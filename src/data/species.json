@@ -1,0 +1,11968 @@
+[
+  {
+    "id": 63,
+    "name": "Abra",
+    "genderRatio": 63,
+    "baseStats": [
+      25,
+      20,
+      15,
+      90,
+      105,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 28,
+        "name": "Synchronize"
+      },
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      }
+    ],
+    "summaryBaseStats": [
+      25,
+      20,
+      15,
+      90,
+      105,
+      55
+    ]
+  },
+  {
+    "id": 376,
+    "name": "Absol",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      130,
+      60,
+      75,
+      75,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      130,
+      60,
+      75,
+      75,
+      60
+    ]
+  },
+  {
+    "id": 142,
+    "name": "Aerodactyl",
+    "genderRatio": 31,
+    "baseStats": [
+      80,
+      105,
+      65,
+      130,
+      60,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 69,
+        "name": "Rock Head"
+      },
+      {
+        "id": 46,
+        "name": "Pressure"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      105,
+      65,
+      130,
+      60,
+      75
+    ]
+  },
+  {
+    "id": 384,
+    "name": "Aggron",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      110,
+      180,
+      50,
+      60,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 5,
+        "name": "Sturdy"
+      },
+      {
+        "id": 69,
+        "name": "Rock Head"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      110,
+      180,
+      50,
+      60,
+      60
+    ]
+  },
+  {
+    "id": 190,
+    "name": "Aipom",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      70,
+      55,
+      85,
+      40,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 50,
+        "name": "Run Away"
+      },
+      {
+        "id": 53,
+        "name": "Pickup"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      70,
+      55,
+      85,
+      40,
+      55
+    ]
+  },
+  {
+    "id": 65,
+    "name": "Alakazam",
+    "genderRatio": 63,
+    "baseStats": [
+      55,
+      50,
+      45,
+      120,
+      135,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 28,
+        "name": "Synchronize"
+      },
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      50,
+      45,
+      120,
+      135,
+      85
+    ]
+  },
+  {
+    "id": 359,
+    "name": "Altaria",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      70,
+      90,
+      80,
+      70,
+      105
+    ],
+    "abilities": [
+      {
+        "id": 30,
+        "name": "Natural Cure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      70,
+      90,
+      80,
+      70,
+      105
+    ]
+  },
+  {
+    "id": 181,
+    "name": "Ampharos",
+    "genderRatio": 127,
+    "baseStats": [
+      90,
+      75,
+      75,
+      55,
+      115,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 9,
+        "name": "Static"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      75,
+      75,
+      55,
+      115,
+      90
+    ]
+  },
+  {
+    "id": 390,
+    "name": "Anorith",
+    "genderRatio": 31,
+    "baseStats": [
+      45,
+      95,
+      50,
+      75,
+      40,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 4,
+        "name": "Battle Armor"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      95,
+      50,
+      75,
+      40,
+      50
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Arbok",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      85,
+      69,
+      80,
+      65,
+      79
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 61,
+        "name": "Shed Skin"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      85,
+      69,
+      80,
+      65,
+      79
+    ]
+  },
+  {
+    "id": 59,
+    "name": "Arcanine",
+    "genderRatio": 63,
+    "baseStats": [
+      90,
+      110,
+      80,
+      95,
+      100,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 18,
+        "name": "Flash Fire"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      110,
+      80,
+      95,
+      100,
+      80
+    ]
+  },
+  {
+    "id": 168,
+    "name": "Ariados",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      90,
+      70,
+      40,
+      60,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 68,
+        "name": "Swarm"
+      },
+      {
+        "id": 15,
+        "name": "Insomnia"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      90,
+      70,
+      40,
+      60,
+      60
+    ]
+  },
+  {
+    "id": 391,
+    "name": "Armaldo",
+    "genderRatio": 31,
+    "baseStats": [
+      75,
+      125,
+      100,
+      45,
+      70,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 4,
+        "name": "Battle Armor"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      125,
+      100,
+      45,
+      70,
+      80
+    ]
+  },
+  {
+    "id": 382,
+    "name": "Aron",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      70,
+      100,
+      30,
+      40,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 5,
+        "name": "Sturdy"
+      },
+      {
+        "id": 69,
+        "name": "Rock Head"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      70,
+      100,
+      30,
+      40,
+      40
+    ]
+  },
+  {
+    "id": 144,
+    "name": "Articuno",
+    "genderRatio": 255,
+    "baseStats": [
+      90,
+      85,
+      100,
+      85,
+      95,
+      125
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      85,
+      100,
+      85,
+      95,
+      125
+    ]
+  },
+  {
+    "id": 184,
+    "name": "Azumarill",
+    "genderRatio": 127,
+    "baseStats": [
+      100,
+      50,
+      80,
+      50,
+      50,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 37,
+        "name": "Huge Power"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      50,
+      80,
+      50,
+      50,
+      80
+    ]
+  },
+  {
+    "id": 350,
+    "name": "Azurill",
+    "genderRatio": 191,
+    "baseStats": [
+      50,
+      20,
+      40,
+      20,
+      20,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 37,
+        "name": "Huge Power"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      20,
+      40,
+      20,
+      20,
+      40
+    ]
+  },
+  {
+    "id": 395,
+    "name": "Bagon",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      75,
+      60,
+      50,
+      40,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 69,
+        "name": "Rock Head"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      75,
+      60,
+      50,
+      40,
+      30
+    ]
+  },
+  {
+    "id": 318,
+    "name": "Baltoy",
+    "genderRatio": 255,
+    "baseStats": [
+      40,
+      40,
+      55,
+      55,
+      40,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      40,
+      55,
+      55,
+      40,
+      70
+    ]
+  },
+  {
+    "id": 378,
+    "name": "Banette",
+    "genderRatio": 127,
+    "baseStats": [
+      64,
+      115,
+      65,
+      65,
+      83,
+      63
+    ],
+    "abilities": [
+      {
+        "id": 15,
+        "name": "Insomnia"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      64,
+      115,
+      65,
+      65,
+      83,
+      63
+    ]
+  },
+  {
+    "id": 323,
+    "name": "Barboach",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      48,
+      43,
+      60,
+      46,
+      41
+    ],
+    "abilities": [
+      {
+        "id": 12,
+        "name": "Oblivious"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      48,
+      43,
+      60,
+      46,
+      41
+    ]
+  },
+  {
+    "id": 153,
+    "name": "Bayleef",
+    "genderRatio": 31,
+    "baseStats": [
+      60,
+      62,
+      80,
+      60,
+      63,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 65,
+        "name": "Overgrow"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      62,
+      80,
+      60,
+      63,
+      80
+    ]
+  },
+  {
+    "id": 292,
+    "name": "Beautifly",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      70,
+      50,
+      65,
+      90,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 68,
+        "name": "Swarm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      70,
+      50,
+      65,
+      90,
+      50
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Beedrill",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      80,
+      40,
+      75,
+      45,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 68,
+        "name": "Swarm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      80,
+      40,
+      75,
+      45,
+      80
+    ]
+  },
+  {
+    "id": 398,
+    "name": "Beldum",
+    "genderRatio": 255,
+    "baseStats": [
+      40,
+      55,
+      80,
+      30,
+      35,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 29,
+        "name": "Clear Body"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      55,
+      80,
+      30,
+      35,
+      60
+    ]
+  },
+  {
+    "id": 182,
+    "name": "Bellossom",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      80,
+      85,
+      50,
+      90,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      80,
+      85,
+      50,
+      90,
+      100
+    ]
+  },
+  {
+    "id": 69,
+    "name": "Bellsprout",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      75,
+      35,
+      40,
+      70,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      75,
+      35,
+      40,
+      70,
+      30
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Blastoise",
+    "genderRatio": 31,
+    "baseStats": [
+      79,
+      83,
+      100,
+      78,
+      85,
+      105
+    ],
+    "abilities": [
+      {
+        "id": 67,
+        "name": "Torrent"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      79,
+      83,
+      100,
+      78,
+      85,
+      105
+    ]
+  },
+  {
+    "id": 282,
+    "name": "Blaziken",
+    "genderRatio": 31,
+    "baseStats": [
+      80,
+      120,
+      70,
+      80,
+      110,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 66,
+        "name": "Blaze"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      120,
+      70,
+      80,
+      110,
+      70
+    ]
+  },
+  {
+    "id": 242,
+    "name": "Blissey",
+    "genderRatio": 254,
+    "baseStats": [
+      255,
+      10,
+      10,
+      55,
+      75,
+      135
+    ],
+    "abilities": [
+      {
+        "id": 30,
+        "name": "Natural Cure"
+      },
+      {
+        "id": 32,
+        "name": "Serene Grace"
+      }
+    ],
+    "summaryBaseStats": [
+      255,
+      10,
+      10,
+      55,
+      75,
+      135
+    ]
+  },
+  {
+    "id": 307,
+    "name": "Breloom",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      130,
+      80,
+      70,
+      60,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 27,
+        "name": "Effect Spore"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      130,
+      80,
+      70,
+      60,
+      60
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Bulbasaur",
+    "genderRatio": 31,
+    "baseStats": [
+      45,
+      49,
+      49,
+      45,
+      65,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 65,
+        "name": "Overgrow"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      49,
+      49,
+      45,
+      65,
+      65
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Butterfree",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      45,
+      50,
+      70,
+      80,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 14,
+        "name": "Compoundeyes"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      45,
+      50,
+      70,
+      80,
+      80
+    ]
+  },
+  {
+    "id": 344,
+    "name": "Cacnea",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      85,
+      40,
+      35,
+      85,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 8,
+        "name": "Sand Veil"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      85,
+      40,
+      35,
+      85,
+      40
+    ]
+  },
+  {
+    "id": 345,
+    "name": "Cacturne",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      115,
+      60,
+      55,
+      115,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 8,
+        "name": "Sand Veil"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      115,
+      60,
+      55,
+      115,
+      60
+    ]
+  },
+  {
+    "id": 340,
+    "name": "Camerupt",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      100,
+      70,
+      40,
+      105,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 40,
+        "name": "Magma Armor"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      100,
+      70,
+      40,
+      105,
+      75
+    ]
+  },
+  {
+    "id": 330,
+    "name": "Carvanha",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      90,
+      20,
+      65,
+      65,
+      20
+    ],
+    "abilities": [
+      {
+        "id": 24,
+        "name": "Rough Skin"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      90,
+      20,
+      65,
+      65,
+      20
+    ]
+  },
+  {
+    "id": 293,
+    "name": "Cascoon",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      35,
+      55,
+      15,
+      25,
+      25
+    ],
+    "abilities": [
+      {
+        "id": 61,
+        "name": "Shed Skin"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      35,
+      55,
+      15,
+      25,
+      25
+    ]
+  },
+  {
+    "id": 385,
+    "name": "Castform",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 59,
+        "name": "Forecast"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      70,
+      70,
+      70,
+      70,
+      70
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Caterpie",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      30,
+      35,
+      45,
+      20,
+      20
+    ],
+    "abilities": [
+      {
+        "id": 19,
+        "name": "Shield Dust"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      30,
+      35,
+      45,
+      20,
+      20
+    ]
+  },
+  {
+    "id": 251,
+    "name": "Celebi",
+    "genderRatio": 255,
+    "baseStats": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 30,
+        "name": "Natural Cure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ]
+  },
+  {
+    "id": 113,
+    "name": "Chansey",
+    "genderRatio": 254,
+    "baseStats": [
+      250,
+      5,
+      5,
+      50,
+      35,
+      105
+    ],
+    "abilities": [
+      {
+        "id": 30,
+        "name": "Natural Cure"
+      },
+      {
+        "id": 32,
+        "name": "Serene Grace"
+      }
+    ],
+    "summaryBaseStats": [
+      250,
+      5,
+      5,
+      50,
+      35,
+      105
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Charizard",
+    "genderRatio": 31,
+    "baseStats": [
+      78,
+      84,
+      78,
+      100,
+      109,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 66,
+        "name": "Blaze"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      78,
+      84,
+      78,
+      100,
+      109,
+      85
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Charmander",
+    "genderRatio": 31,
+    "baseStats": [
+      39,
+      52,
+      43,
+      65,
+      60,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 66,
+        "name": "Blaze"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      39,
+      52,
+      43,
+      65,
+      60,
+      50
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Charmeleon",
+    "genderRatio": 31,
+    "baseStats": [
+      58,
+      64,
+      58,
+      80,
+      80,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 66,
+        "name": "Blaze"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      58,
+      64,
+      58,
+      80,
+      80,
+      65
+    ]
+  },
+  {
+    "id": 152,
+    "name": "Chikorita",
+    "genderRatio": 31,
+    "baseStats": [
+      45,
+      49,
+      65,
+      45,
+      49,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 65,
+        "name": "Overgrow"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      49,
+      65,
+      45,
+      49,
+      65
+    ]
+  },
+  {
+    "id": 411,
+    "name": "Chimecho",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      50,
+      70,
+      65,
+      95,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      50,
+      70,
+      65,
+      95,
+      80
+    ]
+  },
+  {
+    "id": 170,
+    "name": "Chinchou",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      38,
+      38,
+      67,
+      56,
+      56
+    ],
+    "abilities": [
+      {
+        "id": 10,
+        "name": "Volt Absorb"
+      },
+      {
+        "id": 35,
+        "name": "Illuminate"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      38,
+      38,
+      67,
+      56,
+      56
+    ]
+  },
+  {
+    "id": 373,
+    "name": "Clamperl",
+    "genderRatio": 127,
+    "baseStats": [
+      35,
+      64,
+      85,
+      32,
+      74,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 75,
+        "name": "Shell Armor"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      64,
+      85,
+      32,
+      74,
+      55
+    ]
+  },
+  {
+    "id": 319,
+    "name": "Claydol",
+    "genderRatio": 255,
+    "baseStats": [
+      60,
+      70,
+      105,
+      75,
+      70,
+      120
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      70,
+      105,
+      75,
+      70,
+      120
+    ]
+  },
+  {
+    "id": 36,
+    "name": "Clefable",
+    "genderRatio": 191,
+    "baseStats": [
+      95,
+      70,
+      73,
+      60,
+      85,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 56,
+        "name": "Cute Charm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      95,
+      70,
+      73,
+      60,
+      85,
+      90
+    ]
+  },
+  {
+    "id": 35,
+    "name": "Clefairy",
+    "genderRatio": 191,
+    "baseStats": [
+      70,
+      45,
+      48,
+      35,
+      60,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 56,
+        "name": "Cute Charm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      45,
+      48,
+      35,
+      60,
+      65
+    ]
+  },
+  {
+    "id": 173,
+    "name": "Cleffa",
+    "genderRatio": 191,
+    "baseStats": [
+      50,
+      25,
+      28,
+      15,
+      45,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 56,
+        "name": "Cute Charm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      25,
+      28,
+      15,
+      45,
+      55
+    ]
+  },
+  {
+    "id": 91,
+    "name": "Cloyster",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      95,
+      180,
+      70,
+      85,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 75,
+        "name": "Shell Armor"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      95,
+      180,
+      70,
+      85,
+      45
+    ]
+  },
+  {
+    "id": 281,
+    "name": "Combusken",
+    "genderRatio": 31,
+    "baseStats": [
+      60,
+      85,
+      60,
+      55,
+      85,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 66,
+        "name": "Blaze"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      85,
+      60,
+      55,
+      85,
+      60
+    ]
+  },
+  {
+    "id": 326,
+    "name": "Corphish",
+    "genderRatio": 127,
+    "baseStats": [
+      43,
+      80,
+      65,
+      35,
+      50,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 52,
+        "name": "Hyper Cutter"
+      },
+      {
+        "id": 75,
+        "name": "Shell Armor"
+      }
+    ],
+    "summaryBaseStats": [
+      43,
+      80,
+      65,
+      35,
+      50,
+      35
+    ]
+  },
+  {
+    "id": 222,
+    "name": "Corsola",
+    "genderRatio": 191,
+    "baseStats": [
+      55,
+      55,
+      85,
+      35,
+      65,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 55,
+        "name": "Hustle"
+      },
+      {
+        "id": 30,
+        "name": "Natural Cure"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      55,
+      85,
+      35,
+      65,
+      85
+    ]
+  },
+  {
+    "id": 389,
+    "name": "Cradily",
+    "genderRatio": 31,
+    "baseStats": [
+      86,
+      81,
+      97,
+      43,
+      81,
+      107
+    ],
+    "abilities": [
+      {
+        "id": 21,
+        "name": "Suction Cups"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      86,
+      81,
+      97,
+      43,
+      81,
+      107
+    ]
+  },
+  {
+    "id": 327,
+    "name": "Crawdaunt",
+    "genderRatio": 127,
+    "baseStats": [
+      63,
+      120,
+      85,
+      55,
+      90,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 52,
+        "name": "Hyper Cutter"
+      },
+      {
+        "id": 75,
+        "name": "Shell Armor"
+      }
+    ],
+    "summaryBaseStats": [
+      63,
+      120,
+      85,
+      55,
+      90,
+      55
+    ]
+  },
+  {
+    "id": 169,
+    "name": "Crobat",
+    "genderRatio": 127,
+    "baseStats": [
+      85,
+      90,
+      80,
+      130,
+      70,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      85,
+      90,
+      80,
+      130,
+      70,
+      80
+    ]
+  },
+  {
+    "id": 159,
+    "name": "Croconaw",
+    "genderRatio": 31,
+    "baseStats": [
+      65,
+      80,
+      80,
+      58,
+      59,
+      63
+    ],
+    "abilities": [
+      {
+        "id": 67,
+        "name": "Torrent"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      80,
+      80,
+      58,
+      59,
+      63
+    ]
+  },
+  {
+    "id": 104,
+    "name": "Cubone",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      50,
+      95,
+      35,
+      40,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 69,
+        "name": "Rock Head"
+      },
+      {
+        "id": 31,
+        "name": "Lightningrod"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      50,
+      95,
+      35,
+      40,
+      50
+    ]
+  },
+  {
+    "id": 155,
+    "name": "Cyndaquil",
+    "genderRatio": 31,
+    "baseStats": [
+      39,
+      52,
+      43,
+      65,
+      60,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 66,
+        "name": "Blaze"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      39,
+      52,
+      43,
+      65,
+      60,
+      50
+    ]
+  },
+  {
+    "id": 316,
+    "name": "Delcatty",
+    "genderRatio": 191,
+    "baseStats": [
+      70,
+      65,
+      65,
+      70,
+      55,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 56,
+        "name": "Cute Charm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      65,
+      65,
+      70,
+      55,
+      55
+    ]
+  },
+  {
+    "id": 225,
+    "name": "Delibird",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      55,
+      45,
+      75,
+      65,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 72,
+        "name": "Vital Spirit"
+      },
+      {
+        "id": 55,
+        "name": "Hustle"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      55,
+      45,
+      75,
+      65,
+      45
+    ]
+  },
+  {
+    "id": 410,
+    "name": "Deoxys",
+    "genderRatio": 255,
+    "baseStats": [
+      50,
+      150,
+      50,
+      150,
+      150,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      95,
+      90,
+      180,
+      95,
+      90
+    ]
+  },
+  {
+    "id": 87,
+    "name": "Dewgong",
+    "genderRatio": 127,
+    "baseStats": [
+      90,
+      70,
+      80,
+      70,
+      70,
+      95
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      70,
+      80,
+      70,
+      70,
+      95
+    ]
+  },
+  {
+    "id": 50,
+    "name": "Diglett",
+    "genderRatio": 127,
+    "baseStats": [
+      10,
+      55,
+      25,
+      95,
+      35,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 8,
+        "name": "Sand Veil"
+      },
+      {
+        "id": 71,
+        "name": "Arena Trap"
+      }
+    ],
+    "summaryBaseStats": [
+      10,
+      55,
+      25,
+      95,
+      35,
+      45
+    ]
+  },
+  {
+    "id": 132,
+    "name": "Ditto",
+    "genderRatio": 255,
+    "baseStats": [
+      48,
+      48,
+      48,
+      48,
+      48,
+      48
+    ],
+    "abilities": [
+      {
+        "id": 7,
+        "name": "Limber"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      48,
+      48,
+      48,
+      48,
+      48,
+      48
+    ]
+  },
+  {
+    "id": 85,
+    "name": "Dodrio",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      110,
+      70,
+      100,
+      60,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 50,
+        "name": "Run Away"
+      },
+      {
+        "id": 48,
+        "name": "Early Bird"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      110,
+      70,
+      100,
+      60,
+      60
+    ]
+  },
+  {
+    "id": 84,
+    "name": "Doduo",
+    "genderRatio": 127,
+    "baseStats": [
+      35,
+      85,
+      45,
+      75,
+      35,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 50,
+        "name": "Run Away"
+      },
+      {
+        "id": 48,
+        "name": "Early Bird"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      85,
+      45,
+      75,
+      35,
+      35
+    ]
+  },
+  {
+    "id": 232,
+    "name": "Donphan",
+    "genderRatio": 127,
+    "baseStats": [
+      90,
+      120,
+      120,
+      50,
+      60,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 5,
+        "name": "Sturdy"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      120,
+      120,
+      50,
+      60,
+      60
+    ]
+  },
+  {
+    "id": 148,
+    "name": "Dragonair",
+    "genderRatio": 127,
+    "baseStats": [
+      61,
+      84,
+      65,
+      70,
+      70,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 61,
+        "name": "Shed Skin"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      61,
+      84,
+      65,
+      70,
+      70,
+      70
+    ]
+  },
+  {
+    "id": 149,
+    "name": "Dragonite",
+    "genderRatio": 127,
+    "baseStats": [
+      91,
+      134,
+      95,
+      80,
+      100,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      91,
+      134,
+      95,
+      80,
+      100,
+      100
+    ]
+  },
+  {
+    "id": 147,
+    "name": "Dratini",
+    "genderRatio": 127,
+    "baseStats": [
+      41,
+      64,
+      45,
+      50,
+      50,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 61,
+        "name": "Shed Skin"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      41,
+      64,
+      45,
+      50,
+      50,
+      50
+    ]
+  },
+  {
+    "id": 96,
+    "name": "Drowzee",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      48,
+      45,
+      42,
+      43,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 15,
+        "name": "Insomnia"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      48,
+      45,
+      42,
+      43,
+      90
+    ]
+  },
+  {
+    "id": 51,
+    "name": "Dugtrio",
+    "genderRatio": 127,
+    "baseStats": [
+      35,
+      80,
+      50,
+      120,
+      50,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 8,
+        "name": "Sand Veil"
+      },
+      {
+        "id": 71,
+        "name": "Arena Trap"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      80,
+      50,
+      120,
+      50,
+      70
+    ]
+  },
+  {
+    "id": 206,
+    "name": "Dunsparce",
+    "genderRatio": 127,
+    "baseStats": [
+      100,
+      70,
+      70,
+      45,
+      65,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 32,
+        "name": "Serene Grace"
+      },
+      {
+        "id": 50,
+        "name": "Run Away"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      70,
+      70,
+      45,
+      65,
+      65
+    ]
+  },
+  {
+    "id": 362,
+    "name": "Dusclops",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      70,
+      130,
+      25,
+      60,
+      130
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      70,
+      130,
+      25,
+      60,
+      130
+    ]
+  },
+  {
+    "id": 361,
+    "name": "Duskull",
+    "genderRatio": 127,
+    "baseStats": [
+      20,
+      40,
+      90,
+      25,
+      30,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      20,
+      40,
+      90,
+      25,
+      30,
+      90
+    ]
+  },
+  {
+    "id": 294,
+    "name": "Dustox",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      50,
+      70,
+      65,
+      50,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 19,
+        "name": "Shield Dust"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      50,
+      70,
+      65,
+      50,
+      90
+    ]
+  },
+  {
+    "id": 133,
+    "name": "Eevee",
+    "genderRatio": 31,
+    "baseStats": [
+      55,
+      55,
+      50,
+      55,
+      45,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 50,
+        "name": "Run Away"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      55,
+      50,
+      55,
+      45,
+      65
+    ]
+  },
+  {
+    "id": 23,
+    "name": "Ekans",
+    "genderRatio": 127,
+    "baseStats": [
+      35,
+      60,
+      44,
+      55,
+      40,
+      54
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 61,
+        "name": "Shed Skin"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      60,
+      44,
+      55,
+      40,
+      54
+    ]
+  },
+  {
+    "id": 125,
+    "name": "Electabuzz",
+    "genderRatio": 63,
+    "baseStats": [
+      65,
+      83,
+      57,
+      105,
+      95,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 9,
+        "name": "Static"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      83,
+      57,
+      105,
+      95,
+      85
+    ]
+  },
+  {
+    "id": 337,
+    "name": "Electrike",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      45,
+      40,
+      65,
+      65,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 9,
+        "name": "Static"
+      },
+      {
+        "id": 31,
+        "name": "Lightningrod"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      45,
+      40,
+      65,
+      65,
+      40
+    ]
+  },
+  {
+    "id": 101,
+    "name": "Electrode",
+    "genderRatio": 255,
+    "baseStats": [
+      60,
+      50,
+      70,
+      140,
+      80,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 43,
+        "name": "Soundproof"
+      },
+      {
+        "id": 9,
+        "name": "Static"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      50,
+      70,
+      140,
+      80,
+      80
+    ]
+  },
+  {
+    "id": 239,
+    "name": "Elekid",
+    "genderRatio": 63,
+    "baseStats": [
+      45,
+      63,
+      37,
+      95,
+      65,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 9,
+        "name": "Static"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      63,
+      37,
+      95,
+      65,
+      55
+    ]
+  },
+  {
+    "id": 244,
+    "name": "Entei",
+    "genderRatio": 255,
+    "baseStats": [
+      115,
+      115,
+      85,
+      100,
+      90,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      115,
+      115,
+      85,
+      100,
+      90,
+      75
+    ]
+  },
+  {
+    "id": 196,
+    "name": "Espeon",
+    "genderRatio": 31,
+    "baseStats": [
+      65,
+      65,
+      60,
+      110,
+      130,
+      95
+    ],
+    "abilities": [
+      {
+        "id": 28,
+        "name": "Synchronize"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      65,
+      60,
+      110,
+      130,
+      95
+    ]
+  },
+  {
+    "id": 102,
+    "name": "Exeggcute",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      40,
+      80,
+      40,
+      60,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      40,
+      80,
+      40,
+      60,
+      45
+    ]
+  },
+  {
+    "id": 103,
+    "name": "Exeggutor",
+    "genderRatio": 127,
+    "baseStats": [
+      95,
+      95,
+      85,
+      55,
+      125,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      95,
+      95,
+      85,
+      55,
+      125,
+      65
+    ]
+  },
+  {
+    "id": 372,
+    "name": "Exploud",
+    "genderRatio": 127,
+    "baseStats": [
+      104,
+      91,
+      63,
+      68,
+      91,
+      63
+    ],
+    "abilities": [
+      {
+        "id": 43,
+        "name": "Soundproof"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      104,
+      91,
+      63,
+      68,
+      91,
+      63
+    ]
+  },
+  {
+    "id": 83,
+    "name": "Farfetch'D",
+    "genderRatio": 127,
+    "baseStats": [
+      52,
+      65,
+      55,
+      60,
+      58,
+      62
+    ],
+    "abilities": [
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      },
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      }
+    ],
+    "summaryBaseStats": [
+      52,
+      65,
+      55,
+      60,
+      58,
+      62
+    ]
+  },
+  {
+    "id": 22,
+    "name": "Fearow",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      90,
+      65,
+      100,
+      61,
+      61
+    ],
+    "abilities": [
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      90,
+      65,
+      100,
+      61,
+      61
+    ]
+  },
+  {
+    "id": 328,
+    "name": "Feebas",
+    "genderRatio": 127,
+    "baseStats": [
+      20,
+      15,
+      20,
+      80,
+      10,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      20,
+      15,
+      20,
+      80,
+      10,
+      55
+    ]
+  },
+  {
+    "id": 160,
+    "name": "Feraligatr",
+    "genderRatio": 31,
+    "baseStats": [
+      85,
+      105,
+      100,
+      78,
+      79,
+      83
+    ],
+    "abilities": [
+      {
+        "id": 67,
+        "name": "Torrent"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      85,
+      105,
+      100,
+      78,
+      79,
+      83
+    ]
+  },
+  {
+    "id": 180,
+    "name": "Flaaffy",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      55,
+      55,
+      45,
+      80,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 9,
+        "name": "Static"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      55,
+      55,
+      45,
+      80,
+      60
+    ]
+  },
+  {
+    "id": 136,
+    "name": "Flareon",
+    "genderRatio": 31,
+    "baseStats": [
+      65,
+      130,
+      60,
+      65,
+      95,
+      110
+    ],
+    "abilities": [
+      {
+        "id": 18,
+        "name": "Flash Fire"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      130,
+      60,
+      65,
+      95,
+      110
+    ]
+  },
+  {
+    "id": 334,
+    "name": "Flygon",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      100,
+      80,
+      100,
+      80,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 26,
+        "name": "Levitate"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      100,
+      80,
+      100,
+      80,
+      80
+    ]
+  },
+  {
+    "id": 205,
+    "name": "Forretress",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      90,
+      140,
+      40,
+      60,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 5,
+        "name": "Sturdy"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      90,
+      140,
+      40,
+      60,
+      60
+    ]
+  },
+  {
+    "id": 162,
+    "name": "Furret",
+    "genderRatio": 127,
+    "baseStats": [
+      85,
+      76,
+      64,
+      90,
+      45,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 50,
+        "name": "Run Away"
+      },
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      }
+    ],
+    "summaryBaseStats": [
+      85,
+      76,
+      64,
+      90,
+      45,
+      55
+    ]
+  },
+  {
+    "id": 394,
+    "name": "Gardevoir",
+    "genderRatio": 127,
+    "baseStats": [
+      68,
+      65,
+      65,
+      80,
+      125,
+      115
+    ],
+    "abilities": [
+      {
+        "id": 28,
+        "name": "Synchronize"
+      },
+      {
+        "id": 36,
+        "name": "Trace"
+      }
+    ],
+    "summaryBaseStats": [
+      68,
+      65,
+      65,
+      80,
+      125,
+      115
+    ]
+  },
+  {
+    "id": 92,
+    "name": "Gastly",
+    "genderRatio": 127,
+    "baseStats": [
+      30,
+      35,
+      30,
+      80,
+      100,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      30,
+      35,
+      30,
+      80,
+      100,
+      35
+    ]
+  },
+  {
+    "id": 94,
+    "name": "Gengar",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      65,
+      60,
+      110,
+      130,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      65,
+      60,
+      110,
+      130,
+      75
+    ]
+  },
+  {
+    "id": 74,
+    "name": "Geodude",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      80,
+      100,
+      20,
+      30,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 69,
+        "name": "Rock Head"
+      },
+      {
+        "id": 5,
+        "name": "Sturdy"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      80,
+      100,
+      20,
+      30,
+      30
+    ]
+  },
+  {
+    "id": 203,
+    "name": "Girafarig",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      80,
+      65,
+      85,
+      90,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      },
+      {
+        "id": 48,
+        "name": "Early Bird"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      80,
+      65,
+      85,
+      90,
+      65
+    ]
+  },
+  {
+    "id": 347,
+    "name": "Glalie",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      80,
+      80,
+      80,
+      80,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      80,
+      80,
+      80,
+      80,
+      80
+    ]
+  },
+  {
+    "id": 207,
+    "name": "Gligar",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      75,
+      105,
+      85,
+      35,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 52,
+        "name": "Hyper Cutter"
+      },
+      {
+        "id": 8,
+        "name": "Sand Veil"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      75,
+      105,
+      85,
+      35,
+      65
+    ]
+  },
+  {
+    "id": 44,
+    "name": "Gloom",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      65,
+      70,
+      40,
+      85,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      65,
+      70,
+      40,
+      85,
+      75
+    ]
+  },
+  {
+    "id": 42,
+    "name": "Golbat",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      80,
+      70,
+      90,
+      65,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      80,
+      70,
+      90,
+      65,
+      75
+    ]
+  },
+  {
+    "id": 118,
+    "name": "Goldeen",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      67,
+      60,
+      63,
+      35,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 41,
+        "name": "Water Veil"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      67,
+      60,
+      63,
+      35,
+      50
+    ]
+  },
+  {
+    "id": 55,
+    "name": "Golduck",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      82,
+      78,
+      85,
+      95,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 6,
+        "name": "Damp"
+      },
+      {
+        "id": 13,
+        "name": "Cloud Nine"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      82,
+      78,
+      85,
+      95,
+      80
+    ]
+  },
+  {
+    "id": 76,
+    "name": "Golem",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      110,
+      130,
+      45,
+      55,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 69,
+        "name": "Rock Head"
+      },
+      {
+        "id": 5,
+        "name": "Sturdy"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      110,
+      130,
+      45,
+      55,
+      65
+    ]
+  },
+  {
+    "id": 375,
+    "name": "Gorebyss",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      84,
+      105,
+      52,
+      114,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      84,
+      105,
+      52,
+      114,
+      75
+    ]
+  },
+  {
+    "id": 210,
+    "name": "Granbull",
+    "genderRatio": 191,
+    "baseStats": [
+      90,
+      120,
+      75,
+      45,
+      60,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 22,
+        "name": "Intimidate"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      120,
+      75,
+      45,
+      60,
+      60
+    ]
+  },
+  {
+    "id": 75,
+    "name": "Graveler",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      95,
+      115,
+      35,
+      45,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 69,
+        "name": "Rock Head"
+      },
+      {
+        "id": 5,
+        "name": "Sturdy"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      95,
+      115,
+      35,
+      45,
+      45
+    ]
+  },
+  {
+    "id": 88,
+    "name": "Grimer",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      80,
+      50,
+      25,
+      40,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 1,
+        "name": "Stench"
+      },
+      {
+        "id": 60,
+        "name": "Sticky Hold"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      80,
+      50,
+      25,
+      40,
+      50
+    ]
+  },
+  {
+    "id": 405,
+    "name": "Groudon",
+    "genderRatio": 255,
+    "baseStats": [
+      100,
+      150,
+      140,
+      90,
+      100,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 70,
+        "name": "Drought"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      150,
+      140,
+      90,
+      100,
+      90
+    ]
+  },
+  {
+    "id": 278,
+    "name": "Grovyle",
+    "genderRatio": 31,
+    "baseStats": [
+      50,
+      65,
+      45,
+      95,
+      85,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 65,
+        "name": "Overgrow"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      65,
+      45,
+      95,
+      85,
+      65
+    ]
+  },
+  {
+    "id": 58,
+    "name": "Growlithe",
+    "genderRatio": 63,
+    "baseStats": [
+      55,
+      70,
+      45,
+      60,
+      70,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 18,
+        "name": "Flash Fire"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      70,
+      45,
+      60,
+      70,
+      50
+    ]
+  },
+  {
+    "id": 352,
+    "name": "Grumpig",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      45,
+      65,
+      80,
+      90,
+      110
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 20,
+        "name": "Own Tempo"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      45,
+      65,
+      80,
+      90,
+      110
+    ]
+  },
+  {
+    "id": 367,
+    "name": "Gulpin",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      43,
+      53,
+      40,
+      43,
+      53
+    ],
+    "abilities": [
+      {
+        "id": 64,
+        "name": "Liquid Ooze"
+      },
+      {
+        "id": 60,
+        "name": "Sticky Hold"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      43,
+      53,
+      40,
+      43,
+      53
+    ]
+  },
+  {
+    "id": 130,
+    "name": "Gyarados",
+    "genderRatio": 127,
+    "baseStats": [
+      95,
+      125,
+      79,
+      81,
+      60,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      95,
+      125,
+      79,
+      81,
+      60,
+      100
+    ]
+  },
+  {
+    "id": 336,
+    "name": "Hariyama",
+    "genderRatio": 63,
+    "baseStats": [
+      144,
+      120,
+      60,
+      50,
+      40,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 62,
+        "name": "Guts"
+      }
+    ],
+    "summaryBaseStats": [
+      144,
+      120,
+      60,
+      50,
+      40,
+      60
+    ]
+  },
+  {
+    "id": 93,
+    "name": "Haunter",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      50,
+      45,
+      95,
+      115,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      50,
+      45,
+      95,
+      115,
+      55
+    ]
+  },
+  {
+    "id": 214,
+    "name": "Heracross",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      125,
+      75,
+      85,
+      40,
+      95
+    ],
+    "abilities": [
+      {
+        "id": 68,
+        "name": "Swarm"
+      },
+      {
+        "id": 62,
+        "name": "Guts"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      125,
+      75,
+      85,
+      40,
+      95
+    ]
+  },
+  {
+    "id": 107,
+    "name": "Hitmonchan",
+    "genderRatio": 0,
+    "baseStats": [
+      50,
+      105,
+      79,
+      76,
+      35,
+      110
+    ],
+    "abilities": [
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      105,
+      79,
+      76,
+      35,
+      110
+    ]
+  },
+  {
+    "id": 106,
+    "name": "Hitmonlee",
+    "genderRatio": 0,
+    "baseStats": [
+      50,
+      120,
+      53,
+      87,
+      35,
+      110
+    ],
+    "abilities": [
+      {
+        "id": 7,
+        "name": "Limber"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      120,
+      53,
+      87,
+      35,
+      110
+    ]
+  },
+  {
+    "id": 237,
+    "name": "Hitmontop",
+    "genderRatio": 0,
+    "baseStats": [
+      50,
+      95,
+      95,
+      70,
+      35,
+      110
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      95,
+      95,
+      70,
+      35,
+      110
+    ]
+  },
+  {
+    "id": 250,
+    "name": "Ho-Oh",
+    "genderRatio": 255,
+    "baseStats": [
+      106,
+      130,
+      90,
+      90,
+      110,
+      154
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      106,
+      130,
+      90,
+      90,
+      110,
+      154
+    ]
+  },
+  {
+    "id": 163,
+    "name": "Hoothoot",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      30,
+      30,
+      50,
+      36,
+      56
+    ],
+    "abilities": [
+      {
+        "id": 15,
+        "name": "Insomnia"
+      },
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      30,
+      30,
+      50,
+      36,
+      56
+    ]
+  },
+  {
+    "id": 187,
+    "name": "Hoppip",
+    "genderRatio": 127,
+    "baseStats": [
+      35,
+      35,
+      40,
+      50,
+      35,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      35,
+      40,
+      50,
+      35,
+      55
+    ]
+  },
+  {
+    "id": 116,
+    "name": "Horsea",
+    "genderRatio": 127,
+    "baseStats": [
+      30,
+      40,
+      70,
+      60,
+      70,
+      25
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      30,
+      40,
+      70,
+      60,
+      70,
+      25
+    ]
+  },
+  {
+    "id": 229,
+    "name": "Houndoom",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      90,
+      50,
+      95,
+      110,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 48,
+        "name": "Early Bird"
+      },
+      {
+        "id": 18,
+        "name": "Flash Fire"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      90,
+      50,
+      95,
+      110,
+      80
+    ]
+  },
+  {
+    "id": 228,
+    "name": "Houndour",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      60,
+      30,
+      65,
+      80,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 48,
+        "name": "Early Bird"
+      },
+      {
+        "id": 18,
+        "name": "Flash Fire"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      60,
+      30,
+      65,
+      80,
+      50
+    ]
+  },
+  {
+    "id": 374,
+    "name": "Huntail",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      104,
+      105,
+      52,
+      94,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      104,
+      105,
+      52,
+      94,
+      75
+    ]
+  },
+  {
+    "id": 97,
+    "name": "Hypno",
+    "genderRatio": 127,
+    "baseStats": [
+      85,
+      73,
+      70,
+      67,
+      73,
+      115
+    ],
+    "abilities": [
+      {
+        "id": 15,
+        "name": "Insomnia"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      85,
+      73,
+      70,
+      67,
+      73,
+      115
+    ]
+  },
+  {
+    "id": 174,
+    "name": "Igglybuff",
+    "genderRatio": 191,
+    "baseStats": [
+      90,
+      30,
+      15,
+      15,
+      40,
+      20
+    ],
+    "abilities": [
+      {
+        "id": 56,
+        "name": "Cute Charm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      30,
+      15,
+      15,
+      40,
+      20
+    ]
+  },
+  {
+    "id": 387,
+    "name": "Illumise",
+    "genderRatio": 254,
+    "baseStats": [
+      65,
+      47,
+      55,
+      85,
+      73,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 12,
+        "name": "Oblivious"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      47,
+      55,
+      85,
+      73,
+      75
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Ivysaur",
+    "genderRatio": 31,
+    "baseStats": [
+      60,
+      62,
+      63,
+      60,
+      80,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 65,
+        "name": "Overgrow"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      62,
+      63,
+      60,
+      80,
+      80
+    ]
+  },
+  {
+    "id": 39,
+    "name": "Jigglypuff",
+    "genderRatio": 191,
+    "baseStats": [
+      115,
+      45,
+      20,
+      20,
+      45,
+      25
+    ],
+    "abilities": [
+      {
+        "id": 56,
+        "name": "Cute Charm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      115,
+      45,
+      20,
+      20,
+      45,
+      25
+    ]
+  },
+  {
+    "id": 409,
+    "name": "Jirachi",
+    "genderRatio": 255,
+    "baseStats": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 32,
+        "name": "Serene Grace"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ]
+  },
+  {
+    "id": 135,
+    "name": "Jolteon",
+    "genderRatio": 31,
+    "baseStats": [
+      65,
+      65,
+      60,
+      130,
+      110,
+      95
+    ],
+    "abilities": [
+      {
+        "id": 10,
+        "name": "Volt Absorb"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      65,
+      60,
+      130,
+      110,
+      95
+    ]
+  },
+  {
+    "id": 189,
+    "name": "Jumpluff",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      55,
+      70,
+      110,
+      55,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      55,
+      70,
+      110,
+      55,
+      85
+    ]
+  },
+  {
+    "id": 124,
+    "name": "Jynx",
+    "genderRatio": 254,
+    "baseStats": [
+      65,
+      50,
+      35,
+      95,
+      115,
+      95
+    ],
+    "abilities": [
+      {
+        "id": 12,
+        "name": "Oblivious"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      50,
+      35,
+      95,
+      115,
+      95
+    ]
+  },
+  {
+    "id": 140,
+    "name": "Kabuto",
+    "genderRatio": 31,
+    "baseStats": [
+      30,
+      80,
+      90,
+      55,
+      55,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 4,
+        "name": "Battle Armor"
+      }
+    ],
+    "summaryBaseStats": [
+      30,
+      80,
+      90,
+      55,
+      55,
+      45
+    ]
+  },
+  {
+    "id": 141,
+    "name": "Kabutops",
+    "genderRatio": 31,
+    "baseStats": [
+      60,
+      115,
+      105,
+      80,
+      65,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 4,
+        "name": "Battle Armor"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      115,
+      105,
+      80,
+      65,
+      70
+    ]
+  },
+  {
+    "id": 64,
+    "name": "Kadabra",
+    "genderRatio": 63,
+    "baseStats": [
+      40,
+      35,
+      30,
+      105,
+      120,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 28,
+        "name": "Synchronize"
+      },
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      35,
+      30,
+      105,
+      120,
+      70
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Kakuna",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      25,
+      50,
+      35,
+      25,
+      25
+    ],
+    "abilities": [
+      {
+        "id": 61,
+        "name": "Shed Skin"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      25,
+      50,
+      35,
+      25,
+      25
+    ]
+  },
+  {
+    "id": 115,
+    "name": "Kangaskhan",
+    "genderRatio": 254,
+    "baseStats": [
+      105,
+      95,
+      80,
+      90,
+      40,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 48,
+        "name": "Early Bird"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      105,
+      95,
+      80,
+      90,
+      40,
+      80
+    ]
+  },
+  {
+    "id": 317,
+    "name": "Kecleon",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      90,
+      70,
+      40,
+      60,
+      120
+    ],
+    "abilities": [
+      {
+        "id": 16,
+        "name": "Color Change"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      90,
+      70,
+      40,
+      60,
+      120
+    ]
+  },
+  {
+    "id": 230,
+    "name": "Kingdra",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      95,
+      95,
+      85,
+      95,
+      95
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      95,
+      95,
+      85,
+      95,
+      95
+    ]
+  },
+  {
+    "id": 99,
+    "name": "Kingler",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      130,
+      115,
+      75,
+      50,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 52,
+        "name": "Hyper Cutter"
+      },
+      {
+        "id": 75,
+        "name": "Shell Armor"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      130,
+      115,
+      75,
+      50,
+      50
+    ]
+  },
+  {
+    "id": 393,
+    "name": "Kirlia",
+    "genderRatio": 127,
+    "baseStats": [
+      38,
+      35,
+      35,
+      50,
+      65,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 28,
+        "name": "Synchronize"
+      },
+      {
+        "id": 36,
+        "name": "Trace"
+      }
+    ],
+    "summaryBaseStats": [
+      38,
+      35,
+      35,
+      50,
+      65,
+      55
+    ]
+  },
+  {
+    "id": 109,
+    "name": "Koffing",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      65,
+      95,
+      35,
+      60,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      65,
+      95,
+      35,
+      60,
+      45
+    ]
+  },
+  {
+    "id": 98,
+    "name": "Krabby",
+    "genderRatio": 127,
+    "baseStats": [
+      30,
+      105,
+      90,
+      50,
+      25,
+      25
+    ],
+    "abilities": [
+      {
+        "id": 52,
+        "name": "Hyper Cutter"
+      },
+      {
+        "id": 75,
+        "name": "Shell Armor"
+      }
+    ],
+    "summaryBaseStats": [
+      30,
+      105,
+      90,
+      50,
+      25,
+      25
+    ]
+  },
+  {
+    "id": 404,
+    "name": "Kyogre",
+    "genderRatio": 255,
+    "baseStats": [
+      100,
+      100,
+      90,
+      90,
+      150,
+      140
+    ],
+    "abilities": [
+      {
+        "id": 2,
+        "name": "Drizzle"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      100,
+      90,
+      90,
+      150,
+      140
+    ]
+  },
+  {
+    "id": 383,
+    "name": "Lairon",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      90,
+      140,
+      40,
+      50,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 5,
+        "name": "Sturdy"
+      },
+      {
+        "id": 69,
+        "name": "Rock Head"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      90,
+      140,
+      40,
+      50,
+      50
+    ]
+  },
+  {
+    "id": 171,
+    "name": "Lanturn",
+    "genderRatio": 127,
+    "baseStats": [
+      125,
+      58,
+      58,
+      67,
+      76,
+      76
+    ],
+    "abilities": [
+      {
+        "id": 10,
+        "name": "Volt Absorb"
+      },
+      {
+        "id": 35,
+        "name": "Illuminate"
+      }
+    ],
+    "summaryBaseStats": [
+      125,
+      58,
+      58,
+      67,
+      76,
+      76
+    ]
+  },
+  {
+    "id": 131,
+    "name": "Lapras",
+    "genderRatio": 127,
+    "baseStats": [
+      130,
+      85,
+      80,
+      60,
+      85,
+      95
+    ],
+    "abilities": [
+      {
+        "id": 11,
+        "name": "Water Absorb"
+      },
+      {
+        "id": 75,
+        "name": "Shell Armor"
+      }
+    ],
+    "summaryBaseStats": [
+      130,
+      85,
+      80,
+      60,
+      85,
+      95
+    ]
+  },
+  {
+    "id": 246,
+    "name": "Larvitar",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      64,
+      50,
+      41,
+      45,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 62,
+        "name": "Guts"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      64,
+      50,
+      41,
+      45,
+      50
+    ]
+  },
+  {
+    "id": 407,
+    "name": "Latias",
+    "genderRatio": 254,
+    "baseStats": [
+      80,
+      80,
+      90,
+      110,
+      110,
+      130
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      80,
+      90,
+      110,
+      110,
+      130
+    ]
+  },
+  {
+    "id": 408,
+    "name": "Latios",
+    "genderRatio": 0,
+    "baseStats": [
+      80,
+      90,
+      80,
+      110,
+      130,
+      110
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      90,
+      80,
+      110,
+      130,
+      110
+    ]
+  },
+  {
+    "id": 166,
+    "name": "Ledian",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      35,
+      50,
+      85,
+      55,
+      110
+    ],
+    "abilities": [
+      {
+        "id": 68,
+        "name": "Swarm"
+      },
+      {
+        "id": 48,
+        "name": "Early Bird"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      35,
+      50,
+      85,
+      55,
+      110
+    ]
+  },
+  {
+    "id": 165,
+    "name": "Ledyba",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      20,
+      30,
+      55,
+      40,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 68,
+        "name": "Swarm"
+      },
+      {
+        "id": 48,
+        "name": "Early Bird"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      20,
+      30,
+      55,
+      40,
+      80
+    ]
+  },
+  {
+    "id": 108,
+    "name": "Lickitung",
+    "genderRatio": 127,
+    "baseStats": [
+      90,
+      55,
+      75,
+      30,
+      60,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 20,
+        "name": "Own Tempo"
+      },
+      {
+        "id": 12,
+        "name": "Oblivious"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      55,
+      75,
+      30,
+      60,
+      75
+    ]
+  },
+  {
+    "id": 388,
+    "name": "Lileep",
+    "genderRatio": 31,
+    "baseStats": [
+      66,
+      41,
+      77,
+      23,
+      61,
+      87
+    ],
+    "abilities": [
+      {
+        "id": 21,
+        "name": "Suction Cups"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      66,
+      41,
+      77,
+      23,
+      61,
+      87
+    ]
+  },
+  {
+    "id": 289,
+    "name": "Linoone",
+    "genderRatio": 127,
+    "baseStats": [
+      78,
+      70,
+      61,
+      100,
+      50,
+      61
+    ],
+    "abilities": [
+      {
+        "id": 53,
+        "name": "Pickup"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      78,
+      70,
+      61,
+      100,
+      50,
+      61
+    ]
+  },
+  {
+    "id": 296,
+    "name": "Lombre",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      50,
+      50,
+      50,
+      60,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 44,
+        "name": "Rain Dish"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      50,
+      50,
+      50,
+      60,
+      70
+    ]
+  },
+  {
+    "id": 295,
+    "name": "Lotad",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      30,
+      30,
+      30,
+      40,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 44,
+        "name": "Rain Dish"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      30,
+      30,
+      30,
+      40,
+      50
+    ]
+  },
+  {
+    "id": 371,
+    "name": "Loudred",
+    "genderRatio": 127,
+    "baseStats": [
+      84,
+      71,
+      43,
+      48,
+      71,
+      43
+    ],
+    "abilities": [
+      {
+        "id": 43,
+        "name": "Soundproof"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      84,
+      71,
+      43,
+      48,
+      71,
+      43
+    ]
+  },
+  {
+    "id": 297,
+    "name": "Ludicolo",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      70,
+      70,
+      70,
+      90,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 44,
+        "name": "Rain Dish"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      70,
+      70,
+      70,
+      90,
+      100
+    ]
+  },
+  {
+    "id": 249,
+    "name": "Lugia",
+    "genderRatio": 255,
+    "baseStats": [
+      106,
+      90,
+      130,
+      110,
+      90,
+      154
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      106,
+      90,
+      130,
+      110,
+      90,
+      154
+    ]
+  },
+  {
+    "id": 348,
+    "name": "Lunatone",
+    "genderRatio": 255,
+    "baseStats": [
+      70,
+      55,
+      65,
+      70,
+      95,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      55,
+      65,
+      70,
+      95,
+      85
+    ]
+  },
+  {
+    "id": 325,
+    "name": "Luvdisc",
+    "genderRatio": 191,
+    "baseStats": [
+      43,
+      30,
+      55,
+      97,
+      40,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      43,
+      30,
+      55,
+      97,
+      40,
+      65
+    ]
+  },
+  {
+    "id": 68,
+    "name": "Machamp",
+    "genderRatio": 63,
+    "baseStats": [
+      90,
+      130,
+      80,
+      55,
+      65,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 62,
+        "name": "Guts"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      130,
+      80,
+      55,
+      65,
+      85
+    ]
+  },
+  {
+    "id": 67,
+    "name": "Machoke",
+    "genderRatio": 63,
+    "baseStats": [
+      80,
+      100,
+      70,
+      45,
+      50,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 62,
+        "name": "Guts"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      100,
+      70,
+      45,
+      50,
+      60
+    ]
+  },
+  {
+    "id": 66,
+    "name": "Machop",
+    "genderRatio": 63,
+    "baseStats": [
+      70,
+      80,
+      50,
+      35,
+      35,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 62,
+        "name": "Guts"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      80,
+      50,
+      35,
+      35,
+      35
+    ]
+  },
+  {
+    "id": 240,
+    "name": "Magby",
+    "genderRatio": 63,
+    "baseStats": [
+      45,
+      75,
+      37,
+      83,
+      70,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 49,
+        "name": "Flame Body"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      75,
+      37,
+      83,
+      70,
+      55
+    ]
+  },
+  {
+    "id": 219,
+    "name": "Magcargo",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      50,
+      120,
+      30,
+      80,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 40,
+        "name": "Magma Armor"
+      },
+      {
+        "id": 49,
+        "name": "Flame Body"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      50,
+      120,
+      30,
+      80,
+      80
+    ]
+  },
+  {
+    "id": 129,
+    "name": "Magikarp",
+    "genderRatio": 127,
+    "baseStats": [
+      20,
+      10,
+      55,
+      80,
+      15,
+      20
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      20,
+      10,
+      55,
+      80,
+      15,
+      20
+    ]
+  },
+  {
+    "id": 126,
+    "name": "Magmar",
+    "genderRatio": 63,
+    "baseStats": [
+      65,
+      95,
+      57,
+      93,
+      100,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 49,
+        "name": "Flame Body"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      95,
+      57,
+      93,
+      100,
+      85
+    ]
+  },
+  {
+    "id": 81,
+    "name": "Magnemite",
+    "genderRatio": 255,
+    "baseStats": [
+      25,
+      35,
+      70,
+      45,
+      95,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 42,
+        "name": "Magnet Pull"
+      },
+      {
+        "id": 5,
+        "name": "Sturdy"
+      }
+    ],
+    "summaryBaseStats": [
+      25,
+      35,
+      70,
+      45,
+      95,
+      55
+    ]
+  },
+  {
+    "id": 82,
+    "name": "Magneton",
+    "genderRatio": 255,
+    "baseStats": [
+      50,
+      60,
+      95,
+      70,
+      120,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 42,
+        "name": "Magnet Pull"
+      },
+      {
+        "id": 5,
+        "name": "Sturdy"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      60,
+      95,
+      70,
+      120,
+      70
+    ]
+  },
+  {
+    "id": 335,
+    "name": "Makuhita",
+    "genderRatio": 63,
+    "baseStats": [
+      72,
+      60,
+      30,
+      25,
+      20,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 62,
+        "name": "Guts"
+      }
+    ],
+    "summaryBaseStats": [
+      72,
+      60,
+      30,
+      25,
+      20,
+      30
+    ]
+  },
+  {
+    "id": 338,
+    "name": "Manectric",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      75,
+      60,
+      105,
+      105,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 9,
+        "name": "Static"
+      },
+      {
+        "id": 31,
+        "name": "Lightningrod"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      75,
+      60,
+      105,
+      105,
+      60
+    ]
+  },
+  {
+    "id": 56,
+    "name": "Mankey",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      80,
+      35,
+      70,
+      35,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 72,
+        "name": "Vital Spirit"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      80,
+      35,
+      70,
+      35,
+      45
+    ]
+  },
+  {
+    "id": 226,
+    "name": "Mantine",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      40,
+      70,
+      70,
+      80,
+      140
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 11,
+        "name": "Water Absorb"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      40,
+      70,
+      70,
+      80,
+      140
+    ]
+  },
+  {
+    "id": 179,
+    "name": "Mareep",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      40,
+      40,
+      35,
+      65,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 9,
+        "name": "Static"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      40,
+      40,
+      35,
+      65,
+      45
+    ]
+  },
+  {
+    "id": 183,
+    "name": "Marill",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      20,
+      50,
+      40,
+      20,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 37,
+        "name": "Huge Power"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      20,
+      50,
+      40,
+      20,
+      50
+    ]
+  },
+  {
+    "id": 105,
+    "name": "Marowak",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      80,
+      110,
+      45,
+      50,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 69,
+        "name": "Rock Head"
+      },
+      {
+        "id": 31,
+        "name": "Lightningrod"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      80,
+      110,
+      45,
+      50,
+      80
+    ]
+  },
+  {
+    "id": 284,
+    "name": "Marshtomp",
+    "genderRatio": 31,
+    "baseStats": [
+      70,
+      85,
+      70,
+      50,
+      60,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 67,
+        "name": "Torrent"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      85,
+      70,
+      50,
+      60,
+      70
+    ]
+  },
+  {
+    "id": 312,
+    "name": "Masquerain",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      60,
+      62,
+      60,
+      80,
+      82
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      60,
+      62,
+      60,
+      80,
+      82
+    ]
+  },
+  {
+    "id": 355,
+    "name": "Mawile",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      85,
+      85,
+      50,
+      55,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 52,
+        "name": "Hyper Cutter"
+      },
+      {
+        "id": 22,
+        "name": "Intimidate"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      85,
+      85,
+      50,
+      55,
+      55
+    ]
+  },
+  {
+    "id": 357,
+    "name": "Medicham",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      60,
+      75,
+      80,
+      60,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 74,
+        "name": "Pure Power"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      60,
+      75,
+      80,
+      60,
+      75
+    ]
+  },
+  {
+    "id": 356,
+    "name": "Meditite",
+    "genderRatio": 127,
+    "baseStats": [
+      30,
+      40,
+      55,
+      60,
+      40,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 74,
+        "name": "Pure Power"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      30,
+      40,
+      55,
+      60,
+      40,
+      55
+    ]
+  },
+  {
+    "id": 154,
+    "name": "Meganium",
+    "genderRatio": 31,
+    "baseStats": [
+      80,
+      82,
+      100,
+      80,
+      83,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 65,
+        "name": "Overgrow"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      82,
+      100,
+      80,
+      83,
+      100
+    ]
+  },
+  {
+    "id": 52,
+    "name": "Meowth",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      45,
+      35,
+      90,
+      40,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 53,
+        "name": "Pickup"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      45,
+      35,
+      90,
+      40,
+      40
+    ]
+  },
+  {
+    "id": 400,
+    "name": "Metagross",
+    "genderRatio": 255,
+    "baseStats": [
+      80,
+      135,
+      130,
+      70,
+      95,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 29,
+        "name": "Clear Body"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      135,
+      130,
+      70,
+      95,
+      90
+    ]
+  },
+  {
+    "id": 399,
+    "name": "Metang",
+    "genderRatio": 255,
+    "baseStats": [
+      60,
+      75,
+      100,
+      50,
+      55,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 29,
+        "name": "Clear Body"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      75,
+      100,
+      50,
+      55,
+      80
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Metapod",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      20,
+      55,
+      30,
+      25,
+      25
+    ],
+    "abilities": [
+      {
+        "id": 61,
+        "name": "Shed Skin"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      20,
+      55,
+      30,
+      25,
+      25
+    ]
+  },
+  {
+    "id": 151,
+    "name": "Mew",
+    "genderRatio": 255,
+    "baseStats": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 28,
+        "name": "Synchronize"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100
+    ]
+  },
+  {
+    "id": 150,
+    "name": "Mewtwo",
+    "genderRatio": 255,
+    "baseStats": [
+      106,
+      110,
+      90,
+      130,
+      154,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      106,
+      110,
+      90,
+      130,
+      154,
+      90
+    ]
+  },
+  {
+    "id": 287,
+    "name": "Mightyena",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      90,
+      70,
+      70,
+      60,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      90,
+      70,
+      70,
+      60,
+      60
+    ]
+  },
+  {
+    "id": 329,
+    "name": "Milotic",
+    "genderRatio": 127,
+    "baseStats": [
+      95,
+      60,
+      79,
+      81,
+      100,
+      125
+    ],
+    "abilities": [
+      {
+        "id": 63,
+        "name": "Marvel Scale"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      95,
+      60,
+      79,
+      81,
+      100,
+      125
+    ]
+  },
+  {
+    "id": 241,
+    "name": "Miltank",
+    "genderRatio": 254,
+    "baseStats": [
+      95,
+      80,
+      105,
+      100,
+      40,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      95,
+      80,
+      105,
+      100,
+      40,
+      70
+    ]
+  },
+  {
+    "id": 354,
+    "name": "Minun",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      40,
+      50,
+      95,
+      75,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 58,
+        "name": "Minus"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      40,
+      50,
+      95,
+      75,
+      85
+    ]
+  },
+  {
+    "id": 200,
+    "name": "Misdreavus",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      60,
+      60,
+      85,
+      85,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      60,
+      60,
+      85,
+      85,
+      85
+    ]
+  },
+  {
+    "id": 146,
+    "name": "Moltres",
+    "genderRatio": 255,
+    "baseStats": [
+      90,
+      100,
+      90,
+      90,
+      125,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      100,
+      90,
+      90,
+      125,
+      85
+    ]
+  },
+  {
+    "id": 122,
+    "name": "Mr. Mime",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      45,
+      65,
+      90,
+      100,
+      120
+    ],
+    "abilities": [
+      {
+        "id": 43,
+        "name": "Soundproof"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      45,
+      65,
+      90,
+      100,
+      120
+    ]
+  },
+  {
+    "id": 283,
+    "name": "Mudkip",
+    "genderRatio": 31,
+    "baseStats": [
+      50,
+      70,
+      50,
+      40,
+      50,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 67,
+        "name": "Torrent"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      70,
+      50,
+      40,
+      50,
+      50
+    ]
+  },
+  {
+    "id": 89,
+    "name": "Muk",
+    "genderRatio": 127,
+    "baseStats": [
+      105,
+      105,
+      75,
+      50,
+      65,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 1,
+        "name": "Stench"
+      },
+      {
+        "id": 60,
+        "name": "Sticky Hold"
+      }
+    ],
+    "summaryBaseStats": [
+      105,
+      105,
+      75,
+      50,
+      65,
+      100
+    ]
+  },
+  {
+    "id": 198,
+    "name": "Murkrow",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      85,
+      42,
+      91,
+      85,
+      42
+    ],
+    "abilities": [
+      {
+        "id": 15,
+        "name": "Insomnia"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      85,
+      42,
+      91,
+      85,
+      42
+    ]
+  },
+  {
+    "id": 177,
+    "name": "Natu",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      50,
+      45,
+      70,
+      70,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 28,
+        "name": "Synchronize"
+      },
+      {
+        "id": 48,
+        "name": "Early Bird"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      50,
+      45,
+      70,
+      70,
+      45
+    ]
+  },
+  {
+    "id": 34,
+    "name": "Nidoking",
+    "genderRatio": 0,
+    "baseStats": [
+      81,
+      92,
+      77,
+      85,
+      85,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 38,
+        "name": "Poison Point"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      81,
+      92,
+      77,
+      85,
+      85,
+      75
+    ]
+  },
+  {
+    "id": 31,
+    "name": "Nidoqueen",
+    "genderRatio": 254,
+    "baseStats": [
+      90,
+      82,
+      87,
+      76,
+      75,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 38,
+        "name": "Poison Point"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      82,
+      87,
+      76,
+      75,
+      85
+    ]
+  },
+  {
+    "id": 29,
+    "name": "Nidoran♀",
+    "genderRatio": 254,
+    "baseStats": [
+      55,
+      47,
+      52,
+      41,
+      40,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 38,
+        "name": "Poison Point"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      47,
+      52,
+      41,
+      40,
+      40
+    ]
+  },
+  {
+    "id": 32,
+    "name": "Nidoran♂",
+    "genderRatio": 0,
+    "baseStats": [
+      46,
+      57,
+      40,
+      50,
+      40,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 38,
+        "name": "Poison Point"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      46,
+      57,
+      40,
+      50,
+      40,
+      40
+    ]
+  },
+  {
+    "id": 30,
+    "name": "Nidorina",
+    "genderRatio": 254,
+    "baseStats": [
+      70,
+      62,
+      67,
+      56,
+      55,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 38,
+        "name": "Poison Point"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      62,
+      67,
+      56,
+      55,
+      55
+    ]
+  },
+  {
+    "id": 33,
+    "name": "Nidorino",
+    "genderRatio": 0,
+    "baseStats": [
+      61,
+      72,
+      57,
+      65,
+      55,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 38,
+        "name": "Poison Point"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      61,
+      72,
+      57,
+      65,
+      55,
+      55
+    ]
+  },
+  {
+    "id": 301,
+    "name": "Nincada",
+    "genderRatio": 127,
+    "baseStats": [
+      31,
+      45,
+      90,
+      40,
+      30,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 14,
+        "name": "Compoundeyes"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      31,
+      45,
+      90,
+      40,
+      30,
+      30
+    ]
+  },
+  {
+    "id": 38,
+    "name": "Ninetales",
+    "genderRatio": 191,
+    "baseStats": [
+      73,
+      76,
+      75,
+      100,
+      81,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 18,
+        "name": "Flash Fire"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      73,
+      76,
+      75,
+      100,
+      81,
+      100
+    ]
+  },
+  {
+    "id": 302,
+    "name": "Ninjask",
+    "genderRatio": 127,
+    "baseStats": [
+      61,
+      90,
+      45,
+      160,
+      50,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 3,
+        "name": "Speed Boost"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      61,
+      90,
+      45,
+      160,
+      50,
+      50
+    ]
+  },
+  {
+    "id": 164,
+    "name": "Noctowl",
+    "genderRatio": 127,
+    "baseStats": [
+      100,
+      50,
+      50,
+      70,
+      76,
+      96
+    ],
+    "abilities": [
+      {
+        "id": 15,
+        "name": "Insomnia"
+      },
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      50,
+      50,
+      70,
+      76,
+      96
+    ]
+  },
+  {
+    "id": 320,
+    "name": "Nosepass",
+    "genderRatio": 127,
+    "baseStats": [
+      30,
+      45,
+      135,
+      30,
+      45,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 5,
+        "name": "Sturdy"
+      },
+      {
+        "id": 42,
+        "name": "Magnet Pull"
+      }
+    ],
+    "summaryBaseStats": [
+      30,
+      45,
+      135,
+      30,
+      45,
+      90
+    ]
+  },
+  {
+    "id": 339,
+    "name": "Numel",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      60,
+      40,
+      35,
+      65,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 12,
+        "name": "Oblivious"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      60,
+      40,
+      35,
+      65,
+      45
+    ]
+  },
+  {
+    "id": 299,
+    "name": "Nuzleaf",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      70,
+      40,
+      60,
+      60,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 48,
+        "name": "Early Bird"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      70,
+      40,
+      60,
+      60,
+      40
+    ]
+  },
+  {
+    "id": 224,
+    "name": "Octillery",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      105,
+      75,
+      45,
+      105,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 21,
+        "name": "Suction Cups"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      105,
+      75,
+      45,
+      105,
+      75
+    ]
+  },
+  {
+    "id": 43,
+    "name": "Oddish",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      50,
+      55,
+      30,
+      75,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      50,
+      55,
+      30,
+      75,
+      65
+    ]
+  },
+  {
+    "id": 138,
+    "name": "Omanyte",
+    "genderRatio": 31,
+    "baseStats": [
+      35,
+      40,
+      100,
+      35,
+      90,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 75,
+        "name": "Shell Armor"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      40,
+      100,
+      35,
+      90,
+      55
+    ]
+  },
+  {
+    "id": 139,
+    "name": "Omastar",
+    "genderRatio": 31,
+    "baseStats": [
+      70,
+      60,
+      125,
+      55,
+      115,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 75,
+        "name": "Shell Armor"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      60,
+      125,
+      55,
+      115,
+      70
+    ]
+  },
+  {
+    "id": 95,
+    "name": "Onix",
+    "genderRatio": 127,
+    "baseStats": [
+      35,
+      45,
+      160,
+      70,
+      30,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 69,
+        "name": "Rock Head"
+      },
+      {
+        "id": 5,
+        "name": "Sturdy"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      45,
+      160,
+      70,
+      30,
+      45
+    ]
+  },
+  {
+    "id": 46,
+    "name": "Paras",
+    "genderRatio": 127,
+    "baseStats": [
+      35,
+      70,
+      55,
+      25,
+      45,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 27,
+        "name": "Effect Spore"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      70,
+      55,
+      25,
+      45,
+      55
+    ]
+  },
+  {
+    "id": 47,
+    "name": "Parasect",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      95,
+      80,
+      30,
+      60,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 27,
+        "name": "Effect Spore"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      95,
+      80,
+      30,
+      60,
+      80
+    ]
+  },
+  {
+    "id": 310,
+    "name": "Pelipper",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      50,
+      100,
+      65,
+      85,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      50,
+      100,
+      65,
+      85,
+      70
+    ]
+  },
+  {
+    "id": 53,
+    "name": "Persian",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      70,
+      60,
+      115,
+      65,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 7,
+        "name": "Limber"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      70,
+      60,
+      115,
+      65,
+      65
+    ]
+  },
+  {
+    "id": 231,
+    "name": "Phanpy",
+    "genderRatio": 127,
+    "baseStats": [
+      90,
+      60,
+      60,
+      40,
+      40,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 53,
+        "name": "Pickup"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      60,
+      60,
+      40,
+      40,
+      40
+    ]
+  },
+  {
+    "id": 172,
+    "name": "Pichu",
+    "genderRatio": 127,
+    "baseStats": [
+      20,
+      40,
+      15,
+      60,
+      35,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 9,
+        "name": "Static"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      20,
+      40,
+      15,
+      60,
+      35,
+      35
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Pidgeot",
+    "genderRatio": 127,
+    "baseStats": [
+      83,
+      80,
+      75,
+      91,
+      70,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      83,
+      80,
+      75,
+      91,
+      70,
+      70
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Pidgeotto",
+    "genderRatio": 127,
+    "baseStats": [
+      63,
+      60,
+      55,
+      71,
+      50,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      63,
+      60,
+      55,
+      71,
+      50,
+      50
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Pidgey",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      45,
+      40,
+      56,
+      35,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      45,
+      40,
+      56,
+      35,
+      35
+    ]
+  },
+  {
+    "id": 25,
+    "name": "Pikachu",
+    "genderRatio": 127,
+    "baseStats": [
+      35,
+      55,
+      30,
+      90,
+      50,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 9,
+        "name": "Static"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      55,
+      30,
+      90,
+      50,
+      40
+    ]
+  },
+  {
+    "id": 221,
+    "name": "Piloswine",
+    "genderRatio": 127,
+    "baseStats": [
+      100,
+      100,
+      80,
+      50,
+      60,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 12,
+        "name": "Oblivious"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      100,
+      80,
+      50,
+      60,
+      60
+    ]
+  },
+  {
+    "id": 204,
+    "name": "Pineco",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      65,
+      90,
+      15,
+      35,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 5,
+        "name": "Sturdy"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      65,
+      90,
+      15,
+      35,
+      35
+    ]
+  },
+  {
+    "id": 127,
+    "name": "Pinsir",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      125,
+      100,
+      85,
+      55,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 52,
+        "name": "Hyper Cutter"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      125,
+      100,
+      85,
+      55,
+      70
+    ]
+  },
+  {
+    "id": 353,
+    "name": "Plusle",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      50,
+      40,
+      95,
+      85,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 57,
+        "name": "Plus"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      50,
+      40,
+      95,
+      85,
+      75
+    ]
+  },
+  {
+    "id": 186,
+    "name": "Politoed",
+    "genderRatio": 127,
+    "baseStats": [
+      90,
+      75,
+      75,
+      70,
+      90,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 11,
+        "name": "Water Absorb"
+      },
+      {
+        "id": 6,
+        "name": "Damp"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      75,
+      75,
+      70,
+      90,
+      100
+    ]
+  },
+  {
+    "id": 60,
+    "name": "Poliwag",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      50,
+      40,
+      90,
+      40,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 11,
+        "name": "Water Absorb"
+      },
+      {
+        "id": 6,
+        "name": "Damp"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      50,
+      40,
+      90,
+      40,
+      40
+    ]
+  },
+  {
+    "id": 61,
+    "name": "Poliwhirl",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      65,
+      65,
+      90,
+      50,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 11,
+        "name": "Water Absorb"
+      },
+      {
+        "id": 6,
+        "name": "Damp"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      65,
+      65,
+      90,
+      50,
+      50
+    ]
+  },
+  {
+    "id": 62,
+    "name": "Poliwrath",
+    "genderRatio": 127,
+    "baseStats": [
+      90,
+      85,
+      95,
+      70,
+      70,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 11,
+        "name": "Water Absorb"
+      },
+      {
+        "id": 6,
+        "name": "Damp"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      85,
+      95,
+      70,
+      70,
+      90
+    ]
+  },
+  {
+    "id": 77,
+    "name": "Ponyta",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      85,
+      55,
+      90,
+      65,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 50,
+        "name": "Run Away"
+      },
+      {
+        "id": 18,
+        "name": "Flash Fire"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      85,
+      55,
+      90,
+      65,
+      65
+    ]
+  },
+  {
+    "id": 286,
+    "name": "Poochyena",
+    "genderRatio": 127,
+    "baseStats": [
+      35,
+      55,
+      35,
+      35,
+      30,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 50,
+        "name": "Run Away"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      55,
+      35,
+      35,
+      30,
+      30
+    ]
+  },
+  {
+    "id": 137,
+    "name": "Porygon",
+    "genderRatio": 255,
+    "baseStats": [
+      65,
+      60,
+      70,
+      40,
+      85,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 36,
+        "name": "Trace"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      60,
+      70,
+      40,
+      85,
+      75
+    ]
+  },
+  {
+    "id": 233,
+    "name": "Porygon2",
+    "genderRatio": 255,
+    "baseStats": [
+      85,
+      80,
+      90,
+      60,
+      105,
+      95
+    ],
+    "abilities": [
+      {
+        "id": 36,
+        "name": "Trace"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      85,
+      80,
+      90,
+      60,
+      105,
+      95
+    ]
+  },
+  {
+    "id": 57,
+    "name": "Primeape",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      105,
+      60,
+      95,
+      60,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 72,
+        "name": "Vital Spirit"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      105,
+      60,
+      95,
+      60,
+      70
+    ]
+  },
+  {
+    "id": 54,
+    "name": "Psyduck",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      52,
+      48,
+      55,
+      65,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 6,
+        "name": "Damp"
+      },
+      {
+        "id": 13,
+        "name": "Cloud Nine"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      52,
+      48,
+      55,
+      65,
+      50
+    ]
+  },
+  {
+    "id": 247,
+    "name": "Pupitar",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      84,
+      70,
+      51,
+      65,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 61,
+        "name": "Shed Skin"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      84,
+      70,
+      51,
+      65,
+      70
+    ]
+  },
+  {
+    "id": 195,
+    "name": "Quagsire",
+    "genderRatio": 127,
+    "baseStats": [
+      95,
+      85,
+      85,
+      35,
+      65,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 6,
+        "name": "Damp"
+      },
+      {
+        "id": 11,
+        "name": "Water Absorb"
+      }
+    ],
+    "summaryBaseStats": [
+      95,
+      85,
+      85,
+      35,
+      65,
+      65
+    ]
+  },
+  {
+    "id": 156,
+    "name": "Quilava",
+    "genderRatio": 31,
+    "baseStats": [
+      58,
+      64,
+      58,
+      80,
+      80,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 66,
+        "name": "Blaze"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      58,
+      64,
+      58,
+      80,
+      80,
+      65
+    ]
+  },
+  {
+    "id": 211,
+    "name": "Qwilfish",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      95,
+      75,
+      85,
+      55,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 38,
+        "name": "Poison Point"
+      },
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      95,
+      75,
+      85,
+      55,
+      55
+    ]
+  },
+  {
+    "id": 26,
+    "name": "Raichu",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      90,
+      55,
+      100,
+      90,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 9,
+        "name": "Static"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      90,
+      55,
+      100,
+      90,
+      80
+    ]
+  },
+  {
+    "id": 243,
+    "name": "Raikou",
+    "genderRatio": 255,
+    "baseStats": [
+      90,
+      85,
+      75,
+      115,
+      115,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      85,
+      75,
+      115,
+      115,
+      100
+    ]
+  },
+  {
+    "id": 392,
+    "name": "Ralts",
+    "genderRatio": 127,
+    "baseStats": [
+      28,
+      25,
+      25,
+      40,
+      45,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 28,
+        "name": "Synchronize"
+      },
+      {
+        "id": 36,
+        "name": "Trace"
+      }
+    ],
+    "summaryBaseStats": [
+      28,
+      25,
+      25,
+      40,
+      45,
+      35
+    ]
+  },
+  {
+    "id": 78,
+    "name": "Rapidash",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      100,
+      70,
+      105,
+      80,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 50,
+        "name": "Run Away"
+      },
+      {
+        "id": 18,
+        "name": "Flash Fire"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      100,
+      70,
+      105,
+      80,
+      80
+    ]
+  },
+  {
+    "id": 20,
+    "name": "Raticate",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      81,
+      60,
+      97,
+      50,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 50,
+        "name": "Run Away"
+      },
+      {
+        "id": 62,
+        "name": "Guts"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      81,
+      60,
+      97,
+      50,
+      70
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Rattata",
+    "genderRatio": 127,
+    "baseStats": [
+      30,
+      56,
+      35,
+      72,
+      25,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 50,
+        "name": "Run Away"
+      },
+      {
+        "id": 62,
+        "name": "Guts"
+      }
+    ],
+    "summaryBaseStats": [
+      30,
+      56,
+      35,
+      72,
+      25,
+      35
+    ]
+  },
+  {
+    "id": 406,
+    "name": "Rayquaza",
+    "genderRatio": 255,
+    "baseStats": [
+      105,
+      150,
+      90,
+      95,
+      150,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 77,
+        "name": "Air Lock"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      105,
+      150,
+      90,
+      95,
+      150,
+      90
+    ]
+  },
+  {
+    "id": 402,
+    "name": "Regice",
+    "genderRatio": 255,
+    "baseStats": [
+      80,
+      50,
+      100,
+      50,
+      100,
+      200
+    ],
+    "abilities": [
+      {
+        "id": 29,
+        "name": "Clear Body"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      50,
+      100,
+      50,
+      100,
+      200
+    ]
+  },
+  {
+    "id": 401,
+    "name": "Regirock",
+    "genderRatio": 255,
+    "baseStats": [
+      80,
+      100,
+      200,
+      50,
+      50,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 29,
+        "name": "Clear Body"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      100,
+      200,
+      50,
+      50,
+      100
+    ]
+  },
+  {
+    "id": 403,
+    "name": "Registeel",
+    "genderRatio": 255,
+    "baseStats": [
+      80,
+      75,
+      150,
+      50,
+      75,
+      150
+    ],
+    "abilities": [
+      {
+        "id": 29,
+        "name": "Clear Body"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      75,
+      150,
+      50,
+      75,
+      150
+    ]
+  },
+  {
+    "id": 381,
+    "name": "Relicanth",
+    "genderRatio": 31,
+    "baseStats": [
+      100,
+      90,
+      130,
+      55,
+      45,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 69,
+        "name": "Rock Head"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      90,
+      130,
+      55,
+      45,
+      65
+    ]
+  },
+  {
+    "id": 223,
+    "name": "Remoraid",
+    "genderRatio": 127,
+    "baseStats": [
+      35,
+      65,
+      35,
+      65,
+      65,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 55,
+        "name": "Hustle"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      65,
+      35,
+      65,
+      65,
+      35
+    ]
+  },
+  {
+    "id": 112,
+    "name": "Rhydon",
+    "genderRatio": 127,
+    "baseStats": [
+      105,
+      130,
+      120,
+      40,
+      45,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 31,
+        "name": "Lightningrod"
+      },
+      {
+        "id": 69,
+        "name": "Rock Head"
+      }
+    ],
+    "summaryBaseStats": [
+      105,
+      130,
+      120,
+      40,
+      45,
+      45
+    ]
+  },
+  {
+    "id": 111,
+    "name": "Rhyhorn",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      85,
+      95,
+      25,
+      30,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 31,
+        "name": "Lightningrod"
+      },
+      {
+        "id": 69,
+        "name": "Rock Head"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      85,
+      95,
+      25,
+      30,
+      30
+    ]
+  },
+  {
+    "id": 363,
+    "name": "Roselia",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      60,
+      45,
+      65,
+      100,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 30,
+        "name": "Natural Cure"
+      },
+      {
+        "id": 38,
+        "name": "Poison Point"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      60,
+      45,
+      65,
+      100,
+      80
+    ]
+  },
+  {
+    "id": 322,
+    "name": "Sableye",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      75,
+      75,
+      50,
+      65,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      75,
+      75,
+      50,
+      65,
+      65
+    ]
+  },
+  {
+    "id": 397,
+    "name": "Salamence",
+    "genderRatio": 127,
+    "baseStats": [
+      95,
+      135,
+      80,
+      100,
+      110,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      95,
+      135,
+      80,
+      100,
+      110,
+      80
+    ]
+  },
+  {
+    "id": 27,
+    "name": "Sandshrew",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      75,
+      85,
+      40,
+      20,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 8,
+        "name": "Sand Veil"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      75,
+      85,
+      40,
+      20,
+      30
+    ]
+  },
+  {
+    "id": 28,
+    "name": "Sandslash",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      100,
+      110,
+      65,
+      45,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 8,
+        "name": "Sand Veil"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      100,
+      110,
+      65,
+      45,
+      55
+    ]
+  },
+  {
+    "id": 279,
+    "name": "Sceptile",
+    "genderRatio": 31,
+    "baseStats": [
+      70,
+      85,
+      65,
+      120,
+      105,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 65,
+        "name": "Overgrow"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      85,
+      65,
+      120,
+      105,
+      85
+    ]
+  },
+  {
+    "id": 212,
+    "name": "Scizor",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      130,
+      100,
+      65,
+      55,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 68,
+        "name": "Swarm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      130,
+      100,
+      65,
+      55,
+      80
+    ]
+  },
+  {
+    "id": 123,
+    "name": "Scyther",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      110,
+      80,
+      105,
+      55,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 68,
+        "name": "Swarm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      110,
+      80,
+      105,
+      55,
+      80
+    ]
+  },
+  {
+    "id": 117,
+    "name": "Seadra",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      65,
+      95,
+      85,
+      95,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 38,
+        "name": "Poison Point"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      65,
+      95,
+      85,
+      95,
+      45
+    ]
+  },
+  {
+    "id": 119,
+    "name": "Seaking",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      92,
+      65,
+      68,
+      65,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 41,
+        "name": "Water Veil"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      92,
+      65,
+      68,
+      65,
+      80
+    ]
+  },
+  {
+    "id": 342,
+    "name": "Sealeo",
+    "genderRatio": 127,
+    "baseStats": [
+      90,
+      60,
+      70,
+      45,
+      75,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      60,
+      70,
+      45,
+      75,
+      70
+    ]
+  },
+  {
+    "id": 298,
+    "name": "Seedot",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      40,
+      50,
+      30,
+      30,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 48,
+        "name": "Early Bird"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      40,
+      50,
+      30,
+      30,
+      30
+    ]
+  },
+  {
+    "id": 86,
+    "name": "Seel",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      45,
+      55,
+      45,
+      45,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      45,
+      55,
+      45,
+      45,
+      70
+    ]
+  },
+  {
+    "id": 161,
+    "name": "Sentret",
+    "genderRatio": 127,
+    "baseStats": [
+      35,
+      46,
+      34,
+      20,
+      35,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 50,
+        "name": "Run Away"
+      },
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      46,
+      34,
+      20,
+      35,
+      45
+    ]
+  },
+  {
+    "id": 379,
+    "name": "Seviper",
+    "genderRatio": 127,
+    "baseStats": [
+      73,
+      100,
+      60,
+      65,
+      100,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 61,
+        "name": "Shed Skin"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      73,
+      100,
+      60,
+      65,
+      100,
+      60
+    ]
+  },
+  {
+    "id": 331,
+    "name": "Sharpedo",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      120,
+      40,
+      95,
+      95,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 24,
+        "name": "Rough Skin"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      120,
+      40,
+      95,
+      95,
+      40
+    ]
+  },
+  {
+    "id": 303,
+    "name": "Shedinja",
+    "genderRatio": 255,
+    "baseStats": [
+      1,
+      90,
+      45,
+      40,
+      30,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 25,
+        "name": "Wonder Guard"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      1,
+      90,
+      45,
+      40,
+      30,
+      30
+    ]
+  },
+  {
+    "id": 396,
+    "name": "Shelgon",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      95,
+      100,
+      50,
+      60,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 69,
+        "name": "Rock Head"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      95,
+      100,
+      50,
+      60,
+      50
+    ]
+  },
+  {
+    "id": 90,
+    "name": "Shellder",
+    "genderRatio": 127,
+    "baseStats": [
+      30,
+      65,
+      100,
+      40,
+      45,
+      25
+    ],
+    "abilities": [
+      {
+        "id": 75,
+        "name": "Shell Armor"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      30,
+      65,
+      100,
+      40,
+      45,
+      25
+    ]
+  },
+  {
+    "id": 300,
+    "name": "Shiftry",
+    "genderRatio": 127,
+    "baseStats": [
+      90,
+      100,
+      60,
+      80,
+      90,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 48,
+        "name": "Early Bird"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      100,
+      60,
+      80,
+      90,
+      60
+    ]
+  },
+  {
+    "id": 306,
+    "name": "Shroomish",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      40,
+      60,
+      35,
+      40,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 27,
+        "name": "Effect Spore"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      40,
+      60,
+      35,
+      40,
+      60
+    ]
+  },
+  {
+    "id": 213,
+    "name": "Shuckle",
+    "genderRatio": 127,
+    "baseStats": [
+      20,
+      10,
+      230,
+      5,
+      10,
+      230
+    ],
+    "abilities": [
+      {
+        "id": 5,
+        "name": "Sturdy"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      20,
+      10,
+      230,
+      5,
+      10,
+      230
+    ]
+  },
+  {
+    "id": 377,
+    "name": "Shuppet",
+    "genderRatio": 127,
+    "baseStats": [
+      44,
+      75,
+      35,
+      45,
+      63,
+      33
+    ],
+    "abilities": [
+      {
+        "id": 15,
+        "name": "Insomnia"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      44,
+      75,
+      35,
+      45,
+      63,
+      33
+    ]
+  },
+  {
+    "id": 291,
+    "name": "Silcoon",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      35,
+      55,
+      15,
+      25,
+      25
+    ],
+    "abilities": [
+      {
+        "id": 61,
+        "name": "Shed Skin"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      35,
+      55,
+      15,
+      25,
+      25
+    ]
+  },
+  {
+    "id": 227,
+    "name": "Skarmory",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      80,
+      140,
+      70,
+      40,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      },
+      {
+        "id": 5,
+        "name": "Sturdy"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      80,
+      140,
+      70,
+      40,
+      70
+    ]
+  },
+  {
+    "id": 188,
+    "name": "Skiploom",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      45,
+      50,
+      80,
+      45,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      45,
+      50,
+      80,
+      45,
+      65
+    ]
+  },
+  {
+    "id": 315,
+    "name": "Skitty",
+    "genderRatio": 191,
+    "baseStats": [
+      50,
+      45,
+      45,
+      50,
+      35,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 56,
+        "name": "Cute Charm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      45,
+      45,
+      50,
+      35,
+      35
+    ]
+  },
+  {
+    "id": 366,
+    "name": "Slaking",
+    "genderRatio": 127,
+    "baseStats": [
+      150,
+      160,
+      100,
+      100,
+      95,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 54,
+        "name": "Truant"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      150,
+      160,
+      100,
+      100,
+      95,
+      65
+    ]
+  },
+  {
+    "id": 364,
+    "name": "Slakoth",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      60,
+      60,
+      30,
+      35,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 54,
+        "name": "Truant"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      60,
+      60,
+      30,
+      35,
+      35
+    ]
+  },
+  {
+    "id": 80,
+    "name": "Slowbro",
+    "genderRatio": 127,
+    "baseStats": [
+      95,
+      75,
+      110,
+      30,
+      100,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 12,
+        "name": "Oblivious"
+      },
+      {
+        "id": 20,
+        "name": "Own Tempo"
+      }
+    ],
+    "summaryBaseStats": [
+      95,
+      75,
+      110,
+      30,
+      100,
+      80
+    ]
+  },
+  {
+    "id": 199,
+    "name": "Slowking",
+    "genderRatio": 127,
+    "baseStats": [
+      95,
+      75,
+      80,
+      30,
+      100,
+      110
+    ],
+    "abilities": [
+      {
+        "id": 12,
+        "name": "Oblivious"
+      },
+      {
+        "id": 20,
+        "name": "Own Tempo"
+      }
+    ],
+    "summaryBaseStats": [
+      95,
+      75,
+      80,
+      30,
+      100,
+      110
+    ]
+  },
+  {
+    "id": 79,
+    "name": "Slowpoke",
+    "genderRatio": 127,
+    "baseStats": [
+      90,
+      65,
+      65,
+      15,
+      40,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 12,
+        "name": "Oblivious"
+      },
+      {
+        "id": 20,
+        "name": "Own Tempo"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      65,
+      65,
+      15,
+      40,
+      40
+    ]
+  },
+  {
+    "id": 218,
+    "name": "Slugma",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      40,
+      40,
+      20,
+      70,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 40,
+        "name": "Magma Armor"
+      },
+      {
+        "id": 49,
+        "name": "Flame Body"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      40,
+      40,
+      20,
+      70,
+      40
+    ]
+  },
+  {
+    "id": 235,
+    "name": "Smeargle",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      20,
+      35,
+      75,
+      20,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 20,
+        "name": "Own Tempo"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      20,
+      35,
+      75,
+      20,
+      45
+    ]
+  },
+  {
+    "id": 238,
+    "name": "Smoochum",
+    "genderRatio": 254,
+    "baseStats": [
+      45,
+      30,
+      15,
+      65,
+      85,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 12,
+        "name": "Oblivious"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      30,
+      15,
+      65,
+      85,
+      65
+    ]
+  },
+  {
+    "id": 215,
+    "name": "Sneasel",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      95,
+      55,
+      115,
+      35,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      },
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      95,
+      55,
+      115,
+      35,
+      75
+    ]
+  },
+  {
+    "id": 143,
+    "name": "Snorlax",
+    "genderRatio": 31,
+    "baseStats": [
+      160,
+      110,
+      65,
+      30,
+      65,
+      110
+    ],
+    "abilities": [
+      {
+        "id": 17,
+        "name": "Immunity"
+      },
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      }
+    ],
+    "summaryBaseStats": [
+      160,
+      110,
+      65,
+      30,
+      65,
+      110
+    ]
+  },
+  {
+    "id": 346,
+    "name": "Snorunt",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      50,
+      50,
+      50,
+      50,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      50,
+      50,
+      50,
+      50,
+      50
+    ]
+  },
+  {
+    "id": 209,
+    "name": "Snubbull",
+    "genderRatio": 191,
+    "baseStats": [
+      60,
+      80,
+      50,
+      30,
+      40,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 50,
+        "name": "Run Away"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      80,
+      50,
+      30,
+      40,
+      40
+    ]
+  },
+  {
+    "id": 349,
+    "name": "Solrock",
+    "genderRatio": 255,
+    "baseStats": [
+      70,
+      95,
+      85,
+      70,
+      55,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      95,
+      85,
+      70,
+      55,
+      65
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Spearow",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      60,
+      30,
+      70,
+      31,
+      31
+    ],
+    "abilities": [
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      60,
+      30,
+      70,
+      31,
+      31
+    ]
+  },
+  {
+    "id": 341,
+    "name": "Spheal",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      40,
+      50,
+      25,
+      55,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      40,
+      50,
+      25,
+      55,
+      50
+    ]
+  },
+  {
+    "id": 167,
+    "name": "Spinarak",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      60,
+      40,
+      30,
+      40,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 68,
+        "name": "Swarm"
+      },
+      {
+        "id": 15,
+        "name": "Insomnia"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      60,
+      40,
+      30,
+      40,
+      40
+    ]
+  },
+  {
+    "id": 308,
+    "name": "Spinda",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      60,
+      60,
+      60,
+      60,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 20,
+        "name": "Own Tempo"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      60,
+      60,
+      60,
+      60,
+      60
+    ]
+  },
+  {
+    "id": 351,
+    "name": "Spoink",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      25,
+      35,
+      60,
+      70,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 20,
+        "name": "Own Tempo"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      25,
+      35,
+      60,
+      70,
+      80
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Squirtle",
+    "genderRatio": 31,
+    "baseStats": [
+      44,
+      48,
+      65,
+      43,
+      50,
+      64
+    ],
+    "abilities": [
+      {
+        "id": 67,
+        "name": "Torrent"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      44,
+      48,
+      65,
+      43,
+      50,
+      64
+    ]
+  },
+  {
+    "id": 234,
+    "name": "Stantler",
+    "genderRatio": 127,
+    "baseStats": [
+      73,
+      95,
+      62,
+      85,
+      85,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      73,
+      95,
+      62,
+      85,
+      85,
+      65
+    ]
+  },
+  {
+    "id": 121,
+    "name": "Starmie",
+    "genderRatio": 255,
+    "baseStats": [
+      60,
+      75,
+      85,
+      115,
+      100,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 35,
+        "name": "Illuminate"
+      },
+      {
+        "id": 30,
+        "name": "Natural Cure"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      75,
+      85,
+      115,
+      100,
+      85
+    ]
+  },
+  {
+    "id": 120,
+    "name": "Staryu",
+    "genderRatio": 255,
+    "baseStats": [
+      30,
+      45,
+      55,
+      85,
+      70,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 35,
+        "name": "Illuminate"
+      },
+      {
+        "id": 30,
+        "name": "Natural Cure"
+      }
+    ],
+    "summaryBaseStats": [
+      30,
+      45,
+      55,
+      85,
+      70,
+      55
+    ]
+  },
+  {
+    "id": 208,
+    "name": "Steelix",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      85,
+      200,
+      30,
+      55,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 69,
+        "name": "Rock Head"
+      },
+      {
+        "id": 5,
+        "name": "Sturdy"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      85,
+      200,
+      30,
+      55,
+      65
+    ]
+  },
+  {
+    "id": 185,
+    "name": "Sudowoodo",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      100,
+      115,
+      30,
+      30,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 5,
+        "name": "Sturdy"
+      },
+      {
+        "id": 69,
+        "name": "Rock Head"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      100,
+      115,
+      30,
+      30,
+      65
+    ]
+  },
+  {
+    "id": 245,
+    "name": "Suicune",
+    "genderRatio": 255,
+    "baseStats": [
+      100,
+      75,
+      115,
+      85,
+      90,
+      115
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      75,
+      115,
+      85,
+      90,
+      115
+    ]
+  },
+  {
+    "id": 192,
+    "name": "Sunflora",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      75,
+      55,
+      30,
+      105,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      75,
+      55,
+      30,
+      105,
+      85
+    ]
+  },
+  {
+    "id": 191,
+    "name": "Sunkern",
+    "genderRatio": 127,
+    "baseStats": [
+      30,
+      30,
+      30,
+      30,
+      30,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      30,
+      30,
+      30,
+      30,
+      30,
+      30
+    ]
+  },
+  {
+    "id": 311,
+    "name": "Surskit",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      30,
+      32,
+      65,
+      50,
+      52
+    ],
+    "abilities": [
+      {
+        "id": 33,
+        "name": "Swift Swim"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      30,
+      32,
+      65,
+      50,
+      52
+    ]
+  },
+  {
+    "id": 358,
+    "name": "Swablu",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      40,
+      60,
+      50,
+      40,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 30,
+        "name": "Natural Cure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      40,
+      60,
+      50,
+      40,
+      75
+    ]
+  },
+  {
+    "id": 368,
+    "name": "Swalot",
+    "genderRatio": 127,
+    "baseStats": [
+      100,
+      73,
+      83,
+      55,
+      73,
+      83
+    ],
+    "abilities": [
+      {
+        "id": 64,
+        "name": "Liquid Ooze"
+      },
+      {
+        "id": 60,
+        "name": "Sticky Hold"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      73,
+      83,
+      55,
+      73,
+      83
+    ]
+  },
+  {
+    "id": 285,
+    "name": "Swampert",
+    "genderRatio": 31,
+    "baseStats": [
+      100,
+      110,
+      90,
+      60,
+      85,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 67,
+        "name": "Torrent"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      110,
+      90,
+      60,
+      85,
+      90
+    ]
+  },
+  {
+    "id": 305,
+    "name": "Swellow",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      85,
+      60,
+      125,
+      50,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 62,
+        "name": "Guts"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      85,
+      60,
+      125,
+      50,
+      50
+    ]
+  },
+  {
+    "id": 220,
+    "name": "Swinub",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      50,
+      40,
+      50,
+      30,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 12,
+        "name": "Oblivious"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      50,
+      40,
+      50,
+      30,
+      30
+    ]
+  },
+  {
+    "id": 304,
+    "name": "Taillow",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      55,
+      30,
+      85,
+      30,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 62,
+        "name": "Guts"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      55,
+      30,
+      85,
+      30,
+      30
+    ]
+  },
+  {
+    "id": 114,
+    "name": "Tangela",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      55,
+      115,
+      60,
+      100,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      55,
+      115,
+      60,
+      100,
+      40
+    ]
+  },
+  {
+    "id": 128,
+    "name": "Tauros",
+    "genderRatio": 0,
+    "baseStats": [
+      75,
+      100,
+      95,
+      110,
+      40,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 22,
+        "name": "Intimidate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      100,
+      95,
+      110,
+      40,
+      70
+    ]
+  },
+  {
+    "id": 216,
+    "name": "Teddiursa",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      80,
+      50,
+      40,
+      50,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 53,
+        "name": "Pickup"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      80,
+      50,
+      40,
+      50,
+      50
+    ]
+  },
+  {
+    "id": 72,
+    "name": "Tentacool",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      40,
+      35,
+      70,
+      50,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 29,
+        "name": "Clear Body"
+      },
+      {
+        "id": 64,
+        "name": "Liquid Ooze"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      40,
+      35,
+      70,
+      50,
+      100
+    ]
+  },
+  {
+    "id": 73,
+    "name": "Tentacruel",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      70,
+      65,
+      100,
+      80,
+      120
+    ],
+    "abilities": [
+      {
+        "id": 29,
+        "name": "Clear Body"
+      },
+      {
+        "id": 64,
+        "name": "Liquid Ooze"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      70,
+      65,
+      100,
+      80,
+      120
+    ]
+  },
+  {
+    "id": 175,
+    "name": "Togepi",
+    "genderRatio": 31,
+    "baseStats": [
+      35,
+      20,
+      65,
+      20,
+      40,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 55,
+        "name": "Hustle"
+      },
+      {
+        "id": 32,
+        "name": "Serene Grace"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      20,
+      65,
+      20,
+      40,
+      65
+    ]
+  },
+  {
+    "id": 176,
+    "name": "Togetic",
+    "genderRatio": 31,
+    "baseStats": [
+      55,
+      40,
+      85,
+      40,
+      80,
+      105
+    ],
+    "abilities": [
+      {
+        "id": 55,
+        "name": "Hustle"
+      },
+      {
+        "id": 32,
+        "name": "Serene Grace"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      40,
+      85,
+      40,
+      80,
+      105
+    ]
+  },
+  {
+    "id": 280,
+    "name": "Torchic",
+    "genderRatio": 31,
+    "baseStats": [
+      45,
+      60,
+      40,
+      45,
+      70,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 66,
+        "name": "Blaze"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      60,
+      40,
+      45,
+      70,
+      50
+    ]
+  },
+  {
+    "id": 321,
+    "name": "Torkoal",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      85,
+      140,
+      20,
+      85,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 73,
+        "name": "White Smoke"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      85,
+      140,
+      20,
+      85,
+      70
+    ]
+  },
+  {
+    "id": 158,
+    "name": "Totodile",
+    "genderRatio": 31,
+    "baseStats": [
+      50,
+      65,
+      64,
+      43,
+      44,
+      48
+    ],
+    "abilities": [
+      {
+        "id": 67,
+        "name": "Torrent"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      65,
+      64,
+      43,
+      44,
+      48
+    ]
+  },
+  {
+    "id": 332,
+    "name": "Trapinch",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      100,
+      45,
+      10,
+      45,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 52,
+        "name": "Hyper Cutter"
+      },
+      {
+        "id": 71,
+        "name": "Arena Trap"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      100,
+      45,
+      10,
+      45,
+      45
+    ]
+  },
+  {
+    "id": 277,
+    "name": "Treecko",
+    "genderRatio": 31,
+    "baseStats": [
+      40,
+      45,
+      35,
+      70,
+      65,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 65,
+        "name": "Overgrow"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      45,
+      35,
+      70,
+      65,
+      55
+    ]
+  },
+  {
+    "id": 369,
+    "name": "Tropius",
+    "genderRatio": 127,
+    "baseStats": [
+      99,
+      68,
+      83,
+      51,
+      72,
+      87
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      99,
+      68,
+      83,
+      51,
+      72,
+      87
+    ]
+  },
+  {
+    "id": 157,
+    "name": "Typhlosion",
+    "genderRatio": 31,
+    "baseStats": [
+      78,
+      84,
+      78,
+      100,
+      109,
+      85
+    ],
+    "abilities": [
+      {
+        "id": 66,
+        "name": "Blaze"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      78,
+      84,
+      78,
+      100,
+      109,
+      85
+    ]
+  },
+  {
+    "id": 248,
+    "name": "Tyranitar",
+    "genderRatio": 127,
+    "baseStats": [
+      100,
+      134,
+      110,
+      61,
+      95,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 45,
+        "name": "Sand Stream"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      100,
+      134,
+      110,
+      61,
+      95,
+      100
+    ]
+  },
+  {
+    "id": 236,
+    "name": "Tyrogue",
+    "genderRatio": 0,
+    "baseStats": [
+      35,
+      35,
+      35,
+      35,
+      35,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 62,
+        "name": "Guts"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      35,
+      35,
+      35,
+      35,
+      35,
+      35
+    ]
+  },
+  {
+    "id": 197,
+    "name": "Umbreon",
+    "genderRatio": 31,
+    "baseStats": [
+      95,
+      65,
+      110,
+      65,
+      60,
+      130
+    ],
+    "abilities": [
+      {
+        "id": 28,
+        "name": "Synchronize"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      95,
+      65,
+      110,
+      65,
+      60,
+      130
+    ]
+  },
+  {
+    "id": 201,
+    "name": "Unown",
+    "genderRatio": 255,
+    "baseStats": [
+      48,
+      72,
+      48,
+      48,
+      72,
+      48
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      48,
+      72,
+      48,
+      48,
+      72,
+      48
+    ]
+  },
+  {
+    "id": 217,
+    "name": "Ursaring",
+    "genderRatio": 127,
+    "baseStats": [
+      90,
+      130,
+      75,
+      55,
+      75,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 62,
+        "name": "Guts"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      130,
+      75,
+      55,
+      75,
+      75
+    ]
+  },
+  {
+    "id": 134,
+    "name": "Vaporeon",
+    "genderRatio": 31,
+    "baseStats": [
+      130,
+      65,
+      60,
+      65,
+      110,
+      95
+    ],
+    "abilities": [
+      {
+        "id": 11,
+        "name": "Water Absorb"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      130,
+      65,
+      60,
+      65,
+      110,
+      95
+    ]
+  },
+  {
+    "id": 49,
+    "name": "Venomoth",
+    "genderRatio": 127,
+    "baseStats": [
+      70,
+      65,
+      60,
+      90,
+      90,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 19,
+        "name": "Shield Dust"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      70,
+      65,
+      60,
+      90,
+      90,
+      75
+    ]
+  },
+  {
+    "id": 48,
+    "name": "Venonat",
+    "genderRatio": 127,
+    "baseStats": [
+      60,
+      55,
+      50,
+      45,
+      40,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 14,
+        "name": "Compoundeyes"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      60,
+      55,
+      50,
+      45,
+      40,
+      55
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Venusaur",
+    "genderRatio": 31,
+    "baseStats": [
+      80,
+      82,
+      83,
+      80,
+      100,
+      100
+    ],
+    "abilities": [
+      {
+        "id": 65,
+        "name": "Overgrow"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      82,
+      83,
+      80,
+      100,
+      100
+    ]
+  },
+  {
+    "id": 333,
+    "name": "Vibrava",
+    "genderRatio": 127,
+    "baseStats": [
+      50,
+      70,
+      50,
+      70,
+      50,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 26,
+        "name": "Levitate"
+      }
+    ],
+    "summaryBaseStats": [
+      50,
+      70,
+      50,
+      70,
+      50,
+      50
+    ]
+  },
+  {
+    "id": 71,
+    "name": "Victreebel",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      105,
+      65,
+      70,
+      100,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      105,
+      65,
+      70,
+      100,
+      60
+    ]
+  },
+  {
+    "id": 365,
+    "name": "Vigoroth",
+    "genderRatio": 127,
+    "baseStats": [
+      80,
+      80,
+      80,
+      90,
+      55,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 72,
+        "name": "Vital Spirit"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      80,
+      80,
+      80,
+      90,
+      55,
+      55
+    ]
+  },
+  {
+    "id": 45,
+    "name": "Vileplume",
+    "genderRatio": 127,
+    "baseStats": [
+      75,
+      80,
+      85,
+      50,
+      100,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      75,
+      80,
+      85,
+      50,
+      100,
+      90
+    ]
+  },
+  {
+    "id": 386,
+    "name": "Volbeat",
+    "genderRatio": 0,
+    "baseStats": [
+      65,
+      73,
+      55,
+      85,
+      47,
+      75
+    ],
+    "abilities": [
+      {
+        "id": 35,
+        "name": "Illuminate"
+      },
+      {
+        "id": 68,
+        "name": "Swarm"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      73,
+      55,
+      85,
+      47,
+      75
+    ]
+  },
+  {
+    "id": 100,
+    "name": "Voltorb",
+    "genderRatio": 255,
+    "baseStats": [
+      40,
+      30,
+      50,
+      100,
+      55,
+      55
+    ],
+    "abilities": [
+      {
+        "id": 43,
+        "name": "Soundproof"
+      },
+      {
+        "id": 9,
+        "name": "Static"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      30,
+      50,
+      100,
+      55,
+      55
+    ]
+  },
+  {
+    "id": 37,
+    "name": "Vulpix",
+    "genderRatio": 191,
+    "baseStats": [
+      38,
+      41,
+      40,
+      65,
+      50,
+      65
+    ],
+    "abilities": [
+      {
+        "id": 18,
+        "name": "Flash Fire"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      38,
+      41,
+      40,
+      65,
+      50,
+      65
+    ]
+  },
+  {
+    "id": 313,
+    "name": "Wailmer",
+    "genderRatio": 127,
+    "baseStats": [
+      130,
+      70,
+      35,
+      60,
+      70,
+      35
+    ],
+    "abilities": [
+      {
+        "id": 41,
+        "name": "Water Veil"
+      },
+      {
+        "id": 12,
+        "name": "Oblivious"
+      }
+    ],
+    "summaryBaseStats": [
+      130,
+      70,
+      35,
+      60,
+      70,
+      35
+    ]
+  },
+  {
+    "id": 314,
+    "name": "Wailord",
+    "genderRatio": 127,
+    "baseStats": [
+      170,
+      90,
+      45,
+      60,
+      90,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 41,
+        "name": "Water Veil"
+      },
+      {
+        "id": 12,
+        "name": "Oblivious"
+      }
+    ],
+    "summaryBaseStats": [
+      170,
+      90,
+      45,
+      60,
+      90,
+      45
+    ]
+  },
+  {
+    "id": 343,
+    "name": "Walrein",
+    "genderRatio": 127,
+    "baseStats": [
+      110,
+      80,
+      90,
+      65,
+      95,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 47,
+        "name": "Thick Fat"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      110,
+      80,
+      90,
+      65,
+      95,
+      90
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Wartortle",
+    "genderRatio": 31,
+    "baseStats": [
+      59,
+      63,
+      80,
+      58,
+      65,
+      80
+    ],
+    "abilities": [
+      {
+        "id": 67,
+        "name": "Torrent"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      59,
+      63,
+      80,
+      58,
+      65,
+      80
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Weedle",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      35,
+      30,
+      50,
+      20,
+      20
+    ],
+    "abilities": [
+      {
+        "id": 19,
+        "name": "Shield Dust"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      35,
+      30,
+      50,
+      20,
+      20
+    ]
+  },
+  {
+    "id": 70,
+    "name": "Weepinbell",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      90,
+      50,
+      55,
+      85,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 34,
+        "name": "Chlorophyll"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      90,
+      50,
+      55,
+      85,
+      45
+    ]
+  },
+  {
+    "id": 110,
+    "name": "Weezing",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      90,
+      120,
+      60,
+      85,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 26,
+        "name": "Levitate"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      90,
+      120,
+      60,
+      85,
+      70
+    ]
+  },
+  {
+    "id": 324,
+    "name": "Whiscash",
+    "genderRatio": 127,
+    "baseStats": [
+      110,
+      78,
+      73,
+      60,
+      76,
+      71
+    ],
+    "abilities": [
+      {
+        "id": 12,
+        "name": "Oblivious"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      110,
+      78,
+      73,
+      60,
+      76,
+      71
+    ]
+  },
+  {
+    "id": 370,
+    "name": "Whismur",
+    "genderRatio": 127,
+    "baseStats": [
+      64,
+      51,
+      23,
+      28,
+      51,
+      23
+    ],
+    "abilities": [
+      {
+        "id": 43,
+        "name": "Soundproof"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      64,
+      51,
+      23,
+      28,
+      51,
+      23
+    ]
+  },
+  {
+    "id": 40,
+    "name": "Wigglytuff",
+    "genderRatio": 191,
+    "baseStats": [
+      140,
+      70,
+      45,
+      45,
+      75,
+      50
+    ],
+    "abilities": [
+      {
+        "id": 56,
+        "name": "Cute Charm"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      140,
+      70,
+      45,
+      45,
+      75,
+      50
+    ]
+  },
+  {
+    "id": 309,
+    "name": "Wingull",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      30,
+      30,
+      85,
+      55,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 51,
+        "name": "Keen Eye"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      30,
+      30,
+      85,
+      55,
+      30
+    ]
+  },
+  {
+    "id": 202,
+    "name": "Wobbuffet",
+    "genderRatio": 127,
+    "baseStats": [
+      190,
+      33,
+      58,
+      33,
+      33,
+      58
+    ],
+    "abilities": [
+      {
+        "id": 23,
+        "name": "Shadow Tag"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      190,
+      33,
+      58,
+      33,
+      33,
+      58
+    ]
+  },
+  {
+    "id": 194,
+    "name": "Wooper",
+    "genderRatio": 127,
+    "baseStats": [
+      55,
+      45,
+      45,
+      15,
+      25,
+      25
+    ],
+    "abilities": [
+      {
+        "id": 6,
+        "name": "Damp"
+      },
+      {
+        "id": 11,
+        "name": "Water Absorb"
+      }
+    ],
+    "summaryBaseStats": [
+      55,
+      45,
+      45,
+      15,
+      25,
+      25
+    ]
+  },
+  {
+    "id": 290,
+    "name": "Wurmple",
+    "genderRatio": 127,
+    "baseStats": [
+      45,
+      45,
+      35,
+      20,
+      20,
+      30
+    ],
+    "abilities": [
+      {
+        "id": 19,
+        "name": "Shield Dust"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      45,
+      45,
+      35,
+      20,
+      20,
+      30
+    ]
+  },
+  {
+    "id": 360,
+    "name": "Wynaut",
+    "genderRatio": 127,
+    "baseStats": [
+      95,
+      23,
+      48,
+      23,
+      23,
+      48
+    ],
+    "abilities": [
+      {
+        "id": 23,
+        "name": "Shadow Tag"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      95,
+      23,
+      48,
+      23,
+      23,
+      48
+    ]
+  },
+  {
+    "id": 178,
+    "name": "Xatu",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      75,
+      70,
+      95,
+      95,
+      70
+    ],
+    "abilities": [
+      {
+        "id": 28,
+        "name": "Synchronize"
+      },
+      {
+        "id": 48,
+        "name": "Early Bird"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      75,
+      70,
+      95,
+      95,
+      70
+    ]
+  },
+  {
+    "id": 193,
+    "name": "Yanma",
+    "genderRatio": 127,
+    "baseStats": [
+      65,
+      65,
+      45,
+      95,
+      75,
+      45
+    ],
+    "abilities": [
+      {
+        "id": 3,
+        "name": "Speed Boost"
+      },
+      {
+        "id": 14,
+        "name": "Compoundeyes"
+      }
+    ],
+    "summaryBaseStats": [
+      65,
+      65,
+      45,
+      95,
+      75,
+      45
+    ]
+  },
+  {
+    "id": 380,
+    "name": "Zangoose",
+    "genderRatio": 127,
+    "baseStats": [
+      73,
+      115,
+      60,
+      90,
+      60,
+      60
+    ],
+    "abilities": [
+      {
+        "id": 17,
+        "name": "Immunity"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      73,
+      115,
+      60,
+      90,
+      60,
+      60
+    ]
+  },
+  {
+    "id": 145,
+    "name": "Zapdos",
+    "genderRatio": 255,
+    "baseStats": [
+      90,
+      90,
+      85,
+      100,
+      125,
+      90
+    ],
+    "abilities": [
+      {
+        "id": 46,
+        "name": "Pressure"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      90,
+      90,
+      85,
+      100,
+      125,
+      90
+    ]
+  },
+  {
+    "id": 288,
+    "name": "Zigzagoon",
+    "genderRatio": 127,
+    "baseStats": [
+      38,
+      30,
+      41,
+      60,
+      30,
+      41
+    ],
+    "abilities": [
+      {
+        "id": 53,
+        "name": "Pickup"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      38,
+      30,
+      41,
+      60,
+      30,
+      41
+    ]
+  },
+  {
+    "id": 41,
+    "name": "Zubat",
+    "genderRatio": 127,
+    "baseStats": [
+      40,
+      45,
+      35,
+      55,
+      30,
+      40
+    ],
+    "abilities": [
+      {
+        "id": 39,
+        "name": "Inner Focus"
+      },
+      {
+        "id": 0,
+        "name": "-------"
+      }
+    ],
+    "summaryBaseStats": [
+      40,
+      45,
+      35,
+      55,
+      30,
+      40
+    ]
+  }
+]

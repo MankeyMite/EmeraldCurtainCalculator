@@ -1,0 +1,24 @@
+node_modules/
+dist/
+release/
+*.log
+.env*
+.DS_Store
+Thumbs.db
+.codex/
+.agents/
+research/pret/
+research/mgba-source/
+research/captures/
+research/local-history/
+research/HANDOFF.md
+/research/*.png
+/research/*.jpg
+*.gba
+*.sav
+*.ss[0-9]*
+*.ek3
+!research/fixtures/**/*.ek3
+# Historical UI screenshots kept only for local reference
+/docs/preview.jpg
+/docs/hypothesis-checker.jpg

@@ -1,0 +1,6 @@
+{
+  "liveServer.settings.root": "/dist",
+  "liveServer.settings.file": "index.html",
+  "liveServer.settings.port": 5510,
+  "liveServer.settings.host": "127.0.0.1"
+}

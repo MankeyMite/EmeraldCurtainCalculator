@@ -1,0 +1,31 @@
+{
+  "name": "emerald-curtain-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5187",
+    "build": "tsc --noEmit \u0026\u0026 vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "tsx --test tests/*.test.ts",
+    "research": "node scripts/extract-mapping.mjs",
+    "check": "npm run test \u0026\u0026 npm run build",
+    "package:source": "node scripts/package-source.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "prettier": "^3.9.10",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  },
+  "description": "Browser-based Pokémon Emerald curtain renderer and constraint solver",
+  "license": "MIT",
+  "engines": {
+    "node": "\u003e=22.12.0"
+  }
+}

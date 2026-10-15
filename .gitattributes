@@ -1,0 +1,8 @@
+* text=auto
+*.ek3 binary
+*.bin binary
+*.png binary
+*.jpg binary
+
+# Preserve original observation exports and capture evidence byte-for-byte.
+research/fixtures/**/*.json -text

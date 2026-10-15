@@ -1,0 +1,103 @@
+{
+  "saveSha256": "b5137d9b9b5f7393e3a5deee1a5387da5f7c9015877bf3282a35b976c7657e82",
+  "saveBytes": 131088,
+  "saveFileModified": "2026-10-14T18:29:48.374Z",
+  "copies": [
+    {
+      "copy": 0,
+      "valid": true,
+      "counter": 1064,
+      "candidateMatchesSlot5": true,
+      "slot5": {
+        "pid": 1194748572,
+        "otId": 1194748572,
+        "tid": 27292,
+        "sid": 18230,
+        "key": 0,
+        "nature": 22,
+        "checksum": 54371,
+        "computedChecksum": 54371,
+        "checksumValid": true,
+        "species": 408,
+        "heldItem": 0,
+        "friendship": 255,
+        "experience": 92267,
+        "moves": [
+          94,
+          19,
+          57,
+          148
+        ],
+        "evs": [
+          30,
+          8,
+          4,
+          90,
+          32,
+          2
+        ],
+        "ivs": [
+          31,
+          31,
+          31,
+          31,
+          31,
+          31
+        ],
+        "isEgg": false,
+        "ability": 0
+      },
+      "slot4Empty": true,
+      "slot6Empty": true
+    },
+    {
+      "copy": 1,
+      "valid": true,
+      "counter": 1063,
+      "candidateMatchesSlot5": false,
+      "slot5": {
+        "pid": 0,
+        "otId": 0,
+        "tid": 0,
+        "sid": 0,
+        "key": 0,
+        "nature": 0,
+        "checksum": 0,
+        "computedChecksum": 0,
+        "checksumValid": true,
+        "species": 0,
+        "heldItem": 0,
+        "friendship": 0,
+        "experience": 0,
+        "moves": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "evs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "ivs": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "isEgg": false,
+        "ability": 0
+      },
+      "slot4Empty": true,
+      "slot6Empty": true
+    }
+  ],
+  "selectedCopy": 0,
+  "selectedCounter": 1064
+}
