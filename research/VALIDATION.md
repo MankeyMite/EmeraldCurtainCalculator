@@ -5,7 +5,7 @@
 - **72 automated tests pass**, including mapping/capture evidence, exact inference, examples and original trainer information. TypeScript and the Vite production build pass.
 - The source ZIP was extracted to a fresh folder. An offline locked dependency install with lifecycle scripts disabled succeeded; all 72 tests and the production build passed there without the decompilation checkout or development folders. Root and extracted builds produce the same asset names.
 - Go Live at http://127.0.0.1:5510/ returns HTTP 200 for the current page, JavaScript and CSS. This is an HTTP check, not a new visual or pointer-interaction browser test.
-- The pinned GitHub Action references resolve to commits in the official actions repositories. GitHub-hosted CI and Pages deployment still need their first real run after publishing the repository.
+- The pinned GitHub Action references resolve to commits in the official actions repositories. The GitHub-hosted Tests and build workflow passed on the initial public commit (cdb51db), including all 72 tests and the production build. GitHub Pages is enabled for workflow deployment; consult the repository Actions page for the current deployment status.
 - About now distinguishes unencrypted header bytes from encrypted secure data, describes the IV calculator accurately and reminds users to review assumed newly caught values. Invalid known-information or summary inputs block Calculate/Save; Save also guards against exporting stale last-valid facts. The outdated README screenshot was removed.
 - Existing evidence, original observation fixtures and byte-to-pixel mapping remain unchanged. Source packaging excludes ROMs, full saves/states and private development folders.
 

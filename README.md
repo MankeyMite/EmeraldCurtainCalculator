@@ -2,6 +2,8 @@
 
 Draw the Rustboro Trainer’s School curtain glitch in Pokémon Emerald and explore what it reveals about a boxed Pokémon. Or import an encrypted 80-byte `.ek3` to preview its curtain pattern.
 
+**Use the calculator:** [Open Emerald Curtain Calculator](https://mankeymite.github.io/EmeraldCurtainCalculator/)
+
 Everything runs in your browser. No account, ROM, upload service or API key is required.
 
 **Currently supports English Pokémon Emerald only.** Other language versions have not been validated. Their storage positions and exact byte-to-pixel mapping may differ; changing the box position alone is not confirmed to make this tool compatible.
