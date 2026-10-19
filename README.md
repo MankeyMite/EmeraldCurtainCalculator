@@ -1,6 +1,6 @@
 # Emerald Curtain Investigator
 
-Formerly **Emerald Curtain Calculator**. Investigate hidden Generation 3 Pokémon data using the Rustboro Trainer School black curtains glitch: enter known information, draw what you see, narrow PID/SID and encrypted bytes, then choose useful held-item experiments.
+Investigate hidden Generation 3 Pokémon data using the Rustboro Trainer School black curtains glitch: enter known information, draw what you see, narrow PID/SID and encrypted bytes, then choose useful held-item experiments.
 
 [Open the application](https://mankeymite.github.io/EmeraldCurtainCalculator/) · [Recovery model and implementation status](research/INVESTIGATOR.md)
 
