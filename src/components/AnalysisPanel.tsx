@@ -235,6 +235,41 @@ export function AnalysisPanel({ lab }: { lab: CurtainLab }) {
               {s}
             </p>
           ))}
+          {comparison.contradictions.length > 0 && (
+            <details className="reference-disagreements">
+              <summary>Which pixels differ from the reference?</summary>
+              <p className="micro">
+                An imported record is a comparison reference. Check these pixels
+                in-game before changing your observations.
+              </p>
+              <ul>
+                {comparison.contradictions.map((index) => {
+                  const offset = Math.floor((index - 16) / 2),
+                    value = lab.memory[Math.floor(index / 2)];
+                  const predicted =
+                    value === null
+                      ? "Unknown"
+                      : (value >>> ((index % 2) * 4)) & 15
+                        ? "Black"
+                        : "Transparent";
+                  return (
+                    <li key={index}>
+                      Pixel {index} ·{" "}
+                      {index >= 16 && index < 176
+                        ? `record byte 0x${hex(offset)}`
+                        : "neighboring slot"}
+                      , {index % 2 ? "high" : "low"} nibble: drawn{" "}
+                      {lab.obs[index] === 1 ? "Black" : "Transparent"};
+                      reference {predicted}.
+                    </li>
+                  );
+                })}
+              </ul>
+              <button onClick={lab.highlightReferenceConflicts}>
+                Highlight reference disagreements in Curtain Editor
+              </button>
+            </details>
+          )}
         </div>
       ) : (
         <div className="empty-candidate">

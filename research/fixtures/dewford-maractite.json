@@ -1,0 +1,46 @@
+{
+  "source": "https://www.reddit.com/r/u_maractite/comments/16dyods",
+  "attribution": "maractite's 2023 retail Emerald report; independently implemented arithmetic regression, not a new gameplay capture",
+  "tid": 63171,
+  "sid": 55567,
+  "reportedZeroBasedSidAdvance": 830,
+  "calculatorSidCall": 831,
+  "gap": 3,
+  "currentPhrase": [5131, 6659],
+  "trends": [
+    {
+      "name": "APPROVED · FLOWERS",
+      "firstCall": 835,
+      "lastCall": 842,
+      "rand": 57284
+    },
+    {
+      "name": "FULL · CONVERSATION",
+      "firstCall": 843,
+      "lastCall": 850,
+      "rand": 63964
+    },
+    {
+      "name": "APPROVED · KINDERGARTEN",
+      "firstCall": 851,
+      "lastCall": 857,
+      "rand": 57963
+    },
+    {
+      "name": "OVERWHELMING · CHILD'S PLAY",
+      "firstCall": 858,
+      "lastCall": 864,
+      "rand": 56098
+    },
+    {
+      "name": "TOGETHER · MOVIE",
+      "firstCall": 865,
+      "lastCall": 871,
+      "rand": 9286
+    }
+  ],
+  "tests": [
+    { "phrase": [5129, 6146], "present": false },
+    { "phrase": [5123, 6694], "present": true }
+  ]
+}

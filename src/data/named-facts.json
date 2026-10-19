@@ -1,0 +1,2400 @@
+{
+  "moves": [
+    {
+      "id": 0,
+      "name": "No move (empty slot)"
+    },
+    {
+      "id": 1,
+      "name": "Pound"
+    },
+    {
+      "id": 2,
+      "name": "Karate Chop"
+    },
+    {
+      "id": 3,
+      "name": "Doubleslap"
+    },
+    {
+      "id": 4,
+      "name": "Comet Punch"
+    },
+    {
+      "id": 5,
+      "name": "Mega Punch"
+    },
+    {
+      "id": 6,
+      "name": "Pay Day"
+    },
+    {
+      "id": 7,
+      "name": "Fire Punch"
+    },
+    {
+      "id": 8,
+      "name": "Ice Punch"
+    },
+    {
+      "id": 9,
+      "name": "Thunderpunch"
+    },
+    {
+      "id": 10,
+      "name": "Scratch"
+    },
+    {
+      "id": 11,
+      "name": "Vicegrip"
+    },
+    {
+      "id": 12,
+      "name": "Guillotine"
+    },
+    {
+      "id": 13,
+      "name": "Razor Wind"
+    },
+    {
+      "id": 14,
+      "name": "Swords Dance"
+    },
+    {
+      "id": 15,
+      "name": "Cut"
+    },
+    {
+      "id": 16,
+      "name": "Gust"
+    },
+    {
+      "id": 17,
+      "name": "Wing Attack"
+    },
+    {
+      "id": 18,
+      "name": "Whirlwind"
+    },
+    {
+      "id": 19,
+      "name": "Fly"
+    },
+    {
+      "id": 20,
+      "name": "Bind"
+    },
+    {
+      "id": 21,
+      "name": "Slam"
+    },
+    {
+      "id": 22,
+      "name": "Vine Whip"
+    },
+    {
+      "id": 23,
+      "name": "Stomp"
+    },
+    {
+      "id": 24,
+      "name": "Double Kick"
+    },
+    {
+      "id": 25,
+      "name": "Mega Kick"
+    },
+    {
+      "id": 26,
+      "name": "Jump Kick"
+    },
+    {
+      "id": 27,
+      "name": "Rolling Kick"
+    },
+    {
+      "id": 28,
+      "name": "Sand-Attack"
+    },
+    {
+      "id": 29,
+      "name": "Headbutt"
+    },
+    {
+      "id": 30,
+      "name": "Horn Attack"
+    },
+    {
+      "id": 31,
+      "name": "Fury Attack"
+    },
+    {
+      "id": 32,
+      "name": "Horn Drill"
+    },
+    {
+      "id": 33,
+      "name": "Tackle"
+    },
+    {
+      "id": 34,
+      "name": "Body Slam"
+    },
+    {
+      "id": 35,
+      "name": "Wrap"
+    },
+    {
+      "id": 36,
+      "name": "Take Down"
+    },
+    {
+      "id": 37,
+      "name": "Thrash"
+    },
+    {
+      "id": 38,
+      "name": "Double-Edge"
+    },
+    {
+      "id": 39,
+      "name": "Tail Whip"
+    },
+    {
+      "id": 40,
+      "name": "Poison Sting"
+    },
+    {
+      "id": 41,
+      "name": "Twineedle"
+    },
+    {
+      "id": 42,
+      "name": "Pin Missile"
+    },
+    {
+      "id": 43,
+      "name": "Leer"
+    },
+    {
+      "id": 44,
+      "name": "Bite"
+    },
+    {
+      "id": 45,
+      "name": "Growl"
+    },
+    {
+      "id": 46,
+      "name": "Roar"
+    },
+    {
+      "id": 47,
+      "name": "Sing"
+    },
+    {
+      "id": 48,
+      "name": "Supersonic"
+    },
+    {
+      "id": 49,
+      "name": "Sonicboom"
+    },
+    {
+      "id": 50,
+      "name": "Disable"
+    },
+    {
+      "id": 51,
+      "name": "Acid"
+    },
+    {
+      "id": 52,
+      "name": "Ember"
+    },
+    {
+      "id": 53,
+      "name": "Flamethrower"
+    },
+    {
+      "id": 54,
+      "name": "Mist"
+    },
+    {
+      "id": 55,
+      "name": "Water Gun"
+    },
+    {
+      "id": 56,
+      "name": "Hydro Pump"
+    },
+    {
+      "id": 57,
+      "name": "Surf"
+    },
+    {
+      "id": 58,
+      "name": "Ice Beam"
+    },
+    {
+      "id": 59,
+      "name": "Blizzard"
+    },
+    {
+      "id": 60,
+      "name": "Psybeam"
+    },
+    {
+      "id": 61,
+      "name": "Bubblebeam"
+    },
+    {
+      "id": 62,
+      "name": "Aurora Beam"
+    },
+    {
+      "id": 63,
+      "name": "Hyper Beam"
+    },
+    {
+      "id": 64,
+      "name": "Peck"
+    },
+    {
+      "id": 65,
+      "name": "Drill Peck"
+    },
+    {
+      "id": 66,
+      "name": "Submission"
+    },
+    {
+      "id": 67,
+      "name": "Low Kick"
+    },
+    {
+      "id": 68,
+      "name": "Counter"
+    },
+    {
+      "id": 69,
+      "name": "Seismic Toss"
+    },
+    {
+      "id": 70,
+      "name": "Strength"
+    },
+    {
+      "id": 71,
+      "name": "Absorb"
+    },
+    {
+      "id": 72,
+      "name": "Mega Drain"
+    },
+    {
+      "id": 73,
+      "name": "Leech Seed"
+    },
+    {
+      "id": 74,
+      "name": "Growth"
+    },
+    {
+      "id": 75,
+      "name": "Razor Leaf"
+    },
+    {
+      "id": 76,
+      "name": "Solarbeam"
+    },
+    {
+      "id": 77,
+      "name": "Poisonpowder"
+    },
+    {
+      "id": 78,
+      "name": "Stun Spore"
+    },
+    {
+      "id": 79,
+      "name": "Sleep Powder"
+    },
+    {
+      "id": 80,
+      "name": "Petal Dance"
+    },
+    {
+      "id": 81,
+      "name": "String Shot"
+    },
+    {
+      "id": 82,
+      "name": "Dragon Rage"
+    },
+    {
+      "id": 83,
+      "name": "Fire Spin"
+    },
+    {
+      "id": 84,
+      "name": "Thundershock"
+    },
+    {
+      "id": 85,
+      "name": "Thunderbolt"
+    },
+    {
+      "id": 86,
+      "name": "Thunder Wave"
+    },
+    {
+      "id": 87,
+      "name": "Thunder"
+    },
+    {
+      "id": 88,
+      "name": "Rock Throw"
+    },
+    {
+      "id": 89,
+      "name": "Earthquake"
+    },
+    {
+      "id": 90,
+      "name": "Fissure"
+    },
+    {
+      "id": 91,
+      "name": "Dig"
+    },
+    {
+      "id": 92,
+      "name": "Toxic"
+    },
+    {
+      "id": 93,
+      "name": "Confusion"
+    },
+    {
+      "id": 94,
+      "name": "Psychic"
+    },
+    {
+      "id": 95,
+      "name": "Hypnosis"
+    },
+    {
+      "id": 96,
+      "name": "Meditate"
+    },
+    {
+      "id": 97,
+      "name": "Agility"
+    },
+    {
+      "id": 98,
+      "name": "Quick Attack"
+    },
+    {
+      "id": 99,
+      "name": "Rage"
+    },
+    {
+      "id": 100,
+      "name": "Teleport"
+    },
+    {
+      "id": 101,
+      "name": "Night Shade"
+    },
+    {
+      "id": 102,
+      "name": "Mimic"
+    },
+    {
+      "id": 103,
+      "name": "Screech"
+    },
+    {
+      "id": 104,
+      "name": "Double Team"
+    },
+    {
+      "id": 105,
+      "name": "Recover"
+    },
+    {
+      "id": 106,
+      "name": "Harden"
+    },
+    {
+      "id": 107,
+      "name": "Minimize"
+    },
+    {
+      "id": 108,
+      "name": "Smokescreen"
+    },
+    {
+      "id": 109,
+      "name": "Confuse Ray"
+    },
+    {
+      "id": 110,
+      "name": "Withdraw"
+    },
+    {
+      "id": 111,
+      "name": "Defense Curl"
+    },
+    {
+      "id": 112,
+      "name": "Barrier"
+    },
+    {
+      "id": 113,
+      "name": "Light Screen"
+    },
+    {
+      "id": 114,
+      "name": "Haze"
+    },
+    {
+      "id": 115,
+      "name": "Reflect"
+    },
+    {
+      "id": 116,
+      "name": "Focus Energy"
+    },
+    {
+      "id": 117,
+      "name": "Bide"
+    },
+    {
+      "id": 118,
+      "name": "Metronome"
+    },
+    {
+      "id": 119,
+      "name": "Mirror Move"
+    },
+    {
+      "id": 120,
+      "name": "Selfdestruct"
+    },
+    {
+      "id": 121,
+      "name": "Egg Bomb"
+    },
+    {
+      "id": 122,
+      "name": "Lick"
+    },
+    {
+      "id": 123,
+      "name": "Smog"
+    },
+    {
+      "id": 124,
+      "name": "Sludge"
+    },
+    {
+      "id": 125,
+      "name": "Bone Club"
+    },
+    {
+      "id": 126,
+      "name": "Fire Blast"
+    },
+    {
+      "id": 127,
+      "name": "Waterfall"
+    },
+    {
+      "id": 128,
+      "name": "Clamp"
+    },
+    {
+      "id": 129,
+      "name": "Swift"
+    },
+    {
+      "id": 130,
+      "name": "Skull Bash"
+    },
+    {
+      "id": 131,
+      "name": "Spike Cannon"
+    },
+    {
+      "id": 132,
+      "name": "Constrict"
+    },
+    {
+      "id": 133,
+      "name": "Amnesia"
+    },
+    {
+      "id": 134,
+      "name": "Kinesis"
+    },
+    {
+      "id": 135,
+      "name": "Softboiled"
+    },
+    {
+      "id": 136,
+      "name": "Hi Jump Kick"
+    },
+    {
+      "id": 137,
+      "name": "Glare"
+    },
+    {
+      "id": 138,
+      "name": "Dream Eater"
+    },
+    {
+      "id": 139,
+      "name": "Poison Gas"
+    },
+    {
+      "id": 140,
+      "name": "Barrage"
+    },
+    {
+      "id": 141,
+      "name": "Leech Life"
+    },
+    {
+      "id": 142,
+      "name": "Lovely Kiss"
+    },
+    {
+      "id": 143,
+      "name": "Sky Attack"
+    },
+    {
+      "id": 144,
+      "name": "Transform"
+    },
+    {
+      "id": 145,
+      "name": "Bubble"
+    },
+    {
+      "id": 146,
+      "name": "Dizzy Punch"
+    },
+    {
+      "id": 147,
+      "name": "Spore"
+    },
+    {
+      "id": 148,
+      "name": "Flash"
+    },
+    {
+      "id": 149,
+      "name": "Psywave"
+    },
+    {
+      "id": 150,
+      "name": "Splash"
+    },
+    {
+      "id": 151,
+      "name": "Acid Armor"
+    },
+    {
+      "id": 152,
+      "name": "Crabhammer"
+    },
+    {
+      "id": 153,
+      "name": "Explosion"
+    },
+    {
+      "id": 154,
+      "name": "Fury Swipes"
+    },
+    {
+      "id": 155,
+      "name": "Bonemerang"
+    },
+    {
+      "id": 156,
+      "name": "Rest"
+    },
+    {
+      "id": 157,
+      "name": "Rock Slide"
+    },
+    {
+      "id": 158,
+      "name": "Hyper Fang"
+    },
+    {
+      "id": 159,
+      "name": "Sharpen"
+    },
+    {
+      "id": 160,
+      "name": "Conversion"
+    },
+    {
+      "id": 161,
+      "name": "Tri Attack"
+    },
+    {
+      "id": 162,
+      "name": "Super Fang"
+    },
+    {
+      "id": 163,
+      "name": "Slash"
+    },
+    {
+      "id": 164,
+      "name": "Substitute"
+    },
+    {
+      "id": 165,
+      "name": "Struggle"
+    },
+    {
+      "id": 166,
+      "name": "Sketch"
+    },
+    {
+      "id": 167,
+      "name": "Triple Kick"
+    },
+    {
+      "id": 168,
+      "name": "Thief"
+    },
+    {
+      "id": 169,
+      "name": "Spider Web"
+    },
+    {
+      "id": 170,
+      "name": "Mind Reader"
+    },
+    {
+      "id": 171,
+      "name": "Nightmare"
+    },
+    {
+      "id": 172,
+      "name": "Flame Wheel"
+    },
+    {
+      "id": 173,
+      "name": "Snore"
+    },
+    {
+      "id": 174,
+      "name": "Curse"
+    },
+    {
+      "id": 175,
+      "name": "Flail"
+    },
+    {
+      "id": 176,
+      "name": "Conversion 2"
+    },
+    {
+      "id": 177,
+      "name": "Aeroblast"
+    },
+    {
+      "id": 178,
+      "name": "Cotton Spore"
+    },
+    {
+      "id": 179,
+      "name": "Reversal"
+    },
+    {
+      "id": 180,
+      "name": "Spite"
+    },
+    {
+      "id": 181,
+      "name": "Powder Snow"
+    },
+    {
+      "id": 182,
+      "name": "Protect"
+    },
+    {
+      "id": 183,
+      "name": "Mach Punch"
+    },
+    {
+      "id": 184,
+      "name": "Scary Face"
+    },
+    {
+      "id": 185,
+      "name": "Faint Attack"
+    },
+    {
+      "id": 186,
+      "name": "Sweet Kiss"
+    },
+    {
+      "id": 187,
+      "name": "Belly Drum"
+    },
+    {
+      "id": 188,
+      "name": "Sludge Bomb"
+    },
+    {
+      "id": 189,
+      "name": "Mud-Slap"
+    },
+    {
+      "id": 190,
+      "name": "Octazooka"
+    },
+    {
+      "id": 191,
+      "name": "Spikes"
+    },
+    {
+      "id": 192,
+      "name": "Zap Cannon"
+    },
+    {
+      "id": 193,
+      "name": "Foresight"
+    },
+    {
+      "id": 194,
+      "name": "Destiny Bond"
+    },
+    {
+      "id": 195,
+      "name": "Perish Song"
+    },
+    {
+      "id": 196,
+      "name": "Icy Wind"
+    },
+    {
+      "id": 197,
+      "name": "Detect"
+    },
+    {
+      "id": 198,
+      "name": "Bone Rush"
+    },
+    {
+      "id": 199,
+      "name": "Lock-On"
+    },
+    {
+      "id": 200,
+      "name": "Outrage"
+    },
+    {
+      "id": 201,
+      "name": "Sandstorm"
+    },
+    {
+      "id": 202,
+      "name": "Giga Drain"
+    },
+    {
+      "id": 203,
+      "name": "Endure"
+    },
+    {
+      "id": 204,
+      "name": "Charm"
+    },
+    {
+      "id": 205,
+      "name": "Rollout"
+    },
+    {
+      "id": 206,
+      "name": "False Swipe"
+    },
+    {
+      "id": 207,
+      "name": "Swagger"
+    },
+    {
+      "id": 208,
+      "name": "Milk Drink"
+    },
+    {
+      "id": 209,
+      "name": "Spark"
+    },
+    {
+      "id": 210,
+      "name": "Fury Cutter"
+    },
+    {
+      "id": 211,
+      "name": "Steel Wing"
+    },
+    {
+      "id": 212,
+      "name": "Mean Look"
+    },
+    {
+      "id": 213,
+      "name": "Attract"
+    },
+    {
+      "id": 214,
+      "name": "Sleep Talk"
+    },
+    {
+      "id": 215,
+      "name": "Heal Bell"
+    },
+    {
+      "id": 216,
+      "name": "Return"
+    },
+    {
+      "id": 217,
+      "name": "Present"
+    },
+    {
+      "id": 218,
+      "name": "Frustration"
+    },
+    {
+      "id": 219,
+      "name": "Safeguard"
+    },
+    {
+      "id": 220,
+      "name": "Pain Split"
+    },
+    {
+      "id": 221,
+      "name": "Sacred Fire"
+    },
+    {
+      "id": 222,
+      "name": "Magnitude"
+    },
+    {
+      "id": 223,
+      "name": "Dynamicpunch"
+    },
+    {
+      "id": 224,
+      "name": "Megahorn"
+    },
+    {
+      "id": 225,
+      "name": "Dragonbreath"
+    },
+    {
+      "id": 226,
+      "name": "Baton Pass"
+    },
+    {
+      "id": 227,
+      "name": "Encore"
+    },
+    {
+      "id": 228,
+      "name": "Pursuit"
+    },
+    {
+      "id": 229,
+      "name": "Rapid Spin"
+    },
+    {
+      "id": 230,
+      "name": "Sweet Scent"
+    },
+    {
+      "id": 231,
+      "name": "Iron Tail"
+    },
+    {
+      "id": 232,
+      "name": "Metal Claw"
+    },
+    {
+      "id": 233,
+      "name": "Vital Throw"
+    },
+    {
+      "id": 234,
+      "name": "Morning Sun"
+    },
+    {
+      "id": 235,
+      "name": "Synthesis"
+    },
+    {
+      "id": 236,
+      "name": "Moonlight"
+    },
+    {
+      "id": 237,
+      "name": "Hidden Power"
+    },
+    {
+      "id": 238,
+      "name": "Cross Chop"
+    },
+    {
+      "id": 239,
+      "name": "Twister"
+    },
+    {
+      "id": 240,
+      "name": "Rain Dance"
+    },
+    {
+      "id": 241,
+      "name": "Sunny Day"
+    },
+    {
+      "id": 242,
+      "name": "Crunch"
+    },
+    {
+      "id": 243,
+      "name": "Mirror Coat"
+    },
+    {
+      "id": 244,
+      "name": "Psych Up"
+    },
+    {
+      "id": 245,
+      "name": "Extremespeed"
+    },
+    {
+      "id": 246,
+      "name": "Ancientpower"
+    },
+    {
+      "id": 247,
+      "name": "Shadow Ball"
+    },
+    {
+      "id": 248,
+      "name": "Future Sight"
+    },
+    {
+      "id": 249,
+      "name": "Rock Smash"
+    },
+    {
+      "id": 250,
+      "name": "Whirlpool"
+    },
+    {
+      "id": 251,
+      "name": "Beat Up"
+    },
+    {
+      "id": 252,
+      "name": "Fake Out"
+    },
+    {
+      "id": 253,
+      "name": "Uproar"
+    },
+    {
+      "id": 254,
+      "name": "Stockpile"
+    },
+    {
+      "id": 255,
+      "name": "Spit Up"
+    },
+    {
+      "id": 256,
+      "name": "Swallow"
+    },
+    {
+      "id": 257,
+      "name": "Heat Wave"
+    },
+    {
+      "id": 258,
+      "name": "Hail"
+    },
+    {
+      "id": 259,
+      "name": "Torment"
+    },
+    {
+      "id": 260,
+      "name": "Flatter"
+    },
+    {
+      "id": 261,
+      "name": "Will-O-Wisp"
+    },
+    {
+      "id": 262,
+      "name": "Memento"
+    },
+    {
+      "id": 263,
+      "name": "Facade"
+    },
+    {
+      "id": 264,
+      "name": "Focus Punch"
+    },
+    {
+      "id": 265,
+      "name": "Smellingsalt"
+    },
+    {
+      "id": 266,
+      "name": "Follow Me"
+    },
+    {
+      "id": 267,
+      "name": "Nature Power"
+    },
+    {
+      "id": 268,
+      "name": "Charge"
+    },
+    {
+      "id": 269,
+      "name": "Taunt"
+    },
+    {
+      "id": 270,
+      "name": "Helping Hand"
+    },
+    {
+      "id": 271,
+      "name": "Trick"
+    },
+    {
+      "id": 272,
+      "name": "Role Play"
+    },
+    {
+      "id": 273,
+      "name": "Wish"
+    },
+    {
+      "id": 274,
+      "name": "Assist"
+    },
+    {
+      "id": 275,
+      "name": "Ingrain"
+    },
+    {
+      "id": 276,
+      "name": "Superpower"
+    },
+    {
+      "id": 277,
+      "name": "Magic Coat"
+    },
+    {
+      "id": 278,
+      "name": "Recycle"
+    },
+    {
+      "id": 279,
+      "name": "Revenge"
+    },
+    {
+      "id": 280,
+      "name": "Brick Break"
+    },
+    {
+      "id": 281,
+      "name": "Yawn"
+    },
+    {
+      "id": 282,
+      "name": "Knock Off"
+    },
+    {
+      "id": 283,
+      "name": "Endeavor"
+    },
+    {
+      "id": 284,
+      "name": "Eruption"
+    },
+    {
+      "id": 285,
+      "name": "Skill Swap"
+    },
+    {
+      "id": 286,
+      "name": "Imprison"
+    },
+    {
+      "id": 287,
+      "name": "Refresh"
+    },
+    {
+      "id": 288,
+      "name": "Grudge"
+    },
+    {
+      "id": 289,
+      "name": "Snatch"
+    },
+    {
+      "id": 290,
+      "name": "Secret Power"
+    },
+    {
+      "id": 291,
+      "name": "Dive"
+    },
+    {
+      "id": 292,
+      "name": "Arm Thrust"
+    },
+    {
+      "id": 293,
+      "name": "Camouflage"
+    },
+    {
+      "id": 294,
+      "name": "Tail Glow"
+    },
+    {
+      "id": 295,
+      "name": "Luster Purge"
+    },
+    {
+      "id": 296,
+      "name": "Mist Ball"
+    },
+    {
+      "id": 297,
+      "name": "Featherdance"
+    },
+    {
+      "id": 298,
+      "name": "Teeter Dance"
+    },
+    {
+      "id": 299,
+      "name": "Blaze Kick"
+    },
+    {
+      "id": 300,
+      "name": "Mud Sport"
+    },
+    {
+      "id": 301,
+      "name": "Ice Ball"
+    },
+    {
+      "id": 302,
+      "name": "Needle Arm"
+    },
+    {
+      "id": 303,
+      "name": "Slack Off"
+    },
+    {
+      "id": 304,
+      "name": "Hyper Voice"
+    },
+    {
+      "id": 305,
+      "name": "Poison Fang"
+    },
+    {
+      "id": 306,
+      "name": "Crush Claw"
+    },
+    {
+      "id": 307,
+      "name": "Blast Burn"
+    },
+    {
+      "id": 308,
+      "name": "Hydro Cannon"
+    },
+    {
+      "id": 309,
+      "name": "Meteor Mash"
+    },
+    {
+      "id": 310,
+      "name": "Astonish"
+    },
+    {
+      "id": 311,
+      "name": "Weather Ball"
+    },
+    {
+      "id": 312,
+      "name": "Aromatherapy"
+    },
+    {
+      "id": 313,
+      "name": "Fake Tears"
+    },
+    {
+      "id": 314,
+      "name": "Air Cutter"
+    },
+    {
+      "id": 315,
+      "name": "Overheat"
+    },
+    {
+      "id": 316,
+      "name": "Odor Sleuth"
+    },
+    {
+      "id": 317,
+      "name": "Rock Tomb"
+    },
+    {
+      "id": 318,
+      "name": "Silver Wind"
+    },
+    {
+      "id": 319,
+      "name": "Metal Sound"
+    },
+    {
+      "id": 320,
+      "name": "Grasswhistle"
+    },
+    {
+      "id": 321,
+      "name": "Tickle"
+    },
+    {
+      "id": 322,
+      "name": "Cosmic Power"
+    },
+    {
+      "id": 323,
+      "name": "Water Spout"
+    },
+    {
+      "id": 324,
+      "name": "Signal Beam"
+    },
+    {
+      "id": 325,
+      "name": "Shadow Punch"
+    },
+    {
+      "id": 326,
+      "name": "Extrasensory"
+    },
+    {
+      "id": 327,
+      "name": "Sky Uppercut"
+    },
+    {
+      "id": 328,
+      "name": "Sand Tomb"
+    },
+    {
+      "id": 329,
+      "name": "Sheer Cold"
+    },
+    {
+      "id": 330,
+      "name": "Muddy Water"
+    },
+    {
+      "id": 331,
+      "name": "Bullet Seed"
+    },
+    {
+      "id": 332,
+      "name": "Aerial Ace"
+    },
+    {
+      "id": 333,
+      "name": "Icicle Spear"
+    },
+    {
+      "id": 334,
+      "name": "Iron Defense"
+    },
+    {
+      "id": 335,
+      "name": "Block"
+    },
+    {
+      "id": 336,
+      "name": "Howl"
+    },
+    {
+      "id": 337,
+      "name": "Dragon Claw"
+    },
+    {
+      "id": 338,
+      "name": "Frenzy Plant"
+    },
+    {
+      "id": 339,
+      "name": "Bulk Up"
+    },
+    {
+      "id": 340,
+      "name": "Bounce"
+    },
+    {
+      "id": 341,
+      "name": "Mud Shot"
+    },
+    {
+      "id": 342,
+      "name": "Poison Tail"
+    },
+    {
+      "id": 343,
+      "name": "Covet"
+    },
+    {
+      "id": 344,
+      "name": "Volt Tackle"
+    },
+    {
+      "id": 345,
+      "name": "Magical Leaf"
+    },
+    {
+      "id": 346,
+      "name": "Water Sport"
+    },
+    {
+      "id": 347,
+      "name": "Calm Mind"
+    },
+    {
+      "id": 348,
+      "name": "Leaf Blade"
+    },
+    {
+      "id": 349,
+      "name": "Dragon Dance"
+    },
+    {
+      "id": 350,
+      "name": "Rock Blast"
+    },
+    {
+      "id": 351,
+      "name": "Shock Wave"
+    },
+    {
+      "id": 352,
+      "name": "Water Pulse"
+    },
+    {
+      "id": 353,
+      "name": "Doom Desire"
+    },
+    {
+      "id": 354,
+      "name": "Psycho Boost"
+    }
+  ],
+  "metLocations": [
+    {
+      "id": 0,
+      "name": "Littleroot Town"
+    },
+    {
+      "id": 1,
+      "name": "Oldale Town"
+    },
+    {
+      "id": 2,
+      "name": "Dewford Town"
+    },
+    {
+      "id": 3,
+      "name": "Lavaridge Town"
+    },
+    {
+      "id": 4,
+      "name": "Fallarbor Town"
+    },
+    {
+      "id": 5,
+      "name": "Verdanturf Town"
+    },
+    {
+      "id": 6,
+      "name": "Pacifidlog Town"
+    },
+    {
+      "id": 7,
+      "name": "Petalburg City"
+    },
+    {
+      "id": 8,
+      "name": "Slateport City"
+    },
+    {
+      "id": 9,
+      "name": "Mauville City"
+    },
+    {
+      "id": 10,
+      "name": "Rustboro City"
+    },
+    {
+      "id": 11,
+      "name": "Fortree City"
+    },
+    {
+      "id": 12,
+      "name": "Lilycove City"
+    },
+    {
+      "id": 13,
+      "name": "Mossdeep City"
+    },
+    {
+      "id": 14,
+      "name": "Sootopolis City"
+    },
+    {
+      "id": 15,
+      "name": "Ever Grande City"
+    },
+    {
+      "id": 16,
+      "name": "Route 101"
+    },
+    {
+      "id": 17,
+      "name": "Route 102"
+    },
+    {
+      "id": 18,
+      "name": "Route 103"
+    },
+    {
+      "id": 19,
+      "name": "Route 104"
+    },
+    {
+      "id": 20,
+      "name": "Route 105"
+    },
+    {
+      "id": 21,
+      "name": "Route 106"
+    },
+    {
+      "id": 22,
+      "name": "Route 107"
+    },
+    {
+      "id": 23,
+      "name": "Route 108"
+    },
+    {
+      "id": 24,
+      "name": "Route 109"
+    },
+    {
+      "id": 25,
+      "name": "Route 110"
+    },
+    {
+      "id": 26,
+      "name": "Route 111"
+    },
+    {
+      "id": 27,
+      "name": "Route 112"
+    },
+    {
+      "id": 28,
+      "name": "Route 113"
+    },
+    {
+      "id": 29,
+      "name": "Route 114"
+    },
+    {
+      "id": 30,
+      "name": "Route 115"
+    },
+    {
+      "id": 31,
+      "name": "Route 116"
+    },
+    {
+      "id": 32,
+      "name": "Route 117"
+    },
+    {
+      "id": 33,
+      "name": "Route 118"
+    },
+    {
+      "id": 34,
+      "name": "Route 119"
+    },
+    {
+      "id": 35,
+      "name": "Route 120"
+    },
+    {
+      "id": 36,
+      "name": "Route 121"
+    },
+    {
+      "id": 37,
+      "name": "Route 122"
+    },
+    {
+      "id": 38,
+      "name": "Route 123"
+    },
+    {
+      "id": 39,
+      "name": "Route 124"
+    },
+    {
+      "id": 40,
+      "name": "Route 125"
+    },
+    {
+      "id": 41,
+      "name": "Route 126"
+    },
+    {
+      "id": 42,
+      "name": "Route 127"
+    },
+    {
+      "id": 43,
+      "name": "Route 128"
+    },
+    {
+      "id": 44,
+      "name": "Route 129"
+    },
+    {
+      "id": 45,
+      "name": "Route 130"
+    },
+    {
+      "id": 46,
+      "name": "Route 131"
+    },
+    {
+      "id": 47,
+      "name": "Route 132"
+    },
+    {
+      "id": 48,
+      "name": "Route 133"
+    },
+    {
+      "id": 49,
+      "name": "Route 134"
+    },
+    {
+      "id": 50,
+      "name": "Underwater (Underwater 124)"
+    },
+    {
+      "id": 51,
+      "name": "Underwater (Underwater 126)"
+    },
+    {
+      "id": 52,
+      "name": "Underwater (Underwater 127)"
+    },
+    {
+      "id": 53,
+      "name": "Underwater (Underwater 128)"
+    },
+    {
+      "id": 54,
+      "name": "Underwater (Underwater Sootopolis)"
+    },
+    {
+      "id": 55,
+      "name": "Granite Cave"
+    },
+    {
+      "id": 56,
+      "name": "Mt. Chimney"
+    },
+    {
+      "id": 57,
+      "name": "Safari Zone (Safari Zone)"
+    },
+    {
+      "id": 58,
+      "name": "Battle Frontier"
+    },
+    {
+      "id": 59,
+      "name": "Petalburg Woods"
+    },
+    {
+      "id": 60,
+      "name": "Rusturf Tunnel"
+    },
+    {
+      "id": 61,
+      "name": "Abandoned Ship"
+    },
+    {
+      "id": 62,
+      "name": "New Mauville"
+    },
+    {
+      "id": 63,
+      "name": "Meteor Falls (Meteor Falls)"
+    },
+    {
+      "id": 64,
+      "name": "Meteor Falls (Meteor Falls2)"
+    },
+    {
+      "id": 65,
+      "name": "Mt. Pyre"
+    },
+    {
+      "id": 66,
+      "name": "Aqua Hideout (legacy section)"
+    },
+    {
+      "id": 67,
+      "name": "Shoal Cave"
+    },
+    {
+      "id": 68,
+      "name": "Seafloor Cavern"
+    },
+    {
+      "id": 69,
+      "name": "Underwater (Underwater Seafloor Cavern)"
+    },
+    {
+      "id": 70,
+      "name": "Victory Road (Victory Road)"
+    },
+    {
+      "id": 71,
+      "name": "Mirage Island"
+    },
+    {
+      "id": 72,
+      "name": "Cave Of Origin"
+    },
+    {
+      "id": 73,
+      "name": "Southern Island"
+    },
+    {
+      "id": 74,
+      "name": "Fiery Path (Fiery Path)"
+    },
+    {
+      "id": 75,
+      "name": "Fiery Path (Fiery Path2)"
+    },
+    {
+      "id": 76,
+      "name": "Jagged Pass (Jagged Pass)"
+    },
+    {
+      "id": 77,
+      "name": "Jagged Pass (Jagged Pass2)"
+    },
+    {
+      "id": 78,
+      "name": "Sealed Chamber"
+    },
+    {
+      "id": 79,
+      "name": "Underwater (Underwater Sealed Chamber)"
+    },
+    {
+      "id": 80,
+      "name": "Scorched Slab"
+    },
+    {
+      "id": 81,
+      "name": "Island Cave"
+    },
+    {
+      "id": 82,
+      "name": "Desert Ruins"
+    },
+    {
+      "id": 83,
+      "name": "Ancient Tomb"
+    },
+    {
+      "id": 84,
+      "name": "Inside Of Truck"
+    },
+    {
+      "id": 85,
+      "name": "Sky Pillar"
+    },
+    {
+      "id": 86,
+      "name": "Secret Base"
+    },
+    {
+      "id": 87,
+      "name": "Dynamic"
+    },
+    {
+      "id": 88,
+      "name": "Pallet Town"
+    },
+    {
+      "id": 89,
+      "name": "Viridian City"
+    },
+    {
+      "id": 90,
+      "name": "Pewter City"
+    },
+    {
+      "id": 91,
+      "name": "Cerulean City"
+    },
+    {
+      "id": 92,
+      "name": "Lavender Town"
+    },
+    {
+      "id": 93,
+      "name": "Vermilion City"
+    },
+    {
+      "id": 94,
+      "name": "Celadon City"
+    },
+    {
+      "id": 95,
+      "name": "Fuchsia City"
+    },
+    {
+      "id": 96,
+      "name": "Cinnabar Island"
+    },
+    {
+      "id": 97,
+      "name": "Indigo Plateau"
+    },
+    {
+      "id": 98,
+      "name": "Saffron City"
+    },
+    {
+      "id": 99,
+      "name": "Route 4 (Route 4 Pokecenter)"
+    },
+    {
+      "id": 100,
+      "name": "Route 10 (Route 10 Pokecenter)"
+    },
+    {
+      "id": 101,
+      "name": "Route 1"
+    },
+    {
+      "id": 102,
+      "name": "Route 2"
+    },
+    {
+      "id": 103,
+      "name": "Route 3"
+    },
+    {
+      "id": 104,
+      "name": "Route 4 (Route 4)"
+    },
+    {
+      "id": 105,
+      "name": "Route 5"
+    },
+    {
+      "id": 106,
+      "name": "Route 6"
+    },
+    {
+      "id": 107,
+      "name": "Route 7"
+    },
+    {
+      "id": 108,
+      "name": "Route 8"
+    },
+    {
+      "id": 109,
+      "name": "Route 9"
+    },
+    {
+      "id": 110,
+      "name": "Route 10 (Route 10)"
+    },
+    {
+      "id": 111,
+      "name": "Route 11"
+    },
+    {
+      "id": 112,
+      "name": "Route 12"
+    },
+    {
+      "id": 113,
+      "name": "Route 13"
+    },
+    {
+      "id": 114,
+      "name": "Route 14"
+    },
+    {
+      "id": 115,
+      "name": "Route 15"
+    },
+    {
+      "id": 116,
+      "name": "Route 16"
+    },
+    {
+      "id": 117,
+      "name": "Route 17"
+    },
+    {
+      "id": 118,
+      "name": "Route 18"
+    },
+    {
+      "id": 119,
+      "name": "Route 19"
+    },
+    {
+      "id": 120,
+      "name": "Route 20"
+    },
+    {
+      "id": 121,
+      "name": "Route 21"
+    },
+    {
+      "id": 122,
+      "name": "Route 22"
+    },
+    {
+      "id": 123,
+      "name": "Route 23"
+    },
+    {
+      "id": 124,
+      "name": "Route 24"
+    },
+    {
+      "id": 125,
+      "name": "Route 25"
+    },
+    {
+      "id": 126,
+      "name": "Viridian Forest"
+    },
+    {
+      "id": 127,
+      "name": "Mt. Moon"
+    },
+    {
+      "id": 128,
+      "name": "S.s. Anne"
+    },
+    {
+      "id": 129,
+      "name": "Underground Path (Underground Path)"
+    },
+    {
+      "id": 130,
+      "name": "Underground Path (Underground Path 2)"
+    },
+    {
+      "id": 131,
+      "name": "Diglett's Cave"
+    },
+    {
+      "id": 132,
+      "name": "Victory Road (Kanto Victory Road)"
+    },
+    {
+      "id": 133,
+      "name": "Rocket Hideout"
+    },
+    {
+      "id": 134,
+      "name": "Silph Co."
+    },
+    {
+      "id": 135,
+      "name": "Pokémon Mansion"
+    },
+    {
+      "id": 136,
+      "name": "Safari Zone (Kanto Safari Zone)"
+    },
+    {
+      "id": 137,
+      "name": "Pokémon League"
+    },
+    {
+      "id": 138,
+      "name": "Rock Tunnel"
+    },
+    {
+      "id": 139,
+      "name": "Seafoam Islands"
+    },
+    {
+      "id": 140,
+      "name": "Pokémon Tower"
+    },
+    {
+      "id": 141,
+      "name": "Cerulean Cave"
+    },
+    {
+      "id": 142,
+      "name": "Power Plant"
+    },
+    {
+      "id": 143,
+      "name": "One Island"
+    },
+    {
+      "id": 144,
+      "name": "Two Island"
+    },
+    {
+      "id": 145,
+      "name": "Three Island"
+    },
+    {
+      "id": 146,
+      "name": "Four Island"
+    },
+    {
+      "id": 147,
+      "name": "Five Island"
+    },
+    {
+      "id": 148,
+      "name": "Seven Island"
+    },
+    {
+      "id": 149,
+      "name": "Six Island"
+    },
+    {
+      "id": 150,
+      "name": "Kindle Road"
+    },
+    {
+      "id": 151,
+      "name": "Treasure Beach"
+    },
+    {
+      "id": 152,
+      "name": "Cape Brink"
+    },
+    {
+      "id": 153,
+      "name": "Bond Bridge"
+    },
+    {
+      "id": 154,
+      "name": "Three Isle Port"
+    },
+    {
+      "id": 155,
+      "name": "Sevii Isle 6"
+    },
+    {
+      "id": 156,
+      "name": "Sevii Isle 7"
+    },
+    {
+      "id": 157,
+      "name": "Sevii Isle 8"
+    },
+    {
+      "id": 158,
+      "name": "Sevii Isle 9"
+    },
+    {
+      "id": 159,
+      "name": "Resort Gorgeous"
+    },
+    {
+      "id": 160,
+      "name": "Water Labyrinth"
+    },
+    {
+      "id": 161,
+      "name": "Five Isle Meadow"
+    },
+    {
+      "id": 162,
+      "name": "Memorial Pillar"
+    },
+    {
+      "id": 163,
+      "name": "Outcast Island"
+    },
+    {
+      "id": 164,
+      "name": "Green Path"
+    },
+    {
+      "id": 165,
+      "name": "Water Path"
+    },
+    {
+      "id": 166,
+      "name": "Ruin Valley"
+    },
+    {
+      "id": 167,
+      "name": "Trainer Tower (Trainer Tower)"
+    },
+    {
+      "id": 168,
+      "name": "Canyon Entrance"
+    },
+    {
+      "id": 169,
+      "name": "Sevault Canyon"
+    },
+    {
+      "id": 170,
+      "name": "Tanoby Ruins"
+    },
+    {
+      "id": 171,
+      "name": "Sevii Isle 22"
+    },
+    {
+      "id": 172,
+      "name": "Sevii Isle 23"
+    },
+    {
+      "id": 173,
+      "name": "Sevii Isle 24"
+    },
+    {
+      "id": 174,
+      "name": "Navel Rock (Navel Rock Frlg)"
+    },
+    {
+      "id": 175,
+      "name": "Mt. Ember"
+    },
+    {
+      "id": 176,
+      "name": "Berry Forest"
+    },
+    {
+      "id": 177,
+      "name": "Icefall Cave"
+    },
+    {
+      "id": 178,
+      "name": "Rocket Warehouse"
+    },
+    {
+      "id": 179,
+      "name": "Trainer Tower (Trainer Tower 2)"
+    },
+    {
+      "id": 180,
+      "name": "Dotted Hole"
+    },
+    {
+      "id": 181,
+      "name": "Lost Cave"
+    },
+    {
+      "id": 182,
+      "name": "Pattern Bush"
+    },
+    {
+      "id": 183,
+      "name": "Altering Cave (Altering Cave Frlg)"
+    },
+    {
+      "id": 184,
+      "name": "Tanoby Chambers"
+    },
+    {
+      "id": 185,
+      "name": "Three Isle Path"
+    },
+    {
+      "id": 186,
+      "name": "Tanoby Key"
+    },
+    {
+      "id": 187,
+      "name": "Birth Island (Birth Island Frlg)"
+    },
+    {
+      "id": 188,
+      "name": "Monean Chamber"
+    },
+    {
+      "id": 189,
+      "name": "Liptoo Chamber"
+    },
+    {
+      "id": 190,
+      "name": "Weepth Chamber"
+    },
+    {
+      "id": 191,
+      "name": "Dilford Chamber"
+    },
+    {
+      "id": 192,
+      "name": "Scufib Chamber"
+    },
+    {
+      "id": 193,
+      "name": "Rixy Chamber"
+    },
+    {
+      "id": 194,
+      "name": "Viapois Chamber"
+    },
+    {
+      "id": 195,
+      "name": "Ember Spa"
+    },
+    {
+      "id": 196,
+      "name": "Special Area"
+    },
+    {
+      "id": 197,
+      "name": "Aqua Hideout"
+    },
+    {
+      "id": 198,
+      "name": "Magma Hideout"
+    },
+    {
+      "id": 199,
+      "name": "Mirage Tower"
+    },
+    {
+      "id": 200,
+      "name": "Birth Island (Birth Island)"
+    },
+    {
+      "id": 201,
+      "name": "Faraway Island"
+    },
+    {
+      "id": 202,
+      "name": "Artisan Cave"
+    },
+    {
+      "id": 203,
+      "name": "Marine Cave"
+    },
+    {
+      "id": 204,
+      "name": "Underwater (Underwater Marine Cave)"
+    },
+    {
+      "id": 205,
+      "name": "Terra Cave"
+    },
+    {
+      "id": 206,
+      "name": "Underwater (Underwater 105)"
+    },
+    {
+      "id": 207,
+      "name": "Underwater (Underwater 125)"
+    },
+    {
+      "id": 208,
+      "name": "Underwater (Underwater 129)"
+    },
+    {
+      "id": 209,
+      "name": "Desert Underpass"
+    },
+    {
+      "id": 210,
+      "name": "Altering Cave (Altering Cave)"
+    },
+    {
+      "id": 211,
+      "name": "Navel Rock (Navel Rock)"
+    },
+    {
+      "id": 212,
+      "name": "Trainer Hill"
+    },
+    {
+      "id": 213,
+      "name": "None (map section)"
+    },
+    {
+      "id": 253,
+      "name": "Special Egg location"
+    },
+    {
+      "id": 254,
+      "name": "In-game trade"
+    },
+    {
+      "id": 255,
+      "name": "Fateful encounter"
+    }
+  ],
+  "games": [
+    {
+      "id": 1,
+      "name": "Sapphire"
+    },
+    {
+      "id": 2,
+      "name": "Ruby"
+    },
+    {
+      "id": 3,
+      "name": "Emerald"
+    },
+    {
+      "id": 4,
+      "name": "FireRed"
+    },
+    {
+      "id": 5,
+      "name": "LeafGreen"
+    },
+    {
+      "id": 15,
+      "name": "Colosseum / XD"
+    }
+  ],
+  "languages": [
+    {
+      "id": 1,
+      "name": "Japanese"
+    },
+    {
+      "id": 2,
+      "name": "English"
+    },
+    {
+      "id": 3,
+      "name": "French"
+    },
+    {
+      "id": 4,
+      "name": "Italian"
+    },
+    {
+      "id": 5,
+      "name": "German"
+    },
+    {
+      "id": 6,
+      "name": "Unused Korean code (not a released Gen 3 language)"
+    },
+    {
+      "id": 7,
+      "name": "Spanish"
+    }
+  ],
+  "balls": [
+    {
+      "id": 1,
+      "name": "Master Ball"
+    },
+    {
+      "id": 2,
+      "name": "Ultra Ball"
+    },
+    {
+      "id": 3,
+      "name": "Great Ball"
+    },
+    {
+      "id": 4,
+      "name": "Poké Ball"
+    },
+    {
+      "id": 5,
+      "name": "Safari Ball"
+    },
+    {
+      "id": 6,
+      "name": "Net Ball"
+    },
+    {
+      "id": 7,
+      "name": "Dive Ball"
+    },
+    {
+      "id": 8,
+      "name": "Nest Ball"
+    },
+    {
+      "id": 9,
+      "name": "Repeat Ball"
+    },
+    {
+      "id": 10,
+      "name": "Timer Ball"
+    },
+    {
+      "id": 11,
+      "name": "Luxury Ball"
+    },
+    {
+      "id": 12,
+      "name": "Premier Ball"
+    }
+  ]
+}

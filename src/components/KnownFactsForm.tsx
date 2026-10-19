@@ -3,14 +3,37 @@ import { NATURES } from "../core/pokemon";
 import { CONTEST_NAMES, STAT_NAMES } from "../core/facts";
 import { speciesTraits } from "../core/traits";
 import species from "../data/species.json";
+import { useId } from "react";
+import { NamedIdInput } from "./NamedIdInput";
+import {
+  FACT_CATALOGS,
+  HELD_ITEM_CATALOG,
+  type CatalogEntry,
+} from "../core/catalogs";
 
 export function KnownFactsForm({ lab }: { lab: CurtainLab }) {
+  const titleId = useId();
   const traits = speciesTraits(Number(lab.factDraft.species));
   const abilities =
     traits?.abilities.filter(
       (a, i, all) => a.id !== 0 && all.findIndex((b) => b.id === a.id) === i,
     ) ?? [];
   const assumed = new Set(lab.facts.assumed);
+  const named = (
+    key: string,
+    label: string,
+    entries: CatalogEntry[],
+    max: number,
+  ) => (
+    <NamedIdInput
+      key={`${lab.activeId}-${key}`}
+      label={label}
+      value={lab.factDraft[key]}
+      entries={entries}
+      max={max}
+      onChange={(value) => lab.editFact(key, value)}
+    />
+  );
   const input = (key: string, label: string, max: number) => (
     <input
       aria-label={label}
@@ -24,11 +47,8 @@ export function KnownFactsForm({ lab }: { lab: CurtainLab }) {
     />
   );
   return (
-    <section
-      className="input-section known-facts"
-      aria-labelledby="known-facts-title"
-    >
-      <h2 id="known-facts-title">Known Pokémon information</h2>
+    <section className="input-section known-facts" aria-labelledby={titleId}>
+      <h2 id={titleId}>Known Pokémon information</h2>
       <p className="help">
         Blank means unknown. Supplied values restrict reconstruction.
       </p>
@@ -151,6 +171,17 @@ export function KnownFactsForm({ lab }: { lab: CurtainLab }) {
         3 characters are supported; bytes after the name terminator stay
         unknown. OT gender is separate from Pokémon gender.
       </p>
+      <label>
+        Nickname
+        <input
+          aria-label="Known nickname"
+          value={lab.factDraft.nickname ?? ""}
+          placeholder="Exact name / blank = unknown"
+          autoComplete="off"
+          className={assumed.has("nickname") ? "assumed-input" : undefined}
+          onChange={(e) => lab.editFact("nickname", e.target.value)}
+        />
+      </label>
       <details className="stat-details">
         <summary>IV calculator · summary stats</summary>
         <p className="help">
@@ -198,6 +229,88 @@ export function KnownFactsForm({ lab }: { lab: CurtainLab }) {
           Reconstruction shows stat-only and curtain-assisted IV ranges. Ranges
           are compared separately from the PID model; only exact IVs you apply
           become known facts. Uses ordinary English Emerald summary stats.
+        </p>
+      </details>
+      <details className="stat-details">
+        <summary>Moves, PP &amp; where it was met</summary>
+        <p className="help">
+          Type a name and choose a suggestion. Its stored ID appears in the grey
+          box automatically. Blank means unknown; “No move” means a known empty
+          move slot. Origin game means the game where this Pokémon originated,
+          not necessarily the game you are playing now.
+        </p>
+        <div className="form-table">
+          {Array.from({ length: 4 }, (_, i) =>
+            named(`move_${i}`, `Move ${i + 1}`, FACT_CATALOGS.moves, 65535),
+          )}
+          {Array.from({ length: 4 }, (_, i) => (
+            <label key={`pp-${i}`}>
+              Move {i + 1} current PP
+              {input(`pp_${i}`, `Move ${i + 1} current PP`, 255)}
+            </label>
+          ))}
+          {named(
+            "metLocation",
+            "Met location",
+            FACT_CATALOGS.metLocations,
+            255,
+          )}
+          <label>Met level{input("metLevel", "Met level", 127)}</label>
+          {named("metGame", "Origin game", FACT_CATALOGS.games, 15)}
+          {named("ball", "Poké Ball", FACT_CATALOGS.balls, 15)}
+          {named("language", "Language", FACT_CATALOGS.languages, 255)}
+        </div>
+        <p className="help">
+          Met location names use Emerald's Gen 3 map-section IDs, including
+          named Kanto sections and special met locations. Met level is the
+          stored value; hatched Pokémon may store zero.
+        </p>
+      </details>
+      <details className="stat-details technical-fields">
+        <summary>Advanced raw storage fields · filler and flags</summary>
+        <p className="help">
+          These are optional internal record values, not information you need to
+          find on a summary screen. A “word” means two bytes (a 16-bit number).
+          Header flags 0x02 means “has species”; the Egg bit is 0x04. “Is egg”
+          also constrains that header bit.
+        </p>
+        <div className="form-table">
+          {(
+            [
+              ["headerFlags", "Header flags byte", 255],
+              ["checksum", "Known checksum", 65535],
+              ["headerPadding", "Header reserved word", 65535],
+              ["growthPadding", "Growth reserved word", 65535],
+              ["ribbonTail", "Upper five ribbon / flag bits", 31],
+            ] as const
+          ).map(([key, label, max]) => (
+            <label key={key}>
+              {label}
+              {input(key, label, max)}
+            </label>
+          ))}
+        </div>
+        <p className="help">
+          <strong>Header reserved word:</strong> the uninterpreted two-byte
+          field at record offsets 0x1E–0x1F, outside encryption.{" "}
+          <strong>Growth reserved word:</strong> the two-byte filler at
+          Growth-block offsets 0x0A–0x0B, inside encryption. Neither is an IV,
+          stat or trainer ID. For ordinary, unmodified Emerald wild catches,
+          creation starts these at zero. Miscellaneous’s last five bits contain
+          four unused bits and the fateful-encounter flag; ordinary wild catches
+          start with all five clear. Event or edited Pokémon may differ.
+        </p>
+        {lab.origin === "wild" && (
+          <button type="button" onClick={lab.applyWildStorageDefaults}>
+            Use normal wild-catch storage defaults
+          </button>
+        )}
+        <p className="help">
+          This optional preset fills missing filler/upper-flag values with zero
+          and normal header flags, marking them as assumptions. The checksum is
+          calculated automatically once the secure data is exact. A nickname
+          only fixes characters through its terminator; trailing nickname bytes
+          may remain ambiguous.
         </p>
       </details>
       <details className="stat-details">
@@ -255,7 +368,7 @@ export function KnownFactsForm({ lab }: { lab: CurtainLab }) {
               <option value="1">Yes</option>
             </select>
           </label>
-          <label>Held item ID{input("heldItem", "Held item ID", 65535)}</label>
+          {named("heldItem", "Held item", HELD_ITEM_CATALOG, 65535)}
           <label>Friendship{input("friendship", "Friendship", 255)}</label>
           <label>PP Ups byte{input("ppBonuses", "PP Ups byte", 255)}</label>
           <label>
@@ -273,11 +386,11 @@ export function KnownFactsForm({ lab }: { lab: CurtainLab }) {
       <div className="fact-defaults">
         {assumed.size > 0 && (
           <p className="help">
-            <strong>{assumed.size} default assumptions active.</strong> The
-            preset uses EVs, contest condition, PP Ups, ribbons, Pokérus and
-            markings = 0; not an Egg. Remaining defaulted fields are tinted.
-            These are supplied assumptions, not recovered values. Edit or clear
-            them for trained, traded or modified Pokémon.
+            <strong>{assumed.size} default assumptions active.</strong>{" "}
+            Defaulted fields are tinted, including move/PP, nickname and storage
+            assumptions where active. These are supplied assumptions, not
+            recovered values. Edit or clear them for trained, traded or modified
+            Pokémon.
           </p>
         )}
         <div className="inline-buttons">

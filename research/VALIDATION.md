@@ -1,6 +1,19 @@
 # Validation results
 
-## Current release check - 2026-10-15
+## Named inputs and Poochyena feedback — 2026-10-18
+
+- **88 automated tests pass** and the TypeScript/Vite production build passes. Five new tests cover all named catalogs, name/ID matching and the supplied Poochyena conflict/review fixtures.
+- Browser checks in connected Chrome confirmed Tackle→33, Route 101→16, Emerald→3, Poké Ball→4 and English→2, plus clearing the ID while a name is incomplete. The grey boxes and collapsed technical fields were visually inspected. Automated file selection was blocked by the extension's file-access setting; no permissions were changed. The same JSON files were loaded and validated by parser/solver tests.
+- The supplied `.ek3` validates its checksum. Original input reproduces zero PIDs, with 158 matching pixels, two disagreements and Ruby/Emerald mismatch. The review preserves the genuine PID without copying hidden identity into facts. See [POOCHYENA_CASE.md](POOCHYENA_CASE.md).
+
+## Investigator increment — 2026-10-18
+
+- **83 automated tests pass** and the TypeScript/Vite production build passes through `npm run check`. This includes the original 72 tests and 11 new investigator tests; the existing UI contract was updated for the guided navigation and explicit assumptions.
+- New coverage independently checks all 65,536 SIDs across all 24 permutations, partial packed bits, partial-payload checksum carries, per-snapshot item/checksum changes, real encrypted experiment predictions, joint ambiguity, exact synthetic 80-byte recovery, legacy JSON and blind genuine-SID survival for DOTS/Skarmory/Latios. See [the model and limitations](INVESTIGATOR.md).
+- Browser surfaces were unavailable in this implementation session, so interactive browser/screenshot validation was not performed. Server-rendered component checks, numerical tests, static build and local HTTP checks do not replace real-game or browser interaction validation.
+- No new emulator capture is claimed. Illumise and the unresolved John GBA Poochyena observation JSON were not available as fixtures. Encounter RNG and reachable EV experiment methods remain deferred.
+
+## Previous calculator release check - 2026-10-15
 
 - **72 automated tests pass**, including mapping/capture evidence, exact inference, examples and original trainer information. TypeScript and the Vite production build pass.
 - The source ZIP was extracted to a fresh folder. An offline locked dependency install with lifecycle scripts disabled succeeded; all 72 tests and the production build passed there without the decompilation checkout or development folders. Root and extracted builds produce the same asset names.
@@ -10,7 +23,6 @@
 - Existing evidence, original observation fixtures and byte-to-pixel mapping remain unchanged. Source packaging excludes ROMs, full saves/states and private development folders.
 
 The sections below preserve the chronological validation history. Older test totals, UI descriptions and preview ports describe those earlier checkpoints; use README.md for current launch instructions.
-
 
 ## Automated checks
 
@@ -190,3 +202,58 @@ Source and model boundaries are documented in [SUMMARY_STATS.md](SUMMARY_STATS.m
 ## Initial-release file audit
 
 Generated dependencies/builds, release verification folders, full source checkouts, private captures, handoff notes and local screenshots are excluded from the public source bundle. The two historical docs UI screenshots are now ignored by Git and omitted from source packaging; they remain on disk locally. Minimal records, observation JSON, binary mapping assets and stripped native-screen PNG fixtures are intentionally retained for tests and loadable examples. No original fixture bytes were changed.
+
+## Direct item testing — 2026-10-18
+
+- Removed inventory checkboxes from the interface. The full supported catalog is ranked from surviving hypotheses; the player selects an item using Try.
+- Item tests progress through a Yes/No question, an optional editable drawing draft and a recorded result. Drafts do not enter inference. No confirms the prior observed pattern, preserving unknown cells. Yes opens the prior drawing; saving applies edits and updates findings and the next ranking.
+- Local autosave preserves the investigation and unfinished test, including edited draft pixels. Legacy JSON remains compatible. Research examples pause autosave to preserve the user's prior investigation.
+- Five additional tests cover draft isolation, both answer paths, actual encrypted item-swap narrowing with genuine SID survival, recomputed rankings, pending-test JSON/device restore, invalid metadata/storage and direct question/save interface contracts. All 93 tests and the TypeScript/Vite production build pass.
+- Chrome smoke checks exercised selecting an item, No, selecting the next item, Yes, restoring the unfinished editor after reload, painting a pixel, saving and returning to updated rankings. This verifies the interface; the manual browser data is development input, not an emulator experiment. The independent encrypted-record regression verifies real constraint narrowing.
+
+## Wild H1/H2/H4 seed/advance search — 2026-10-18
+
+- Added inclusive seed/minimum/maximum advance searching for ordinary Emerald wild encounters. The UI defaults to seed 0 and all three methods, selects encounter tables from known met data/species and supports generation lead settings. A known PID is not required.
+- Generated PID/IV tuples remain correlated through per-snapshot constraints, checksum checks, projection and item ranking. Worker searches rerun after saved evidence changes; unfinished item drafts remain excluded. Counts distinguish generated spreads and joint PID/SID/IV hypotheses. Settings persist through JSON/autosave and can be turned off.
+- Seven additional tests check independent BigInt LCG arithmetic/jump bounds, numeric PokéFinder H1/H2/H4 golden vectors (including Synchronize/Cute Charm), header/trait/stat filtering, exact optimized versus exhaustive SID results, non-circular Poochyena PID/IV recovery, unknown TID, multiple/no-match scopes, item-draft exclusion, JSON and interface contracts. All 100 tests and the TypeScript/Vite build pass.
+- The reviewed Poochyena session, with PID/IVs absent from known facts, gives one matching spread in seed 0 advances 0–99,999: PID 2384797520, IVs 2/1/30/4/22/13, H2 at advance 603. Widening through 999,999 retains two spreads and 288 joint hypotheses; the true reference PID/IVs/SID survive. The original conflicting input is preserved unchanged.
+- Chrome smoke checks left PID/IV fields blank, entered Poochyena traits, searched a narrow range and obtained the correct PID. Adding summary stats automatically narrowed three IV spreads to one and enabled ranked items. Reload restored settings/evidence and recomputed the result. Turning off RNG returned to ordinary inference. The temporary browser inputs were cleared after visual review. No new emulator capture is claimed.
+
+Model details and supported encounter/lead scope: [WILD_RNG.md](WILD_RNG.md).
+
+## Compact workbench, fixed baseline and new-game SID RNG — 2026-10-19
+
+- Recreated the supplied split layout: three input tabs, scrolling left panel, one canonical curtain strip, fixed live values/inspector and grouped 80-byte hex. Hex digits and pixels share hover/pin addresses; inspector shows allowed digits. Extra fields remain collapsed; the classic workspace preserves advanced tools.
+- Every new experiment compares against the original observation. Both saved answer paths restore it while keeping test evidence. In-game restoration is explicit; consumable tests require reloading a baseline save. Legacy chained test sources remain intact.
+- Optional TID-seeded SID generation, distinct output/all-advance grouping, exact candidate intersections and unknown-PID witnesses are shared across SID Finder/Data Recovery. Wild PID/IV hypotheses are filtered before the candidate safety limit. Empty windows offer widen/disable. Settings round-trip without mutating facts.
+- Source verification and timing/reseeding limitations: [SID_RNG.md](SID_RNG.md). The reviewed Poochyena's genuine SID 37399 appears at advance 1,736. Known-PID SID candidates narrow 4,394 → 237; wild seed 0 advances 0–99,999 narrows 144 → 9 joint hypotheses with the default SID window. No hidden PID or IV is injected into the wild test.
+- Fresh-catch defaults include source-derived friendship/full known PP, retain manual exceptions and update dependent defaults on species/move edits. Extraction now excludes the inline SPECIES_NONE initializer so Bulbasaur retains its own metadata.
+- Added controlled move, Rare Candy and vitamin recommendations. Move PP/PP Ups follow swaps. Rare Candy requires four occupied known moves to allow declining new moves; evolution must be canceled. Vitamins enforce per-stat/total caps, clear stale summary stats and retain assumption provenance. Independent encrypted-record tests retain genuine SID and verify predicted pixels.
+- Deterministic coverage includes RNG/duplicate outputs/window boundaries, exact intersections, unknown-PID witness isolation, all 24 dynamic validator orders, genuine SID outside scope, reversible JSON, fixed-baseline restore, controlled actions and compact inspector/hex contracts. All 117 tests and TypeScript/Vite build pass via `npm run check`.
+- Chrome checks at 1430 × 950 verified all right-side content fits without page scrolling, linked hex selection, zero-SID guidance and restoring results by disabling the filter. Direct original-baseline No flow saved a separate observation and recalculated the next ranking. These UI inputs are disposable examples; independent core tests provide the data-recovery evidence. No new emulator measurement is claimed.
+- The production build was also checked at 1366 × 768. Its unknown-PID worker returned all 3,506 TID-40492 SID outputs when no further facts were supplied, retained the broad PID bound, displayed duplicate advances, validated a compatibility witness and shared the result with Data Recovery. Reverse curtain-keyboard → hex highlighting was verified. Temporary inputs were cleared, an unmodified example was restored, and the viewport override was reset.
+
+
+## About research publication ? 2026-10-19
+
+- Expanded both About views with the same substantial research article, preserving usage notes, examples and prior research documents. Added interactive low/high nibble and XOR examples, an 80-byte address/permutation explorer, repeated-key and PID/OTID diagrams, separate new-game/wild RNG histories, SID-set intersection and a proposed multi-Pok?mon flow.
+- Audited important claims against the pinned pret source, existing algorithms and tests. Historical attribution was checked against the preserved Glitch City article. All 40 distinct locally linked source/research paths exist. [ABOUT_RESEARCH.md](ABOUT_RESEARCH.md) records the evidence boundaries.
+- Source-verified SID initialization is distinguished from unmeasured introduction timing. The reported Illumise reconstruction retains attribution and its missing-fixture qualification. Existing single-Pok?mon snapshots are explicitly distinguished from a future trainer-level multi-Pok?mon aggregator. No new emulator or gameplay result is claimed.
+- All 120 tests and the TypeScript/Vite production build pass. Chrome checks exercised article anchors, the 80 address buttons/two-pixel highlight, permutation changes, nibble order and XOR results. At 390 ? 844, diagrams fit the scrolling left panel without horizontal overflow. The right panel remains fixed on desktop; educational controls leave the investigation unchanged.
+
+## Dewford phrase SID evidence — 2026-10-19
+
+- Added optional original-phrase membership and ranked first-submission tests to SID Finder and Data Recovery. Evidence intersects the existing TID-seeded SID window and actual curtain/Pokémon constraints, including unknown-PID compatibility. Disabling Dewford evidence retains recorded answers; pending tests add no constraint until answered.
+- Source-derived English Easy Chat IDs and all five phrase-generation branches are checked against an independent BigInt RNG oracle. Tests cover boundaries, gap uncertainty, duplicate SID outcomes, overlapping outcome sets, exact curtain intersections, JSON persistence and reversible filtering. All 127 tests and the TypeScript/Vite build pass via `npm run check`.
+- Reproduced maractite's published retail example without supplying its SID: TID 63171, original TOGETHER / MOVIE, inclusive SID calls 100–2000 and gap 3 leave seven distinct SIDs. WEIRD / MONEY accepted leaves two; APPROVED / FLOWERS rejected leaves SID 55567 at call 831. The fixture explicitly converts the guide's zero-based output indexes to one-based RNG calls.
+- Chrome exercised the same 7 → 2 → 1 sequence, a custom phrase, pending-test autosave/reload, shared Data Recovery evidence, and disable/re-enable (1,879 timing-only SIDs → one restored SID). At 1430 × 950 and 390 × 844 the panel controls fit without horizontal overflow; no browser errors were captured. The user's separate live investigation was untouched.
+- This reproduces a published example and validates the implementation; it is not a new emulator/console experiment. The calibrated three-call gap, uninterrupted generation and original-history assumptions remain explicit limitations. Full audit, baseline-save protocol and research credits: [DEWFORD_SID.md](DEWFORD_SID.md).
+
+
+## Entry defaults and reported Nincada completion ? 2026-10-19
+
+- Added editable new-test English/Emerald, normal header flags, empty move and full-PP defaults. The compact nickname field stays beneath Species; exact names constrain through the first EOS while trailing memory stays unknown. Manual nickname/PP overrides and existing imports are preserved. Summary level/stats now say Required for stat-based IV recovery.
+- Is egg constrains the header and secure Egg bits; 0x02 is the hasSpecies header flag, not the Egg flag. Added an optional normal-wild storage preset for zero filler and upper unused/fateful bits, with assumption metadata and no checksum input. See [ENTRY_DEFAULTS.md](ENTRY_DEFAULTS.md) for pinned source references and scope.
+- Replayed the supplied Nincada JSON without injecting SID/PID/IVs: one H2 spread at advance 900, PID 0x97507B58, SID 33789. Assuming nickname NINCADA and normal wild storage gives 79 exact bytes and checksum 0x15D1; byte 0x10 after the nickname terminator retains 225 values. Exact export remains blocked. The reported three-phrase gameplay success is attributed to the contributor; no independent original record was supplied. The reviewed JSON/report are local ignored artifacts, and the source file is unchanged.
+- Four regression tests cover default dependencies/manual exceptions, names/encoding/EOS boundaries, both Egg flags, JSON compatibility, zero-storage opt-in and checksum derivation while preserving ambiguous nickname memory. All 131 tests and TypeScript/Vite production build pass via npm run check.
+- Chrome checks verified automatic NINCADA, a retained manual nickname, Scratch ? ID 10 / PP 35, empty slots/PP 0, header/language 02, required stat labels and the explicit storage preset. Layouts fit at 1430 ? 950 and 390 ? 844 without horizontal overflow; no browser errors were recorded. Browser file import was unavailable because the extension lacks file-URL access, so the supplied session was replayed through the core solver, not imported in the UI. The separate live workspace was untouched.

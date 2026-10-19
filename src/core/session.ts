@@ -6,7 +6,7 @@ import {
 import { PROFILE } from "./memory";
 import { speciesTraits } from "./traits";
 import { validateSummaryStats, type SummaryStats } from "./stats";
-import { encodeOtName } from "./names";
+import { encodeOtName, encodeNickname } from "./names";
 export type Session = {
   format: "emerald-curtain-observations";
   schemaVersion: 1;
@@ -38,6 +38,16 @@ export function validateFacts(
     friendship: 255,
     ppBonuses: 255,
     ribbons: 0x07ffffff,
+    metLocation: 255,
+    metLevel: 127,
+    metGame: 15,
+    ball: 15,
+    language: 255,
+    headerFlags: 255,
+    checksum: 65535,
+    headerPadding: 65535,
+    growthPadding: 65535,
+    ribbonTail: 31,
   };
   for (const k of Object.keys(f)) {
     if (k === "assumed") {
@@ -46,7 +56,7 @@ export function validateFacts(
         !f[k].every(
           (v) =>
             typeof v === "string" &&
-            /^(ev_[0-5]|contest_[0-5]|pokerus|markings|isEgg|ppBonuses|ribbons)$/.test(
+            /^(ev_[0-5]|contest_[0-5]|pp_[0-3]|move_[0-3]|nickname|headerFlags|headerPadding|growthPadding|ribbonTail|friendship|heldItem|pokerus|markings|isEgg|ppBonuses|ribbons)$/.test(
               v,
             ),
         )
@@ -55,11 +65,11 @@ export function validateFacts(
       out.assumed = [...new Set(f[k] as string[])];
       continue;
     }
-    if (k === "otName") {
+    if (k === "otName" || k === "nickname") {
       if (typeof f[k] !== "string") throw Error("Invalid OT name");
       const name = (f[k] as string).normalize("NFC");
-      encodeOtName(name);
-      out.otName = name;
+      (k === "otName" ? encodeOtName : encodeNickname)(name);
+      out[k] = name;
       continue;
     }
     if (k === "otGender") {
@@ -74,22 +84,28 @@ export function validateFacts(
       out.gender = f[k] as KnownFacts["gender"];
       continue;
     }
-    if (k === "evs" || k === "ivs" || k === "contest") {
+    if (
+      k === "evs" ||
+      k === "ivs" ||
+      k === "contest" ||
+      k === "moves" ||
+      k === "pp"
+    ) {
       const evs = f[k];
       if (
         !Array.isArray(evs) ||
-        evs.length !== 6 ||
+        evs.length !== (k === "moves" || k === "pp" ? 4 : 6) ||
         !evs.every(
           (v) =>
             v === null ||
             (typeof v === "number" &&
               Number.isInteger(v) &&
               v >= 0 &&
-              v <= (k === "ivs" ? 31 : 255)),
+              v <= (k === "ivs" ? 31 : k === "moves" ? 65535 : 255)),
         )
       )
         throw Error(
-          `${k} require six entries: 0–${k === "ivs" ? 31 : 255} or null for unknown`,
+          `${k} require ${k === "moves" || k === "pp" ? "four" : "six"} entries: 0–${k === "ivs" ? 31 : k === "moves" ? 65535 : 255} or null for unknown`,
         );
       out[k] = evs.slice();
       continue;
@@ -118,11 +134,27 @@ export function validateFacts(
   )
     throw Error("Gender and ability require a supported known species");
   for (const key of out.assumed ?? []) {
-    const match = /^(ev|contest)_([0-5])$/.exec(key);
+    const match = /^(ev|contest|pp|move)_([0-5])$/.exec(key);
     const value = match
-      ? out[match[1] === "ev" ? "evs" : "contest"]?.[Number(match[2])]
-      : out[key as "pokerus" | "markings" | "isEgg" | "ppBonuses" | "ribbons"];
-    if (value !== 0)
+      ? out[
+          match[1] === "ev"
+            ? "evs"
+            : match[1] === "pp"
+              ? "pp"
+              : match[1] === "move"
+                ? "moves"
+                : "contest"
+        ]?.[Number(match[2])]
+      : out[key as keyof KnownFacts];
+    if (
+      key === "friendship" ||
+      key === "nickname" ||
+      key === "headerFlags" ||
+      key.startsWith("pp_") ||
+      key.startsWith("ev_")
+        ? value === undefined || value === null
+        : value !== 0
+    )
       throw Error(
         "Default assumption metadata must reference an active zero value",
       );

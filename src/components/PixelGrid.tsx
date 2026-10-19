@@ -3,6 +3,7 @@ import { type Observations, type Observation } from "../core/constraints";
 import { type Memory } from "../core/memory";
 import { type Placement, pixelAddress, nibbleValue } from "../core/tiles";
 import { backgroundColor, curtainHit } from "../core/window";
+import { bitmapCoordinates } from "../core/canvasCoordinates";
 
 export type Hit = ReturnType<typeof pixelAddress> & {
   displayX: number;
@@ -23,6 +24,10 @@ type Props = {
   observations: Observations;
   tool: Observation;
   contradictions: Set<number>;
+  predictions?: Observations;
+  targets?: number[];
+  highlightedNibble?: number | null;
+  onSelect?: (hit: Hit) => void;
   onHover: (hit: Hit | null) => void;
   onStart: () => void;
   onPaint: (indices: number[], value: Observation) => void;
@@ -37,6 +42,13 @@ export function PixelGrid(p: Props) {
     width = p.bounds.w * p.zoom,
     height = p.bounds.h * p.zoom + top;
   function hitAt(x: number, y: number): Hit | null {
+    if (
+      x < p.bounds.x ||
+      x >= p.bounds.x + p.bounds.w ||
+      y < p.bounds.y ||
+      y >= p.bounds.y + p.bounds.h
+    )
+      return null;
     return curtainHit(p.placements, x, y, p.mainOnly);
   }
   useEffect(() => {
@@ -101,6 +113,34 @@ export function PixelGrid(p: Props) {
             ctx.lineTo(px + 0.5, py + p.zoom);
             ctx.stroke();
           }
+          if (
+            p.solver &&
+            state === -1 &&
+            p.predictions &&
+            p.predictions[a.nibble] !== -1
+          ) {
+            ctx.strokeStyle =
+              p.predictions[a.nibble] === 1 ? "#176db0" : "#00a595";
+            ctx.lineWidth = Math.max(1, p.zoom / 8);
+            ctx.setLineDash([Math.max(1, p.zoom / 5), Math.max(1, p.zoom / 7)]);
+            ctx.strokeRect(
+              px + 3,
+              py + 3,
+              Math.max(1, p.zoom - 6),
+              Math.max(1, p.zoom - 6),
+            );
+            ctx.setLineDash([]);
+          }
+          if (p.solver && p.targets?.includes(a.nibble)) {
+            ctx.strokeStyle = "#e78510";
+            ctx.lineWidth = Math.max(2, p.zoom / 6);
+            ctx.strokeRect(
+              px + 2,
+              py + 2,
+              Math.max(1, p.zoom - 4),
+              Math.max(1, p.zoom - 4),
+            );
+          }
           if (p.contradictions.has(a.nibble)) {
             ctx.strokeStyle = "#ef435f";
             ctx.lineWidth = 2;
@@ -109,6 +149,16 @@ export function PixelGrid(p: Props) {
             ctx.moveTo(px + 2, py + 2);
             ctx.lineTo(px + p.zoom - 2, py + p.zoom - 2);
             ctx.stroke();
+          }
+          if (p.highlightedNibble === a.nibble) {
+            ctx.strokeStyle = "#db7b12";
+            ctx.lineWidth = Math.max(2, p.zoom / 5);
+            ctx.strokeRect(
+              px + 2,
+              py + 2,
+              Math.max(1, p.zoom - 4),
+              Math.max(1, p.zoom - 4),
+            );
           }
         }
       if (p.annotated) {
@@ -128,14 +178,17 @@ export function PixelGrid(p: Props) {
     }
   }, [p, width, height, top]);
   function coordinates(e: React.PointerEvent<HTMLCanvasElement>) {
-    const r = e.currentTarget.getBoundingClientRect();
+    const bitmap = bitmapCoordinates(
+      e.clientX,
+      e.clientY,
+      e.currentTarget.getBoundingClientRect(),
+      width,
+      height,
+      getComputedStyle(e.currentTarget).objectFit === "contain",
+    );
     return {
-      x:
-        Math.floor(((e.clientX - r.left) * width) / r.width / p.zoom) +
-        p.bounds.x,
-      y:
-        Math.floor((((e.clientY - r.top) * height) / r.height - top) / p.zoom) +
-        p.bounds.y,
+      x: Math.floor(bitmap.x / p.zoom) + p.bounds.x,
+      y: Math.floor((bitmap.y - top) / p.zoom) + p.bounds.y,
     };
   }
   function move(e: React.PointerEvent<HTMLCanvasElement>) {
@@ -188,10 +241,15 @@ export function PixelGrid(p: Props) {
       style={{
         width,
         height,
-        cursor: p.solver ? "crosshair" : "help",
+        // Use the arrow's tip as the target, rather than a crosshair/help glyph
+        // whose center or question-mark can look like a half-cell offset.
+        cursor: "default",
         touchAction: "none",
       }}
       onPointerDown={(e) => {
+        const point = coordinates(e),
+          selected = hitAt(point.x, point.y);
+        if (selected) p.onSelect?.(selected);
         if (e.button !== 0 || !p.solver) return;
         e.preventDefault();
         e.currentTarget.focus();

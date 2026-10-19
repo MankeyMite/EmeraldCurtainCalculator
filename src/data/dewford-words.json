@@ -1,0 +1,681 @@
+{
+  "commit": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "conditions": [
+    {
+      "id": 5120,
+      "text": "HOT"
+    },
+    {
+      "id": 5121,
+      "text": "EXISTS"
+    },
+    {
+      "id": 5122,
+      "text": "EXCESS"
+    },
+    {
+      "id": 5123,
+      "text": "APPROVED"
+    },
+    {
+      "id": 5124,
+      "text": "HAS"
+    },
+    {
+      "id": 5125,
+      "text": "GOOD"
+    },
+    {
+      "id": 5126,
+      "text": "LESS"
+    },
+    {
+      "id": 5127,
+      "text": "MOMENTUM"
+    },
+    {
+      "id": 5128,
+      "text": "GOING"
+    },
+    {
+      "id": 5129,
+      "text": "WEIRD"
+    },
+    {
+      "id": 5130,
+      "text": "BUSY"
+    },
+    {
+      "id": 5131,
+      "text": "TOGETHER"
+    },
+    {
+      "id": 5132,
+      "text": "FULL"
+    },
+    {
+      "id": 5133,
+      "text": "ABSENT"
+    },
+    {
+      "id": 5134,
+      "text": "BEING"
+    },
+    {
+      "id": 5135,
+      "text": "NEED"
+    },
+    {
+      "id": 5136,
+      "text": "TASTY"
+    },
+    {
+      "id": 5137,
+      "text": "SKILLED"
+    },
+    {
+      "id": 5138,
+      "text": "NOISY"
+    },
+    {
+      "id": 5139,
+      "text": "BIG"
+    },
+    {
+      "id": 5140,
+      "text": "LATE"
+    },
+    {
+      "id": 5141,
+      "text": "CLOSE"
+    },
+    {
+      "id": 5142,
+      "text": "DOCILE"
+    },
+    {
+      "id": 5143,
+      "text": "AMUSING"
+    },
+    {
+      "id": 5144,
+      "text": "ENTERTAINING"
+    },
+    {
+      "id": 5145,
+      "text": "PERFECTION"
+    },
+    {
+      "id": 5146,
+      "text": "PRETTY"
+    },
+    {
+      "id": 5147,
+      "text": "HEALTHY"
+    },
+    {
+      "id": 5148,
+      "text": "EXCELLENT"
+    },
+    {
+      "id": 5149,
+      "text": "UPSIDE DOWN"
+    },
+    {
+      "id": 5150,
+      "text": "COLD"
+    },
+    {
+      "id": 5151,
+      "text": "REFRESHING"
+    },
+    {
+      "id": 5152,
+      "text": "UNAVOIDABLE"
+    },
+    {
+      "id": 5153,
+      "text": "MUCH"
+    },
+    {
+      "id": 5154,
+      "text": "OVERWHELMING"
+    },
+    {
+      "id": 5155,
+      "text": "FABULOUS"
+    },
+    {
+      "id": 5156,
+      "text": "ELSE"
+    },
+    {
+      "id": 5157,
+      "text": "EXPENSIVE"
+    },
+    {
+      "id": 5158,
+      "text": "CORRECT"
+    },
+    {
+      "id": 5159,
+      "text": "IMPOSSIBLE"
+    },
+    {
+      "id": 5160,
+      "text": "SMALL"
+    },
+    {
+      "id": 5161,
+      "text": "DIFFERENT"
+    },
+    {
+      "id": 5162,
+      "text": "TIRED"
+    },
+    {
+      "id": 5163,
+      "text": "SKILL"
+    },
+    {
+      "id": 5164,
+      "text": "TOP"
+    },
+    {
+      "id": 5165,
+      "text": "NON-STOP"
+    },
+    {
+      "id": 5166,
+      "text": "PREPOSTEROUS"
+    },
+    {
+      "id": 5167,
+      "text": "NONE"
+    },
+    {
+      "id": 5168,
+      "text": "NOTHING"
+    },
+    {
+      "id": 5169,
+      "text": "NATURAL"
+    },
+    {
+      "id": 5170,
+      "text": "BECOMES"
+    },
+    {
+      "id": 5171,
+      "text": "LUKEWARM"
+    },
+    {
+      "id": 5172,
+      "text": "FAST"
+    },
+    {
+      "id": 5173,
+      "text": "LOW"
+    },
+    {
+      "id": 5174,
+      "text": "AWFUL"
+    },
+    {
+      "id": 5175,
+      "text": "ALONE"
+    },
+    {
+      "id": 5176,
+      "text": "BORED"
+    },
+    {
+      "id": 5177,
+      "text": "SECRET"
+    },
+    {
+      "id": 5178,
+      "text": "MYSTERY"
+    },
+    {
+      "id": 5179,
+      "text": "LACKS"
+    },
+    {
+      "id": 5180,
+      "text": "BEST"
+    },
+    {
+      "id": 5181,
+      "text": "LOUSY"
+    },
+    {
+      "id": 5182,
+      "text": "MISTAKE"
+    },
+    {
+      "id": 5183,
+      "text": "KIND"
+    },
+    {
+      "id": 5184,
+      "text": "WELL"
+    },
+    {
+      "id": 5185,
+      "text": "WEAKENED"
+    },
+    {
+      "id": 5186,
+      "text": "SIMPLE"
+    },
+    {
+      "id": 5187,
+      "text": "SEEMS"
+    },
+    {
+      "id": 5188,
+      "text": "BADLY"
+    }
+  ],
+  "lifestyle": [
+    {
+      "id": 6144,
+      "text": "CHORES"
+    },
+    {
+      "id": 6145,
+      "text": "HOME"
+    },
+    {
+      "id": 6146,
+      "text": "MONEY"
+    },
+    {
+      "id": 6147,
+      "text": "ALLOWANCE"
+    },
+    {
+      "id": 6148,
+      "text": "BATH"
+    },
+    {
+      "id": 6149,
+      "text": "CONVERSATION"
+    },
+    {
+      "id": 6150,
+      "text": "SCHOOL"
+    },
+    {
+      "id": 6151,
+      "text": "COMMEMORATE"
+    },
+    {
+      "id": 6152,
+      "text": "HABIT"
+    },
+    {
+      "id": 6153,
+      "text": "GROUP"
+    },
+    {
+      "id": 6154,
+      "text": "WORD"
+    },
+    {
+      "id": 6155,
+      "text": "STORE"
+    },
+    {
+      "id": 6156,
+      "text": "SERVICE"
+    },
+    {
+      "id": 6157,
+      "text": "WORK"
+    },
+    {
+      "id": 6158,
+      "text": "SYSTEM"
+    },
+    {
+      "id": 6159,
+      "text": "TRAIN"
+    },
+    {
+      "id": 6160,
+      "text": "CLASS"
+    },
+    {
+      "id": 6161,
+      "text": "LESSONS"
+    },
+    {
+      "id": 6162,
+      "text": "INFORMATION"
+    },
+    {
+      "id": 6163,
+      "text": "LIVING"
+    },
+    {
+      "id": 6164,
+      "text": "TEACHER"
+    },
+    {
+      "id": 6165,
+      "text": "TOURNAMENT"
+    },
+    {
+      "id": 6166,
+      "text": "LETTER"
+    },
+    {
+      "id": 6167,
+      "text": "EVENT"
+    },
+    {
+      "id": 6168,
+      "text": "DIGITAL"
+    },
+    {
+      "id": 6169,
+      "text": "TEST"
+    },
+    {
+      "id": 6170,
+      "text": "DEPT. STORE"
+    },
+    {
+      "id": 6171,
+      "text": "TELEVISION"
+    },
+    {
+      "id": 6172,
+      "text": "PHONE"
+    },
+    {
+      "id": 6173,
+      "text": "ITEM"
+    },
+    {
+      "id": 6174,
+      "text": "NAME"
+    },
+    {
+      "id": 6175,
+      "text": "NEWS"
+    },
+    {
+      "id": 6176,
+      "text": "POPULAR"
+    },
+    {
+      "id": 6177,
+      "text": "PARTY"
+    },
+    {
+      "id": 6178,
+      "text": "STUDY"
+    },
+    {
+      "id": 6179,
+      "text": "MACHINE"
+    },
+    {
+      "id": 6180,
+      "text": "MAIL"
+    },
+    {
+      "id": 6181,
+      "text": "MESSAGE"
+    },
+    {
+      "id": 6182,
+      "text": "PROMISE"
+    },
+    {
+      "id": 6183,
+      "text": "DREAM"
+    },
+    {
+      "id": 6184,
+      "text": "KINDERGARTEN"
+    },
+    {
+      "id": 6185,
+      "text": "LIFE"
+    },
+    {
+      "id": 6186,
+      "text": "RADIO"
+    },
+    {
+      "id": 6187,
+      "text": "RENTAL"
+    },
+    {
+      "id": 6188,
+      "text": "WORLD"
+    }
+  ],
+  "hobbies": [
+    {
+      "id": 6656,
+      "text": "IDOL"
+    },
+    {
+      "id": 6657,
+      "text": "ANIME"
+    },
+    {
+      "id": 6658,
+      "text": "SONG"
+    },
+    {
+      "id": 6659,
+      "text": "MOVIE"
+    },
+    {
+      "id": 6660,
+      "text": "SWEETS"
+    },
+    {
+      "id": 6661,
+      "text": "CHAT"
+    },
+    {
+      "id": 6662,
+      "text": "CHILD'S PLAY"
+    },
+    {
+      "id": 6663,
+      "text": "TOYS"
+    },
+    {
+      "id": 6664,
+      "text": "MUSIC"
+    },
+    {
+      "id": 6665,
+      "text": "CARDS"
+    },
+    {
+      "id": 6666,
+      "text": "SHOPPING"
+    },
+    {
+      "id": 6667,
+      "text": "CAMERA"
+    },
+    {
+      "id": 6668,
+      "text": "VIEWING"
+    },
+    {
+      "id": 6669,
+      "text": "SPECTATOR"
+    },
+    {
+      "id": 6670,
+      "text": "GOURMET"
+    },
+    {
+      "id": 6671,
+      "text": "GAME"
+    },
+    {
+      "id": 6672,
+      "text": "RPG"
+    },
+    {
+      "id": 6673,
+      "text": "COLLECTION"
+    },
+    {
+      "id": 6674,
+      "text": "COMPLETE"
+    },
+    {
+      "id": 6675,
+      "text": "MAGAZINE"
+    },
+    {
+      "id": 6676,
+      "text": "WALK"
+    },
+    {
+      "id": 6677,
+      "text": "BIKE"
+    },
+    {
+      "id": 6678,
+      "text": "HOBBY"
+    },
+    {
+      "id": 6679,
+      "text": "SPORTS"
+    },
+    {
+      "id": 6680,
+      "text": "SOFTWARE"
+    },
+    {
+      "id": 6681,
+      "text": "SONGS"
+    },
+    {
+      "id": 6682,
+      "text": "DIET"
+    },
+    {
+      "id": 6683,
+      "text": "TREASURE"
+    },
+    {
+      "id": 6684,
+      "text": "TRAVEL"
+    },
+    {
+      "id": 6685,
+      "text": "DANCE"
+    },
+    {
+      "id": 6686,
+      "text": "CHANNEL"
+    },
+    {
+      "id": 6687,
+      "text": "MAKING"
+    },
+    {
+      "id": 6688,
+      "text": "FISHING"
+    },
+    {
+      "id": 6689,
+      "text": "DATE"
+    },
+    {
+      "id": 6690,
+      "text": "DESIGN"
+    },
+    {
+      "id": 6691,
+      "text": "LOCOMOTIVE"
+    },
+    {
+      "id": 6692,
+      "text": "PLUSH DOLL"
+    },
+    {
+      "id": 6693,
+      "text": "PC"
+    },
+    {
+      "id": 6694,
+      "text": "FLOWERS"
+    },
+    {
+      "id": 6695,
+      "text": "HERO"
+    },
+    {
+      "id": 6696,
+      "text": "NAP"
+    },
+    {
+      "id": 6697,
+      "text": "HEROINE"
+    },
+    {
+      "id": 6698,
+      "text": "FASHION"
+    },
+    {
+      "id": 6699,
+      "text": "ADVENTURE"
+    },
+    {
+      "id": 6700,
+      "text": "BOARD"
+    },
+    {
+      "id": 6701,
+      "text": "BALL"
+    },
+    {
+      "id": 6702,
+      "text": "BOOK"
+    },
+    {
+      "id": 6703,
+      "text": "FESTIVAL"
+    },
+    {
+      "id": 6704,
+      "text": "COMICS"
+    },
+    {
+      "id": 6705,
+      "text": "HOLIDAY"
+    },
+    {
+      "id": 6706,
+      "text": "PLANS"
+    },
+    {
+      "id": 6707,
+      "text": "TRENDY"
+    },
+    {
+      "id": 6708,
+      "text": "VACATION"
+    },
+    {
+      "id": 6709,
+      "text": "LOOK"
+    }
+  ]
+}

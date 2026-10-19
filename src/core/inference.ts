@@ -93,7 +93,7 @@ function advance(
   });
   return next;
 }
-function knownPlaintext(facts: KnownFacts): number[] {
+export function knownPlaintext(facts: KnownFacts): number[] {
   const plain = Array<number>(96).fill(0xffff);
   const bits = (start: number, count: number, value: number | undefined) => {
     if (value === undefined) return;
@@ -117,6 +117,18 @@ function knownPlaintext(facts: KnownFacts): number[] {
   bits(72, 8, facts.friendship);
   bits(64, 8, facts.ppBonuses);
   bits(352, 27, facts.ribbons);
+  bits(379, 5, facts.ribbonTail);
+  bits(80, 16, facts.growthPadding);
+  facts.moves?.forEach((v, i) => {
+    if (v !== null) bits(96 + i * 16, 16, v);
+  });
+  facts.pp?.forEach((v, i) => {
+    if (v !== null) bits(160 + i * 8, 8, v);
+  });
+  bits(296, 8, facts.metLocation);
+  bits(304, 7, facts.metLevel);
+  bits(311, 4, facts.metGame);
+  bits(315, 4, facts.ball);
   facts.evs?.forEach((v, i) => {
     if (v !== null) bits(192 + i * 8, 8, v);
   });

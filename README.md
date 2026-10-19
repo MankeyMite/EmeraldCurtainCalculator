@@ -1,141 +1,136 @@
-# Emerald Curtain Calculator
+# Emerald Curtain Investigator
 
-Draw the Rustboro Trainer’s School curtain glitch in Pokémon Emerald and explore what it reveals about a boxed Pokémon. Or import an encrypted 80-byte `.ek3` to preview its curtain pattern.
+Formerly **Emerald Curtain Calculator**. Investigate hidden Generation 3 Pokémon data using the Rustboro Trainer School black curtains glitch: enter known information, draw what you see, narrow PID/SID and encrypted bytes, then choose useful held-item experiments.
 
-**Use the calculator:** [Open Emerald Curtain Calculator](https://mankeymite.github.io/EmeraldCurtainCalculator/)
+[Open the application](https://mankeymite.github.io/EmeraldCurtainCalculator/) · [Recovery model and implementation status](research/INVESTIGATOR.md)
 
-Everything runs in your browser. No account, ROM, upload service or API key is required.
+Everything runs locally in your browser. No ROM, account, API key or upload service is needed. This source update does not itself deploy the public website.
 
-**Currently supports English Pokémon Emerald only.** Other language versions have not been validated. Their storage positions and exact byte-to-pixel mapping may differ; changing the box position alone is not confirmed to make this tool compatible.
+**Verified mapping: English Pokémon Emerald only.** Other language versions have not been validated. Pokémon received from other Gen 3 games can be investigated as stored records in English Emerald; their original generation method is not assumed to be Emerald's.
 
-## Use the calculator
+## Investigate a real Pokémon
 
-1. In English Emerald, place the Pokémon in **Box 8, slot 5**, keep **slots 4 and 6 empty**, then enter Rustboro Trainer’s School.
-2. On **Curtain**, draw the black pixels. Mirrored edges update together; click a black pixel again to erase it.
-3. Add known species, nature, Pokémon gender, ability, current EXP, PID and original trainer name/gender/TID/SID on the left. Open **EVs, IVs & contest stats** for more facts. Review the newly caught defaults: exact results are conditional on all supplied values being true.
-4. Choose **Calculate Pokémon data**. The remaining displayed cells become observed transparent pixels, and **Reconstruction** opens. This assumes you finished reproducing the visible pattern.
-5. Use **Save drawing** to keep observations and facts as JSON. They stay separate from imported candidates.
+1. Put the Pokémon in **Box 8, slot 5**. Preferably leave slots **4 and 6 empty**. Enter Rustboro Trainer School.
+2. Use **Pokémon info** on the left to choose the species and obtaining method. The fixed right side shows one curtain strip, live Species/PID/IV/XOR/SID results, pixel inspector and grouped 80-byte encrypted record. The strip contains every main-record pixel; mirrored repeats are omitted.
+3. Enter what you know from the Pokémon summary and original trainer information. Use **maximum HP**, not remaining HP. TID, SID and name refer to the **original trainer**. Another trainer's Pokémon cannot directly reveal your own SID.
+4. For an untouched fresh catch, check **Assume freshly caught Pokémon** if appropriate. It fills zero EVs/contest data, standard flags, base friendship, no held item and full known move PP. Tinted values are assumptions; edit exceptions or uncheck to clear them. EXP, random IVs/PID and reserved bytes remain unknown. **View and edit remaining fields** opens additional inputs, including an optional known PID.
+5. Paint actual black pixels on the curtain. Unmarked cells remain unknown until **Calculate** declares the remaining displayed cells transparent. Leave uncertain/obscured pixels unknown instead of completing a partial drawing. **Inspect** selects without painting; hover or pin a pixel or hex digit to highlight its counterpart and inspect allowed digits. Undo preserves the prior drawing.
+6. For a **wild encounter**, use **Find PID and IVs from wild RNG**: enter seed (default **0**), minimum/maximum advances and the encounter area, then **Search and use matching spreads**. H1, H2 and H4 are searched together by default. Your known traits, summary stats and saved drawings filter the generated spreads; matching PID/IV correlations feed SID recovery and item ranking automatically. You do not need to supply a PID. Other origins retain the stored-data solver, which jointly enumerates up to 32 inferred PIDs. The original TID is needed for joint SID recovery in either mode.
+7. Optionally enable **New-game SID RNG Filter** in Pokémon info, **Investigate → SID Finder**, or **Data Recovery**. It uses the entered public TID, defaults to approximately 60 seconds / calls 1–3,600, and accepts custom bounds. It intersects actual candidates with pixels and known facts while preserving possible PIDs. View SID/advance rows, Validate, widen or disable. See [verified source sequence and limitations](research/SID_RNG.md).
+8. Click **Investigate** beside an unresolved value to open ranked experiments on the left. Choose an action you can perform: held-item swap, move swap, Rare Candy EXP checkpoint or vitamin EV change when supported by the known facts. No inventory checklist is required. Follow the instructions, return the Pokémon to the target slot and leave/reenter the school.
+9. Answer **Did the pixels change compared with the original drawing?** **No** records the unchanged original pattern. **Yes** copies the original into an active test draft: edit differences, then **Save drawing & analyze test**. Saving keeps the test separately, recalculates candidates/rankings and restores the original drawing. Restore the original Pokémon state in-game too; consumable tests require a baseline save to reload. Do not overwrite that save.
+10. The investigation, including unfinished tests and RNG settings, saves automatically on this device. **Save** downloads a separate JSON backup. **Load** accepts previous observation JSON too, without adding defaults.
 
-Recheck any obscured or uncertain pixels in-game before completing the drawing. Unfinished cells remain unknown internally until you choose **Calculate Pokémon data**. If the result conflicts with known information, compare your drawing and inputs with the game and correct any mistakes.
+Changing tabs preserves the investigation. New generic observations start with mutable fields unknown. New tests use the first original observation as their baseline; historical chained tests retain their saved comparisons. Drafts contribute no evidence until recorded. Controlled tests clear friendship/checksum; EXP/EV tests also clear stale summary stats. Review copied facts if anything else changed. Rename observations and record changes under **Notes and snapshot comparison**. Save JSON before removing an observation if you want to retain a copy.
 
-**New workspaces assume a newly caught Pokémon:** EVs, all five contest conditions and Sheen, PP Up counters, ribbon bits, Pokérus and markings start at **0**; Is Egg starts at **No**. Defaulted inputs are tinted and labeled as assumptions. Use **Clear defaults** to remove only those assumptions, or **Clear all information** for an unrestricted workspace. Blank always means unknown. IVs, held item and friendship stay blank. Unused ribbon bits, fateful encounter, experience, met data and padding are never invented as zero. Loading an older drawing preserves exactly its saved facts, without adding defaults.
+Moves, met location, origin game, Ball, language and held item accept typed names with suggestions; a grey read-only box shows the stored ID automatically. Unknown and a known empty move slot are separate choices. New tests start with English Emerald, normal non-Egg header flags and four empty move slots; selecting a move fills its assumed maximum PP. A compact nickname field sits beneath Species and starts with the English species name. Manual nickname/PP changes are preserved; summary stats are marked Required for stat-based IV recovery. Existing imports acquire no new facts.
 
-### Explore the research examples
+Technical reserved words are under **Advanced raw storage fields · filler and flags**: each is a two-byte internal field, not a summary-screen stat. Header reserved bytes are at 0x1E–0x1F; Growth filler is at logical Growth offsets 0x0A–0x0B. An optional **Use normal wild-catch storage defaults** preset assumes these and the unused/fateful bits are zero for an ordinary, unmodified Emerald wild catch. Those values remain labeled assumptions. Nickname text fixes characters through its terminator, not trailing memory. See [defaults and completion limits](research/ENTRY_DEFAULTS.md).
 
-Open **About → Research examples** to load **DOTS Seedot**, **Skarmory**, or **Latios (illegal test record)**. Each example loads saved observations and known facts, with the matching encrypted record loaded separately for candidate comparison. DOTS also includes its known male gender and Early Bird ability. It opens the Curtain tab; open Reconstruction to see the remaining possibilities.
+Dashed blue pixels predict black; dashed teal predicts transparent. Orange outlines identify experiment targets. **Predictions never enter the observed drawing or count as independent evidence.** Verify them in-game before recording an observation.
 
-DOTS includes the summary-visible male gender and Early Bird ability, establishing exactly one PID: **132 (0x00000084)** under the supplied facts, without entering a PID or SID. The original saved fixture remains unchanged and leaves five PIDs without those two traits. The Skarmory checkpoint includes the established HP IV 31 and leaves 20 PIDs; clear its HP IV to see 41 and inspect the IV calculator to reproduce the deduction. Latios leaves 5,703 and is retained as a rendering/constraint test, without legality claims. Hidden Skarmory neighboring bytes remain unknown.
+## Implementation status
 
-**Restore previous workspace** brings back your drawing, known inputs, candidates and painting history from before the first example was loaded, even if you switch between examples. This backup lasts only while the page stays open. Use **Save drawing** for a permanent JSON copy. The synthetic record and nibble-ordering tests remain under **Synthetic test patterns**.
+**Dewford SID research:** Investigate → SID Finder / Data Recovery now includes an optional original-trendy-phrase filter and ranked phrase tests. Before any successful phrase change or record mixing, the first submission's accept/reject response tests membership in the initial five phrases; reload the same baseline save before every test. Actual SID sets intersect with curtain and supported wild-RNG evidence. The source model reproduces maractite's published retail example (TID 63171 → SID 55567), with timing/VBlank limitations explicitly marked experimental. See [Dewford protocol and validation](research/DEWFORD_SID.md). Disabling just the Dewford evidence retains its recorded answers for re-enabling.
 
-### Test a suspected PID or other values
+**Dewford SID research:** Investigate → SID Finder / Data Recovery now includes an optional original-trendy-phrase filter and ranked phrase tests. Before any successful phrase change or record mixing, the first submission's accept/reject response tests membership in the initial five phrases; reload the same baseline save before every test. Actual SID sets intersect with curtain and supported wild-RNG evidence. The source model reproduces maractite's published retail example (TID 63171 → SID 55567), with timing/VBlank limitations explicitly marked experimental. See [Dewford protocol and validation](research/DEWFORD_SID.md). Disabling just the Dewford evidence retains its recorded answers for re-enabling.
 
-The **Data reconstruction** section shows the encrypted hex first. **PID possibilities** then puts the count beside one editable PID input. When 100 or fewer remain, choose a listed PID or use the input’s suggestions; otherwise type any PID. The fixed-digit pattern below uses numeric PID order, highest digit first. `?` means that position is not uniquely determined. **Check values** tests typed values; clicking a listed PID checks it immediately. **Other trial values** supports nature, original trainer TID/SID, species and individual EVs. All filled trial fields are tested together alongside the drawing and known information.
+| Phase                             | Status                                                                                                                        |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| 1: Rebranding and guided workflow | Implemented; 386 species, extensible obtaining categories and shared editor/recovery state                                    |
+| 2: Known-PID/TID SID inference    | Implemented; all 65,536 SIDs, all four substructures, partial bit facts and checksum compatibility                            |
+| 3: Multiple observations          | Implemented; immutable identity plus independent mutable snapshots; JSON and legacy imports                                   |
+| 4: Adaptive experiments           | Ranked held-item/move swaps, Rare Candy and cap-limited vitamins; original-baseline Yes/No flow and saved evidence            |
+| 5: Encounter RNG search           | Emerald wild H1/H2/H4 seed/advance search implemented; static, gift, event, breeding and special wild methods remain deferred |
+| 6: Advanced recovery and polish   | Partial: joint field/byte domains, conditional exact export, prediction overlays, mobile layout and documentation             |
 
-- **Impossible under current constraints** rules out that combination, conditional on the drawing and known facts being correct. Direct pixel conflicts identify the byte and nibble.
-- **Possible under current constraints** means the model has at least one compatible solution. It does not identify the Pokémon or prove that a particular RNG method can produce it.
+Controlled move swaps, Rare Candy checkpoints and cap-limited vitamin uses are available alongside held-item tests. Battle EV training, berries and arbitrary PP-use experiments remain deferred. Recommendations require shared observable positions for their affected blocks. Their benefit concerns shared identity/key uncertainty, not direct recovery of unrelated plaintext.
 
-Trial values do not change your known facts, reconstructed hex or saved observations. Leave the **known PID** blank when comparing alternative PIDs. The checker also applies all active known gender, ability, IV and condition inputs. Checksum, legality and RNG generation methods are outside its model.
+Wild RNG searches use inclusive advance bounds, with at most 1,000,000 advances per run. Advance 0 means the supplied seed before the encounter-slot call (before the encounter-rate check for Rock Smash). Advances count RNG calls, not seconds. Ordinary grass/cave, surf, fishing and Rock Smash tables are included, with no generation lead effect, Synchronize, Cute Charm or Pressure/Hustle/Vital Spirit. Use the species and lead as they were at capture. Safari Pokéblocks, Route 119 Feebas fishing, Static/Magnet Pull and Intimidate/Keen Eye extra-call behavior are outside this search. All results are conditional on the selected settings; broad searches preserve multiple matches rather than choosing the first. Settings and pending tests round-trip through JSON/autosave. See [wild RNG validation](research/WILD_RNG.md).
 
-### Use summary stats to narrow IVs
+Obtaining categories include wild, static, starter, gift, Egg/hatched, in-game trade, event/Mystery Gift, received from another Gen 3 game, and unknown. All currently use the generic stored-data solver. The design was compared with the locally available Gen 3 ACE Pokémon Builder taxonomy; no unrelated application or RNG implementation was copied.
 
-Under **Known Pokémon information → IV calculator · summary stats**, enter the current level and ordinary summary-screen stats. Enter **maximum HP**, not remaining HP. Supply species, nature and each relevant EV (the newly caught preset supplies zero EVs). Reconstruction’s **IV ranges** table compares the stat-only ranges with the curtain-derived ranges and their intersection. Unknown EVs stay unknown; stats, IVs and EXP never default to zero.
+## What the mathematics establishes
 
-If one IV value survives, **Use exact IVs in reconstruction** adds that value to known information. Unresolved ranges remain upper bounds and are not searched jointly or included in PID/candidate counts until you supply exact IV facts. Incorrect summary values can cause conflicts. Summary observations are saved separately in JSON, without copying candidate data. See [summary-stat calculation](research/SUMMARY_STATS.md).
+The 80-byte BoxPokemon has a 32-byte unencrypted header and four 12-byte secure blocks. Their order depends on `PID % 24`. Each secure word uses the repeating XOR key:
 
-**Render .ek3** supports file selection, drag-and-drop and a live hexadecimal editor. Exactly 80 encrypted bytes are required. A 100-byte party export must be explicitly converted to its 80-byte boxed record first. Importing a candidate never fills the solver’s observations.
+```text
+OTID = (SID << 16) | TID
+KEY  = PID XOR OTID
+ciphertext nibble = plaintext nibble XOR key nibble
+```
 
-The default view is one window at 20× zoom, with a black grid and see-through unpainted cells. The first editable row begins at PID byte 0. Neighboring rows are hidden; missing neighboring bytes stay unknown. Raw tiles, annotations and neighboring-slot imports are available under the additional controls.
+Transparent establishes ciphertext **0**. Black establishes **1–F**, not an exact digit. Therefore transparent means the key digit equals the known plaintext digit, and black means it differs. **Known nonzero plaintext is as useful as zero plaintext.** An unreadable pixel remains unconstrained.
 
-## Run locally
+SID enumeration applies every supported fact: species, held item, experience, friendship, moves/PP, PP Ups, EVs, contest/Sheen, Pokérus, IV bits, ability selection, origins/met data, ribbon/flag bits and independently supplied reserved/header fields. Ability constrains the stored selection bit; generic inference does not impose PID parity. Nature and gender use Gen 3 rules.
 
-Install **Node.js 24 LTS**, then run:
+Every candidate must satisfy all snapshot-specific plaintext and ciphertext constraints, the unencrypted SID header and a compatible 16-bit checksum. Partial-payload checksum compatibility uses exact digit-sum/carry propagation without enumerating every unknown byte combination. Each changed item has its own snapshot checksum. Ciphertext at matching offsets is not intersected across changed snapshots.
+
+Counts are conditional on supplied facts, assumptions and the supported stored-data model, and do not certify encounter legality or timing. Unresolved summary-stat IV ranges remain in the existing IV calculator; only exact IVs you explicitly apply enter the solver. Broader PID counts in the legacy advanced view refer to the **active observation**. Joint results include every snapshot and are separately labeled.
+
+**Known**, **Derived**, **Assumed** and **Unknown** remain distinct. Field/byte domains can be correlated; non-exact counts are upper bounds. The compact completeness percentage counts exact encrypted bytes out of 80. Exact `.ek3`/hex export requires all 80 bytes to be uniquely established under active constraints and the decrypted checksum to validate. Reserved bytes and black nonzero digits are never guessed. Results using assumptions remain conditional on those assumptions.
+
+The user reported a separately verified complete Illumise reconstruction with sufficiently informative facts, including known SID. That fixture is **not present in this checkout**, so this release cannot reproduce that particular experiment. Full-record synthetic tests and blind unknown-SID tests are separate validation goals. Full recovery is possible under informative conditions; it is not guaranteed from one screenshot.
+
+## Preserved advanced tools
+
+Open **About → Open classic workspace and full research notes** for the complete previous editor and research UI, sharing the same investigation. The compact desktop layout scrolls only its left panel; on narrow mobile screens the panels stack.
+
+- **Curtain Editor → Render .ek3** retains file input, drag/drop and the live hex editor. Exactly 80 encrypted bytes are required. A 100-byte party export needs explicit conversion; decrypted `.pk3` is not encrypted evidence.
+- Imported candidates stay separate from observed pixels and known facts. Importing a reference never fills the solver.
+- **Data Recovery** retains encrypted hex constraints, PID possibilities, hypothesis checking, IV analysis, plaintext interpretation and candidate comparisons. Use the new findings section for joint snapshot results.
+- **About → Research examples** retains DOTS Seedot, Skarmory and Latios. Backup/restore preserves the complete prior investigation in memory. Save JSON for a permanent copy.
+- DOTS with summary-visible male gender and Early Bird establishes PID 132. The original saved fixture leaves five PIDs without those traits. Skarmory's HP IV 31 checkpoint leaves 20 PIDs; the earlier checkpoint leaves 41. Latios is an **illegal test record**, retained for rendering/constraint consistency, not legality claims.
+- Neighbor imports, raw/annotated tiles, PNG export, painting history and the full 192-nibble window remain available. Hiding neighbor rows never assumes zero bytes.
+
+## Research status
+
+**About now contains a substantial technical research article**, shared by the compact and classic workspaces: historical credits, graphics overread, an interactive byte/pixel address diagram and XOR examples, known plaintext, wild PID/IV recovery, the TID-seeded new-game SID filter, controlled experiments and exact-export limits. Source references are pinned to the extraction revision. See the [About claim audit](research/ABOUT_RESEARCH.md) for verified, contributor-reported and proposed findings. Multi-Pokémon SID aggregation is described as future workflow; existing snapshots belong to one Pokémon.
+
+Existing independent DOTS and Latios English Emerald mGBA captures match **768/768 displayed pixel appearances each**. They validate those configurations, not every language or runtime. All 192 unique nibbles occur in the static layout; sprites and menus may obscure them.
+
+The **Poochyena zero-PID report has been reproduced and diagnosed** using the subsequently supplied JSON and checksum-valid `.ek3`. Its saved origin was Ruby (2), while the record says Emerald (3); 158/160 pixels match and two disagree. All other entered stored facts and all six summary stats match the reference. The review copy fixes the game and clears those two pixels to **unknown**, preserving independent evidence. It leaves 1,012,489 PID possibilities and retains the reference's true PID. This is not blind PID recovery. See [the case report and review file](research/POOCHYENA_CASE.md). Earlier John GBA RNG timing and markings-refresh questions remain unresolved; no speculative PID is hardcoded.
+
+Diagnostics identify failed header/secure byte nibbles and checksum incompatibility. Recheck drawings, summary facts, refresh on school reentry, and timing/generation assumptions independently. Fifteen seconds is not asserted to equal 900 RNG advances. See [investigator research](research/INVESTIGATOR.md).
+
+## Run and verify locally
+
+Use Node.js 24 LTS:
 
 ```sh
 npm ci
 npm run dev
+npm run check
 ```
 
-Open the local URL printed by Vite (normally `http://127.0.0.1:5187/`; it chooses another port if busy). On Windows PowerShell, use `npm.cmd` if execution policy blocks `npm.ps1`.
+Open Vite's printed URL, normally `http://127.0.0.1:5187/`. On Windows PowerShell use `npm.cmd` if execution policy blocks `npm.ps1`. `npm run check` runs all tests and the TypeScript/production build. `npm run preview` serves `dist/`.
+
+Tests retain the existing emulator/rendering/reconstruction regressions and add independent all-SID comparisons over all 24 permutations, partial packed facts, exact/partial checksums, ambiguous PID/SID sets, item snapshots, recommendation predictions, full synthetic reconstruction, legacy imports and guided interface contracts. Genuine fixture SIDs must survive blind investigations without injecting hidden fixture truth.
+
+VS Code's build task and Go Live port 5510 still serve the compiled app. Rebuild after edits; use Vite for automatic source updates.
+
+## Publish and package
+
+The existing GitHub Pages workflow installs from the lockfile, runs tests and builds before deployment. Use `main` or adjust `.github/workflows/pages.yml`; choose **GitHub Actions** in Pages settings. Relative assets support the existing repository path. See [Vite's Pages guide](https://vite.dev/guide/static-deploy.html#github-pages).
+
+`npm run package:source` retains `release/emerald-curtain-calculator-source.zip` for compatibility. It includes source, dotfiles and fixtures; excludes dependencies, builds, private captures, ROMs and saves. Extract and commit the contents, including `.github/`.
+
+The pinned pret checkout is needed only to regenerate catalogs, not to build:
 
 ```sh
-npm test            # Parsers, graphics, capture evidence, solver and UI contracts
-npm run build      # TypeScript check and static production build
-npm run preview    # Preview dist/ locally
-npm run check      # Tests and build
+node scripts/extract-investigation-data.mjs
 ```
 
-No decompilation checkout is needed to run, test or build the application.
+This extracts real item IDs/holdability and growth rates from the same pinned source as the existing species catalog. Availability is never inferred solely from an ID; key/important items, Safari Balls, placeholders and Mail experiments are excluded.
 
-### VS Code Go Live
+## Sources and credits
 
-Open this project folder in VS Code with the **Live Server** extension installed. Run **Terminal → Run Build Task** (`Ctrl+Shift+B`), then click **Go Live** in the status bar. Workspace settings serve the compiled `dist/` app at `http://127.0.0.1:5510/`, avoiding the default port 5500.
+Developed with AI assistance. Recovery is deterministic and local. No new emulator capture was produced for this implementation. Synthetic tests validate the supported mathematical model, not legality or gameplay reachability of arbitrary records.
 
-Go Live serves the latest build. After source changes, run the build task again. For automatic source updates during development, use `npm run dev` instead. The source `index.html` requires Vite’s TypeScript/React compilation and cannot be served directly as a static app.
+Primary evidence: [pinned pret/pokeemerald](https://github.com/pret/pokeemerald/tree/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881), [BoxPokemon definitions](https://github.com/pret/pokeemerald/blob/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881/include/pokemon.h), [encryption/checksum/permutations](https://github.com/pret/pokeemerald/blob/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881/src/pokemon.c), and [item data](https://github.com/pret/pokeemerald/blob/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881/src/data/items.h). Capture evidence uses [mGBA](https://mgba.io/).
 
-## Publish on GitHub Pages
+Historical [Bulbapedia](<https://bulbapedia.bulbagarden.net/wiki/List_of_overworld_glitches_(Generation_III)#Trainer's_School_window_tile_quirks>) and [Glitch City](https://nintyconservation.github.io/glitchcity.wiki/glitchcity.wiki/Black_curtains_glitch.html) research informed the original investigation; this project does not claim discovery of the glitch. Future RNG work should be checked against [pret wild generation](https://github.com/pret/pokeemerald/blob/master/src/wild_encounter.c) and [PokéFinder's Gen 3 generators](https://github.com/Admiral-Fish/PokeFinder/tree/master/Core/Gen3/Generators). No PokéFinder code is bundled.
 
-1. Create a GitHub repository and upload/commit this source, including dotfiles and `.github/`.
-2. Use `main` as the default branch, or adjust `.github/workflows/pages.yml` to your branch name.
-3. In **Settings → Pages → Build and deployment**, choose **GitHub Actions**.
-4. Run **Deploy GitHub Pages** from Actions, or push to `main`.
+Further documentation: [mapping](research/RESEARCH.md), [validation](research/VALIDATION.md), [solver guide](research/SOLVER_GUIDE.md), [experiments](research/EXPERIMENTS.md), [summary stats](research/SUMMARY_STATS.md), [OT information](research/OT_INFORMATION.md), [trait constraints](research/TRAIT_STATS_CONSTRAINTS.md), [Skarmory](research/SKARMORY_CASE.md), [Whismur](research/WHISMUR_CHECK.md), [investigator model](research/INVESTIGATOR.md).
 
-The workflow installs from the lockfile, runs tests and builds before deploying `dist/`. Relative asset URLs support repository paths without hard-coding a repository name. No secrets are needed. See the [Vite Pages guide](https://vite.dev/guide/static-deploy.html#github-pages).
-
-### Source ZIP
-
-```sh
-npm run package:source
-```
-
-This creates `release/emerald-curtain-calculator-source.zip`. Extract it and commit its **contents**, including `.github/` and dotfiles. The ZIP includes source, the lockfile, workflows, documentation and regression fixtures. It excludes dependencies, builds, local ROMs/saves, private captures, local backups and handoff notes. GitHub’s web uploader may omit hidden files; a Git client is the most reliable way to include the workflow files.
-
-## Accuracy and limitations
-
-A transparent pixel establishes nibble **0**. Black permits **1–F**, not a particular digit or individual set bit. Unknown permits **0–F**. Completing a drawing is an explicit assertion that its remaining displayed pixels were transparent.
-
-OT name constrains the unencrypted name field using Gen 3 text encoding; capitalization matters and bytes after its terminator stay unknown. OT gender constrains its encrypted origins bit independently of Pokémon gender. See [original trainer information](research/OT_INFORMATION.md) for encoding and source evidence.
-
-The engine combines observed nibbles, gender thresholds, species/stat/condition bit constraints, the stored ability flag, XOR encryption and PID-dependent substructure order. Ability does not automatically impose PID parity. It computes exact remaining PID/header counts and guaranteed byte domains without an exhaustive search of Pokémon records. Bounds are labeled **≤**. Checksum inference, legality filters, EV totals, automatic level-from-EXP inference and inferred names are not applied. Supplied level and summary stats are used by the separate IV calculator. Candidate consistency does not establish identity. See [trait/stat constraints](research/TRAIT_STATS_CONSTRAINTS.md) for source evidence and bit mapping.
-
-The pixel inspector names encrypted fields only when the active model has an exact PID (or the rendered record supplies it). Candidate bytes are labeled separately and are never used as recovered solver data.
-
-## Development and validation
-
-Developed with AI assistance. Mapping and solver behavior are checked through source analysis, emulator captures and automated tests. Calculations run locally using deterministic code.
-
-The renderer matches every checked curtain pixel in the independent DOTS and Latios English Emerald captures (768/768 appearances per capture). These checks validate the tested configurations; other language ROMs and untested runtime configurations require separate verification. Exact solver results remain conditional on accurate drawings and supplied facts. See the [source derivation](research/RESEARCH.md), [validation record](research/VALIDATION.md) and [automated tests](tests/).
-
-**Test-record provenance:** DOTS is an in-game trade, and the supplied Skarmory is user-created and described by its contributor as legal. The contributor has confirmed that the Latios fixture is illegal. It is retained to check byte-to-pixel rendering and constraint consistency, not as an example of a legally obtainable Pokémon. The renderer reads stored bytes regardless of legality; these tests do not certify legality or validate encounter-specific RNG relationships.
-
-## Mapping evidence
-
-The pinned [pret/pokeemerald source](https://github.com/pret/pokeemerald/tree/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881) establishes tiles 791–793, palette 8, tile flipping and school placement. The leaked region contains slot 4’s last 8 bytes, slot 5’s 80 bytes and slot 6’s first 8 bytes.
-
-Independent English Emerald mGBA 0.10.3 captures verify 96/96 bytes and 768/768 displayed pixels. All 192 unique nibbles appear in the static school layout; temporary sprite/menu occlusion must be left unknown. Absolute storage addresses can relocate. Other ROM/runtime configurations require validation.
-
-- [Source derivation](research/RESEARCH.md)
-- [Recorded validation](research/VALIDATION.md)
-- [Solver guide](research/SOLVER_GUIDE.md)
-- [Experiments](research/EXPERIMENTS.md)
-- [Whismur byte-position regression](research/WHISMUR_CHECK.md)
-- [User-painted Skarmory regression and controlled-change study](research/SKARMORY_CASE.md)
-
-## Project structure
-
-| Location                        | Purpose                                                                        |
-| ------------------------------- | ------------------------------------------------------------------------------ |
-| `src/core/`                     | File parsing, memory/tile mapping, constraints, inference and field inspection |
-| `src/hooks/useCurtainLab.ts`    | Shared workspace state, history, imports and exports                           |
-| `src/components/`               | Painting grid, input forms, inspector and reconstruction views                 |
-| `src/App.tsx`, `src/styles.css` | Light interface and tab layout                                                 |
-| `src/data/`                     | Extracted mapping, background and species catalog                              |
-| `tests/`, `research/fixtures/`  | Automated checks and minimal reproducible evidence                             |
-| `scripts/`                      | Source extraction, capture validation and release packaging                    |
-| `.github/workflows/`            | CI checks and GitHub Pages deployment                                          |
-
-## Credits and license
-
-Technical mapping and validation use [pret/pokeemerald](https://github.com/pret/pokeemerald) and [mGBA](https://mgba.io/). Background information and historical storage-slot/memory-region reports were informed by [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/List_of_overworld_glitches_(Generation_III)#Trainer's_School_window_tile_quirks) and [earlier Glitch City research](https://nintyconservation.github.io/glitchcity.wiki/glitchcity.wiki/Black_curtains_glitch.html). This project builds on that work; it does not claim discovery of the original glitch.
-
-Original application code is MIT licensed; see [LICENSE](LICENSE). Extracted Pokémon artwork and other third-party material are outside that license; see [NOTICE.md](NOTICE.md). This is an independent research project.
+Original code/documentation: MIT. Pokémon assets/names and third-party materials retain their rights; see [NOTICE.md](NOTICE.md). Not affiliated with Nintendo, Game Freak or Creatures.

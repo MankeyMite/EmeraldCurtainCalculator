@@ -2,7 +2,7 @@ import { type Memory, type Records, assembleMemory } from "./memory";
 import { decodePokemon, NATURES, hex } from "./pokemon";
 import { nibbleValue } from "./tiles";
 import { genderForPid, speciesTraits, type Gender } from "./traits";
-import { encodeOtName, matchesOtName } from "./names";
+import { encodeOtName, encodeNickname, matchesOtName } from "./names";
 export type Observation = -1 | 0 | 1; // unknown, transparent, black
 export type Observations = Observation[];
 export type KnownFacts = {
@@ -11,6 +11,7 @@ export type KnownFacts = {
   sid?: number;
   otGender?: "male" | "female"; // Stored original-trainer gender bit.
   otName?: string; // Exact visible name; trailing bytes after EOS stay unknown.
+  nickname?: string; // Exact visible nickname; bytes after EOS stay unknown.
   species?: number;
   nature?: number;
   experience?: number;
@@ -26,6 +27,18 @@ export type KnownFacts = {
   friendship?: number;
   ppBonuses?: number; // Four packed 2-bit PP Up counters.
   ribbons?: number; // Low 27 ribbon bits; excludes unused/fateful flags.
+  moves?: (number | null)[];
+  pp?: (number | null)[];
+  metLocation?: number;
+  metLevel?: number;
+  metGame?: number;
+  ball?: number;
+  language?: number;
+  headerFlags?: number;
+  checksum?: number;
+  headerPadding?: number;
+  growthPadding?: number;
+  ribbonTail?: number; // Upper five bits; optional normal-wild preset assumes zero.
   assumed?: string[]; // Draft field keys filled by an explicitly labeled preset.
   notes?: string;
 };
@@ -73,7 +86,17 @@ export function applyFacts(masks: number[], facts: KnownFacts) {
   if (facts.otName !== undefined) {
     encodeOtName(facts.otName).forEach((value, i) => set(20 + i, 1, value));
   }
+  if (facts.nickname !== undefined)
+    encodeNickname(facts.nickname).forEach((value, i) => set(8 + i, 1, value));
   if (facts.markings !== undefined) set(27, 1, facts.markings);
+  if (facts.language !== undefined) set(18, 1, facts.language);
+  if (facts.headerFlags !== undefined) set(19, 1, facts.headerFlags);
+  if (facts.isEgg !== undefined) {
+    // SetMonData keeps the unencrypted sanity Egg bit and secure Egg bit in sync.
+    result[38] &= facts.isEgg ? 0xf0f0 : 0x0f0f;
+  }
+  if (facts.checksum !== undefined) set(28, 2, facts.checksum);
+  if (facts.headerPadding !== undefined) set(30, 2, facts.headerPadding);
   return result;
 }
 export const maskSymbol = (mask: number) =>
@@ -150,6 +173,20 @@ export function compareCandidate(
   const factContradictions: string[] = [];
   if (records[5]) {
     const p = decodePokemon(records[5]);
+    if (
+      facts.nickname !== undefined &&
+      !encodeNickname(facts.nickname).every(
+        (value, i) => records[5]![8 + i] === value,
+      )
+    )
+      factContradictions.push("Nickname differs from supplied information");
+    if (
+      facts.isEgg !== undefined &&
+      ((p.headerFlags >>> 2) & 1) !== facts.isEgg
+    )
+      factContradictions.push(
+        "Header Egg flag differs from supplied information",
+      );
     if (facts.otGender !== undefined && facts.otGender !== p.otGender)
       factContradictions.push("OT gender differs from supplied information");
     if (facts.otName !== undefined && !matchesOtName(records[5], facts.otName))
@@ -165,7 +202,7 @@ export function compareCandidate(
           `EV ${["HP", "Atk", "Def", "Speed", "SpA", "SpD"][i]}: candidate ${p.evs[i]}, supplied ${value}`,
         );
     });
-    for (const field of ["ivs", "contest"] as const)
+    for (const field of ["ivs", "contest", "moves", "pp"] as const)
       facts[field]?.forEach((value, i) => {
         if (value !== null && value !== p[field][i])
           factContradictions.push(
@@ -180,6 +217,16 @@ export function compareCandidate(
       "experience",
       "ppBonuses",
       "ribbons",
+      "metLocation",
+      "metLevel",
+      "metGame",
+      "ball",
+      "language",
+      "headerFlags",
+      "checksum",
+      "headerPadding",
+      "growthPadding",
+      "ribbonTail",
     ] as const)
       if (facts[field] !== undefined && facts[field] !== p[field])
         factContradictions.push(

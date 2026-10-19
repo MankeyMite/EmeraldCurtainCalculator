@@ -1,0 +1,2165 @@
+[
+  {
+    "id": 1,
+    "name": "MASTER BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 2,
+    "name": "ULTRA BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 3,
+    "name": "GREAT BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 4,
+    "name": "POKé BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 5,
+    "name": "SAFARI BALL",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 6,
+    "name": "NET BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 7,
+    "name": "DIVE BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 8,
+    "name": "NEST BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 9,
+    "name": "REPEAT BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 10,
+    "name": "TIMER BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 11,
+    "name": "LUXURY BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 12,
+    "name": "PREMIER BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 13,
+    "name": "POTION",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 14,
+    "name": "ANTIDOTE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 15,
+    "name": "BURN HEAL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 16,
+    "name": "ICE HEAL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 17,
+    "name": "AWAKENING",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 18,
+    "name": "PARLYZ HEAL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 19,
+    "name": "FULL RESTORE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 20,
+    "name": "MAX POTION",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 21,
+    "name": "HYPER POTION",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 22,
+    "name": "SUPER POTION",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 23,
+    "name": "FULL HEAL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 24,
+    "name": "REVIVE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 25,
+    "name": "MAX REVIVE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 26,
+    "name": "FRESH WATER",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 27,
+    "name": "SODA POP",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 28,
+    "name": "LEMONADE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 29,
+    "name": "MOOMOO MILK",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 30,
+    "name": "ENERGYPOWDER",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 31,
+    "name": "ENERGY ROOT",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 32,
+    "name": "HEAL POWDER",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 33,
+    "name": "REVIVAL HERB",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 34,
+    "name": "ETHER",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 35,
+    "name": "MAX ETHER",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 36,
+    "name": "ELIXIR",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 37,
+    "name": "MAX ELIXIR",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 38,
+    "name": "LAVA COOKIE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 39,
+    "name": "BLUE FLUTE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 40,
+    "name": "YELLOW FLUTE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 41,
+    "name": "RED FLUTE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 42,
+    "name": "BLACK FLUTE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 43,
+    "name": "WHITE FLUTE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 44,
+    "name": "BERRY JUICE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 45,
+    "name": "SACRED ASH",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 46,
+    "name": "SHOAL SALT",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 47,
+    "name": "SHOAL SHELL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 48,
+    "name": "RED SHARD",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 49,
+    "name": "BLUE SHARD",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 50,
+    "name": "YELLOW SHARD",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 51,
+    "name": "GREEN SHARD",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 63,
+    "name": "HP UP",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 64,
+    "name": "PROTEIN",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 65,
+    "name": "IRON",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 66,
+    "name": "CARBOS",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 67,
+    "name": "CALCIUM",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 68,
+    "name": "RARE CANDY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 69,
+    "name": "PP UP",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 70,
+    "name": "ZINC",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 71,
+    "name": "PP MAX",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 73,
+    "name": "GUARD SPEC.",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 74,
+    "name": "DIRE HIT",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 75,
+    "name": "X ATTACK",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 76,
+    "name": "X DEFEND",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 77,
+    "name": "X SPEED",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 78,
+    "name": "X ACCURACY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 79,
+    "name": "X SPECIAL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 80,
+    "name": "POKé DOLL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 81,
+    "name": "FLUFFY TAIL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 83,
+    "name": "SUPER REPEL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 84,
+    "name": "MAX REPEL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 85,
+    "name": "ESCAPE ROPE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 86,
+    "name": "REPEL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 93,
+    "name": "SUN STONE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 94,
+    "name": "MOON STONE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 95,
+    "name": "FIRE STONE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 96,
+    "name": "THUNDERSTONE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 97,
+    "name": "WATER STONE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 98,
+    "name": "LEAF STONE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 103,
+    "name": "TINYMUSHROOM",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 104,
+    "name": "BIG MUSHROOM",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 106,
+    "name": "PEARL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 107,
+    "name": "BIG PEARL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 108,
+    "name": "STARDUST",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 109,
+    "name": "STAR PIECE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 110,
+    "name": "NUGGET",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 111,
+    "name": "HEART SCALE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 121,
+    "name": "ORANGE MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 122,
+    "name": "HARBOR MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 123,
+    "name": "GLITTER MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 124,
+    "name": "MECH MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 125,
+    "name": "WOOD MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 126,
+    "name": "WAVE MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 127,
+    "name": "BEAD MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 128,
+    "name": "SHADOW MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 129,
+    "name": "TROPIC MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 130,
+    "name": "DREAM MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 131,
+    "name": "FAB MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 132,
+    "name": "RETRO MAIL",
+    "holdable": true,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 133,
+    "name": "CHERI BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 134,
+    "name": "CHESTO BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 135,
+    "name": "PECHA BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 136,
+    "name": "RAWST BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 137,
+    "name": "ASPEAR BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 138,
+    "name": "LEPPA BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 139,
+    "name": "ORAN BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 140,
+    "name": "PERSIM BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 141,
+    "name": "LUM BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 142,
+    "name": "SITRUS BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 143,
+    "name": "FIGY BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 144,
+    "name": "WIKI BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 145,
+    "name": "MAGO BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 146,
+    "name": "AGUAV BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 147,
+    "name": "IAPAPA BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 148,
+    "name": "RAZZ BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 149,
+    "name": "BLUK BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 150,
+    "name": "NANAB BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 151,
+    "name": "WEPEAR BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 152,
+    "name": "PINAP BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 153,
+    "name": "POMEG BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 154,
+    "name": "KELPSY BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 155,
+    "name": "QUALOT BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 156,
+    "name": "HONDEW BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 157,
+    "name": "GREPA BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 158,
+    "name": "TAMATO BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 159,
+    "name": "CORNN BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 160,
+    "name": "MAGOST BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 161,
+    "name": "RABUTA BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 162,
+    "name": "NOMEL BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 163,
+    "name": "SPELON BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 164,
+    "name": "PAMTRE BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 165,
+    "name": "WATMEL BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 166,
+    "name": "DURIN BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 167,
+    "name": "BELUE BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 168,
+    "name": "LIECHI BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 169,
+    "name": "GANLON BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 170,
+    "name": "SALAC BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 171,
+    "name": "PETAYA BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 172,
+    "name": "APICOT BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 173,
+    "name": "LANSAT BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 174,
+    "name": "STARF BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 175,
+    "name": "ENIGMA BERRY",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 179,
+    "name": "BRIGHTPOWDER",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 180,
+    "name": "WHITE HERB",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 181,
+    "name": "MACHO BRACE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 182,
+    "name": "EXP. SHARE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 183,
+    "name": "QUICK CLAW",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 184,
+    "name": "SOOTHE BELL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 185,
+    "name": "MENTAL HERB",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 186,
+    "name": "CHOICE BAND",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 187,
+    "name": "KING'S ROCK",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 188,
+    "name": "SILVERPOWDER",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 189,
+    "name": "AMULET COIN",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 190,
+    "name": "CLEANSE TAG",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 191,
+    "name": "SOUL DEW",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 192,
+    "name": "DEEPSEATOOTH",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 193,
+    "name": "DEEPSEASCALE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 194,
+    "name": "SMOKE BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 195,
+    "name": "EVERSTONE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 196,
+    "name": "FOCUS BAND",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 197,
+    "name": "LUCKY EGG",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 198,
+    "name": "SCOPE LENS",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 199,
+    "name": "METAL COAT",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 200,
+    "name": "LEFTOVERS",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 201,
+    "name": "DRAGON SCALE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 202,
+    "name": "LIGHT BALL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 203,
+    "name": "SOFT SAND",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 204,
+    "name": "HARD STONE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 205,
+    "name": "MIRACLE SEED",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 206,
+    "name": "BLACKGLASSES",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 207,
+    "name": "BLACK BELT",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 208,
+    "name": "MAGNET",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 209,
+    "name": "MYSTIC WATER",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 210,
+    "name": "SHARP BEAK",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 211,
+    "name": "POISON BARB",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 212,
+    "name": "NEVERMELTICE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 213,
+    "name": "SPELL TAG",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 214,
+    "name": "TWISTEDSPOON",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 215,
+    "name": "CHARCOAL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 216,
+    "name": "DRAGON FANG",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 217,
+    "name": "SILK SCARF",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 218,
+    "name": "UP-GRADE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 219,
+    "name": "SHELL BELL",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 220,
+    "name": "SEA INCENSE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 221,
+    "name": "LAX INCENSE",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 222,
+    "name": "LUCKY PUNCH",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 223,
+    "name": "METAL POWDER",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 224,
+    "name": "THICK CLUB",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 225,
+    "name": "STICK",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 254,
+    "name": "RED SCARF",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 255,
+    "name": "BLUE SCARF",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 256,
+    "name": "PINK SCARF",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 257,
+    "name": "GREEN SCARF",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 258,
+    "name": "YELLOW SCARF",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 259,
+    "name": "MACH BIKE",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 260,
+    "name": "COIN CASE",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 261,
+    "name": "ITEMFINDER",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 262,
+    "name": "OLD ROD",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 263,
+    "name": "GOOD ROD",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 264,
+    "name": "SUPER ROD",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 265,
+    "name": "S.S. TICKET",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 266,
+    "name": "CONTEST PASS",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 268,
+    "name": "WAILMER PAIL",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 269,
+    "name": "DEVON GOODS",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 270,
+    "name": "SOOT SACK",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 271,
+    "name": "BASEMENT KEY",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 272,
+    "name": "ACRO BIKE",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 273,
+    "name": "{POKEBLOCK} CASE",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 274,
+    "name": "LETTER",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 275,
+    "name": "EON TICKET",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 276,
+    "name": "RED ORB",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 277,
+    "name": "BLUE ORB",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 278,
+    "name": "SCANNER",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 279,
+    "name": "GO-GOGGLES",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 280,
+    "name": "METEORITE",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 281,
+    "name": "RM. 1 KEY",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 282,
+    "name": "RM. 2 KEY",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 283,
+    "name": "RM. 4 KEY",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 284,
+    "name": "RM. 6 KEY",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 285,
+    "name": "STORAGE KEY",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 286,
+    "name": "ROOT FOSSIL",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 287,
+    "name": "CLAW FOSSIL",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 288,
+    "name": "DEVON SCOPE",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 289,
+    "name": "TM01",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 290,
+    "name": "TM02",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 291,
+    "name": "TM03",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 292,
+    "name": "TM04",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 293,
+    "name": "TM05",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 294,
+    "name": "TM06",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 295,
+    "name": "TM07",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 296,
+    "name": "TM08",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 297,
+    "name": "TM09",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 298,
+    "name": "TM10",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 299,
+    "name": "TM11",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 300,
+    "name": "TM12",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 301,
+    "name": "TM13",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 302,
+    "name": "TM14",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 303,
+    "name": "TM15",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 304,
+    "name": "TM16",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 305,
+    "name": "TM17",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 306,
+    "name": "TM18",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 307,
+    "name": "TM19",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 308,
+    "name": "TM20",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 309,
+    "name": "TM21",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 310,
+    "name": "TM22",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 311,
+    "name": "TM23",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 312,
+    "name": "TM24",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 313,
+    "name": "TM25",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 314,
+    "name": "TM26",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 315,
+    "name": "TM27",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 316,
+    "name": "TM28",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 317,
+    "name": "TM29",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 318,
+    "name": "TM30",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 319,
+    "name": "TM31",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 320,
+    "name": "TM32",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 321,
+    "name": "TM33",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 322,
+    "name": "TM34",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 323,
+    "name": "TM35",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 324,
+    "name": "TM36",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 325,
+    "name": "TM37",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 326,
+    "name": "TM38",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 327,
+    "name": "TM39",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 328,
+    "name": "TM40",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 329,
+    "name": "TM41",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 330,
+    "name": "TM42",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 331,
+    "name": "TM43",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 332,
+    "name": "TM44",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 333,
+    "name": "TM45",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 334,
+    "name": "TM46",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 335,
+    "name": "TM47",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 336,
+    "name": "TM48",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 337,
+    "name": "TM49",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 338,
+    "name": "TM50",
+    "holdable": true,
+    "experiment": true,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 339,
+    "name": "HM01",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 340,
+    "name": "HM02",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 341,
+    "name": "HM03",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 342,
+    "name": "HM04",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 343,
+    "name": "HM05",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 344,
+    "name": "HM06",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 345,
+    "name": "HM07",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 346,
+    "name": "HM08",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 349,
+    "name": "OAK'S PARCEL",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 350,
+    "name": "POKé FLUTE",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 351,
+    "name": "SECRET KEY",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 352,
+    "name": "BIKE VOUCHER",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 353,
+    "name": "GOLD TEETH",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 354,
+    "name": "OLD AMBER",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 355,
+    "name": "CARD KEY",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 356,
+    "name": "LIFT KEY",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 357,
+    "name": "HELIX FOSSIL",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 358,
+    "name": "DOME FOSSIL",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 359,
+    "name": "SILPH SCOPE",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 360,
+    "name": "BICYCLE",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 361,
+    "name": "TOWN MAP",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 362,
+    "name": "VS SEEKER",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 363,
+    "name": "FAME CHECKER",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 364,
+    "name": "TM CASE",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 365,
+    "name": "BERRY POUCH",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 366,
+    "name": "TEACHY TV",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 367,
+    "name": "TRI-PASS",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 368,
+    "name": "RAINBOW PASS",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 369,
+    "name": "TEA",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 370,
+    "name": "MYSTICTICKET",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 371,
+    "name": "AURORATICKET",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 372,
+    "name": "POWDER JAR",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 373,
+    "name": "RUBY",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 374,
+    "name": "SAPPHIRE",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 375,
+    "name": "MAGMA EMBLEM",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  },
+  {
+    "id": 376,
+    "name": "OLD SEA MAP",
+    "holdable": false,
+    "experiment": false,
+    "availability": "Confirm this item is in your Bag; internal existence does not establish availability."
+  }
+]

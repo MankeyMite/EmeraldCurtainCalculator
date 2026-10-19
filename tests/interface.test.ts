@@ -2,13 +2,17 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import App from "../src/App";
+import LegacyWorkspace from "../src/LegacyWorkspace";
+import { useCurtainLab } from "../src/hooks/useCurtainLab";
+function ClassicHarness() {
+  return createElement(LegacyWorkspace, { lab: useCurtainLab() });
+}
 
-test("public interface separates reconstruction from the default single-window workspace", () => {
-  const html = renderToStaticMarkup(createElement(App));
+test("guided investigation shares the existing editor and advanced recovery without implicit fresh-catch facts", () => {
+  const html = renderToStaticMarkup(createElement(ClassicHarness));
   const main = html.slice(
-    html.indexOf('id="panel-0"'),
     html.indexOf('id="panel-1"'),
+    html.indexOf('id="panel-2"'),
   );
   assert.match(html, /id="tab-0" aria-selected="true"/);
   assert.match(main, /width="640" height="520"/);
@@ -22,10 +26,10 @@ test("public interface separates reconstruction from the default single-window w
       main.indexOf('class="input-panel"'),
   );
   assert.doesNotMatch(
-    html,
+    main,
     /Use completed drawing|Feebas Tile Calculator|mucksw/,
   );
-  assert.match(html, /Other language versions have not been/);
+  assert.match(html, /Only English Emerald is independently validated here/);
   assert.match(html, /Load DOTS Seedot example/);
   assert.match(html, /Load Skarmory example/);
   assert.ok(html.includes("Load Latios (illegal test record) example"));
@@ -40,14 +44,39 @@ test("public interface separates reconstruction from the default single-window w
   );
   assert.match(html, /id="panel-1"[^>]*hidden=""/);
   assert.match(html, /id="panel-2"[^>]*hidden=""/);
-  const about = html.slice(html.indexOf('id="panel-2"'));
+  const about = html.slice(html.indexOf('id="panel-3"'));
   assert.ok(
-    about.indexOf("What is this tool about?") <
-      about.indexOf("How to use the calculator"),
+    about.indexOf('id="research-title"') <
+      about.indexOf("Using the classic workspace"),
   );
-  assert.match(about, /A graphics glitch/);
+  assert.match(about, /From black curtains to hidden Pokémon data/);
+  assert.match(about, /id="research-sid-rng"/);
   assert.match(about, /bulbapedia.bulbagarden.net/);
   assert.match(about, /Glitch City researchers/);
+  const references = about.slice(about.indexOf('class="research-references"'));
+  for (const credit of [
+    "maractite",
+    "Lincoln",
+    "HappyLappy",
+    "Shao",
+    "mucksw",
+    "Goppier",
+    "yuhasem",
+  ])
+    assert.ok(references.includes(credit));
+  assert.ok(
+    references.includes(
+      'href="https://www.pokemonrng.com/emerald-sid-feebas/"',
+    ),
+  );
+  assert.equal(
+    (
+      about.match(
+        /<h4>Dewford phrases can add another independent observation<\/h4>/g,
+      ) ?? []
+    ).length,
+    1,
+  );
   assert.equal((html.match(/<canvas/g) ?? []).length, 1);
   assert.match(main, /aria-label="Pokémon gender" disabled=""/);
   assert.match(main, /Ability<select disabled=""/);
@@ -65,16 +94,16 @@ test("public interface separates reconstruction from the default single-window w
   );
   assert.match(main, /EVs, IVs &amp; contest stats/);
   assert.match(main, /aria-label="HP IV"[^>]*value=""/);
-  assert.match(main, /aria-label="HP EV"[^>]*value="0"/);
-  assert.match(main, /aria-label="Cool condition"[^>]*value="0"/);
-  assert.match(main, /17 default assumptions active/);
-  assert.match(main, /Clear defaults/);
+  assert.match(main, /aria-label="HP EV"[^>]*value=""/);
+  assert.match(main, /aria-label="Cool condition"[^>]*value=""/);
+  assert.doesNotMatch(main, /17 default assumptions active/);
+  assert.match(main, /Use newly caught defaults/);
   assert.match(main, /aria-label="Current EXP"/);
   assert.match(main, /aria-label="Current level"/);
   assert.match(main, /aria-label="Summary maximum HP"/);
   const reconstruction = html.slice(
-    html.indexOf('id="panel-1"'),
     html.indexOf('id="panel-2"'),
+    html.indexOf('id="panel-3"'),
   );
   assert.match(reconstruction, /Data reconstruction/);
   assert.doesNotMatch(
@@ -90,4 +119,13 @@ test("public interface separates reconstruction from the default single-window w
   assert.match(reconstruction, /More than 100 PIDs remain/);
   assert.match(reconstruction, /Stats only/);
   assert.match(reconstruction, /Curtain \+ known facts/);
+  assert.match(html, /Emerald Curtain Investigator/);
+  assert.match(html, /Which Pokémon do you have in Box 8, slot 5/);
+  assert.match(html, /How did you obtain this Pokémon/);
+  assert.match(html, /Save investigation/);
+  assert.match(html, /Best items to try next/);
+  assert.doesNotMatch(html, /Items I own|useful owned items/);
+  assert.match(html, /Saving on this device/);
+  assert.match(html, /Preview derived pixels/);
+  assert.match(html, /previews are not observations/i);
 });

@@ -1,5 +1,9 @@
 # User gameplay experiments
 
+The subsequently supplied Poochyena JSON and encrypted reference now reproduce and explain its zero-PID input conflict: one origin-game mismatch and two pixel disagreements. See [the case report](POOCHYENA_CASE.md). The historical RNG/markings questions remain open; the review does not inject reference predictions as observations.
+
+The investigator records separate before/after drawings and mutable facts, ranks held-item swaps without an inventory checklist, and checks each snapshot's checksum compatibility. Wild origins can search H1/H2/H4 over seed/advance bounds and retain correlated PID/IV candidates. The reviewed Poochyena session uniquely matches its reference PID and IVs within the tested early range, conditional on corrected inputs and search scope. See [the investigator model](INVESTIGATOR.md) and [wild RNG validation](WILD_RNG.md). Historical markings/refresh questions and reachable EV-training recommendations remain unresolved.
+
 The contributor has confirmed that the Latios fixture is illegal. It is retained as a captured byte-to-pixel test record; none of the results below establish legality or RNG reachability.
 
 ## Latios replacement / save / soft-reset — 2026-10-14
