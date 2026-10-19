@@ -1,54 +1,89 @@
 # Emerald Curtain Investigator
 
-Formerly **Emerald Curtain Calculator**. Investigate hidden Generation 3 Pokémon data using the Rustboro Trainer School black curtains glitch: enter known information, draw what you see, narrow PID/SID and encrypted bytes, then choose useful held-item experiments.
+Formerly **Emerald Curtain Calculator**. Use the Rustboro Trainer School black curtains glitch to investigate hidden Generation 3 Pokémon data. Combine a curtain drawing, known Pokémon information, encounter RNG and Dewford phrase evidence to narrow PID, SID, IVs and an 80-byte encrypted Pokémon record.
 
 [Open the application](https://mankeymite.github.io/EmeraldCurtainCalculator/) · [Recovery model and implementation status](research/INVESTIGATOR.md)
 
-Everything runs locally in your browser. No ROM, account, API key or upload service is needed. This source update does not itself deploy the public website.
+Calculations, imported files and autosave stay in your browser. No ROM, account, API key or upload service is needed. Exact recovery depends on the evidence available; black pixels alone do not reveal every hexadecimal digit.
 
 **Verified mapping: English Pokémon Emerald only.** Other language versions have not been validated. Pokémon received from other Gen 3 games can be investigated as stored records in English Emerald; their original generation method is not assumed to be Emerald's.
+
+## Latest update — 19 October 2026
+
+- **Compact workspace:** Pokémon info, Investigate and About on the scrolling left; a fixed curtain, live recovery values, pixel inspector and grouped 80-byte hex on the right. Mobile screens stack the panels.
+- **Clearer curtain:** three columns of actual school artwork on each side of the canonical 8×20 data strip, optional helper lines, corrected hover selection and linked pixel/hex highlighting in both directions.
+- **SID recovery:** optional public-TID-seeded new-game RNG filtering plus original Dewford phrases and ranked accept/reject phrase tests. Recommendations use the actual surviving Pokémon/curtain-compatible SIDs.
+- **PID/IV recovery:** configurable seed and inclusive advance searches for supported Emerald wild H1/H2/H4 encounters; a known PID is not required.
+- **Guided experiments:** ranked held items without inventory checkboxes, plus supported move swaps, Rare Candy and vitamins. Saved experiments return the drawing to the original baseline.
+- **Faster data entry:** typed names with automatic grey ID boxes, English/Emerald and normal non-Egg defaults, empty move slots, automatic full PP and a compact nickname field beneath Species. Summary level/stats say Required for stat-based IV recovery.
+- **Completion guidance:** an optional, labeled normal-wild storage preset resolves ordinary filler/upper flag assumptions so the checksum can be calculated. Nickname bytes after the terminator remain unknown unless independently established.
+- **Save and reset:** JSON backups, local autosave of evidence and pending tests, and **New Pokémon** for a clean investigation with the entry defaults restored.
+- **Research article and attribution:** expanded About explanations, diagrams, source references and Dewford/Feebas SID tool credits. Latest code validation: **131 tests and the TypeScript/Vite production build pass** with `npm run check`.
 
 ## Investigate a real Pokémon
 
 1. Put the Pokémon in **Box 8, slot 5**. Preferably leave slots **4 and 6 empty**. Enter Rustboro Trainer School.
 2. Use **Pokémon info** on the left to choose the species and obtaining method. The fixed right side shows one curtain strip, live Species/PID/IV/XOR/SID results, pixel inspector and grouped 80-byte encrypted record. The strip contains every main-record pixel; mirrored repeats are omitted.
 3. Enter what you know from the Pokémon summary and original trainer information. Use **maximum HP**, not remaining HP. TID, SID and name refer to the **original trainer**. Another trainer's Pokémon cannot directly reveal your own SID.
-4. For an untouched fresh catch, check **Assume freshly caught Pokémon** if appropriate. It fills zero EVs/contest data, standard flags, base friendship, no held item and full known move PP. Tinted values are assumptions; edit exceptions or uncheck to clear them. EXP, random IVs/PID and reserved bytes remain unknown. **View and edit remaining fields** opens additional inputs, including an optional known PID.
+4. Review the entry defaults and type the actual moves, nickname and PP exceptions. For an untouched fresh catch, check **Assume freshly caught Pokémon** if appropriate: zero EVs/contest data, no Pokérus or ribbons, base friendship, no held item and full known move PP. Tinted fields are assumptions. EXP, random IVs/PID and reserved bytes are not supplied by this checkbox. **View and edit remaining fields** opens additional inputs and storage assumptions.
 5. Paint actual black pixels on the curtain. Unmarked cells remain unknown until **Calculate** declares the remaining displayed cells transparent. Leave uncertain/obscured pixels unknown instead of completing a partial drawing. **Inspect** selects without painting; hover or pin a pixel or hex digit to highlight its counterpart and inspect allowed digits. Undo preserves the prior drawing.
-6. For a **wild encounter**, use **Find PID and IVs from wild RNG**: enter seed (default **0**), minimum/maximum advances and the encounter area, then **Search and use matching spreads**. H1, H2 and H4 are searched together by default. Your known traits, summary stats and saved drawings filter the generated spreads; matching PID/IV correlations feed SID recovery and item ranking automatically. You do not need to supply a PID. Other origins retain the stored-data solver, which jointly enumerates up to 32 inferred PIDs. The original TID is needed for joint SID recovery in either mode.
+6. For a **wild encounter**, select **Limit wild RNG advances** or open **Investigate → Wild RNG**. Enter seed (default **0**), minimum/maximum advances, encounter area and applicable lead settings. The full search supports H1, H2 and H4, selected together by default. Known traits, summary stats and saved drawings filter the generated spreads; correlated PID/IV candidates feed SID recovery and experiment ranking automatically. You do not need to supply a PID. The original TID is needed for joint SID recovery.
 7. Optionally enable **New-game SID RNG Filter** in Pokémon info, **Investigate → SID Finder**, or **Data Recovery**. It uses the entered public TID, defaults to approximately 60 seconds / calls 1–3,600, and accepts custom bounds. It intersects actual candidates with pixels and known facts while preserving possible PIDs. View SID/advance rows, Validate, widen or disable. See [verified source sequence and limitations](research/SID_RNG.md).
 8. Click **Investigate** beside an unresolved value to open ranked experiments on the left. Choose an action you can perform: held-item swap, move swap, Rare Candy EXP checkpoint or vitamin EV change when supported by the known facts. No inventory checklist is required. Follow the instructions, return the Pokémon to the target slot and leave/reenter the school.
-9. Answer **Did the pixels change compared with the original drawing?** **No** records the unchanged original pattern. **Yes** copies the original into an active test draft: edit differences, then **Save drawing & analyze test**. Saving keeps the test separately, recalculates candidates/rankings and restores the original drawing. Restore the original Pokémon state in-game too; consumable tests require a baseline save to reload. Do not overwrite that save.
+9. Answer **Did the pixels change compared with the original drawing?** **No** records the unchanged original pattern. **Yes** copies the original into an active test draft: edit differences, then save the test drawing. Saving keeps the test separately, recalculates candidates/rankings and restores the original drawing. Restore the original Pokémon state in-game too; consumable tests require a baseline save to reload. Do not overwrite that save.
 10. The investigation, including unfinished tests and RNG settings, saves automatically on this device. **Save** downloads a separate JSON backup. **Load** accepts previous observation JSON too, without adding defaults.
 
 Changing tabs preserves the investigation. New generic observations start with mutable fields unknown. New tests use the first original observation as their baseline; historical chained tests retain their saved comparisons. Drafts contribute no evidence until recorded. Controlled tests clear friendship/checksum; EXP/EV tests also clear stale summary stats. Review copied facts if anything else changed. Rename observations and record changes under **Notes and snapshot comparison**. Save JSON before removing an observation if you want to retain a copy.
 
-Moves, met location, origin game, Ball, language and held item accept typed names with suggestions; a grey read-only box shows the stored ID automatically. Unknown and a known empty move slot are separate choices. New tests start with English Emerald, normal non-Egg header flags and four empty move slots; selecting a move fills its assumed maximum PP. A compact nickname field sits beneath Species and starts with the English species name. Manual nickname/PP changes are preserved; summary stats are marked Required for stat-based IV recovery. Existing imports acquire no new facts.
+### Drawing and entry controls
+
+The center **8×20** grid represents the main Pokémon's 160 nibbles. The three context columns on either side are school artwork, not additional editable record bytes. Use **Lines on / Lines off** to toggle helper lines, **Draw / Inspect** to switch painting and selection, and **Unknown** for uncertain cells. Hovering a pixel highlights its corresponding hex digit; hovering a hex digit highlights the pixel. Click to pin the address and inspect its remaining allowed digits.
+
+Moves, met location, origin game, Ball, language and held item accept typed names with suggestions; a grey read-only box shows the stored ID automatically. Clearing a move means unknown; choosing **No move (empty slot)** means a known zero ID. New investigations start with English (2), Emerald (3), header flags `0x02`, Is egg = No, no PP Ups and four empty move slots with PP 0. Selecting a move fills its assumed maximum PP; manual PP changes are preserved.
+
+Nickname sits beneath Species and defaults to the uppercase English species name. Enter the exact visible spelling/case if renamed; a manual nickname is preserved when species changes. Summary level and six stats are marked **Required** for stat-based IV recovery, but SID/pixel analysis can run while they are incomplete. Existing imports acquire no new facts. **New Pokémon** clears the previous investigation and restores the entry defaults; use **Save** first to retain the previous Pokémon.
 
 Technical reserved words are under **Advanced raw storage fields · filler and flags**: each is a two-byte internal field, not a summary-screen stat. Header reserved bytes are at 0x1E–0x1F; Growth filler is at logical Growth offsets 0x0A–0x0B. An optional **Use normal wild-catch storage defaults** preset assumes these and the unused/fateful bits are zero for an ordinary, unmodified Emerald wild catch. Those values remain labeled assumptions. Nickname text fixes characters through its terminator, not trailing memory. See [defaults and completion limits](research/ENTRY_DEFAULTS.md).
+
+Header flags `0x02` means **has species**, not Egg. The header Egg bit is `0x04`; **Is egg** constrains both that header bit and the separate encrypted Egg bit. Normal non-Egg defaults therefore resolve the header to `02` without treating the Pokémon as an Egg.
 
 Dashed blue pixels predict black; dashed teal predicts transparent. Orange outlines identify experiment targets. **Predictions never enter the observed drawing or count as independent evidence.** Verify them in-game before recording an observation.
 
 ## Implementation status
 
-**Dewford SID research:** Investigate → SID Finder / Data Recovery now includes an optional original-trendy-phrase filter and ranked phrase tests. Before any successful phrase change or record mixing, the first submission's accept/reject response tests membership in the initial five phrases; reload the same baseline save before every test. Actual SID sets intersect with curtain and supported wild-RNG evidence. The source model reproduces maractite's published retail example (TID 63171 → SID 55567), with timing/VBlank limitations explicitly marked experimental. See [Dewford protocol and validation](research/DEWFORD_SID.md). Disabling just the Dewford evidence retains its recorded answers for re-enabling.
+### Dewford phrases and new-game SID RNG
 
-**Dewford SID research:** Investigate → SID Finder / Data Recovery now includes an optional original-trendy-phrase filter and ranked phrase tests. Before any successful phrase change or record mixing, the first submission's accept/reject response tests membership in the initial five phrases; reload the same baseline save before every test. Actual SID sets intersect with curtain and supported wild-RNG evidence. The source model reproduces maractite's published retail example (TID 63171 → SID 55567), with timing/VBlank limitations explicitly marked experimental. See [Dewford protocol and validation](research/DEWFORD_SID.md). Disabling just the Dewford evidence retains its recorded answers for re-enabling.
+Open **Investigate → SID Finder** or **Data Recovery**, expand **Dewford trendy phrases · experimental SID filter**, enter the original current phrase and confirm that the save has never successfully changed its phrase or mixed records. The tool searches the known public TID's new-game RNG window, checks the five generated phrases and intersects actual surviving SIDs with Pokémon/curtain evidence. It can do this while PID is still unknown; it does not invent one.
 
-| Phase                             | Status                                                                                                                        |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| 1: Rebranding and guided workflow | Implemented; 386 species, extensible obtaining categories and shared editor/recovery state                                    |
-| 2: Known-PID/TID SID inference    | Implemented; all 65,536 SIDs, all four substructures, partial bit facts and checksum compatibility                            |
-| 3: Multiple observations          | Implemented; immutable identity plus independent mutable snapshots; JSON and legacy imports                                   |
-| 4: Adaptive experiments           | Ranked held-item/move swaps, Rare Candy and cap-limited vitamins; original-baseline Yes/No flow and saved evidence            |
-| 5: Encounter RNG search           | Emerald wild H1/H2/H4 seed/advance search implemented; static, gift, event, breeding and special wild methods remain deferred |
-| 6: Advanced recovery and polish   | Partial: joint field/byte domains, conditional exact export, prediction overlays, mobile layout and documentation             |
+1. Keep a baseline save from before any successful phrase change or record mixing.
+2. Choose a ranked phrase. Counts show how many of the actual surviving SIDs remain if it is accepted or rejected; no fishing or inventory checklist is required for this phrase workflow.
+3. In-game, tell the boy outside Dewford Hall **No** about the current trend, then submit the exact two suggested words.
+4. Answer the tool's separate question: **Did he accept this phrase as the new trend?** Under these first-submission conditions, accepted means absent from the initial five; rejected means present.
+5. Reset without saving and reload the same baseline before **every** next test, including after rejection. The calculator keeps the answers and ranks the next useful phrases.
+
+Pending tests add no constraint until answered. Saved answers and the pending test survive disabling/re-enabling Dewford evidence. If no phrase distinguishes the remaining SIDs, the tool says so. If no candidates survive, widen the window, review facts/history/gap assumptions or disable the filter. Save JSON before turning off the entire SID RNG search, which removes that optional search configuration.
+
+The public maractite example reproduces **7 → 2 → 1 SIDs**, ending at SID 55567 without supplying it. This is reproduction of published evidence, not a new gameplay capture. Default timing is approximately 60 seconds / SID calls 1–3,600; actual RNG calls can differ from frames. The three-call gap before phrase generation is community calibration, and VBlank interruptions can invalidate the model. Active Dewford searches are limited to 100,000 SID calls; timing-only searches allow 1,000,000. See [protocol, source audit and limitations](research/DEWFORD_SID.md).
+
+The new-game sequence starts from the **public TID** and concerns generation of that trainer's SID. The separate wild PID/IV search normally starts from **seed 0 after a soft reset of an existing save**. These are different RNG histories.
+
+### Supported features
+
+| Phase                             | Status                                                                                                                             |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| 1: Rebranding and guided workflow | Implemented; 386 species, extensible obtaining categories and shared editor/recovery state                                         |
+| 2: Known-PID/TID SID inference    | Implemented; all 65,536 SIDs, all four substructures, partial bit facts and checksum compatibility                                 |
+| 3: Multiple observations          | Implemented; immutable identity plus independent mutable snapshots; JSON and legacy imports                                        |
+| 4: Adaptive experiments           | Ranked held-item/move swaps, Rare Candy and cap-limited vitamins; original-baseline Yes/No flow and saved evidence                 |
+| 5: Encounter RNG search           | Emerald wild H1/H2/H4 seed/advance search implemented; static, gift, event, breeding and special wild methods remain deferred      |
+| New-game SID and Dewford filters  | Implemented; exact candidate intersections, surviving advance rows and ranked phrase tests; timing assumptions remain experimental |
+| 6: Advanced recovery and polish   | Partial: joint field/byte domains, conditional exact export, prediction overlays, mobile layout and documentation                  |
 
 Controlled move swaps, Rare Candy checkpoints and cap-limited vitamin uses are available alongside held-item tests. Battle EV training, berries and arbitrary PP-use experiments remain deferred. Recommendations require shared observable positions for their affected blocks. Their benefit concerns shared identity/key uncertainty, not direct recovery of unrelated plaintext.
 
 Wild RNG searches use inclusive advance bounds, with at most 1,000,000 advances per run. Advance 0 means the supplied seed before the encounter-slot call (before the encounter-rate check for Rock Smash). Advances count RNG calls, not seconds. Ordinary grass/cave, surf, fishing and Rock Smash tables are included, with no generation lead effect, Synchronize, Cute Charm or Pressure/Hustle/Vital Spirit. Use the species and lead as they were at capture. Safari Pokéblocks, Route 119 Feebas fishing, Static/Magnet Pull and Intimidate/Keen Eye extra-call behavior are outside this search. All results are conditional on the selected settings; broad searches preserve multiple matches rather than choosing the first. Settings and pending tests round-trip through JSON/autosave. See [wild RNG validation](research/WILD_RNG.md).
 
-Obtaining categories include wild, static, starter, gift, Egg/hatched, in-game trade, event/Mystery Gift, received from another Gen 3 game, and unknown. All currently use the generic stored-data solver. The design was compared with the locally available Gen 3 ACE Pokémon Builder taxonomy; no unrelated application or RNG implementation was copied.
+Obtaining categories include wild, static, starter, gift, Egg/hatched, in-game trade, event/Mystery Gift, received from another Gen 3 game, and unknown. All can use the generic stored-data solver; supported wild encounters additionally have the implemented RNG search. Other encounter generators remain unimplemented. Without encounter RNG, bounded joint SID enumeration accepts up to 32 inferred PIDs; broader sets are not silently truncated. The obtaining taxonomy was compared with the locally available Gen 3 ACE Pokémon Builder; no unrelated application or RNG implementation was copied.
 
 ## What the mathematics establishes
 
@@ -66,11 +101,13 @@ SID enumeration applies every supported fact: species, held item, experience, fr
 
 Every candidate must satisfy all snapshot-specific plaintext and ciphertext constraints, the unencrypted SID header and a compatible 16-bit checksum. Partial-payload checksum compatibility uses exact digit-sum/carry propagation without enumerating every unknown byte combination. Each changed item has its own snapshot checksum. Ciphertext at matching offsets is not intersected across changed snapshots.
 
-Counts are conditional on supplied facts, assumptions and the supported stored-data model, and do not certify encounter legality or timing. Unresolved summary-stat IV ranges remain in the existing IV calculator; only exact IVs you explicitly apply enter the solver. Broader PID counts in the legacy advanced view refer to the **active observation**. Joint results include every snapshot and are separately labeled.
+Counts are conditional on supplied facts, assumptions and the supported stored-data model, and do not certify encounter legality or timing. The stat calculator promotes only exact IVs you explicitly apply; unresolved ranges are not supplied as exact facts. The wild RNG search also filters generated PID/IV tuples against summary stats and retains their correlations automatically. Broader PID counts in the legacy advanced view refer to the **active observation**. Joint results include every recorded snapshot and are separately labeled.
 
-**Known**, **Derived**, **Assumed** and **Unknown** remain distinct. Field/byte domains can be correlated; non-exact counts are upper bounds. The compact completeness percentage counts exact encrypted bytes out of 80. Exact `.ek3`/hex export requires all 80 bytes to be uniquely established under active constraints and the decrypted checksum to validate. Reserved bytes and black nonzero digits are never guessed. Results using assumptions remain conditional on those assumptions.
+**Known**, **Derived**, **Assumed** and **Unknown** remain distinct. Field/byte domains can be correlated; non-exact counts are upper bounds. The compact completeness percentage counts exact stored bytes out of 80, including the unencrypted header. Exact `.ek3`/hex export requires all 80 bytes to be uniquely established under active constraints and the decrypted checksum to validate. Reserved bytes and black nonzero digits are never guessed. Results using assumptions remain conditional on those assumptions.
 
 The user reported a separately verified complete Illumise reconstruction with sufficiently informative facts, including known SID. That fixture is **not present in this checkout**, so this release cannot reproduce that particular experiment. Full-record synthetic tests and blind unknown-SID tests are separate validation goals. Full recovery is possible under informative conditions; it is not guaranteed from one screenshot.
+
+**Reported Nincada case:** the contributor recovered SID after three Dewford phrase tests on a new save. Replaying the supplied JSON leaves SID **33789**, PID **0x97507B58**, and one H2 spread at advance 900 under the selected settings. Assuming nickname **NINCADA** and normal wild storage produces **79/80 exact bytes** and checksum **0x15D1**. Byte `0x10`, after the nickname terminator, still has **225 possible values**: both observed nibbles are nonzero, and the secure-data checksum does not cover nickname memory. Exact export stays blocked. This reproduces the supplied evidence and assumptions; no original `.ek3` was supplied for independent verification. See [case details and source explanation](research/ENTRY_DEFAULTS.md).
 
 ## Preserved advanced tools
 
@@ -95,17 +132,17 @@ Diagnostics identify failed header/secure byte nibbles and checksum incompatibil
 
 ## Run and verify locally
 
-Use Node.js 24 LTS:
+Use Node.js 24, matching the CI workflow:
 
 ```sh
 npm ci
-npm run dev
 npm run check
+npm run dev
 ```
 
 Open Vite's printed URL, normally `http://127.0.0.1:5187/`. On Windows PowerShell use `npm.cmd` if execution policy blocks `npm.ps1`. `npm run check` runs all tests and the TypeScript/production build. `npm run preview` serves `dist/`.
 
-Tests retain the existing emulator/rendering/reconstruction regressions and add independent all-SID comparisons over all 24 permutations, partial packed facts, exact/partial checksums, ambiguous PID/SID sets, item snapshots, recommendation predictions, full synthetic reconstruction, legacy imports and guided interface contracts. Genuine fixture SIDs must survive blind investigations without injecting hidden fixture truth.
+The latest validated code has **131 passing tests** plus a successful TypeScript/Vite build. Coverage includes emulator/rendering regressions, independent all-SID comparisons over all 24 permutations, partial packed facts/checksums, ambiguous PID/SID sets, original-baseline experiments, wild RNG vectors, new-game SID windows/duplicates, Dewford generation and ranked outcomes, legacy JSON, defaults, both Egg bits and nickname trailing-memory ambiguity. Genuine fixture SIDs must survive blind investigations without injecting hidden fixture truth. Details: [validation history](research/VALIDATION.md).
 
 VS Code's build task and Go Live port 5510 still serve the compiled app. Rebuild after edits; use Vite for automatic source updates.
 
@@ -129,8 +166,12 @@ Developed with AI assistance. Recovery is deterministic and local. No new emulat
 
 Primary evidence: [pinned pret/pokeemerald](https://github.com/pret/pokeemerald/tree/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881), [BoxPokemon definitions](https://github.com/pret/pokeemerald/blob/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881/include/pokemon.h), [encryption/checksum/permutations](https://github.com/pret/pokeemerald/blob/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881/src/pokemon.c), and [item data](https://github.com/pret/pokeemerald/blob/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881/src/data/items.h). Capture evidence uses [mGBA](https://mgba.io/).
 
-Historical [Bulbapedia](<https://bulbapedia.bulbagarden.net/wiki/List_of_overworld_glitches_(Generation_III)#Trainer's_School_window_tile_quirks>) and [Glitch City](https://nintyconservation.github.io/glitchcity.wiki/glitchcity.wiki/Black_curtains_glitch.html) research informed the original investigation; this project does not claim discovery of the glitch. Future RNG work should be checked against [pret wild generation](https://github.com/pret/pokeemerald/blob/master/src/wild_encounter.c) and [PokéFinder's Gen 3 generators](https://github.com/Admiral-Fish/PokeFinder/tree/master/Core/Gen3/Generators). No PokéFinder code is bundled.
+Historical [Bulbapedia](<https://bulbapedia.bulbagarden.net/wiki/List_of_overworld_glitches_(Generation_III)#Trainer's_School_window_tile_quirks>) and [Glitch City](https://nintyconservation.github.io/glitchcity.wiki/glitchcity.wiki/Black_curtains_glitch.html) research, including Chaos Rush, Metarkai and TheZZAZZGlitch, informed the investigation. This project does not claim discovery of the glitch. Wild generation is checked against [pret's source](https://github.com/pret/pokeemerald/blob/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881/src/wild_encounter.c) and numeric fixtures from [PokéFinder](https://github.com/Admiral-Fish/PokeFinder/tree/master/Core/Gen3/Generators). No PokéFinder implementation is bundled.
+
+**Dewford/Feebas SID credits:** [maractite's established phrase method](https://www.reddit.com/r/pokemonrng/comments/16ei2ej/) and [retail worked example](https://www.reddit.com/r/u_maractite/comments/16dyods); [Pokémon RNG's Find SID with Feebas](https://www.pokemonrng.com/emerald-sid-feebas/), which credits **Lincoln, HappyLappy and Shao** for the [Python SID Finder](https://github.com/HappyLappy1/Lappy-Python-Scripts/tree/main/RSE_Trendy_Saying_2_SID); **mucksw's [Feebas Tile Calculator](https://mucksw.github.io/Feebas-Tile-Calculator/)**; and the related [Goppier/FindingFeebas](https://github.com/Goppier/FindingFeebas) and [yuhasem/FeebasFinder](https://github.com/yuhasem/FeebasFinder) research tools. The source model is implemented independently here and combined with curtain constraints. These credits concern related RNG research, not the independently verified curtain-memory mapping; no third-party tool implementation is bundled.
 
 Further documentation: [mapping](research/RESEARCH.md), [validation](research/VALIDATION.md), [solver guide](research/SOLVER_GUIDE.md), [experiments](research/EXPERIMENTS.md), [summary stats](research/SUMMARY_STATS.md), [OT information](research/OT_INFORMATION.md), [trait constraints](research/TRAIT_STATS_CONSTRAINTS.md), [Skarmory](research/SKARMORY_CASE.md), [Whismur](research/WHISMUR_CHECK.md), [investigator model](research/INVESTIGATOR.md).
+
+Today's feature references: [new-game SID RNG](research/SID_RNG.md), [Dewford phrase recovery](research/DEWFORD_SID.md), [wild PID/IV RNG](research/WILD_RNG.md), [entry defaults and Nincada completion limits](research/ENTRY_DEFAULTS.md), and [About article claim audit](research/ABOUT_RESEARCH.md).
 
 Original code/documentation: MIT. Pokémon assets/names and third-party materials retain their rights; see [NOTICE.md](NOTICE.md). Not affiliated with Nintendo, Game Freak or Creatures.
