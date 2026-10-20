@@ -26,7 +26,6 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
   const [tab, setTab] = useState<number>(() =>
     lab.pendingItemTest?.itemTest?.phase === "editing" ? 1 : 0,
   );
-  const [brush, setBrush] = useState<-1 | 0 | 1>(1);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   useEffect(() => {
     if (lab.pendingItemTest)
@@ -320,15 +319,6 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
               />
               Pixel grid
             </label>
-            <select
-              aria-label="Pixel paint value"
-              value={brush}
-              onChange={(e) => setBrush(Number(e.target.value) as -1 | 0 | 1)}
-            >
-              <option value={1}>Black</option>
-              <option value={0}>Transparent</option>
-              <option value={-1}>Unknown</option>
-            </select>
             <label className="zoom-label">
               Zoom{" "}
               <input
@@ -357,7 +347,6 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
                 memory={lab.memory}
                 observations={lab.obs}
                 referenceObservations={lab.referenceObservations}
-                tool={brush}
                 contradictions={lab.conflicts}
                 predictions={lab.showPredictions ? lab.predictions : undefined}
                 targets={
@@ -438,9 +427,10 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
             <div className="partial-pattern">
               <strong>Partial drawing</strong>
               <p>
-                Unmarked cells stay unknown. Record only pixels verified
-                in-game. Known facts and automatic deductions already constrain
-                the solver.
+                Blank cells look transparent while editing. Finish drawing
+                confirms the remaining blanks as transparent. Automatic pixels
+                remain derived from known facts; experiment questions record
+                only the pixels you verify.
               </p>
               <button
                 onClick={lab.completeDrawing}

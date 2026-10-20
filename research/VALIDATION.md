@@ -1,5 +1,20 @@
 # Validation results
 
+## Navigation, PP Ups controls and dual SID display - 2026-10-20
+
+- All 183 automated tests and the TypeScript/Vite production build pass with `npm run check`.
+- Reordered tabs and keyboard traversal to About → Pokémon info → Investigate, with Curtain between entry and investigation on mobile. Advanced snapshot management is collapsed; its explanation distinguishes optional manual snapshots from automatically saved experiments.
+- Move names share rows with independent PP and PP Ups fields; maximum PP is in normal flow beneath the input. Selecting a stage fills full restored PP, and valid typed PP infers its stage. Slot edits preserve other explicit packed counters. Editing the default assumed packed byte clears that shared assumption instead of promoting other default counters to verified facts.
+- SID headings show decimal and hexadecimal in both solved and partial states. Independent exhaustive comparisons validate decimal carries and common digit support across nibble domains; candidate subsets can establish additional decimal digits. Candidate table rows also show hexadecimal. These displays add no solver evidence.
+- Chrome production-preview checks at 1440×900, 390×844 and 320×740 verify tab order, collapsed observation controls, Ember PP Ups 3 → PP 40, typed PP 35 → stage 2, and SID 33789 → 0x83FD. All four maximum labels remain below their inputs and rows have no horizontal overflow. The isolated preview and public fixtures leave the user's live investigation untouched.
+
+## Opening guide and simpler drawing - 2026-10-20
+
+- About now opens first, including with a restored pending experiment. A short pitch and four setup steps precede the research article; Start with Pokémon info preserves the investigation.
+- Removed pencil selectors in both workspaces. Click toggles the visible black/transparent state; a drag paints the starting color. Manual paint takes precedence over predictions and experiment references. Blank drawing cells look transparent without silently becoming evidence.
+- Finish drawing confirms unpredicted blank main-record cells as transparent, preserves derived pixels and hidden neighbors, and adds an undo step. Experiment snapshots bypass blank completion and retain only verified observations. Old JSON keeps its original -1/0/1 semantics.
+- Automated checks cover every observed/predicted/reference combination, completion without prediction promotion, save/load compatibility, genuine Skarmory preservation and opening-guide/control placement. Chrome production-preview checks at desktop and 390×844 verify About/entry navigation, adjacent controls, black/transparent clicks, drawing pause and completion Undo/Redo. Phone emulation shows no horizontal overflow; it is not a physical touch-device test.
+
 ## Compact mobile Curtain follow-up - 2026-10-20
 
 - All 175 automated tests pass, including a new exhaustive mapping check that the compact 8x20 crop retains all 160 main-record nibbles at their original screen addresses. The production TypeScript/Vite build succeeds.

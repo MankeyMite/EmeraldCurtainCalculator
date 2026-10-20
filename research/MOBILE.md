@@ -45,11 +45,16 @@ missing main-record data. The existing contained-bitmap hit conversion handles
 letterboxing and responsive sizes. Switching size preserves evidence and does
 not finish a drawing or add observations.
 
-Draw, brush and Finish drawing stay together above the compact workspace, or
+Draw and Finish drawing stay together above the compact workspace, or
 in the sticky toolbar in the larger view. Lines, Undo,
 Redo and automatic-pixel display are under Drawing options. Actual painting
 retains the existing prediction freeze and background-calculation pause until
-Finish drawing, which opens the updated findings. Mobile inspector details sit
+Finish drawing, which opens the updated findings. Clicking toggles the visible
+black/transparent state, including predicted and reference pixels; dragging
+continues the starting color. Blank cells look transparent without immediately
+becoming evidence. Finishing the full drawing confirms its remaining blanks,
+excludes automatic predictions, preserves hidden neighbors and can be undone.
+Finishing an experiment never fills its unexamined pixels. Mobile inspector details sit
 directly below the curtain and bytes. The compact grid shows all 80 bytes in ten
 rows without horizontal scrolling; its smaller digit buttons are for inspection,
 and the larger view retains larger touch targets with a horizontally scrollable

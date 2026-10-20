@@ -49,7 +49,7 @@ export function PixelInspector({ lab }: { lab: CurtainLab }) {
       <h2>Pixel inspector</h2>
       <p className="help">
         Tap or click a pixel or hex digit to pin its details. Hover links them;
-        arrow keys select, Space paints.
+        arrow keys select, Space toggles black and transparent.
       </p>
       <dl className="inspector-grid">
         <div className="inspect-field">
@@ -80,7 +80,7 @@ export function PixelInspector({ lab }: { lab: CurtainLab }) {
           <dd>
             {h
               ? value === -1
-                ? "Unknown"
+                ? "Not recorded"
                 : value === 0
                   ? "Transparent"
                   : "Black"
@@ -95,7 +95,7 @@ export function PixelInspector({ lab }: { lab: CurtainLab }) {
                       .join(", ") || "none"
                   }`
                 : "Neighbor record"
-              : "Unpainted pixels stay unknown"}
+              : "Finish drawing confirms blank cells as transparent"}
           </small>
         </div>
       </dl>

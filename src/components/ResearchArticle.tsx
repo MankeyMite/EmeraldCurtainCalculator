@@ -313,8 +313,9 @@ export function ResearchArticle() {
         </table>
         <p>
           A black pixel does not distinguish 1 from F. Treating black as F would
-          invent information. Leave unclear cells unknown; only explicitly
-          completing a drawing declares its remaining visible cells transparent.
+          invent information. Blank drawing cells look transparent but stay
+          unrecorded until Finish drawing confirms the pattern. Automatic pixels
+          remain derived; experiment questions record only verified answers.
         </p>
         <NibbleExample />
         <p>

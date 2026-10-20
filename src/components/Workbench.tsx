@@ -23,11 +23,10 @@ export function Workbench({
   lab: CurtainLab;
   onClassic: () => void;
 }) {
-  const [tab, setTab] = useState("info"),
+  const [tab, setTab] = useState("about"),
     [section, setSection] = useState("items"),
     [field, setField] = useState("hidden data");
-  const [paint, setPaint] = useState(true),
-    [brush, setBrush] = useState<-1 | 0 | 1>(1),
+  const [paint, setPaint] = useState(false),
     [showCurtain, setShowCurtain] = useState(false),
     [drawingOptions, setDrawingOptions] = useState(false),
     [largeCurtain, setLargeCurtain] = useState(false),
@@ -36,6 +35,7 @@ export function Workbench({
     curtainOpen = mobile && showCurtain;
   const scroll = useRef<HTMLDivElement>(null),
     locateTarget = useRef<number | null>(null),
+    previousPendingTest = useRef(lab.pendingItemTest?.id),
     layout = mobile && !largeCurtain ? recordStripLayout() : stripLayout(),
     highlight = lab.hover ?? lab.selectedPixel;
   const open = (next: string, focus = "hidden data") => {
@@ -69,13 +69,20 @@ export function Workbench({
     if (mobile) setPaint(false);
   }, [mobile]);
   useEffect(() => {
-    if (lab.pendingItemTest) {
+    if (
+      lab.pendingItemTest &&
+      lab.pendingItemTest.id !== previousPendingTest.current
+    ) {
       open("items");
-      setPaint(!mobile);
+      setPaint(false);
     }
+    previousPendingTest.current = lab.pendingItemTest?.id;
   }, [lab.pendingItemTest?.id]);
   const finish = () => {
-    if (lab.completeDrawing()) open("items");
+    if (lab.completeDrawing()) {
+      setPaint(false);
+      open("items");
+    }
   };
   const newPokemon = () => {
     lab.resetSolver();
@@ -83,8 +90,7 @@ export function Workbench({
     setTab("info");
     setSection("items");
     setField("hidden data");
-    setPaint(!mobile);
-    setBrush(1);
+    setPaint(false);
     scroll.current?.scrollTo({ top: 0 });
   };
   return (
@@ -128,10 +134,10 @@ export function Workbench({
           role="tablist"
         >
           {[
+            ["about", "About"],
             ["info", "Pokémon info"],
             ...(mobile ? [["curtain", "Curtain"]] : []),
             ["investigate", "Investigate"],
-            ["about", "About"],
           ].map(([id, name]) => (
             <button
               role="tab"
@@ -148,8 +154,8 @@ export function Workbench({
               }
               onKeyDown={(e) => {
                 const ids = mobile
-                    ? ["info", "curtain", "investigate", "about"]
-                    : ["info", "investigate", "about"],
+                    ? ["about", "info", "curtain", "investigate"]
+                    : ["about", "info", "investigate"],
                   index = ids.indexOf(id);
                 const next =
                   e.key === "ArrowRight"
@@ -208,11 +214,12 @@ export function Workbench({
               </button>
             </p>
           )}
-          {tab === "info" && (
+          {
             <section
               role="tabpanel"
               id="work-panel-info"
               aria-labelledby="work-tab-info"
+              hidden={tab !== "info"}
             >
               <PokemonInfoForm lab={lab} onSid={() => open("sid", "SID")} />
               <details className="workspace-files">
@@ -242,7 +249,7 @@ export function Workbench({
                 </label>
               </details>
             </section>
-          )}
+          }
           {tab === "investigate" && (
             <section
               role="tabpanel"
@@ -272,7 +279,15 @@ export function Workbench({
                 Investigating <strong>{field}</strong>. Every result uses
                 verified observations and active assumptions.
               </div>
-              <ObservationManager lab={lab} />
+              <details className="observation-tools">
+                <summary>Saved observations and notes · advanced</summary>
+                <p>
+                  Experiments save their observations automatically. Use these
+                  controls to review or name saved snapshots, or add a separate
+                  observation of this same Pokémon after another change.
+                </p>
+                <ObservationManager lab={lab} />
+              </details>
               <ItemTestControls
                 lab={lab}
                 openEditor={() => {
@@ -320,6 +335,48 @@ export function Workbench({
               aria-labelledby="work-tab-about"
               className="workbench-about"
             >
+              <section
+                className="getting-started"
+                aria-labelledby="getting-started-title"
+              >
+                <h2 id="getting-started-title">
+                  Reveal the Pokémon behind the curtains
+                </h2>
+                <p>
+                  Use Emerald’s curtain glitch to narrow your Pokémon’s PID,
+                  IVs, Secret ID and XOR encryption key. Known information fills
+                  provable pixels; guided experiments help uncover more. Exact
+                  recovery depends on the evidence.
+                </p>
+                <h3>How to use the tool</h3>
+                <ol>
+                  <li>
+                    In <strong>English Pokémon Emerald</strong>, put your
+                    Pokémon in <strong>Box 8, slot 5</strong>. Keep slots 4 and
+                    6 empty.
+                  </li>
+                  <li>
+                    Open <strong>Pokémon info</strong> and enter its known
+                    summary-screen details. Leave uncertain values blank.
+                    Provable pixels fill automatically.
+                  </li>
+                  <li>
+                    Visit <strong>Rustboro Trainer’s School</strong> and copy
+                    its curtain pattern. Open <strong>Curtain</strong> on
+                    mobile; choose <strong>Draw</strong>. Click to toggle black
+                    / transparent, or drag to continue that color.
+                  </li>
+                  <li>
+                    Check the whole pattern, then click{" "}
+                    <strong>Finish drawing</strong> to confirm remaining blanks
+                    as transparent. <strong>Investigate</strong> shows results
+                    and useful experiments.
+                  </li>
+                </ol>
+                <button onClick={() => setTab("info")}>
+                  Start with Pokémon info
+                </button>
+              </section>
               <ResearchArticle />
               <details className="workspace-help">
                 <summary>Using this workspace</summary>
@@ -337,8 +394,10 @@ export function Workbench({
                 <p>
                   Click a hex digit or curtain pixel to pin their
                   correspondence. Inspector mode selects without painting.
-                  Automatic pixels have dashed borders. Only pixels you record
-                  are observations.
+                  Automatic pixels have dashed borders. Click toggles black and
+                  transparent. Finish drawing confirms the remaining blank cells
+                  as transparent; automatic pixels stay derived, without adding
+                  independent observations.
                 </p>
                 <p>
                   Each experiment starts from the original drawing, saves its
@@ -451,20 +510,16 @@ export function Workbench({
               aria-pressed={paint}
               onClick={() => setPaint(!paint)}
             >
-              {mobile ? "Draw" : paint ? "Draw" : "Inspect"}
+              Draw
             </button>
-            <select
-              aria-label="Pixel paint value"
-              value={brush}
-              onChange={(e) => setBrush(Number(e.target.value) as -1 | 0 | 1)}
-            >
-              <option value={1}>Black</option>
-              <option value={0}>Transparent</option>
-              <option value={-1}>Unknown</option>
-            </select>
             <button
               className={`finish-drawing${lab.drawingInProgress ? " drawing-pending" : ""}`}
               disabled={lab.mode === "renderer"}
+              title={
+                lab.activeSnapshot.itemTest
+                  ? "Calculate using only verified experiment pixels. Unexamined cells stay unrecorded."
+                  : "Confirm the whole pattern: remaining blank cells are transparent. Automatic pixels remain derived."
+              }
               onClick={finish}
             >
               Finish drawing
@@ -531,7 +586,7 @@ export function Workbench({
               : lab.analysisBusy
                 ? "Calculating in background…"
                 : paint
-                  ? "Draw is on: tap or drag to record pixels. Tap Draw again to inspect and scroll."
+                  ? "Tap to toggle black / transparent; drag to paint or erase. Finish drawing confirms blank cells as transparent."
                   : "Inspect: swipe to scroll, or tap a pixel for details. Choose Draw to record observations."}
           </p>
         </div>
@@ -552,7 +607,6 @@ export function Workbench({
               memory={lab.memory}
               observations={lab.obs}
               referenceObservations={lab.referenceObservations}
-              tool={brush}
               contradictions={lab.conflicts}
               predictions={lab.showPredictions ? lab.predictions : undefined}
               targets={

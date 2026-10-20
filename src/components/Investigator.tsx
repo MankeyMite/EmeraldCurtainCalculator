@@ -153,9 +153,10 @@ export function InvestigationFlow({
         <section className="investigation-card">
           <h3>4 · Record and investigate</h3>
           <p>
-            Paint observed black pixels. Leave unreadable pixels unknown. Only
-            complete a drawing when you have checked every visible pixel.
-            Analysis updates automatically as you add evidence.
+            Click to paint black; click black again to make it transparent.
+            Check the whole pattern before Finish drawing confirms remaining
+            blanks as transparent. Calculations pause while drawing and resume
+            when you finish.
           </p>
           <div className="inline-buttons">
             <button onClick={openEditor}>Draw curtains</button>
@@ -385,7 +386,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                 {lab.currentSnapshots.filter(isRecorded).length} saved
                 observations.{" "}
                 {analysis.sidValues.length === 1
-                  ? `Derived SID: ${analysis.sidValues[0]}.`
+                  ? `Derived SID: ${analysis.sidValues[0]} - 0x${hex(analysis.sidValues[0], 4)}.`
                   : "No unique SID established."}
               </p>
               <p className="help">{analysis.model}</p>

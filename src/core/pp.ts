@@ -26,3 +26,33 @@ export function ppInputError(move: number | undefined, text: string): string {
     ? `PC storage restores PP. Enter one of ${[...new Set([0, 1, 2, 3].map((n) => maxPp(move, n)))].join(", ")} PP (0–3 PP Ups); partly used PP is not a valid curtain checkpoint.`
     : "";
 }
+
+/** A slot edit preserves every other packed counter; absent counters stay
+ * unknown rather than inventing zero PP Ups for the other three moves. */
+export function ppUpChange(
+  move: number | undefined,
+  index: number,
+  stage: number,
+  packed?: number,
+): { pp: number; ppBonuses?: number } {
+  if (
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index > 3 ||
+    !Number.isInteger(stage) ||
+    stage < 0 ||
+    stage > 3
+  )
+    throw Error("Choose a move slot and 0–3 PP Ups.");
+  const pp = maxPp(move, stage);
+  if (pp === undefined)
+    throw Error("Select a known move before choosing PP Ups.");
+  return {
+    pp,
+    ...(packed === undefined
+      ? {}
+      : {
+          ppBonuses: (packed & ~(3 << (index * 2))) | (stage << (index * 2)),
+        }),
+  };
+}

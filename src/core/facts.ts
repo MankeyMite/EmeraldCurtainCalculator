@@ -2,10 +2,34 @@ import type { KnownFacts } from "./constraints";
 import { validateFacts } from "./session";
 import captureDefaults from "../data/capture-defaults.json";
 import species from "../data/species.json";
-import { maxPp, ppUpStages } from "./pp";
+import { maxPp, ppUpStages, ppUpChange } from "./pp";
 
 export const speciesNickname = (id: number | undefined) =>
   species.find((s) => s.id === id)?.name.toUpperCase();
+
+/** A selected slot is explicit; never promote the other three assumed-zero
+ * counters into verified facts by editing their shared byte. */
+export function ppUpDraftChange(
+  facts: KnownFacts,
+  index: number,
+  stage: number,
+): Record<string, string> {
+  const assumedPacked = facts.assumed?.includes("ppBonuses"),
+    next = ppUpChange(
+      facts.moves?.[index] ?? undefined,
+      index,
+      stage,
+      assumedPacked ? undefined : facts.ppBonuses,
+    );
+  return {
+    [`pp_${index}`]: String(next.pp),
+    ...(assumedPacked
+      ? { ppBonuses: "" }
+      : next.ppBonuses === undefined
+        ? {}
+        : { ppBonuses: String(next.ppBonuses) }),
+  };
+}
 
 /** Editable starting assumptions for a new investigation, never injected into imports. */
 export function newPokemonFacts(): KnownFacts {
@@ -197,6 +221,17 @@ export function refreshCaptureDefaults(
       delete next.ppBonuses;
       assumed.delete("ppBonuses");
     }
+  }
+  if (
+    /^pp_[0-3]$/.test(edited) &&
+    next.ppBonuses !== undefined &&
+    !assumed.has("ppBonuses")
+  ) {
+    const i = Number(edited.at(-1)),
+      move = next.moves?.[i] ?? undefined,
+      stages = ppUpStages(move, next.pp?.[i]);
+    if (stages.length === 1)
+      next.ppBonuses = ppUpChange(move, i, stages[0], next.ppBonuses).ppBonuses;
   }
   next.assumed = [...assumed];
   return next;

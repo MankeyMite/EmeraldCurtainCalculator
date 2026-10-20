@@ -45,6 +45,7 @@ import {
 import { EMPTY_DEDUCTION } from "../core/deduction";
 import { ppInputError } from "../core/pp";
 import { PROFILE } from "../core/memory";
+import { completeAssistedDrawing } from "../core/pixelAssistance";
 import { loadResearchExample, type ResearchExampleId } from "../core/examples";
 import {
   freshCapturePreset,
@@ -52,6 +53,7 @@ import {
   factsToDraft,
   draftToFacts,
   newPokemonFacts,
+  ppUpDraftChange,
   wildStoragePreset,
 } from "../core/facts";
 import { windowLayout } from "../core/window";
@@ -633,9 +635,13 @@ export function useCurtainLab() {
       setError((e as Error).message);
     }
   }
-  function editFact(key: string, value: string) {
+  function editFact(
+    key: string,
+    value: string,
+    related: Record<string, string> = {},
+  ) {
     setDrawingInProgress(false);
-    const draft = { ...factDraft, [key]: value };
+    const draft = { ...factDraft, ...related, [key]: value };
     if (key === "species") {
       draft.ability = "";
       if (!value) draft.gender = "";
@@ -645,7 +651,7 @@ export function useCurtainLab() {
       const next = refreshCaptureDefaults(
         draftToFacts(
           draft,
-          facts.assumed?.filter((k) => k !== key),
+          facts.assumed?.filter((k) => k !== key && !(k in related)),
         ),
         key,
       );
@@ -670,6 +676,10 @@ export function useCurtainLab() {
     } catch (e) {
       setFactError((e as Error).message + "; last valid facts remain active.");
     }
+  }
+  function editMovePpUps(index: number, stage: number) {
+    const patch = ppUpDraftChange(facts, index, stage);
+    editFact(`pp_${index}`, patch[`pp_${index}`], patch);
   }
   const hv = hover ? nibbleValue(memory, hover.nibble) : null,
     ob = hover ? obs[hover.nibble] : -1;
@@ -834,11 +844,17 @@ export function useCurtainLab() {
       setError(factError || summaryState.error || ppError);
       return false;
     }
+    // Finishing the main drawing verifies its blank cells as transparent.
+    // Never complete an experiment's unexamined cells or promote predictions.
+    if (!activeSnapshot.itemTest)
+      change(completeAssistedDrawing(obsRef.current, predictions));
     setDrawingInProgress(false);
     setAnalysisRevision((n) => n + 1);
     setMode("solver");
     setNotice(
-      "Drawing submitted for calculation. Unexamined pixels stay unknown; known facts and automatic pixels are already included through their constraints.",
+      activeSnapshot.itemTest
+        ? "Verified experiment pixels submitted. Unexamined pixels stay unrecorded."
+        : "Drawing complete: remaining blank cells confirmed transparent. Automatic pixels remain derived from known facts, not separate observations.",
     );
     return true;
   }
@@ -1268,6 +1284,7 @@ export function useCurtainLab() {
     clear: () => change(emptyObservations()),
     start,
     paint,
+    editMovePpUps,
     finish,
   };
 }

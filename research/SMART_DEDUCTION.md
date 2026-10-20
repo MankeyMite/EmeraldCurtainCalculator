@@ -129,8 +129,10 @@ targets. The UI explains when combined pixels help.
 `pixelAssistance.ts` displays transparent only for domain {0}, black for any
 nonempty domain excluding zero, otherwise unknown. Unions cover every compatible
 key/PID/order. Predictions have dashed borders; painting can confirm or contradict
-them. They never enter observations, JSON or candidate weights. Finish drawing submits only explicit observations;
-unexamined cells stay unknown. Removing facts retracts
+them. They never enter observations, JSON or candidate weights. Blank editor cells
+look transparent while staying unrecorded. Finish drawing confirms remaining
+unpredicted blanks as transparent for a full drawing, with an undo step; experiment
+snapshots retain only verified observations. Removing facts retracts
 unsupported predictions. Direct independent-fact conflicts get red pixel marks;
 general inconsistency gets a message without blaming one pixel. Inspector text
 explains the field/key/checksum and labels conditional assumptions. Inspect mode
@@ -142,8 +144,9 @@ keeps the drawing visible while disabling painting.
 intersection and ranking stages. `deduction.worker.ts` runs this pipeline off
 the main thread; `deductionScheduler.ts` debounces entry for 450 ms and cancels
 obsolete jobs. Starting a stroke freezes displayed predictions and cancels
-work. Finish drawing submits explicit observations immediately, without
-filling unexamined cells. No late worker result can interrupt a newer drawing.
+work. Finish drawing resumes calculation immediately, confirming the main
+drawing's unpredicted blanks while never filling unexamined experiment cells.
+No late worker result can interrupt a newer drawing.
 
 New experiments use `itemTest.mode = "pixels"`. Their observation arrays start
 unknown, with only explicit Black/Transparent answers added. Partial answers

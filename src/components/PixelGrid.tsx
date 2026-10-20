@@ -4,6 +4,7 @@ import { type Memory } from "../core/memory";
 import { type Placement, pixelAddress, nibbleValue } from "../core/tiles";
 import { backgroundColor, curtainHit } from "../core/window";
 import { bitmapCoordinates } from "../core/canvasCoordinates";
+import { drawingPixelState, toggleDrawingPixel } from "../core/drawing";
 
 export type Hit = ReturnType<typeof pixelAddress> & {
   displayX: number;
@@ -24,7 +25,6 @@ type Props = {
   memory: Memory;
   observations: Observations;
   referenceObservations?: Observations;
-  tool: Observation;
   contradictions: Set<number>;
   predictions?: Observations;
   targets?: number[];
@@ -39,7 +39,7 @@ export function PixelGrid(p: Props) {
   const drawing = useRef(false),
     last = useRef<{ x: number; y: number } | null>(null),
     keyIndex = useRef(p.mainOnly ? 16 : 0),
-    pendingErase = useRef<number | null>(null);
+    strokeValue = useRef<0 | 1>(1);
   const top = p.annotated ? 24 : 0,
     width = p.bounds.w * p.zoom,
     height = p.bounds.h * p.zoom + top;
@@ -81,11 +81,11 @@ export function PixelGrid(p: Props) {
             p.referenceObservations?.[a.nibble] !== undefined &&
             p.referenceObservations[a.nibble] !== -1;
           const state = p.solver
-            ? automatic
-              ? predicted
-              : reference
-                ? p.referenceObservations![a.nibble]
-                : observed
+            ? drawingPixelState(
+                observed,
+                predicted,
+                p.referenceObservations?.[a.nibble],
+              )
             : n === null
               ? -1
               : n === 0
@@ -95,17 +95,12 @@ export function PixelGrid(p: Props) {
             py = (t.y + y - p.bounds.y) * p.zoom + top;
           ctx.fillStyle =
             state === 1 ? "#000000" : state === 0 ? "#ffffff" : "#a4b6c3";
-          // Unpainted solver cells are a see-through editing overlay, not
-          // observations of zero. Keep their dots distinct from observed
-          // transparent pixels; never fade the canvas or painted black pixels.
-          const unpaintedOverlay = p.solver && state === -1 && p.gameBackground;
-          // Transparent leak pixels reveal the actual pane / window art.
-          if (!unpaintedOverlay && (state !== 0 || !p.gameBackground))
+          // Blank drawing cells look transparent without becoming observations.
+          // Transparent pixels reveal the actual pane / window art.
+          if (state !== 0 || !p.gameBackground)
             ctx.fillRect(px, py, p.zoom, p.zoom);
           if (state === -1 && p.zoom >= 7) {
-            ctx.fillStyle = unpaintedOverlay
-              ? "rgba(74,100,115,.4)"
-              : "#7e94a5";
+            ctx.fillStyle = "#7e94a5";
             ctx.fillRect(px + p.zoom / 2 - 1, py + p.zoom / 2 - 1, 2, 2);
           }
           if (p.grid) {
@@ -223,13 +218,6 @@ export function PixelGrid(p: Props) {
       hit = hitAt(current.x, current.y);
     p.onHover(hit);
     if (!drawing.current) return;
-    if (pendingErase.current !== null) {
-      // A stationary click erases. Once a drag enters another cell, use the
-      // selected brush for the entire stroke, including its starting cell.
-      if (current.x === last.current?.x && current.y === last.current?.y)
-        return;
-      pendingErase.current = null;
-    }
     const previous = last.current ?? current,
       dx = current.x - previous.x,
       dy = current.y - previous.y,
@@ -241,14 +229,11 @@ export function PixelGrid(p: Props) {
         h = hitAt(x, y);
       if (h) indices.push(h.nibble);
     }
-    p.onPaint([...new Set(indices)], p.tool);
+    p.onPaint([...new Set(indices)], strokeValue.current);
     last.current = current;
   }
-  function end(e: React.PointerEvent<HTMLCanvasElement>, commitClick = true) {
+  function end(e: React.PointerEvent<HTMLCanvasElement>) {
     if (drawing.current) {
-      if (commitClick && pendingErase.current !== null)
-        p.onPaint([pendingErase.current], -1);
-      pendingErase.current = null;
       drawing.current = false;
       last.current = null;
       p.onEnd();
@@ -263,8 +248,8 @@ export function PixelGrid(p: Props) {
       height={height}
       tabIndex={0}
       role="img"
-      title="Click or drag to draw black pixels. Click a black pixel again to erase it."
-      aria-label="Curtain pixel grid. Click or drag to paint in solver mode. Arrow keys select a raw pixel; Space paints."
+      title="Click or drag to draw black pixels. Click a black pixel again to erase it to transparent."
+      aria-label="Curtain pixel grid. Click toggles black and transparent; drag continues that color. Arrow keys select a raw pixel; Space toggles it."
       style={{
         width,
         height,
@@ -277,28 +262,30 @@ export function PixelGrid(p: Props) {
       onPointerDown={(e) => {
         const point = coordinates(e),
           selected = hitAt(point.x, point.y);
-        if (selected) p.onSelect?.(selected);
+        if (selected) {
+          keyIndex.current = selected.nibble;
+          p.onSelect?.(selected);
+        }
         if (!selected || e.button !== 0 || !p.solver || p.editable === false)
           return;
         e.preventDefault();
         e.currentTarget.focus();
         drawing.current = true;
         last.current = coordinates(e);
-        const hit = hitAt(last.current.x, last.current.y);
-        pendingErase.current =
-          hit && p.tool !== -1 && p.observations[hit.nibble] === p.tool
-            ? hit.nibble
-            : null;
+        strokeValue.current = toggleDrawingPixel(
+          p.observations[selected.nibble],
+          p.predictions?.[selected.nibble],
+          p.referenceObservations?.[selected.nibble],
+        );
         p.onStart();
         e.currentTarget.setPointerCapture(e.pointerId);
         move(e);
       }}
       onPointerMove={move}
       onPointerUp={(e) => end(e)}
-      onPointerCancel={(e) => end(e, false)}
+      onPointerCancel={end}
       onLostPointerCapture={() => {
         if (drawing.current) {
-          pendingErase.current = null;
           drawing.current = false;
           last.current = null;
           p.onEnd();
@@ -338,7 +325,15 @@ export function PixelGrid(p: Props) {
         if (e.key === " " && p.solver && p.editable !== false) {
           e.preventDefault();
           p.onStart();
-          p.onPaint([keyIndex.current], p.tool);
+          const index = keyIndex.current;
+          p.onPaint(
+            [index],
+            toggleDrawingPixel(
+              p.observations[index],
+              p.predictions?.[index],
+              p.referenceObservations?.[index],
+            ),
+          );
           p.onEnd();
         }
       }}

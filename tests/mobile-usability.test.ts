@@ -26,7 +26,6 @@ test("inspection and record previews allow touch scrolling and zoom; drawing alo
     solver: true,
     memory: Array(96).fill(null),
     observations: Array(192).fill(-1),
-    tool: 1,
     contradictions: new Set(),
     onHover: () => {},
     onStart: () => {},

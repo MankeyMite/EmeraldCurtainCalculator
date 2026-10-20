@@ -14,7 +14,29 @@ test("compact workspace follows the supplied split layout with one curtain strip
   const html = renderToStaticMarkup(createElement(App));
   assert.equal((html.match(/<canvas/g) ?? []).length, 1);
   assert.match(html, /width="280" height="520"/);
-  assert.match(html, /id="work-tab-info" aria-selected="true"/);
+  assert.match(html, /id="work-tab-about" aria-selected="true"/);
+  assert.ok(
+    html.indexOf('id="work-tab-about"') < html.indexOf('id="work-tab-info"'),
+  );
+  assert.ok(
+    html.indexOf('id="work-tab-info"') <
+      html.indexOf('id="work-tab-investigate"'),
+  );
+  assert.match(html, /id="work-panel-info"[^>]*hidden=""/);
+  assert.ok(
+    html.indexOf('id="getting-started-title"') <
+      html.indexOf('id="research-title"'),
+  );
+  assert.match(html, /Box 8, slot 5/);
+  assert.match(html, /Keep slots 4 and 6 empty/);
+  assert.match(html, /Rustboro Trainer’s School/);
+  assert.match(html, />Start with Pokémon info<\/button>/);
+  const tools = html.slice(
+    html.indexOf('class="toolbar-primary"'),
+    html.indexOf('class="drawing-options"'),
+  );
+  assert.match(tools, />Draw<\/button><button[^>]*[\s\S]*Finish drawing/);
+  assert.doesNotMatch(html, /Pixel paint value/);
   const header = html.slice(html.indexOf("<header"), html.indexOf("</header>"));
   assert.match(header, />New Pokémon<\/button>/);
   assert.match(header, /Use Save first/);

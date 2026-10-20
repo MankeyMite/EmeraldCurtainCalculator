@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { hex } from "../core/pokemon";
 import type { CurtainLab } from "../hooks/useCurtainLab";
 import { DewfordPanel } from "./DewfordPanel";
 import {
@@ -235,7 +236,9 @@ export function SidRngPanel({
                       .slice(0, showAll ? undefined : 50)
                       .map((row) => (
                         <tr key={row.sid}>
-                          <td>{row.sid}</td>
+                          <td>
+                            {row.sid} - 0x{hex(row.sid, 4)}
+                          </td>
                           <td>{row.advances.join(", ")}</td>
                           <td>
                             <button
