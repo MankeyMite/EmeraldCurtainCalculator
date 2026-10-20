@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { CurtainLab } from "../hooks/useCurtainLab";
 import { workbenchMasks, digit, hitForNibble } from "./WorkbenchData";
 import { hex, SUBSTRUCT_POSITIONS } from "../core/pokemon";
@@ -14,11 +15,25 @@ const header = [
   { start: 30, size: 2, name: "Reserved" },
 ];
 export function GroupedHex({ lab }: { lab: CurtainLab }) {
-  const masks = workbenchMasks(lab),
+  const masks = useMemo(
+      () => workbenchMasks(lab),
+      [
+        lab.mode,
+        lab.suppliedMasks,
+        lab.recovery,
+        lab.inference,
+        lab.sidRngSettings,
+        lab.sidRngResult,
+      ],
+    ),
     active = lab.hover ?? lab.selectedPixel;
-  const pids = lab.sidAnalysis
-    ? [...new Set(lab.sidAnalysis.candidates.map((h) => h.pid))]
-    : lab.inference.pidValues;
+  const pids = useMemo(
+    () =>
+      lab.sidAnalysis
+        ? [...new Set(lab.sidAnalysis.candidates.map((h) => h.pid))]
+        : lab.inference.pidValues,
+    [lab.sidAnalysis, lab.inference],
+  );
   const pid =
     lab.mode === "renderer"
       ? lab.imported?.pid
@@ -46,6 +61,10 @@ export function GroupedHex({ lab }: { lab: CurtainLab }) {
       className="hex-dashboard"
       aria-label="80-byte grouped encrypted record"
     >
+      <p className="mobile-only micro">
+        Swipe the byte grid sideways to see all columns. Tap a digit to inspect
+        its pixel.
+      </p>
       <div
         className="grouped-hex"
         role="group"

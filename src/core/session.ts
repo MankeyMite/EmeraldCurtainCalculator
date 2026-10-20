@@ -50,6 +50,11 @@ export function validateFacts(
     ribbonTail: 31,
   };
   for (const k of Object.keys(f)) {
+    if (k === "shiny") {
+      if (typeof f[k] !== "boolean") throw Error("Invalid shiny status");
+      out.shiny = f[k];
+      continue;
+    }
     if (k === "assumed") {
       if (
         !Array.isArray(f[k]) ||

@@ -11,6 +11,14 @@ import { xorMask } from "./cryptoConstraints";
 import { validateFacts } from "./session";
 import type { Snapshot } from "./investigation";
 import type { RngSpread } from "./rng";
+import { fitsShiny } from "./shiny";
+import {
+  checksumValues,
+  checksumMasks,
+  refineChecksumPayload,
+  mod16,
+} from "./checksum";
+import { experimentChecksumDelta } from "./checksumExperiments";
 
 export type Hypothesis = {
   pid: number;
@@ -77,6 +85,7 @@ function prepare(
       { length: 4 },
       () => new Map<number, number[]>(),
     ),
+    checksumValuesCache: new Map<number, number[]>(),
     valid:
       (!generated ||
         !suppliedIvs?.some((v, i) => v !== null && v !== generated.ivs[i])) &&
@@ -86,15 +95,158 @@ function prepare(
         genderForPid(facts.species!, pid) === facts.gender),
   };
 }
+const unrestrictedChecksumCache = new Map<string, number[]>();
+const singletonChecksums = new Map<number, number[]>();
+function possibleChecksums(p: Prepared, h: Hypothesis): number[] {
+  const cached = p.checksumValuesCache.get(h.key);
+  if (cached) return cached;
+  if (p.header.slice(56, 60).every((m) => m && !(m & (m - 1)))) {
+    const value = p.header
+      .slice(56, 60)
+      .reduce((v, m, n) => v | ((31 - Math.clz32(m)) << (4 * n)), 0);
+    let values = singletonChecksums.get(value);
+    if (!values) {
+      values = [value];
+      singletonChecksums.set(value, values);
+    }
+    return values;
+  }
+  const domains = p.plain.map(
+    (_, n) => p.plaintextDomains[n][(h.key >>> ((n % 8) * 4)) & 15],
+  );
+  const masks = p.header.slice(56, 60);
+  // One unrestricted word makes every modular sum possible, independently of
+  // all the other words. Reuse that common support instead of enumerating it
+  // for each of thousands of identities.
+  if (
+    Array.from({ length: 24 }, (_, w) =>
+      domains.slice(w * 4, w * 4 + 4).every((m) => m === 65535),
+    ).some(Boolean)
+  ) {
+    const signature = masks.join(",");
+    let values = unrestrictedChecksumCache.get(signature);
+    if (!values) {
+      values = [0];
+      masks.forEach(
+        (m, n) =>
+          (values = values!.flatMap((v) =>
+            allowedValues(m).map((d) => v | (d << (n * 4))),
+          )),
+      );
+      if (unrestrictedChecksumCache.size > 64)
+        unrestrictedChecksumCache.clear();
+      unrestrictedChecksumCache.set(signature, values);
+    }
+    return values;
+  }
+  const values = checksumValues(domains, masks);
+  if (p.checksumValuesCache.size > 64) p.checksumValuesCache.clear();
+  p.checksumValuesCache.set(h.key, values);
+  return values;
+}
+
+function checksumLinks(snapshots: Snapshot[]) {
+  return snapshots.flatMap((target, j) => {
+    const i = snapshots.findIndex((s) => s.id === target.itemTest?.sourceId);
+    if (i < 0) return [];
+    const delta = experimentChecksumDelta(snapshots[i], target);
+    return delta === null ? [] : [{ i, j, delta }];
+  });
+}
+function linkedChecksumValues(
+  prepared: Prepared[],
+  h: Hypothesis,
+  links: ReturnType<typeof checksumLinks>,
+  index?: number,
+): number[] | boolean {
+  const done = new Set<number>();
+  let selected: number[] =
+    index === undefined ? [] : possibleChecksums(prepared[index], h);
+  for (const edge of links) {
+    if (done.has(edge.i)) continue;
+    const offsets = new Map<number, number>([[edge.i, 0]]),
+      queue = [edge.i];
+    for (const i of queue)
+      for (const link of links) {
+        const j = link.i === i ? link.j : link.j === i ? link.i : -1;
+        if (j < 0) continue;
+        const offset = mod16(
+          offsets.get(i)! + (link.i === i ? link.delta : -link.delta),
+        );
+        if (offsets.has(j)) {
+          if (offsets.get(j)! !== offset)
+            return index === undefined ? false : [];
+        } else {
+          offsets.set(j, offset);
+          queue.push(j);
+        }
+      }
+    const supports = [...offsets].map(([i, offset]) => ({
+      i,
+      offset,
+      size: prepared[i].header
+        .slice(56, 60)
+        .reduce((v, m) => v * allowedValues(m).length, 1),
+    }));
+    const smallest = supports.reduce((a, b) => (a.size <= b.size ? a : b));
+    const values = possibleChecksums(prepared[smallest.i], h);
+    const roots: number[] = [];
+    for (const v of values) {
+      const root = mod16(v - smallest.offset);
+      if (
+        supports.every((s) =>
+          checksumFits(prepared[s.i], h, mod16(root + s.offset)),
+        )
+      ) {
+        roots.push(root);
+        if (index === undefined) break; // Existence, not enumeration, for validation.
+      }
+    }
+    if (!roots.length) return index === undefined ? false : [];
+    if (index !== undefined && offsets.has(index))
+      selected = roots.map((v) => mod16(v + offsets.get(index)!));
+    queue.forEach((i) => done.add(i));
+  }
+  return index === undefined ? true : selected;
+}
+
+/** Support accessor for experiment ranking. Identity candidates retain their
+ * own nuisance checksum supports, including exact links to other snapshots. */
+export function compileChecksumSupport(
+  identity: KnownFacts,
+  snapshots: Snapshot[],
+  source: Snapshot,
+) {
+  const all = snapshots.some((s) => s.id === source.id)
+    ? snapshots
+    : [source, ...snapshots];
+  const links = checksumLinks(all),
+    index = all.findIndex((s) => s.id === source.id);
+  const cache = new Map<string, Prepared[]>();
+  return (h: Hypothesis): number[] => {
+    const signature = `${h.pid % 24}/${h.rng?.ivs.join(",") ?? ""}/${h.rng?.abilitySlot ?? ""}`;
+    let prepared = cache.get(signature);
+    if (!prepared) {
+      prepared = all.map((s) => prepare(s, identity, h.pid, h.tid, h.rng));
+      cache.set(signature, prepared);
+    }
+    return linkedChecksumValues(prepared, h, links, index) as number[];
+  };
+}
 function headerFits(p: Prepared, h: Hypothesis) {
   if (!p.valid) return false;
+  if (!fitsShiny(p.facts, h.key)) return false;
   if (p.facts.sid !== undefined && p.facts.sid !== h.sid) return false;
   for (let n = 0; n < 4; n++)
     if (!(p.header[12 + n] & (1 << ((h.sid >>> (n * 4)) & 15)))) return false;
   return true;
 }
-function checksumFits(p: Prepared, h: Hypothesis) {
-  if (p.header.slice(56, 60).every((m) => m === 0xffff)) return true;
+function checksumFits(p: Prepared, h: Hypothesis, checksum?: number) {
+  if (
+    checksum === undefined &&
+    p.header.slice(56, 60).every((m) => m === 0xffff)
+  )
+    return true;
   // Exact addition of 24 independently constrained 16-bit words modulo 65536.
   // Each digit column has at most 361 possible sums and carries 0..23.
   // Cache column transitions by its two repeating XOR-key digits (256 cases).
@@ -102,7 +254,11 @@ function checksumFits(p: Prepared, h: Hypothesis) {
   for (let column = 0; column < 4; column++) {
     const lowKey = (h.key >>> (column * 4)) & 15;
     const highKey = (h.key >>> ((column + 4) * 4)) & 15;
-    const cacheKey = lowKey | (highKey << 4);
+    const digit =
+      checksum === undefined ? -1 : (checksum >>> (4 * column)) & 15;
+    const mask = p.header[56 + column] & (digit < 0 ? 65535 : 1 << digit);
+    if (!mask) return false;
+    const cacheKey = (lowKey | (highKey << 4)) + (digit + 1) * 256;
     let transitions = p.checksumTransitions[column].get(cacheKey);
     if (!transitions) {
       let sums = 1n;
@@ -121,7 +277,7 @@ function checksumFits(p: Prepared, h: Hypothesis) {
       for (let carry = 0; carry < 24; carry++)
         for (const sum of values) {
           const total = sum + carry;
-          if (p.header[56 + column] & (1 << (total & 15)))
+          if (mask & (1 << (total & 15)))
             transitions[carry] |= 1 << (total >>> 4);
         }
       p.checksumTransitions[column].set(cacheKey, transitions);
@@ -159,7 +315,9 @@ export function compileHypothesisValidator(
   const contexts = Array.from({ length: 24 }, (_, order) =>
     snapshots.map((s) => prepare(s, identity, order, identity.tid!)),
   );
+  const links = checksumLinks(snapshots);
   return (h: Hypothesis) => {
+    if (!fitsShiny(identity, h.key)) return false;
     if (
       h.tid !== identity.tid ||
       (identity.sid !== undefined && identity.sid !== h.sid) ||
@@ -173,17 +331,19 @@ export function compileHypothesisValidator(
       genderForPid(identity.species!, h.pid) !== identity.gender
     )
       return false;
-    return contexts[h.pid % 24].every(
-      (p, i) =>
-        pidMasks[i].every(
-          (m, n) => !!(m & (1 << ((h.pid >>> (n * 4)) & 15))),
-        ) &&
-        p.header.slice(8, 64).every(Boolean) &&
-        [0, 1, 2, 3].every(
-          (n) => !!(p.header[12 + n] & (1 << ((h.sid >>> (n * 4)) & 15))),
-        ) &&
-        p.keys.every((m, n) => !!(m & (1 << ((h.key >>> (n * 4)) & 15)))) &&
-        checksumFits(p, h),
+    return (
+      contexts[h.pid % 24].every(
+        (p, i) =>
+          pidMasks[i].every(
+            (m, n) => !!(m & (1 << ((h.pid >>> (n * 4)) & 15))),
+          ) &&
+          p.header.slice(8, 64).every(Boolean) &&
+          [0, 1, 2, 3].every(
+            (n) => !!(p.header[12 + n] & (1 << ((h.sid >>> (n * 4)) & 15))),
+          ) &&
+          p.keys.every((m, n) => !!(m & (1 << ((h.key >>> (n * 4)) & 15)))) &&
+          checksumFits(p, h),
+      ) && linkedChecksumValues(contexts[h.pid % 24], h, links) === true
     );
   };
 }
@@ -204,6 +364,7 @@ export function solveSids(
   )
     throw Error("Supply compatible PIDs");
   const candidates: Hypothesis[] = [];
+  const links = checksumLinks(snapshots);
   const eliminated = snapshots.map((s) => ({
     id: s.id,
     name: s.name,
@@ -259,6 +420,7 @@ export function solveSids(
     for (let index = 0; index < (sidChoices?.length ?? 65536); index++) {
       const sid = sidChoices ? sidChoices[index] : index;
       const h = makeHypothesis(pid, identity.tid, sid);
+      if (!fitsShiny(identity, h.key)) continue;
       if (rng) h.rng = rng;
       let valid = true;
       for (let i = 0; i < prepared.length; i++) {
@@ -273,7 +435,7 @@ export function solveSids(
           break;
         }
       }
-      if (valid) {
+      if (valid && linkedChecksumValues(prepared, h, links) === true) {
         candidates.push(h);
         if (candidates.length > maxCandidates)
           throw Error(
@@ -287,7 +449,7 @@ export function solveSids(
     sidValues: [...new Set(candidates.map((h) => h.sid))].sort((a, b) => a - b),
     eliminated,
     model: spreads
-      ? "Conditional on the selected Emerald wild RNG settings, generated PID/IV spreads, supplied facts, all saved pixels and the 16-bit checksum."
+      ? "Conditional on the selected Emerald encounter RNG settings, generated PID/IV spreads, supplied facts, all saved pixels and the 16-bit checksum."
       : "Exact for supplied stored facts, all observed zero/nonzero nibbles and the 16-bit checksum. Legality and unresolved summary-stat ranges are not searched.",
   };
 }
@@ -323,10 +485,14 @@ export function projectRecord(
   identity: KnownFacts,
   snapshot: Snapshot,
   candidates: Hypothesis[],
+  snapshots: Snapshot[] = [snapshot],
 ) {
   const masks = Array<number>(160).fill(0),
     plaintext = Array<number>(96).fill(0);
   const prepared = new Map<string, Prepared>();
+  const linkedSupport = checksumLinks(snapshots).length
+    ? compileChecksumSupport(identity, snapshots, snapshot)
+    : null;
   for (const h of candidates) {
     const signature = `${h.pid}/${h.rng?.ivs.join(",") ?? ""}/${h.rng?.abilitySlot ?? ""}`;
     let p = prepared.get(signature);
@@ -335,13 +501,30 @@ export function projectRecord(
       prepared.set(signature, p);
     }
     const header = applyFacts(p.header, { pid: h.pid, tid: h.tid, sid: h.sid });
+    const checksum = checksumMasks(
+      linkedSupport ? linkedSupport(h) : possibleChecksums(p, h),
+    );
+    checksum.forEach((m, n) => (header[56 + n] &= m));
+    const refinedDomains =
+      candidates.length <= 32 && checksum.some((m) => m !== 65535)
+        ? refineChecksumPayload(
+            p.plain.map(
+              (_, n) => p!.plaintextDomains[n][(h.key >>> ((n % 8) * 4)) & 15],
+            ),
+            checksum,
+          )
+        : null;
     let sum = 0,
       word = 0,
       exactPayload = true;
     p.plain.forEach((m, n) => {
       const key = (h.key >>> ((n % 8) * 4)) & 15;
-      const domain = p!.ciphertextDomains[n][key];
-      const decoded = p!.plaintextDomains[n][key];
+      const decoded = refinedDomains
+        ? refinedDomains[n]
+        : p!.plaintextDomains[n][key];
+      const domain = refinedDomains
+        ? xorMask(decoded, key)
+        : p!.ciphertextDomains[n][key];
       if (!decoded || decoded & (decoded - 1)) exactPayload = false;
       else word |= (31 - Math.clz32(decoded)) << ((n % 4) * 4);
       if (n % 4 === 3) {

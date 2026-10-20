@@ -1,14 +1,18 @@
 import type { CurtainLab } from "../hooks/useCurtainLab";
 import { ITEM_CATALOG } from "../core/experiments";
+import { hitForNibble } from "./WorkbenchData";
+import { hex } from "../core/pokemon";
 
 export function ItemTestControls({
   lab,
   openEditor,
   openResults,
+  locatePixel,
 }: {
   lab: CurtainLab;
   openEditor: () => void;
   openResults: () => void;
+  locatePixel?: (index: number) => void;
 }) {
   const pending = lab.pendingItemTest;
   const active = lab.activeSnapshot;
@@ -31,15 +35,19 @@ export function ItemTestControls({
     return (
       <section className="item-test-status" role="status">
         <strong>{savedTest.name} saved separately.</strong>{" "}
-        {savedTest.itemTest.changed
-          ? "Updated drawing recorded."
-          : "Unchanged pixels recorded for this test."}{" "}
+        {savedTest.itemTest.mode === "pixels"
+          ? "Verified target pixels recorded; unexamined cells stayed unknown."
+          : savedTest.itemTest.changed
+            ? "Updated drawing recorded."
+            : "Unchanged pixels recorded for this test."}{" "}
         {active.id === baseline.id && (
           <>Original drawing “{baseline.name}” restored for the next test. </>
         )}
-        {savedTest.itemTest.candidatesBefore !== undefined && lab.sidAnalysis
-          ? `${savedTest.itemTest.candidatesBefore.toLocaleString()} → ${lab.sidAnalysis.candidates.length.toLocaleString()} ${lab.hypothesisLabel}.`
-          : "Findings updated."}{" "}
+        {lab.analysisBusy
+          ? "Updating candidates and recommendations…"
+          : savedTest.itemTest.candidatesBefore !== undefined
+            ? `${savedTest.itemTest.candidatesBefore.toLocaleString()} → ${(lab.sidAnalysis?.candidates.length ?? Number(lab.investigationInference.pidCount)).toLocaleString()} ${lab.sidAnalysis ? lab.hypothesisLabel : "PID possibilities (stored-data bound)"}.`
+            : "Findings updated."}{" "}
         <p>
           {savedTest.itemTest.action?.restore ??
             "Restore the original held item (or remove the test item if none was originally held) before the next test. The app restores the drawing only."}
@@ -72,7 +80,77 @@ export function ItemTestControls({
     comparison.id === baseline.id
       ? "original drawing"
       : "saved comparison drawing";
-  const disabled = !!(lab.factError || lab.summaryError);
+  const disabled = !!(lab.factError || lab.summaryError || lab.ppError);
+  if (active.itemTest!.mode === "pixels")
+    return (
+      <section
+        id="current-item-test"
+        className="item-test-status active-test"
+        aria-label="Current item test"
+      >
+        <h2>Testing {testName}</h2>
+        <p>
+          {action?.instructions ??
+            `Use the PC item controls without walking with this Pokemon in your party. Start from the original Pokémon state and give it ${item?.name}.`}{" "}
+          Put it in Box 8 slot 5, leave and reenter the school.
+        </p>
+        <p>
+          Inspect only the highlighted pixels below. Answer black or transparent
+          for each one you can verify. Other changes can be ignored. Grey dashed
+          cells show the original drawing as an unverified reference; automatic
+          deductions remain visible.
+        </p>
+        {(lab.experimentTargets ?? active.targets ?? []).map((index) => (
+          <div className="target-question" key={index}>
+            <strong>
+              {index >= 72 && index < 76 ? "Checksum" : "Encrypted data"} · byte
+              0x{hex(Math.floor((index - 16) / 2))},{" "}
+              {index % 2 ? "high" : "low"} digit
+            </strong>
+            <button
+              onClick={() => {
+                lab.setHover(null);
+                lab.setSelectedPixel(hitForNibble(index));
+                locatePixel?.(index);
+              }}
+            >
+              Locate pixel
+            </button>
+            <button
+              disabled={disabled}
+              onClick={() => lab.answerTarget(index, 1)}
+            >
+              Black
+            </button>
+            <button
+              disabled={disabled}
+              onClick={() => lab.answerTarget(index, 0)}
+            >
+              Transparent
+            </button>
+            <small>Unexamined · leave unanswered if you cannot see it.</small>
+          </div>
+        ))}
+        {lab.analysisBusy && (
+          <p role="status">Updating candidates from verified answers…</p>
+        )}
+        <div className="inline-buttons">
+          <button
+            disabled={disabled || !active.observations.some((v) => v !== -1)}
+            onClick={lab.saveVerifiedTargets}
+          >
+            Keep verified answers &amp; next experiment
+          </button>
+          <button onClick={lab.cancelItemTest}>Cancel test</button>
+        </div>
+        <p>
+          {action?.restore ??
+            "Restore the original held item before the next test."}{" "}
+          Known facts and automatic deductions already constrain the solver; you
+          do not need to redraw them.
+        </p>
+      </section>
+    );
   return (
     <section
       id="current-item-test"

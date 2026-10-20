@@ -7,13 +7,17 @@ import { calculateStat } from "./stats";
 export const WILD_AREAS = tables;
 export const WILD_METHODS = ["H1", "H2", "H4"] as const;
 export type WildMethod = (typeof WILD_METHODS)[number];
+export const STATIC_METHODS = ["Method1", "Method4"] as const;
+export type StaticMethod = (typeof STATIC_METHODS)[number];
+export type RngMethod = WildMethod | StaticMethod;
 export type WildLead =
   "none" | "synchronize" | "cuteCharmM" | "cuteCharmF" | "pressure";
 export type RngSettings = {
+  kind?: "wild" | "static"; // Missing in existing investigations means wild.
   seed: number;
   minAdvance: number;
   maxAdvance: number;
-  methods: WildMethod[];
+  methods: RngMethod[];
   areaId: string;
   lead: WildLead;
   synchronizeNature: number;
@@ -24,7 +28,7 @@ export type RngSpread = {
   abilitySlot: number;
   advance: number;
   lastAdvance: number;
-  methods: WildMethod[];
+  methods: RngMethod[];
   slot: number;
   level: number;
 };
@@ -34,6 +38,9 @@ export function validateRngSettings(value: unknown): RngSettings {
   if (!value || typeof value !== "object" || Array.isArray(value))
     throw Error("Invalid RNG search settings");
   const v = value as RngSettings;
+  if (v.kind !== undefined && v.kind !== "wild" && v.kind !== "static")
+    throw Error("Choose a wild or static RNG model");
+  const isStatic = v.kind === "static";
   if (
     ![v.seed, v.minAdvance, v.maxAdvance].every(
       (n) => Number.isInteger(n) && n >= 0 && n <= 0xffffffff,
@@ -52,26 +59,36 @@ export function validateRngSettings(value: unknown): RngSettings {
   if (
     !Array.isArray(v.methods) ||
     !v.methods.length ||
-    v.methods.some((m) => !WILD_METHODS.includes(m))
+    v.methods.some(
+      (m) =>
+        !(isStatic ? STATIC_METHODS : WILD_METHODS).some(
+          (allowed) => allowed === m,
+        ),
+    )
   )
-    throw Error("Select H1, H2 or H4");
-  if (!WILD_AREAS.some((a) => a.id === v.areaId))
+    throw Error(
+      isStatic ? "Select Method 1 or Method 4" : "Select H1, H2 or H4",
+    );
+  if (!isStatic && !WILD_AREAS.some((a) => a.id === v.areaId))
     throw Error("Choose a supported Emerald encounter area");
   if (
-    !["none", "synchronize", "cuteCharmM", "cuteCharmF", "pressure"].includes(
-      v.lead,
-    ) ||
+    !(
+      isStatic
+        ? ["none"]
+        : ["none", "synchronize", "cuteCharmM", "cuteCharmF", "pressure"]
+    ).includes(v.lead) ||
     !Number.isInteger(v.synchronizeNature) ||
     v.synchronizeNature < 0 ||
     v.synchronizeNature > 24
   )
     throw Error("Invalid lead ability or Synchronize nature");
   return {
+    ...(v.kind ? { kind: v.kind } : {}),
     seed: v.seed,
     minAdvance: v.minAdvance,
     maxAdvance: v.maxAdvance,
     methods: [...new Set(v.methods)],
-    areaId: v.areaId,
+    areaId: isStatic ? "" : v.areaId,
     lead: v.lead,
     synchronizeNature: v.synchronizeNature,
   };
@@ -127,6 +144,8 @@ export function scanWildSpreads(
   progress?: (done: number, total: number) => void,
 ): RngSpread[] {
   const settings = validateRngSettings(input);
+  if (settings.kind === "static")
+    throw Error("Use the static generation search for this scope");
   const area = WILD_AREAS.find((a) => a.id === settings.areaId)!;
   if (identity.metGame !== undefined && identity.metGame !== 3)
     throw Error(
@@ -225,52 +244,7 @@ export function scanWildSpreads(
             ? ivsFromWords(b, c)
             : ivsFromWords(a, c);
       if (identity.ivs?.some((v, i) => v !== null && v !== ivs[i])) continue;
-      if (
-        snapshots.some((snapshot) => {
-          const summary = snapshot.summaryStats;
-          if (!summary?.level) return false;
-          return summary.stats.some((stat, i) => {
-            if (stat === null) return false;
-            const ev = snapshot.knownFacts.evs?.[i];
-            const base = species.summaryBaseStats[i];
-            if (ev !== null && ev !== undefined)
-              return (
-                calculateStat(
-                  base,
-                  ivs[i],
-                  ev,
-                  summary.level!,
-                  i,
-                  nature,
-                  species.name === "Shedinja",
-                ) !== stat
-              );
-            // Unknown EVs remain free. A monotone interval is a conservative filter.
-            return (
-              stat <
-                calculateStat(
-                  base,
-                  ivs[i],
-                  0,
-                  summary.level!,
-                  i,
-                  nature,
-                  species.name === "Shedinja",
-                ) ||
-              stat >
-                calculateStat(
-                  base,
-                  ivs[i],
-                  255,
-                  summary.level!,
-                  i,
-                  nature,
-                  species.name === "Shedinja",
-                )
-            );
-          });
-        })
-      )
+      if (!summaryMatchesSpread(encounter.species, pid, ivs, snapshots))
         continue;
       const key = `${pid}/${ivs.join(",")}/${abilitySlot}`;
       const old = found.get(key);
@@ -296,4 +270,86 @@ export function scanWildSpreads(
   }
   progress?.(total, total);
   return [...found.values()];
+}
+
+export function summaryMatchesSpread(
+  speciesId: number,
+  pid: number,
+  ivs: number[],
+  snapshots: Snapshot[],
+): boolean {
+  const species = speciesTraits(speciesId)!;
+  const nature = pid % 25;
+  return !snapshots.some((snapshot) => {
+    const summary = snapshot.summaryStats;
+    if (!summary?.level) return false;
+    return summary.stats.some((stat, i) => {
+      if (stat === null) return false;
+      const ev = snapshot.knownFacts.evs?.[i];
+      const base = species.summaryBaseStats[i];
+      if (ev !== null && ev !== undefined)
+        return (
+          calculateStat(
+            base,
+            ivs[i],
+            ev,
+            summary.level!,
+            i,
+            nature,
+            species.name === "Shedinja",
+          ) !== stat
+        );
+      // Unknown EVs remain free. A monotone interval is a conservative filter.
+      return (
+        stat <
+          calculateStat(
+            base,
+            ivs[i],
+            0,
+            summary.level!,
+            i,
+            nature,
+            species.name === "Shedinja",
+          ) ||
+        stat >
+          calculateStat(
+            base,
+            ivs[i],
+            255,
+            summary.level!,
+            i,
+            nature,
+            species.name === "Shedinja",
+          )
+      );
+    });
+  });
+}
+
+/** Old scopes without kind are wild, never silently applied to static origins. */
+export function rngAppliesToOrigin(
+  settings: RngSettings | undefined,
+  origin: string,
+): boolean {
+  return (
+    !!settings &&
+    (settings.kind === "static"
+      ? ["static", "starter", "gift"].includes(origin)
+      : origin === "wild")
+  );
+}
+export function defaultRngSettings(
+  origin: string,
+  facts: KnownFacts,
+): RngSettings {
+  return {
+    seed: 0,
+    minAdvance: 0,
+    maxAdvance: 3600,
+    kind: origin === "static" ? "static" : "wild",
+    methods: origin === "static" ? ["Method1"] : [...WILD_METHODS],
+    areaId: origin === "static" ? "" : (matchingAreas(facts)[0]?.id ?? ""),
+    lead: "none",
+    synchronizeNature: 0,
+  };
 }

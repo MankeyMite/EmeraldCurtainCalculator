@@ -14,6 +14,32 @@ import { hex, recordHex } from "../core/pokemon";
 import { diagnoseHypothesis, makeHypothesis } from "../core/sid";
 import species from "../data/species.json";
 import growth from "../data/growth-rates.json";
+import type { DomainQuestion } from "../core/domainExperiments";
+
+function DomainExplanation({ question }: { question?: DomainQuestion }) {
+  if (!question) return null;
+  return (
+    <p className="help">
+      Inspect byte 0x{hex(Math.floor((question.index - 16) / 2))},{" "}
+      {question.index % 2 ? "high" : "low"} digit. This tests XOR-key digit{" "}
+      {question.keyDigit} across all compatible block orders; with known
+      TID/SID, key restrictions also restrict PID. Transparent retains at most{" "}
+      {question.transparentCount.toLocaleString()} PID possibilities; black
+      retains at most {question.blackCount.toLocaleString()}.
+      {question.digits.length > 0 && question.digits.length < 16 && (
+        <>
+          {" "}
+          Known plaintext digits tested:{" "}
+          {question.digits.map((n) => hex(n, 1)).join(", ")}.
+        </>
+      )}
+      {question.conditional &&
+        " The sets can overlap because some block orders leave this pixel's plaintext unknown."}{" "}
+      Counts are stored-data bounds; no encounter timing or zero EVs are
+      assumed.
+    </p>
+  );
+}
 
 export function InvestigationFlow({
   lab,
@@ -105,14 +131,12 @@ export function InvestigationFlow({
           </label>
           <p className="help">
             {lab.origin === "wild" || lab.origin === "static"
-              ? "Enter met level and location if known. For a newly caught, untouched Pokémon you can explicitly apply the labeled fresh-catch assumptions below. Wild origins can use the seed and advance search below; static origins use stored-data constraints."
+              ? "Enter met level and location if known. For a newly caught, untouched Pokémon you can explicitly apply the labeled fresh-catch assumptions below. Wild origins can use the seed and advance search below; Static includes starters and ordinary gifts and uses Method 1 or Method 4."
               : lab.origin === "egg"
                 ? "Eggs use breeding-specific PID and inherited IV mechanics. This version uses stored-data constraints and makes no breeding RNG assumptions."
                 : lab.origin === "trade" || lab.origin === "transferred"
                   ? "Use the original trainer's name and IDs. Another trainer's Pokémon reveals that trainer's SID, not your own. Its origin generation is not assumed to be Emerald wild RNG."
-                  : lab.origin === "event" ||
-                      lab.origin === "gift" ||
-                      lab.origin === "starter"
+                  : lab.origin === "event"
                     ? "Only enter distribution or encounter values you have verified. No fixed PID, IVs, trainer IDs or generation method are assumed."
                     : "Choose the origin when known. The stored-data solver also works without an encounter model."}
           </p>
@@ -137,7 +161,16 @@ export function InvestigationFlow({
             <button onClick={openEditor}>Draw curtains</button>
             <button onClick={openRecovery}>View data recovery</button>
             <button
-              disabled={!!(lab.factError || lab.summaryError)}
+              disabled={
+                !!(
+                  lab.factError ||
+                  lab.summaryError ||
+                  lab.ppError ||
+                  lab.analysisError ||
+                  lab.analysisBusy ||
+                  lab.drawingInProgress
+                )
+              }
               onClick={lab.saveDrawing}
             >
               Save investigation
@@ -184,8 +217,14 @@ export function ObservationManager({ lab }: { lab: CurtainLab }) {
       </label>
       <button
         disabled={
-          !!(lab.factError || lab.summaryError) ||
-          lab.currentSnapshots.length >= 100
+          !!(
+            lab.factError ||
+            lab.summaryError ||
+            lab.ppError ||
+            lab.analysisError ||
+            lab.analysisBusy ||
+            lab.drawingInProgress
+          ) || lab.currentSnapshots.length >= 100
         }
         onClick={() => lab.addObservation()}
       >
@@ -193,7 +232,15 @@ export function ObservationManager({ lab }: { lab: CurtainLab }) {
       </button>
       <button
         disabled={
-          !lab.canRemoveObservation || !!(lab.factError || lab.summaryError)
+          !lab.canRemoveObservation ||
+          !!(
+            lab.factError ||
+            lab.summaryError ||
+            lab.ppError ||
+            lab.analysisError ||
+            lab.analysisBusy ||
+            lab.drawingInProgress
+          )
         }
         onClick={lab.removeObservation}
       >
@@ -309,8 +356,8 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
               ? `${lab.facts.pid} · Known`
               : lab.rngActive
                 ? rngPids
-                  ? `${rngPids.length} compatible within the active wild RNG scope${rngPids.length === 1 ? ` · ${rngPids[0]} derived` : ""}`
-                  : "Wild RNG search pending; no PID selected"
+                  ? `${rngPids.length} compatible within the active encounter RNG scope${rngPids.length === 1 ? ` · ${rngPids[0]} derived` : ""}`
+                  : "Encounter RNG search pending; no PID selected"
                 : lab.investigationInference.pidCount === 1n
                   ? `${lab.investigationInference.pidValues?.[0]} · Derived`
                   : `${lab.investigationInference.pidCount.toLocaleString()} compatible with the saved observations and facts`}
@@ -322,8 +369,11 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
           {!analysis ? (
             <p>
               {lab.rngActive
-                ? "Wild RNG results feed joint recovery automatically. Enter the original trainer TID if missing; wait for the search to finish or resolve the search message above."
-                : "For wild encounters, search a seed and advance range to derive PID/IV candidates without knowing the PID. Otherwise joint SID recovery uses the original trainer TID and up to 32 PIDs narrowed by stored data. Broader sets are never silently truncated."}
+                ? "Encounter RNG results feed joint recovery automatically. Enter the original trainer TID if missing; wait for the search to finish or resolve the search message above."
+                : lab.identity.tid !== undefined &&
+                    lab.identity.sid !== undefined
+                  ? "Known TID and SID let pixel experiments narrow the XOR key and PID directly, even with millions of possibilities. RNG limits are optional. Counts remain stored-data bounds until joint validation is possible."
+                  : "Enter the original trainer TID and SID to rank key/PID experiments without encounter timing. Joint SID recovery uses TID and a small PID set; encounter RNG limits are optional."}
             </p>
           ) : (
             <>
@@ -556,7 +606,8 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
           in-game as instructed. For Rare Candy or vitamin tests, make a
           baseline save and reload it afterwards.
         </p>
-        {analysis && analysis.candidates.length > 0 && (
+        {(lab.experiments.some((e) => e.groups > 1) ||
+          lab.controlledExperiments.some((e) => e.groups > 1)) && (
           <ol className="investigation-cards">
             {[
               ...lab.experiments
@@ -571,6 +622,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                   worstCase: e.worstCase,
                   informationGain: e.informationGain,
                   groups: e.groups,
+                  checksumContributes: e.checksumContributes,
                   select: () => lab.startItemTest(e.item.id),
                 })),
               ...lab.controlledExperiments
@@ -581,6 +633,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                   worstCase: e.worstCase,
                   informationGain: e.informationGain,
                   groups: e.groups,
+                  checksumContributes: e.checksumContributes,
                   select: () => lab.startControlledTest(e.action.id),
                 })),
             ]
@@ -598,7 +651,14 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                   <button
                     disabled={
                       !!lab.pendingItemTest ||
-                      !!(lab.factError || lab.summaryError)
+                      !!(
+                        lab.factError ||
+                        lab.summaryError ||
+                        lab.ppError ||
+                        lab.analysisError ||
+                        lab.analysisBusy ||
+                        lab.drawingInProgress
+                      )
                     }
                     onClick={e.select}
                   >
@@ -607,8 +667,19 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                   <small>
                     {e.groups} patterns · worst case{" "}
                     {e.worstCase.toLocaleString()} hypotheses ·{" "}
+                    {lab.domainQuestions[e.key]?.conditional && "at least "}
                     {e.informationGain.toFixed(2)} bits
+                    {e.checksumContributes &&
+                      " · Combined encrypted and checksum pixels improve this test."}
                   </small>
+                  {lab.domainQuestions[e.key] && (
+                    <details>
+                      <summary>Why this experiment?</summary>
+                      <DomainExplanation
+                        question={lab.domainQuestions[e.key]}
+                      />
+                    </details>
+                  )}
                 </li>
               ))}
           </ol>
@@ -619,8 +690,8 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
             These tests use the original moves, current level and EVs. Move
             swaps carry PP and PP Ups. Rare Candy requires four known occupied
             move slots so you can decline new moves. Vitamins require all six
-            original EVs. Tests are ranked only when their affected positions
-            can be predicted for every surviving PID.
+            original EVs. Every compatible block order is considered when
+            choosing useful target pixels.
           </p>
           {lab.controlledExperiments
             .filter((e) => e.groups > 1)
@@ -629,14 +700,26 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                 <h4>{e.action.name}</h4>
                 <p>{e.action.instructions}</p>
                 <p>{e.action.restore}</p>
+                <DomainExplanation
+                  question={lab.domainQuestions[e.action.id]}
+                />
                 <p>
                   {e.groups} patterns; worst case {e.worstCase} compatible
                   hypotheses remain.
+                  {e.checksumContributes &&
+                    " Combined encrypted and checksum pixels eliminate additional identities."}
                 </p>
                 <button
                   disabled={
                     !!lab.pendingItemTest ||
-                    !!(lab.factError || lab.summaryError)
+                    !!(
+                      lab.factError ||
+                      lab.summaryError ||
+                      lab.ppError ||
+                      lab.analysisError ||
+                      lab.analysisBusy ||
+                      lab.drawingInProgress
+                    )
                   }
                   onClick={() => lab.startControlledTest(e.action.id)}
                 >
@@ -647,8 +730,9 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
           {!lab.controlledExperiments.some((e) => e.groups > 1) && (
             <p>
               No informative move, EXP or vitamin test is established by the
-              current facts and candidate set. Add known moves/level/EVs or
-              narrow PID candidates with the RNG filters first.
+              current facts and candidate set. Check the original trainer IDs,
+              known moves and level. Unknown EVs prevent vitamin predictions,
+              but do not prevent move or eligible Rare Candy tests.
             </p>
           )}
         </details>
@@ -656,16 +740,17 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
         {savedTest?.itemTest?.phase === "recorded" && (
           <p role="status">
             <strong>{savedTest.name} saved separately.</strong>{" "}
-            {savedTest.itemTest.candidatesBefore !== undefined && analysis
-              ? `${savedTest.itemTest.candidatesBefore.toLocaleString()} → ${analysis.candidates.length.toLocaleString()} ${lab.hypothesisLabel}. Ranking updated below.`
-              : "Findings and ranking updated below."}
+            {lab.analysisBusy
+              ? "Updating candidates and recommendations…"
+              : savedTest.itemTest.candidatesBefore !== undefined
+                ? `${savedTest.itemTest.candidatesBefore.toLocaleString()} → ${(analysis?.candidates.length ?? Number(lab.investigationInference.pidCount)).toLocaleString()} ${analysis ? lab.hypothesisLabel : "PID possibilities (stored-data bound)"}. Ranking updated below.`
+                : "Findings and ranking updated below."}
           </p>
         )}
         <p>
-          Choose an item you can use from this ranked list. Give it to your
-          Pokémon and return to the school; the investigator will ask whether
-          the pixels changed compared with original drawing “
-          {lab.itemTestBaseline.name}”.
+          Choose an item, perform the test, then answer black or transparent for
+          the highlighted useful pixels. Each verified answer updates the
+          candidates and next recommendations. Unexamined pixels stay unknown.
         </p>
         <label>
           Find an item
@@ -680,17 +765,17 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
           <p>
             Finish the current item test above to update these recommendations.
           </p>
-        ) : !analysis ? (
+        ) : !analysis && !Object.keys(lab.domainQuestions).length ? (
           <p>
             {lab.rngActive
-              ? "Item recommendations appear when the wild RNG search finishes with compatible hypotheses and the original trainer TID is entered."
-              : "For wild Pokémon, use the seed and advance search to generate candidates. Add the original trainer TID for item ranking. You do not need to enter a PID yourself."}
+              ? "Item recommendations appear when the encounter RNG search finishes with compatible hypotheses and the original trainer TID is entered."
+              : "Enter the original trainer TID and SID for experiments on a broad PID set. If both are known, no supported item currently distinguishes the remaining possibilities. RNG limits are optional."}
           </p>
         ) : !useful.length ? (
           <p>
             {itemQuery
               ? "No useful items match that search."
-              : "No supported held item currently splits the remaining hypotheses at a common block position. More information is needed before another item swap can help."}
+              : "No supported held item currently distinguishes the remaining possibilities. Try the move or EXP experiments above, or add verified information."}
           </p>
         ) : (
           <>
@@ -712,7 +797,16 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                       {index + 1}. {e.item.name}
                     </h4>
                     <button
-                      disabled={!!(lab.factError || lab.summaryError)}
+                      disabled={
+                        !!(
+                          lab.factError ||
+                          lab.summaryError ||
+                          lab.ppError ||
+                          lab.analysisError ||
+                          lab.analysisBusy ||
+                          lab.drawingInProgress
+                        )
+                      }
                       onClick={() => lab.startItemTest(e.item.id)}
                     >
                       Try {e.item.name}
@@ -724,13 +818,45 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                         {e.worstCase.toLocaleString()} compatible hypotheses
                         remain.
                       </p>
-                      <p>
-                        Expected survivors {e.expectedRemaining.toFixed(1)};
-                        information gain {e.informationGain.toFixed(2)} bits,
-                        using a uniform prior over remaining hypotheses. Ranked
-                        by worst-case survivors, then information gain.{" "}
-                        {e.effort}
-                      </p>
+                      {lab.domainQuestions[`item-${e.item.id}`] ? (
+                        <DomainExplanation
+                          question={lab.domainQuestions[`item-${e.item.id}`]}
+                        />
+                      ) : (
+                        <p>
+                          Expected survivors {e.expectedRemaining.toFixed(1)};
+                          information gain {e.informationGain.toFixed(2)} bits,
+                          using a uniform prior over remaining hypotheses.
+                          Ranked by worst-case survivors, then information gain.{" "}
+                          {e.effort}
+                        </p>
+                      )}
+                      {e.questions?.map((q) => (
+                        <p key={q.index}>
+                          Byte 0x{hex(Math.floor((q.index - 16) / 2))},{" "}
+                          {q.index % 2 ? "high" : "low"} digit: transparent
+                          confirms XOR-key digit {q.keyDigit} ={" "}
+                          {hex(q.digit, 1)} (
+                          {q.transparentCount.toLocaleString()} hypotheses);{" "}
+                          black excludes {hex(q.digit, 1)} (
+                          {q.blackCount.toLocaleString()} hypotheses). Remaining
+                          digits: {q.values.map((v) => hex(v, 1)).join(", ")}.
+                        </p>
+                      ))}
+                      {!!e.questions?.length && (
+                        <small>XOR-key digit 0 is the rightmost digit.</small>
+                      )}
+                      {e.checksumQuestions.map((q) => (
+                        <p key={q.index}>
+                          Checksum byte 0x{hex(Math.floor((q.index - 16) / 2))},{" "}
+                          {q.index % 2 ? "high" : "low"} digit: transparent
+                          retains {q.transparentCount.toLocaleString()}{" "}
+                          hypotheses; black retains{" "}
+                          {q.blackCount.toLocaleString()}. These compatible sets
+                          can overlap when checksum values are unknown. Inspect
+                          together with the other highlighted pixels.
+                        </p>
+                      ))}
                       {equivalent.length > 0 && (
                         <p>
                           Equivalent tests:{" "}

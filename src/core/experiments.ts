@@ -1,8 +1,45 @@
 import items from "../data/items.json";
 import { SUBSTRUCT_POSITIONS } from "./pokemon";
 import type { Hypothesis } from "./sid";
+import { compileChecksumSupport } from "./sid";
+import type { Snapshot } from "./investigation";
+import type { KnownFacts } from "./constraints";
+import { rankCombinedPixels } from "./checksum";
+import { experimentChecksumDelta } from "./checksumExperiments";
 
 export const ITEM_CATALOG = items;
+export type ItemQuestion = {
+  index: number;
+  keyDigit: number;
+  digit: number;
+  transparentCount: number;
+  blackCount: number;
+  values: number[];
+};
+function questionBuilder(candidates: Hypothesis[]) {
+  const counts = Array.from({ length: 4 }, () => Array(16).fill(0));
+  candidates.forEach((h) =>
+    counts.forEach((row, n) => row[(h.key >>> ((4 + n) * 4)) & 15]++),
+  );
+  return (itemId: number): ItemQuestion[] =>
+    itemPixels(candidates[0], itemId).flatMap((p, n) => {
+      const digit = (itemId >>> (n * 4)) & 15,
+        transparentCount = counts[n][digit],
+        blackCount = candidates.length - transparentCount;
+      return transparentCount && blackCount
+        ? [
+            {
+              index: p.index,
+              keyDigit: p.keyDigit,
+              digit,
+              transparentCount,
+              blackCount,
+              values: counts[n].flatMap((count, d) => (count ? [d] : [])),
+            },
+          ]
+        : [];
+    });
+}
 export function itemPixels(h: Hypothesis, itemId: number) {
   const offset = 32 + SUBSTRUCT_POSITIONS[h.pid % 24][0] * 12 + 2;
   return Array.from({ length: 4 }, (_, n) => {
@@ -20,6 +57,9 @@ export function itemPixels(h: Hypothesis, itemId: number) {
 export function rankItemExperiments(
   candidates: Hypothesis[],
   ownedItems?: number[],
+  source?: Snapshot,
+  identity: KnownFacts = {},
+  snapshots: Snapshot[] = source ? [source] : [],
 ) {
   if (
     !candidates.length ||
@@ -27,6 +67,47 @@ export function rankItemExperiments(
       1
   )
     return [];
+  const questions = questionBuilder(candidates);
+  if (source) {
+    const support = compileChecksumSupport(identity, snapshots, source);
+    const supports = candidates.map(support);
+    if (
+      supports.every((s) => s === supports[0]) ||
+      supports.every((s) => s.length === 65536)
+    )
+      return rankItemExperiments(candidates, ownedItems);
+    return ITEM_CATALOG.filter(
+      (i) =>
+        i.experiment && (ownedItems === undefined || ownedItems.includes(i.id)),
+    )
+      .map((item) => {
+        const target = {
+          ...source,
+          knownFacts: { ...source.knownFacts, heldItem: item.id },
+          itemTest: { sourceId: source.id, phase: "question" as const },
+        };
+        const delta = experimentChecksumDelta(source, target);
+        const ranked = rankCombinedPixels(
+          candidates.map((h) => itemPixels(h, item.id)),
+          supports,
+          delta,
+        );
+        return {
+          ...ranked,
+          item,
+          questions: questions(item.id),
+          effort: ranked.checksumContributes
+            ? "Combined encrypted and checksum pixels eliminate additional identities."
+            : "One reversible held-item swap; no battle required.",
+        };
+      })
+      .sort(
+        (a, b) =>
+          a.worstCase - b.worstCase ||
+          b.informationGain - a.informationGain ||
+          a.item.id - b.item.id,
+      );
+  }
   // Counts of matching key digits for all 16 subsets. Reuse these marginals
   // across the catalog instead of traversing every candidate for every item.
   const digitMasks = Array.from({ length: 16 }, (_, subset) => {
@@ -71,6 +152,7 @@ export function rankItemExperiments(
         .join(",");
       return {
         item,
+        questions: questions(item.id),
         groups: sizes.length,
         worstCase: Math.max(...sizes),
         expectedRemaining: sizes.reduce((sum, n) => sum + (n * n) / total, 0),
@@ -78,6 +160,13 @@ export function rankItemExperiments(
         pixels,
         signature,
         effort: "One reversible held-item swap; no battle required.",
+        checksumContributes: false,
+        checksumQuestions: [] as {
+          index: number;
+          transparentCount: number;
+          blackCount: number;
+        }[],
+        checksumDelta: null as number | null,
       };
     })
     .sort(

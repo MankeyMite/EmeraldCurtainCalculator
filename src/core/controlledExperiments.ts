@@ -6,6 +6,9 @@ import { newSnapshot } from "./investigation";
 import { isRecorded } from "./itemTests";
 import { SUBSTRUCT_POSITIONS } from "./pokemon";
 import type { Hypothesis } from "./sid";
+import { compileChecksumSupport } from "./sid";
+import { rankCombinedPixels } from "./checksum";
+import { experimentChecksumDelta } from "./checksumExperiments";
 
 export type ActionDescription = {
   kind: "moves" | "candy" | "vitamin";
@@ -84,7 +87,7 @@ export function controlledActions(
         id: `moves-${a}-${b}`,
         kind: "moves",
         name: `Swap moves ${a + 1} and ${b + 1}`,
-        instructions: `In the summary, swap move slots ${a + 1} and ${b + 1}. Do not use either move or change anything else. Current PP and PP Ups follow their moves.`,
+        instructions: `While boxed, open the PC summary and swap move slots ${a + 1} and ${b + 1}. Do not use either move or change anything else. Current PP and PP Ups follow their moves.`,
         restore: `Swap moves ${a + 1} and ${b + 1} back before starting the next test. Restore the original held item too.`,
         changes: {
           moves,
@@ -173,8 +176,12 @@ export function rankControlledExperiments(
   source: Snapshot,
   species: number | undefined,
   candidates: Hypothesis[],
+  identity: KnownFacts = {},
+  snapshots: Snapshot[] = [source],
 ) {
   if (!candidates.length) return [];
+  const support = compileChecksumSupport(identity, snapshots, source),
+    supports = candidates.map(support);
   return controlledActions(source, species)
     .flatMap((action) => {
       const plaintext = knownPlaintext({
@@ -200,8 +207,7 @@ export function rankControlledExperiments(
       );
       const reference = actionPixels(source, action, candidates[0]);
       if (!reference.length) return [];
-      const groups = new Map<string, number>();
-      const seen = reference.map(() => new Set<number>());
+      const encrypted: { index: number; value: number }[][] = [];
       for (const h of candidates) {
         const pixels = templates[h.pid % 24].map((p) => ({
           index: p.index,
@@ -212,23 +218,29 @@ export function rankControlledExperiments(
           pixels.some((p, n) => p.index !== reference[n].index)
         )
           return [];
-        pixels.forEach((p, n) => seen[n].add(p.value));
-        const key = pixels.map((p) => p.value).join("");
-        groups.set(key, (groups.get(key) ?? 0) + 1);
+        encrypted.push(pixels);
       }
-      const sizes = [...groups.values()],
-        total = candidates.length;
+      const target = {
+        ...source,
+        knownFacts: { ...source.knownFacts, ...action.changes },
+        itemTest: {
+          sourceId: source.id,
+          phase: "question" as const,
+          action,
+          actionId: action.id,
+        },
+      };
+      // Consumable side effects are unknown until independently established.
+      if (action.kind !== "moves") delete target.knownFacts.friendship;
+      const combined = rankCombinedPixels(
+        encrypted,
+        supports,
+        experimentChecksumDelta(source, target),
+      );
       return [
         {
           action,
-          groups: groups.size,
-          worstCase: Math.max(...sizes),
-          expectedRemaining: sizes.reduce((sum, n) => sum + (n * n) / total, 0),
-          informationGain: sizes.reduce(
-            (sum, n) => sum - (n / total) * Math.log2(n / total),
-            0,
-          ),
-          pixels: reference.filter((_, n) => seen[n].size > 1),
+          ...combined,
         },
       ];
     })
@@ -292,6 +304,7 @@ export function createControlledTest(
         instructions: action.instructions,
         restore: action.restore,
       },
+      actionId: action.id,
     },
   };
 }

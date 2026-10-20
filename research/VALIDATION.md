@@ -1,5 +1,52 @@
 # Validation results
 
+## Compact mobile Curtain follow-up - 2026-10-20
+
+- All 175 automated tests pass, including a new exhaustive mapping check that the compact 8x20 crop retains all 160 main-record nibbles at their original screen addresses. The production TypeScript/Vite build succeeds.
+- At 390x844, connected Chrome shows the whole curtain, all 80 bytes (160 selectable digits), selected-byte inspector and collapsed extras within one viewport. A 390x700 check also retains all digits and inspector text on screen. A 320x568 check uses the scrolling fallback without clipping digit cells or widening the page.
+- The existing Skarmory drawing demonstrates last-byte selection linked to its highlighted curtain pixel and inspector. Fit/large switching keeps one canvas and all 80 bytes; large uses the original artwork viewport. Returning to Fit closes extras. A 1440x900 check retains the desktop split layout and three navigation tabs.
+- Screenshot: ignored local `research/mobile-compact-curtain-preview.jpg`. See [behavior and limits](MOBILE.md). No new emulator capture or physical phone test is claimed.
+
+## Mobile usability - 2026-10-20
+
+- All 174 automated tests and the TypeScript/Vite production build pass. New regressions cover scrolling/zoom in Inspect and record previews, gesture capture only for drawing, unchanged curtain geometry and numeric/text keyboard behavior.
+- Connected Chrome production-preview checks at 320x740, 390x844 and 768x1024 verified mobile tabs, readable form controls, inline PP errors, pending-test reload, target location and return, verified answers, prediction pause/Undo/Finish drawing, and no page-wide horizontal overflow. A 1440x900 check restores the desktop split view and three tabs with exactly one canvas.
+- Browser test data lived in a separate localhost origin. The user's original investigation and browser tab were not edited. No new in-game capture or physical phone test is claimed. See [mobile architecture and behavior](MOBILE.md).
+
+## RNG-free experiments for broad PID sets - 2026-10-20
+
+- All 172 tests and the production TypeScript/Vite build pass. Six new regressions cover independent exhaustive key-count comparisons over 4,096-PID domains and all 24 orders, shiny/nature/gender constraints, answer counts against full multi-snapshot inference, genuine trained-Combusken retention, reranking, JSON and rendered experiment controls/target geometry.
+- The contributed Combusken retains the original 10,984,833 PID bound without encounter RNG, known IVs or EVs. Held items, all six move swaps and the level-23 Candy test now have informative questions. The Smoke Ball black illustration reduces the bound to 10,675,313; no inferred pixels or reference PID enter solver input.
+- The independent SID-generation filter can remain enabled if the supplied SID survives it; an excluded SID suppresses recommendations. It does not add a PID encounter timing assumption.
+- Browser JSON import was blocked by the extension's file-URL permission. No permissions were changed. Parser/core and server-rendered UI tests verify the same fixture, recommendation buttons, target coordinates and count feedback; no new in-game capture or interactive browser-answer verification is claimed.
+- See [reproduction, architecture and conservative limits](SMART_DEDUCTION.md#broad-pid-sets-with-known-trainer-ids).
+
+## Static category and bounded RNG - 2026-10-20
+
+- All 166 tests and the production TypeScript/Vite build pass. Seven static regressions compare Method 1/4 with numeric PokeFinder vectors and an independent BigInt oracle, inclusive bounds and filters, immediate target evidence, shiny SID recovery and IV bounds before TID entry.
+- Legacy Starter/Gift files migrate into Static without changing evidence. Saved wild RNG scopes retain their original semantics and never activate as static scopes. Static scope settings survive investigation/backup parsing.
+- Connected Chrome: Totodile, Static, seed 0, Method 1, advances 0-9 returns 10 PIDs without a supplied PID or wild encounter area. Method 4 is available under the existing settings disclosure.
+- See [static architecture, primary references and limitations](STATIC_RNG.md). No new emulator capture was produced.
+
+## 2026-10-20 entry and experiment feedback
+
+- Exact PC-restored PP checked for every catalog move and all values through its three-PP-Up cap; boosted PP restricts the packed slot bits. Invalid PP reports the four possible maxima on blur.
+- Stats update with unknown EVs/nature and an existing joint projection, verified against an independent IV/EV enumeration. Electrike ability constrains stored bits and supported generated slots without imposing generic PID parity.
+- A 15-SID target-answer regression retains 14 after a black Master Ball pixel, preserves the original, leaves unexamined checksum cells unknown and reranks that item out. Partial answers immediately constrain all searches and survive JSON.
+- Exhaustive 3-candidate, 2-pixel support sets verify that removing nuisance/redundant questions preserves every joint surviving identity set.
+- Mock timers/workers verify 450 ms debounce, cancellation on drawing, stale-result suppression and immediate Finish drawing submission.
+- Connected Chrome verified direct Tackle entry, maximum 56, typed 42 = one PP Up, invalid 40 = red outline and hover explanation, unchecked fresh-catch IV bounds, and drawing pause status. A synthetic Master Ball target answer visibly changed 15 to 14 SIDs, restored the original with automatic pixels intact, and removed Master Ball from the useful list. The next Ultra Ball explanation confirmed key digit 4 = 2 retains one hypothesis, while black excludes that value and retains 13. Screenshot: local ignored research/entry-workflow-preview.png.
+
+
+## Checksum, shiny identity and automatic pixels — 2026-10-20
+
+- All **159 automated tests pass** via `npm.cmd run check`; TypeScript checking and the Vite production build succeed. The existing bundle-size advisory remains non-fatal.
+- Nineteen new tests cover exact modular deltas, PP parity/counters, EXP word carries, EV byte weights, unknown friendship, exhaustive checksum/payload and paired-shiny oracles, all 24 orders, genuine fixture retention, linked snapshot checksums, JSON/autosave compatibility, prediction ambiguity/retraction/conflicts and completion without promoting automatic pixels.
+- `npx.cmd tsx scripts/deduction-examples.ts` reproduces a four-identity scenario where Poké Ball improves worst-case survivors from four (encrypted pixels only) to two (combined checksum/encrypted pixels), changing the top recommendation from Repeat Ball to Poké Ball.
+- The real Skarmory fixture, given the documented known facts and empty observations, yields 74 guaranteed pixels: 59 black and 15 transparent, zero mismatches and zero observed pixels. Repeated and mirrored screen appearances agree with the existing verified geometry.
+- Chrome visual review confirmed the shiny selector defaults to Unknown, guaranteed pixels render with their actual black/transparent state and dashed borders, and the pinned inspector labels an automatic nickname pixel while its observation remains Unknown. Fixed a compact-workspace style that hid the new explanation. Review inputs used a separate localhost preview origin. No emulator measurements were added.
+- [Architecture, reproducible examples, scoring conventions and conservative limits](SMART_DEDUCTION.md).
+
 ## Named inputs and Poochyena feedback — 2026-10-18
 
 - **88 automated tests pass** and the TypeScript/Vite production build passes. Five new tests cover all named catalogs, name/ID matching and the supplied Poochyena conflict/review fixtures.
@@ -236,9 +283,9 @@ Model details and supported encounter/lead scope: [WILD_RNG.md](WILD_RNG.md).
 
 ## About research publication ? 2026-10-19
 
-- Expanded both About views with the same substantial research article, preserving usage notes, examples and prior research documents. Added interactive low/high nibble and XOR examples, an 80-byte address/permutation explorer, repeated-key and PID/OTID diagrams, separate new-game/wild RNG histories, SID-set intersection and a proposed multi-Pok?mon flow.
+- Expanded both About views with the same substantial research article, preserving usage notes, examples and prior research documents. Added interactive low/high nibble and XOR examples, an 80-byte address/permutation explorer, repeated-key and PID/OTID diagrams, separate new-game/wild RNG histories, SID-set intersection and a proposed multi-Pokémon flow.
 - Audited important claims against the pinned pret source, existing algorithms and tests. Historical attribution was checked against the preserved Glitch City article. All 40 distinct locally linked source/research paths exist. [ABOUT_RESEARCH.md](ABOUT_RESEARCH.md) records the evidence boundaries.
-- Source-verified SID initialization is distinguished from unmeasured introduction timing. The reported Illumise reconstruction retains attribution and its missing-fixture qualification. Existing single-Pok?mon snapshots are explicitly distinguished from a future trainer-level multi-Pok?mon aggregator. No new emulator or gameplay result is claimed.
+- Source-verified SID initialization is distinguished from unmeasured introduction timing. The reported Illumise reconstruction retains attribution and its missing-fixture qualification. Existing single-Pokémon snapshots are explicitly distinguished from a future trainer-level multi-Pokémon aggregator. No new emulator or gameplay result is claimed.
 - All 120 tests and the TypeScript/Vite production build pass. Chrome checks exercised article anchors, the 80 address buttons/two-pixel highlight, permutation changes, nibble order and XOR results. At 390 ? 844, diagrams fit the scrolling left panel without horizontal overflow. The right panel remains fixed on desktop; educational controls leave the investigation unchanged.
 
 ## Dewford phrase SID evidence — 2026-10-19

@@ -34,7 +34,7 @@ test("guided investigation shares the existing editor and advanced recovery with
   assert.match(html, /Load Skarmory example/);
   assert.ok(html.includes("Load Latios (illegal test record) example"));
   assert.match(html, /Restore previous workspace/);
-  assert.match(main, /Calculate Pokémon data/);
+  assert.match(main, /Finish drawing/);
   assert.doesNotMatch(main, /advanced-brushes|class="paint-tools"/);
   assert.match(main, /Click a black pixel again to erase it/);
   assert.match(main, /Known Pokémon information/);
@@ -90,7 +90,7 @@ test("guided investigation shares the existing editor and advanced recovery with
   const setup = main.slice(0, main.indexOf('class="input-panel"'));
   assert.ok(
     setup.indexOf("add the information you know") <
-      setup.indexOf("Calculate Pokémon data"),
+      setup.indexOf("Finish drawing"),
   );
   assert.match(main, /EVs, IVs &amp; contest stats/);
   assert.match(main, /aria-label="HP IV"[^>]*value=""/);
@@ -126,6 +126,6 @@ test("guided investigation shares the existing editor and advanced recovery with
   assert.match(html, /Best items to try next/);
   assert.doesNotMatch(html, /Items I own|useful owned items/);
   assert.match(html, /Saving on this device/);
-  assert.match(html, /Preview derived pixels/);
-  assert.match(html, /previews are not observations/i);
+  assert.match(html, /Auto pixels/);
+  assert.match(html, /known facts already constrain calculations/i);
 });

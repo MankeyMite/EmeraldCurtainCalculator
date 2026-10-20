@@ -92,24 +92,35 @@ export function estimateIVs(
     if (stat === null) why = "Enter the summary stat";
     else if (!data) why = "Choose the species";
     else if (summary.level === undefined) why = "Enter the current level";
-    else if (ev === undefined || ev === null) why = "Enter this stat’s EVs";
-    else if (i !== 0 && facts.nature === undefined) why = "Choose the nature";
+    const evs = ev == null ? Array.from({ length: 64 }, (_, n) => n * 4) : [ev];
+    const natures =
+      facts.nature === undefined && i !== 0
+        ? Array.from({ length: 25 }, (_, n) => n)
+        : [facts.nature ?? 0];
     const statValues = why
       ? null
-      : Array.from({ length: 32 }, (_, n) => n).filter(
-          (iv) =>
-            calculateStat(
-              data!.summaryBaseStats[i],
-              iv,
-              ev!,
-              summary.level!,
-              i,
-              facts.nature ?? 0,
-              data!.name === "Shedinja",
-            ) === stat,
+      : Array.from({ length: 32 }, (_, n) => n).filter((iv) =>
+          evs.some((ev) =>
+            natures.some(
+              (nature) =>
+                calculateStat(
+                  data!.summaryBaseStats[i],
+                  iv,
+                  ev,
+                  summary.level!,
+                  i,
+                  nature,
+                  data!.name === "Shedinja",
+                ) === stat,
+            ),
+          ),
         );
     return {
       why,
+      note:
+        !why && (ev == null || (i !== 0 && facts.nature === undefined))
+          ? "Bounds include unknown EVs/natures; verified values narrow further."
+          : "",
       curtain: curtain[i],
       stats: statValues,
       combined:

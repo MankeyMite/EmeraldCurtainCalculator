@@ -5,7 +5,6 @@ import { assembleMemory, type Records, type Slot } from "../core/memory";
 import { RAW_PLACEMENTS, nibbleValue } from "../core/tiles";
 import {
   emptyObservations,
-  completeObservations,
   recordMasks,
   compareCandidate,
   constraintHex,
@@ -21,24 +20,10 @@ import {
   type Snapshot,
   type Origin,
 } from "../core/investigation";
-import {
-  solveSids,
-  projectRecord,
-  diagnoseHypothesis,
-  makeHypothesis,
-} from "../core/sid";
-import {
-  generateSidRng,
-  intersectSidCandidates,
-  validateSidRng,
-  type SidRngSettings,
-} from "../core/sidRng";
-import { useSidRngWorker } from "./useSidRng";
-import { rankItemExperiments } from "../core/experiments";
-import {
-  rankControlledExperiments,
-  createControlledTest,
-} from "../core/controlledExperiments";
+import { diagnoseHypothesis, makeHypothesis } from "../core/sid";
+import { validateSidRng, type SidRngSettings } from "../core/sidRng";
+import { useDeduction } from "./useDeduction";
+import { createControlledTest } from "../core/controlledExperiments";
 import {
   createItemTest,
   answerItemTest,
@@ -46,10 +31,19 @@ import {
   isRecorded,
   itemTestBaseline,
   recordItemTest,
+  isEvidence,
+  targetExperiment,
+  answerExperimentPixel,
+  finishPixelExperiment,
 } from "../core/itemTests";
 import { AUTOSAVE_KEY, readAutosave } from "../core/autosave";
-import { validateRngSettings, type RngSettings } from "../core/rng";
-import { useWildRng } from "./useWildRng";
+import {
+  validateRngSettings,
+  rngAppliesToOrigin,
+  type RngSettings,
+} from "../core/rng";
+import { EMPTY_DEDUCTION } from "../core/deduction";
+import { ppInputError } from "../core/pp";
 import { PROFILE } from "../core/memory";
 import { loadResearchExample, type ResearchExampleId } from "../core/examples";
 import {
@@ -61,13 +55,8 @@ import {
   wildStoragePreset,
 } from "../core/facts";
 import { windowLayout } from "../core/window";
+import { fieldPossibilities } from "../core/inference";
 import {
-  analyzeConstraints,
-  fieldPossibilities,
-  ivPossibilities,
-} from "../core/inference";
-import {
-  estimateIVs,
   summaryFromDraft,
   summaryToDraft,
   promoteExactIVs,
@@ -147,6 +136,9 @@ export function useCurtainLab() {
   );
   const [saveStatus, setSaveStatus] = useState("Saving on this device…");
   const [showPredictions, setShowPredictions] = useState(true);
+  const [drawingInProgress, setDrawingInProgress] = useState(false);
+  const [analysisRevision, setAnalysisRevision] = useState(0);
+  const frozenAssistance = useRef(EMPTY_DEDUCTION.assistance);
   const summaryState = useMemo(() => {
     try {
       return { value: summaryFromDraft(summaryDraft), error: "" };
@@ -178,24 +170,6 @@ export function useCurtainLab() {
   const evidenceSnapshot = isRecorded(activeSnapshot)
     ? activeSnapshot
     : currentSnapshots.find((s) => s.id === activeSnapshot.itemTest!.sourceId)!;
-  const evidenceFacts = useMemo(
-    () => ({ ...evidenceSnapshot.knownFacts, ...identity }),
-    [evidenceSnapshot.knownFacts, identity],
-  );
-  const evidenceMasks = useMemo(
-    () => recordMasks(evidenceSnapshot.observations, 5),
-    [evidenceSnapshot.observations],
-  );
-  const evidenceSignature = JSON.stringify({
-    identity,
-    snapshots: currentSnapshots
-      .filter(isRecorded)
-      .map(({ id, knownFacts, observations }) => ({
-        id,
-        knownFacts,
-        observations,
-      })),
-  });
   const canvasRef = useRef<HTMLCanvasElement | null>(null),
     fileRef = useRef<HTMLInputElement | null>(null),
     sessionRef = useRef<HTMLInputElement | null>(null);
@@ -221,6 +195,7 @@ export function useCurtainLab() {
       gameBackground,
       hexSource,
       showConflicts,
+      showPredictions,
       undo,
       redo,
       snapshots: currentSnapshots,
@@ -295,164 +270,89 @@ export function useCurtainLab() {
             : masks,
       [mode, records, masks],
     );
-  const investigationInference = useMemo(
-    () => analyzeConstraints(evidenceMasks, evidenceFacts),
-    [evidenceMasks, evidenceFacts],
-  );
-  const inference = useMemo(
-    () =>
-      mode === "solver"
-        ? investigationInference
-        : analyzeConstraints(suppliedMasks, {}),
-    [suppliedMasks, mode, investigationInference],
-  );
-  const pidSignature = JSON.stringify(investigationInference.pidValues);
-  const rngEligible =
-    origin === "wild" &&
-    facts.species !== undefined &&
-    !factError &&
-    !summaryState.error;
-  const rngEvidenceSignature = JSON.stringify({
-    evidenceSignature,
-    sidRngSettings,
-    summaries: currentSnapshots
-      .filter(isRecorded)
-      .map((s) => ({ id: s.id, summaryStats: s.summaryStats })),
-  });
-  const wildRng = useWildRng(
-    rngSettings,
-    rngEligible,
+  const rngActive = rngAppliesToOrigin(rngSettings, origin);
+  const ppError =
+    Array.from({ length: 4 }, (_, i) =>
+      ppInputError(facts.moves?.[i] ?? undefined, factDraft[`pp_${i}`] ?? ""),
+    ).find(Boolean) ?? "";
+  const deduction = useDeduction(
     {
       identity,
-      snapshots: currentSnapshots.filter(isRecorded),
+      snapshots: currentSnapshots,
+      activeId,
+      ...(rngActive && identity.species !== undefined
+        ? { rng: rngSettings }
+        : {}),
       ...(sidRngSettings ? { sidRng: sidRngSettings } : {}),
+      ...(mode === "renderer" ? { renderMasks: suppliedMasks } : {}),
     },
-    rngEvidenceSignature,
+    drawingInProgress,
+    !factError && !summaryState.error && !ppError,
+    analysisRevision,
   );
-  const rngActive = !!(rngSettings && origin === "wild");
-  const curtainSidAnalysis = useMemo(() => {
-    if (rngActive) return wildRng.result?.analysis ?? null;
-    if (factError || summaryState.error || identity.tid === undefined)
-      return null;
-    const pids =
-      identity.pid !== undefined
-        ? [identity.pid]
-        : investigationInference.pidValues;
-    // Bounded joint enumeration. Never pick the first PID or silently truncate.
-    if (!pids?.length || pids.length > 32) return null;
-    return solveSids(identity, currentSnapshots.filter(isRecorded), pids);
-  }, [
-    evidenceSignature,
-    pidSignature,
-    factError,
-    summaryState.error,
-    rngActive,
-    wildRng.result,
-  ]);
-  const sidRngRows = useMemo(
-    () =>
-      sidRngSettings && identity.tid !== undefined
-        ? generateSidRng(identity.tid, sidRngSettings)
-        : [],
-    [identity.tid, sidRngSettings],
-  );
-  const sidWorker = useSidRngWorker(
-    !!sidRngSettings &&
-      identity.tid !== undefined &&
-      !factError &&
-      !summaryState.error &&
-      !curtainSidAnalysis &&
-      !wildRng.busy &&
-      (!rngActive || !!wildRng.result),
-    JSON.stringify({ evidenceSignature, sidRngSettings, pidSignature }),
-    {
-      identity,
-      snapshots: currentSnapshots.filter(isRecorded),
-      rows: sidRngRows,
-      pids:
-        identity.pid !== undefined
-          ? [identity.pid]
-          : investigationInference.pidValues,
-    },
-  );
-  const sidRngResult = useMemo(
-    () =>
-      !sidRngSettings
-        ? null
-        : curtainSidAnalysis
-          ? intersectSidCandidates(curtainSidAnalysis, sidRngRows)
-          : sidWorker.result,
-    [sidRngSettings, curtainSidAnalysis, sidRngRows, sidWorker.result],
-  );
-  const sidAnalysis = sidRngSettings
-    ? (sidRngResult?.analysis ?? null)
-    : curtainSidAnalysis;
-  const projectionSignature = JSON.stringify({
-    identity,
-    knownFacts: evidenceSnapshot.knownFacts,
-    observations: evidenceSnapshot.observations,
-  });
-  const recovery = useMemo(
-    () =>
-      sidAnalysis
-        ? projectRecord(identity, evidenceSnapshot, sidAnalysis.candidates)
-        : null,
-    [sidAnalysis, projectionSignature],
-  );
-  const experiments = useMemo(
-    () => (sidAnalysis ? rankItemExperiments(sidAnalysis.candidates) : []),
-    [sidAnalysis],
-  );
-  const controlledExperiments = useMemo(
-    () =>
-      rankControlledExperiments(
-        originalItemBaseline,
-        identity.species,
-        sidAnalysis?.candidates ?? [],
-      ),
-    [originalItemBaseline, identity.species, sidAnalysis],
-  );
-  const predictions = useMemo(() => {
-    const masks = recovery?.masks ?? inference.masks;
-    if (
-      mode !== "solver" ||
-      !isRecorded(activeSnapshot) ||
-      factError ||
-      !inference.consistent ||
-      (sidAnalysis && !sidAnalysis.candidates.length)
-    )
-      return emptyObservations();
-    return emptyObservations().map((_, i) => {
-      if (i < 16 || i >= 176) return -1;
-      const m = masks[i - 16];
-      return m === 1 ? 0 : m && !(m & 1) ? 1 : -1;
-    });
-  }, [
-    recovery,
+  const {
+    investigationInference,
     inference,
-    mode,
-    factError,
+    recovery,
+    experiments,
+    controlledExperiments,
+    domainQuestions,
+    ivEstimates,
+    curtainSidAnalysis,
     sidAnalysis,
-    activeSnapshot.itemTest?.phase,
-  ]);
+  } = deduction.data;
+  const sidRngRows = deduction.data.sidRows,
+    sidRngResult = deduction.data.sidResult;
+  const wildRng = {
+    result: deduction.data.wildResult,
+    busy: rngActive && deduction.busy,
+    progress: deduction.progress,
+    error: rngActive ? deduction.error : "",
+    retry: () => setAnalysisRevision((n) => n + 1),
+  };
+  const sidWorker = {
+    busy: !!sidRngSettings && deduction.busy,
+    progress: deduction.progress,
+    error: sidRngSettings ? deduction.error : "",
+  };
+  const assistance = drawingInProgress
+    ? frozenAssistance.current
+    : deduction.data.assistance;
+  const predictions =
+    mode !== "solver" ||
+    factError ||
+    (!drawingInProgress && (!deduction.current || deduction.error))
+      ? emptyObservations()
+      : assistance.predictions;
   const displayedMasks =
     mode === "solver" && hexSource === "inferred"
       ? inference.masks
       : suppliedMasks;
-  const ivEstimates = useMemo(
-    () =>
-      estimateIVs(
-        {
-          ...facts,
-          ...(facts.nature === undefined && inference.natures.length === 1
-            ? { nature: inference.natures[0] }
-            : {}),
-        },
-        summaryState.value ?? { stats: [null, null, null, null, null, null] },
-        Array.from({ length: 6 }, (_, i) => ivPossibilities(inference, i)),
-      ),
-    [facts, summaryState, inference],
-  );
+  const experimentTargets = deduction.current
+    ? deduction.data.experimentTargets
+    : (activeSnapshot.targets ?? []).filter(
+        (n) => activeSnapshot.observations[n] === -1,
+      );
+  useEffect(() => {
+    if (
+      !deduction.current ||
+      deduction.busy ||
+      deduction.error ||
+      factError ||
+      summaryState.error ||
+      ppError ||
+      deduction.error ||
+      ppError ||
+      drawingInProgress ||
+      activeSnapshot.itemTest?.mode !== "pixels" ||
+      isRecorded(activeSnapshot) ||
+      !sidAnalysis?.candidates.length ||
+      experimentTargets.length
+    )
+      return;
+    if (activeSnapshot.observations.some((v) => v !== -1))
+      saveVerifiedTargets();
+  }, [deduction.current, deduction.data, drawingInProgress, activeId]);
   const comparison = useMemo(
     () => compareCandidate(obs, records, facts),
     [obs, records, facts],
@@ -460,9 +360,11 @@ export function useCurtainLab() {
   const conflicts = useMemo(
     () =>
       new Set(
-        mode === "solver" && showConflicts ? comparison.contradictions : [],
+        mode === "solver" && showConflicts
+          ? [...comparison.contradictions, ...assistance.contradictions]
+          : [],
       ),
-    [comparison, mode, showConflicts],
+    [comparison, mode, showConflicts, assistance],
   );
   const imported = useMemo(
     () => (records[5] ? decodePokemon(records[5]) : null),
@@ -480,8 +382,11 @@ export function useCurtainLab() {
       inference.byteValues,
       offset,
       size,
-      (!inference.cryptoFacts && facts.gender === undefined) ||
+      (!inference.cryptoFacts &&
+        facts.gender === undefined &&
+        facts.shiny === undefined) ||
         mode === "renderer",
+      inference.byteCountsExact,
     );
   const pid = { ...field(0, 4), count: inference.pidCount, countExact: true },
     tid = field(4, 2),
@@ -506,6 +411,12 @@ export function useCurtainLab() {
     }
   }
   function start() {
+    if (!drawingInProgress)
+      frozenAssistance.current = {
+        ...assistance,
+        predictions: predictions.slice(),
+      };
+    setDrawingInProgress(true);
     stroke.current = obsRef.current.slice();
   }
   function paint(indices: number[], value: Observation) {
@@ -633,6 +544,7 @@ export function useCurtainLab() {
     }
   }
   function restoreWorkspace() {
+    setDrawingInProgress(false);
     const before = exampleBackup.current;
     if (!before) return;
     stroke.current = null;
@@ -658,6 +570,7 @@ export function useCurtainLab() {
     setGameBackground(before.gameBackground);
     setHexSource(before.hexSource);
     setShowConflicts(before.showConflicts);
+    setShowPredictions(before.showPredictions);
     setUndo(before.undo);
     setRedo(before.redo);
     setHover(null);
@@ -690,6 +603,7 @@ export function useCurtainLab() {
     }, "image/png");
   }
   async function importSession(file?: File) {
+    setDrawingInProgress(false);
     if (!file) return;
     try {
       const investigation = loadInvestigation(await file.text());
@@ -720,6 +634,7 @@ export function useCurtainLab() {
     }
   }
   function editFact(key: string, value: string) {
+    setDrawingInProgress(false);
     const draft = { ...factDraft, [key]: value };
     if (key === "species") {
       draft.ability = "";
@@ -744,6 +659,7 @@ export function useCurtainLab() {
             "friendship",
             "nickname",
             "headerFlags",
+            "ppBonuses",
             ...Array.from({ length: 4 }, (_, i) => `pp_${i}`),
           ]
             .filter((k) => k !== key)
@@ -796,6 +712,7 @@ export function useCurtainLab() {
     }
   }
   function resetSolver() {
+    setDrawingInProgress(false);
     const id = crypto.randomUUID();
     update(emptyObservations());
     setUndo([]);
@@ -837,6 +754,7 @@ export function useCurtainLab() {
     setNotice("");
   }
   function zeroEVs() {
+    setDrawingInProgress(false);
     if (factError) return;
     const next = {
       ...facts,
@@ -853,6 +771,7 @@ export function useCurtainLab() {
     setFactError("");
   }
   function applyFreshDefaults() {
+    setDrawingInProgress(false);
     const next = freshCapturePreset(facts);
     setFacts(next);
     setFactDraft(factsToDraft(next));
@@ -862,6 +781,7 @@ export function useCurtainLab() {
     );
   }
   function applyWildStorageDefaults() {
+    setDrawingInProgress(false);
     if (origin !== "wild" || factError) return;
     const next = wildStoragePreset(facts);
     setFacts(next);
@@ -871,12 +791,14 @@ export function useCurtainLab() {
     );
   }
   function clearFacts() {
+    setDrawingInProgress(false);
     setFacts({});
     setFactDraft({});
     setFactError("");
     setSummaryDraft({});
   }
   function applyEstimatedIVs() {
+    setDrawingInProgress(false);
     if (
       mode !== "solver" ||
       !isRecorded(activeSnapshot) ||
@@ -894,6 +816,7 @@ export function useCurtainLab() {
     );
   }
   function clearDefaults() {
+    setDrawingInProgress(false);
     const draft = { ...factDraft };
     for (const key of facts.assumed ?? []) draft[key] = "";
     setFactDraft(draft);
@@ -907,19 +830,20 @@ export function useCurtainLab() {
     }
   }
   function completeDrawing() {
-    if (!isRecorded(activeSnapshot)) return confirmItemTest();
-    // Explicit user action: blanks in the displayed scope are observations
-    // of transparency. Never silently fill neighboring rows hidden by default.
-    change(
-      completeObservations(obsRef.current, view !== "room" || showNeighbors),
-    );
+    if (factError || summaryState.error || ppError) {
+      setError(factError || summaryState.error || ppError);
+      return false;
+    }
+    setDrawingInProgress(false);
+    setAnalysisRevision((n) => n + 1);
     setMode("solver");
     setNotice(
-      "Remaining displayed cells marked transparent. Undo restores the unfinished drawing.",
+      "Drawing submitted for calculation. Unexamined pixels stay unknown; known facts and automatic pixels are already included through their constraints.",
     );
     return true;
   }
   function activateSnapshot(id: string) {
+    setDrawingInProgress(false);
     if (factError || summaryState.error) {
       setError("Correct invalid inputs before changing observations.");
       return;
@@ -976,6 +900,19 @@ export function useCurtainLab() {
     setSnapshots(remaining);
   }
   function observePixel(index: number, value: Observation) {
+    if (
+      activeSnapshot.itemTest?.mode === "pixels" &&
+      activeSnapshot.targets?.includes(index)
+    ) {
+      answerTarget(index, value);
+      return;
+    }
+    if (!drawingInProgress)
+      frozenAssistance.current = {
+        ...assistance,
+        predictions: predictions.slice(),
+      };
+    setDrawingInProgress(true);
     const next = obsRef.current.slice();
     next[index] = value;
     change(next);
@@ -998,6 +935,8 @@ export function useCurtainLab() {
     );
   }
   function useItemSnapshot(next: Snapshot, all: Snapshot[]) {
+    setAnalysisRevision((n) => n + 1);
+    setDrawingInProgress(false);
     setSnapshots(all);
     setActiveId(next.id);
     const nextFacts = { ...next.knownFacts, ...identity };
@@ -1016,6 +955,8 @@ export function useCurtainLab() {
       factError ||
       summaryState.error ||
       pendingItemTest ||
+      deduction.busy ||
+      drawingInProgress ||
       currentSnapshots.length >= 100
     )
       return;
@@ -1026,9 +967,10 @@ export function useCurtainLab() {
       crypto.randomUUID(),
       itemId,
       recommendation.pixels.map((p) => p.index),
-      sidAnalysis?.candidates.length,
+      sidAnalysis?.candidates.length ?? Number(investigationInference.pidCount),
     );
-    useItemSnapshot(next, [...currentSnapshots, next]);
+    const targeted = targetExperiment(next);
+    useItemSnapshot(targeted, [...currentSnapshots, targeted]);
     setNotice(
       `Item test selected. Compare the new item's curtain with original drawing “${originalItemBaseline.name}”.`,
     );
@@ -1038,6 +980,8 @@ export function useCurtainLab() {
       factError ||
       summaryState.error ||
       pendingItemTest ||
+      deduction.busy ||
+      drawingInProgress ||
       currentSnapshots.length >= 100
     )
       return;
@@ -1050,12 +994,36 @@ export function useCurtainLab() {
       crypto.randomUUID(),
       recommendation.action,
       recommendation.pixels.map((p) => p.index),
-      sidAnalysis?.candidates.length,
+      sidAnalysis?.candidates.length ?? Number(investigationInference.pidCount),
     );
-    useItemSnapshot(next, [...currentSnapshots, next]);
+    const targeted = targetExperiment(next);
+    useItemSnapshot(targeted, [...currentSnapshots, targeted]);
     setNotice(
       "Experiment selected. Follow its instructions and compare with the original drawing. Restore the original Pokémon state after recording this test.",
     );
+  }
+  function answerTarget(index: number, value: Observation) {
+    if (activeSnapshot.itemTest?.mode !== "pixels") return;
+    const next = answerExperimentPixel(activeSnapshot, index, value);
+    const all = currentSnapshots.map((s) => (s.id === next.id ? next : s));
+    useItemSnapshot(isRecorded(next) ? itemTestBaseline(all) : next, all);
+    setNotice(
+      isRecorded(next)
+        ? "Verified experiment pixels saved. Original drawing restored; next experiments are being reranked."
+        : "Verified pixel saved; unexamined pixels remain unknown. Candidates are updating.",
+    );
+  }
+  function saveVerifiedTargets() {
+    try {
+      const next = finishPixelExperiment(activeSnapshot),
+        all = currentSnapshots.map((s) => (s.id === next.id ? next : s));
+      useItemSnapshot(itemTestBaseline(all), all);
+      setNotice(
+        "Verified pixels saved. Unexamined pixels remain unknown; recommendations are updating.",
+      );
+    } catch (error) {
+      setError((error as Error).message);
+    }
   }
   function reportItemChange(changed: boolean) {
     if (factError || summaryState.error || !activeSnapshot.itemTest)
@@ -1130,7 +1098,7 @@ export function useCurtainLab() {
           : null);
       const problem = witness
         ? currentSnapshots
-            .filter(isRecorded)
+            .filter(isEvidence)
             .map((s) => diagnoseHypothesis(identity, s, witness))
             .find(Boolean)
         : null;
@@ -1151,7 +1119,7 @@ export function useCurtainLab() {
       setRngSettings(validateRngSettings(settings));
       wildRng.retry();
       setNotice(
-        "Wild RNG search enabled. Matching spreads will update automatically when saved evidence changes.",
+        "Encounter RNG search enabled. Matching spreads will update automatically when saved evidence changes.",
       );
     },
     stopRngSearch: () => setRngSettings(undefined),
@@ -1160,6 +1128,20 @@ export function useCurtainLab() {
     startItemTest,
     startControlledTest,
     controlledExperiments,
+    domainQuestions,
+    answerTarget,
+    saveVerifiedTargets,
+    experimentTargets,
+    referenceObservations:
+      activeSnapshot.itemTest?.mode === "pixels"
+        ? currentSnapshots.find(
+            (s) => s.id === activeSnapshot.itemTest!.sourceId,
+          )?.observations
+        : undefined,
+    drawingInProgress,
+    ppError,
+    analysisBusy: deduction.busy,
+    analysisError: deduction.error,
     reportItemChange,
     confirmItemTest,
     cancelItemTest,
@@ -1169,7 +1151,11 @@ export function useCurtainLab() {
     evidenceSnapshot,
     highlightReferenceConflicts,
     origin,
-    setOrigin,
+    setOrigin: (next: Origin) => {
+      setOrigin(next);
+      setDrawingInProgress(false);
+      if (next !== origin) setRngSettings(undefined);
+    },
     currentSnapshots,
     activeSnapshot,
     activeId,
@@ -1184,6 +1170,7 @@ export function useCurtainLab() {
     recovery,
     experiments,
     predictions,
+    assistance,
     showPredictions,
     setShowPredictions,
     observePixel,
@@ -1222,9 +1209,14 @@ export function useCurtainLab() {
     summaryDraft,
     summaryError: summaryState.error,
     ivEstimates,
-    editSummaryStat: (key: string, value: string) =>
-      setSummaryDraft((draft) => ({ ...draft, [key]: value })),
-    clearSummaryStats: () => setSummaryDraft({}),
+    editSummaryStat: (key: string, value: string) => {
+      setDrawingInProgress(false);
+      setSummaryDraft((draft) => ({ ...draft, [key]: value }));
+    },
+    clearSummaryStats: () => {
+      setDrawingInProgress(false);
+      setSummaryDraft({});
+    },
     applyEstimatedIVs,
     canvasRef,
     fileRef,

@@ -1,5 +1,7 @@
 # Bounded Emerald wild RNG search
 
+Static encounters, starters and ordinary gifts now share the separate [Static Method 1/4 path](STATIC_RNG.md) and the same advance-limit controls. Their sequence differs from the wild methods below.
+
 Wild origins can search H1, H2 and H4 without a known PID. Seed defaults to 0; the user supplies inclusive minimum/maximum advances and an encounter area. Results remain conditional on that scope. Numeric inputs accept decimal or `0x` hex. At most 1,000,000 advances and 5,000 distinct spreads are accepted per run. Above 200,000 joint hypotheses, an explicit refinement message replaces the result; no truncated search enters recovery.
 
 ## Generation and indexing

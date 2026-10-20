@@ -26,6 +26,7 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
   const [tab, setTab] = useState<number>(() =>
     lab.pendingItemTest?.itemTest?.phase === "editing" ? 1 : 0,
   );
+  const [brush, setBrush] = useState<-1 | 0 | 1>(1);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   useEffect(() => {
     if (lab.pendingItemTest)
@@ -175,7 +176,7 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
             empty. Enter Rustboro City’s Trainer’s School in Pokémon Emerald,
             draw every black pixel on the curtains below, add the information
             you know under Known Pokémon information, then click{" "}
-            <strong>Calculate Pokémon data</strong>.
+            <strong>Finish drawing</strong>.
           </p>
         )}
         <aside className="input-panel" aria-label="Inputs and drawing controls">
@@ -198,14 +199,12 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
               <h2>Draw your curtain</h2>
               <button
                 className="complete-button"
-                disabled={!!(lab.factError || lab.summaryError)}
+                disabled={!!(lab.factError || lab.summaryError || lab.ppError)}
                 onClick={() => {
                   if (lab.completeDrawing()) setTab(2);
                 }}
               >
-                {lab.activeSnapshot.itemTest?.phase === "editing"
-                  ? "Save drawing & analyze test"
-                  : "Calculate Pokémon data"}
+                Finish drawing
               </button>{" "}
               <div className="inline-buttons history-tools">
                 <button onClick={lab.undoStroke} disabled={!lab.canUndo}>
@@ -217,9 +216,9 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
                 <button onClick={lab.clear}>Clear pixels</button>
               </div>
               <p className="help">
-                {lab.activeSnapshot.itemTest?.phase === "editing"
-                  ? "Edit the changed pixels. Saving this test keeps unmarked cells unknown. Click black pixels again to erase."
-                  : "Draw every black pixel and add known information before calculating. Remaining displayed cells will count as transparent. Click black pixels again to erase."}
+                Record black or transparent pixels you can verify. Automatic
+                deductions stay visible. Calculations pause while drawing; click
+                Finish drawing when ready. Unexamined cells stay unknown.
               </p>
             </section>
           )}
@@ -311,7 +310,7 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
                 checked={lab.showPredictions}
                 onChange={(e) => lab.setShowPredictions(e.target.checked)}
               />
-              Preview derived pixels
+              Auto pixels (known facts already constrain calculations)
             </label>
             <label className="check-label">
               <input
@@ -321,6 +320,15 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
               />
               Pixel grid
             </label>
+            <select
+              aria-label="Pixel paint value"
+              value={brush}
+              onChange={(e) => setBrush(Number(e.target.value) as -1 | 0 | 1)}
+            >
+              <option value={1}>Black</option>
+              <option value={0}>Transparent</option>
+              <option value={-1}>Unknown</option>
+            </select>
             <label className="zoom-label">
               Zoom{" "}
               <input
@@ -348,10 +356,15 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
                 solver={lab.mode === "solver"}
                 memory={lab.memory}
                 observations={lab.obs}
-                tool={1}
+                referenceObservations={lab.referenceObservations}
+                tool={brush}
                 contradictions={lab.conflicts}
                 predictions={lab.showPredictions ? lab.predictions : undefined}
-                targets={lab.activeSnapshot.targets}
+                targets={
+                  lab.activeSnapshot.itemTest?.mode === "pixels"
+                    ? lab.experimentTargets
+                    : lab.activeSnapshot.targets
+                }
                 onHover={(hit) => {
                   if (hit) lab.setHover(hit);
                 }}
@@ -425,15 +438,15 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
             <div className="partial-pattern">
               <strong>Partial drawing</strong>
               <p>
-                Unmarked cells still mean unknown. If every visible black pixel
-                has been drawn, you can count the remaining displayed cells as
-                transparent.
+                Unmarked cells stay unknown. Record only pixels verified
+                in-game. Known facts and automatic deductions already constrain
+                the solver.
               </p>
               <button
                 onClick={lab.completeDrawing}
                 disabled={!!(lab.factError || lab.summaryError)}
               >
-                Calculate Pokémon data
+                Finish drawing
               </button>
               <p className="help">
                 Recheck any obscured or uncertain pixels in-game before
@@ -480,10 +493,10 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
               keep slots 4 and 6 empty, then enter Rustboro Trainer’s School.
             </li>
             <li>
-              Draw every black curtain pixel, add the Pokémon information you
-              know, then choose Calculate Pokémon data. Remaining displayed
-              cells count as transparent. Click a black pixel again to erase it,
-              or use Undo to fix a mistake.
+              Record the black and transparent pixels you can verify, add the
+              information you know, then choose Finish drawing. Unexamined cells
+              stay unknown. Click a pixel again to erase it, or use Undo to fix
+              a mistake.
             </li>
             <li>
               Open Data Recovery to see guaranteed digits, remaining

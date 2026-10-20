@@ -37,9 +37,10 @@ export function IVAnalysis({ lab }: { lab: CurtainLab }) {
             {lab.ivEstimates.map((row, i) => (
               <tr key={i}>
                 <th scope="row">{STAT_NAMES[i]}</th>
-                <td title={row.why}>
+                <td title={row.why || row.note}>
                   {row.stats === null ? "—" : valueRanges(row.stats)}
                   {row.stats === null && <small>{row.why}</small>}
+                  {row.note && <small>{row.note}</small>}
                 </td>
                 <td>{valueRanges(row.curtain)}</td>
                 <td

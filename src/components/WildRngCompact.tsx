@@ -1,19 +1,14 @@
 import { useState } from "react";
 import type { CurtainLab } from "../hooks/useCurtainLab";
-import { matchingAreas } from "../core/rng";
+import { defaultRngSettings, rngAppliesToOrigin } from "../core/rng";
 import { WildRngPanel } from "./WildRngPanel";
 export function WildRngCompact({ lab }: { lab: CurtainLab }) {
   const [error, setError] = useState("");
-  const defaults = {
-    seed: 0,
-    minAdvance: 0,
-    maxAdvance: 3600,
-    methods: ["H1", "H2", "H4"] as ("H1" | "H2" | "H4")[],
-    areaId: matchingAreas(lab.facts)[0]?.id ?? "",
-    lead: "none" as const,
-    synchronizeNature: 0,
-  };
-  const settings = lab.rngSettings ?? defaults;
+  const isStatic = lab.origin === "static";
+  const defaults = defaultRngSettings(lab.origin, lab.facts);
+  const settings = rngAppliesToOrigin(lab.rngSettings, lab.origin)
+    ? lab.rngSettings!
+    : defaults;
   const update = (key: "minAdvance" | "maxAdvance", value: string) => {
     try {
       lab.runRngSearch({ ...settings, [key]: Number(value) });
@@ -29,23 +24,26 @@ export function WildRngCompact({ lab }: { lab: CurtainLab }) {
           type="checkbox"
           checked={lab.rngActive}
           disabled={
-            lab.origin !== "wild" || !lab.facts.species || !defaults.areaId
+            (lab.origin !== "wild" && !isStatic) ||
+            !lab.facts.species ||
+            (!isStatic && !defaults.areaId)
           }
           onChange={(e) =>
             e.target.checked ? lab.runRngSearch(settings) : lab.stopRngSearch()
           }
         />
-        Limit wild RNG advances
+        Limit RNG advances
       </label>
       <p className="micro">
-        From the initial seed (default 0). Select Wild encounter and a species
-        to enable.
+        From the initial seed (default 0). Select Wild or Static and a species.
+        {isStatic &&
+          " Static includes starters and ordinary gifts; Method 1 is selected by default."}
       </p>
       <div className="timing-inputs">
         <label>
           Start advance
           <input
-            aria-label="Wild RNG start advance"
+            aria-label="RNG start advance"
             type="number"
             min={0}
             disabled={!lab.rngActive}
@@ -56,7 +54,7 @@ export function WildRngCompact({ lab }: { lab: CurtainLab }) {
         <label>
           End advance
           <input
-            aria-label="Wild RNG end advance"
+            aria-label="RNG end advance"
             type="number"
             min={0}
             disabled={!lab.rngActive}
@@ -75,7 +73,11 @@ export function WildRngCompact({ lab }: { lab: CurtainLab }) {
         </p>
       )}
       <details>
-        <summary>Seed, encounter and lead settings</summary>
+        <summary>
+          {isStatic
+            ? "Seed and generation methods"
+            : "Seed, encounter and lead settings"}
+        </summary>
         <WildRngPanel lab={lab} />
       </details>
     </section>

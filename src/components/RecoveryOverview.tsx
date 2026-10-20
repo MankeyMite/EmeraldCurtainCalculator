@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { CurtainLab } from "../hooks/useCurtainLab";
 import { speciesTraits } from "../core/traits";
 import { allowedValues } from "../core/constraints";
@@ -11,63 +12,87 @@ export function RecoveryOverview({
   lab: CurtainLab;
   onInvestigate: (field: string) => void;
 }) {
-  const imported = lab.mode === "renderer" ? lab.imported : undefined;
-  const masks = workbenchMasks(lab),
-    pids = imported
-      ? [imported.pid]
-      : lab.sidAnalysis
-        ? [...new Set(lab.sidAnalysis.candidates.map((h) => h.pid))]
-        : (lab.sidRngResult?.pidValues ??
-          (lab.rngActive
-            ? lab.wildRng.result?.spreads.map((s) => s.pid)
-            : lab.inference.pidValues));
-  const count = pids ? BigInt(new Set(pids).size) : lab.inference.pidCount;
+  const { imported, masks, pids, count, ivs, sidValues, sidCount, key } =
+    useMemo(() => {
+      const imported = lab.mode === "renderer" ? lab.imported : undefined;
+      const masks = workbenchMasks(lab),
+        pids = imported
+          ? [imported.pid]
+          : lab.sidAnalysis
+            ? [...new Set(lab.sidAnalysis.candidates.map((h) => h.pid))]
+            : (lab.sidRngResult?.pidValues ??
+              (lab.rngActive
+                ? lab.wildRng.result?.spreads.map((s) => s.pid)
+                : lab.inference.pidValues));
+      const count = pids ? BigInt(new Set(pids).size) : lab.inference.pidCount;
+      const ivs = Array.from({ length: 6 }, (_, i) => {
+        if (imported) return [imported.ivs[i]];
+        if (lab.recovery) {
+          return Array.from({ length: 32 }, (_, v) => v).filter((v) => {
+            const requirements = new Map<
+              number,
+              { mask: number; value: number }
+            >();
+            for (let bit = 0; bit < 5; bit++) {
+              const pos = 320 + i * 5 + bit,
+                n = Math.floor(pos / 4),
+                shift = pos % 4,
+                old = requirements.get(n) ?? { mask: 0, value: 0 };
+              old.mask |= 1 << shift;
+              old.value |= ((v >>> bit) & 1) << shift;
+              requirements.set(n, old);
+            }
+            return (
+              lab.ivEstimates[i].combined.includes(v) &&
+              [...requirements].every(([n, r]) =>
+                allowedValues(lab.recovery!.plaintext[n]).some(
+                  (d) => (d & r.mask) === r.value,
+                ),
+              )
+            );
+          });
+        }
+        return lab.ivEstimates[i].combined;
+      });
+      const sidValues = imported
+        ? [imported.sid]
+        : (lab.sidAnalysis?.sidValues ??
+          lab.sidRngResult?.rows.map((r) => r.sid));
+      const sidCount = sidValues?.length ?? Number(lab.sid.count);
+      const key = imported
+        ? Array.from(
+            { length: 8 },
+            (_, n) => 1 << ((imported.key >>> (n * 4)) & 15),
+          )
+        : lab.sidAnalysis
+          ? Array.from({ length: 8 }, (_, n) =>
+              lab.sidAnalysis!.candidates.reduce(
+                (m, h) => m | (1 << ((h.key >>> (n * 4)) & 15)),
+                0,
+              ),
+            )
+          : lab.inference.keyMasks;
+      return { imported, masks, pids, count, ivs, sidValues, sidCount, key };
+    }, [
+      lab.mode,
+      lab.imported,
+      lab.recovery,
+      lab.inference,
+      lab.sidAnalysis,
+      lab.sidRngSettings,
+      lab.sidRngResult,
+      lab.rngActive,
+      lab.wildRng.result,
+      lab.suppliedMasks,
+      lab.ivEstimates,
+      lab.sid.count,
+    ]);
   const pattern = (start: number, length: number) =>
     masks
       .slice(start, start + length)
       .map(digit)
       .reverse()
       .join("");
-  const ivs = Array.from({ length: 6 }, (_, i) => {
-    if (imported) return [imported.ivs[i]];
-    if (lab.recovery) {
-      return Array.from({ length: 32 }, (_, v) => v).filter((v) => {
-        const requirements = new Map<number, { mask: number; value: number }>();
-        for (let bit = 0; bit < 5; bit++) {
-          const pos = 320 + i * 5 + bit,
-            n = Math.floor(pos / 4),
-            shift = pos % 4,
-            old = requirements.get(n) ?? { mask: 0, value: 0 };
-          old.mask |= 1 << shift;
-          old.value |= ((v >>> bit) & 1) << shift;
-          requirements.set(n, old);
-        }
-        return [...requirements].every(([n, r]) =>
-          allowedValues(lab.recovery!.plaintext[n]).some(
-            (d) => (d & r.mask) === r.value,
-          ),
-        );
-      });
-    }
-    return lab.ivEstimates[i].combined;
-  });
-  const sidValues = imported
-    ? [imported.sid]
-    : (lab.sidAnalysis?.sidValues ?? lab.sidRngResult?.rows.map((r) => r.sid));
-  const sidCount = sidValues?.length ?? Number(lab.sid.count);
-  const key = imported
-    ? Array.from(
-        { length: 8 },
-        (_, n) => 1 << ((imported.key >>> (n * 4)) & 15),
-      )
-    : lab.sidAnalysis
-      ? Array.from({ length: 8 }, (_, n) =>
-          lab.sidAnalysis!.candidates.reduce(
-            (m, h) => m | (1 << ((h.key >>> (n * 4)) & 15)),
-            0,
-          ),
-        )
-      : lab.inference.keyMasks;
   return (
     <section className="recovery-overview" aria-label="Live recovery values">
       <h2>
@@ -97,6 +122,12 @@ export function RecoveryOverview({
       </div>
       <div>
         <h3>IVs</h3>
+        {lab.ivEstimates?.some((row) => row.note) && (
+          <small>
+            IV bounds include unknown EVs or nature. Verified EVs/nature narrow
+            them further.
+          </small>
+        )}
         <div className="iv-overview">
           {[0, 1, 2, 4, 5, 3].map((i) => (
             <span key={i}>

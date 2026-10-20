@@ -33,7 +33,7 @@ test("compact workspace follows the supplied split layout with one curtain strip
   assert.match(html, /View and edit remaining fields/);
   assert.match(html, /Assume freshly caught Pokémon/);
   assert.match(html, /New-game SID RNG Filter/);
-  assert.match(html, /Limit wild RNG advances/);
+  assert.match(html, /Limit RNG advances/);
   assert.match(html, /Fixed curtain and byte recovery/);
   assert.match(html, /aria-label="Pixel grid lines" aria-pressed="true"/);
   assert.match(html, />Lines on<\/button>/);
@@ -77,6 +77,7 @@ test("pinned pixel inspector and hex digit agree on byte, nibble and remaining c
     selectedPixel: hit,
     inference: { masks, pidValues: null },
     obs: Array(192).fill(-1),
+    predictions: Array(192).fill(-1),
     memory: Array(96).fill(null),
   } as unknown as CurtainLab;
   const inspector = renderToStaticMarkup(

@@ -4,7 +4,7 @@ New investigations start with origin game Emerald (3), English (2), normal heade
 
 Selecting a species supplies its uppercase English species name as an assumed nickname. Renamed Pokémon require the exact visible capitalization. A manually entered nickname is retained when species changes. Other language selections do not automatically use English species names. Nicknames use the international Gen 3 character map, up to ten characters. A shorter name supplies its first 0xFF end marker and leaves all subsequent memory unknown. No trailing zero or 0xFF padding is invented.
 
-Selecting a move supplies its full PP, including known PP Ups. Manual PP edits stop following that assumed maximum. Clearing a move makes it unknown; explicitly selecting No move sets ID/PP to zero. Summary level and six stats are marked Required for stat-based IV recovery, while the SID/pixel solver remains usable before all stats are entered.
+Selecting a move supplies its full PP, including known PP Ups. Manual PP edits stop following that assumed maximum. Empty move fields show hint text and retain ID 0; selecting Unknown in the suggestions clears the fact. PP maxima display all three PP Ups. PC storage restores PP, so typed PP must equal one of the four restored maxima, and the stage is inferred from that value. Invalid entries get a red outline on blur and an explanation on hover. Entering boosted PP removes a conflicting assumed zero counter; unknown slot counters remain unknown. Summary level and six stats are marked Required for stat-based IV recovery, while the SID/pixel solver remains usable before all stats are entered. Unknown EVs/nature produce safe IV bounds rather than disabling calculation or assuming zero EVs.
 
 ## Header flags and secure Egg flag
 

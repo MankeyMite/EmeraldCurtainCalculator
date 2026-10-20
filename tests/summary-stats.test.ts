@@ -130,7 +130,7 @@ test("summary-stat IV sets intersect real Whismur curtain domains without losing
   ranges.forEach((row, i) => assert.ok(row.combined.includes(p.ivs[i])));
 });
 
-test("missing summary prerequisites remain unknown; conflicts block promoting IVs and ranges never become guesses", () => {
+test("unknown EVs/nature retain safe bounds; missing level stays unknown and ranges never become guesses", () => {
   const facts: KnownFacts = {
     species: 370,
     evs: [0, 0, 0, 0, 0, 0],
@@ -142,9 +142,9 @@ test("missing summary prerequisites remain unknown; conflicts block promoting IV
   const promoted = promoteExactIVs(facts, estimateIVs(facts, summary, curtain));
   assert.deepEqual(promoted.ivs, [29, null, null, null, null, null]);
   assert.equal(facts.ivs, undefined);
-  assert.equal(
-    estimateIVs({ species: 370, nature: 24 }, summary, fullIVs())[0].stats,
-    null,
+  assert.ok(
+    estimateIVs({ species: 370, nature: 24 }, summary, fullIVs())[0].stats
+      ?.length,
   );
   const noNature = estimateIVs(
     { species: 370, evs: facts.evs },
@@ -152,7 +152,7 @@ test("missing summary prerequisites remain unknown; conflicts block promoting IV
     fullIVs(),
   );
   assert.ok(noNature[0].stats); // HP does not require nature.
-  assert.equal(noNature[1].stats, null);
+  assert.ok(noNature[1].stats?.length);
   assert.equal(
     estimateIVs(facts, { stats: summary.stats }, fullIVs())[0].stats,
     null,

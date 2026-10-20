@@ -2,9 +2,16 @@ import { applyFacts, summarizeField, type KnownFacts } from "./constraints";
 import { SUBSTRUCT_POSITIONS } from "./pokemon";
 import { validateFacts } from "./session";
 import { genderPidCases, speciesTraits } from "./traits";
+import { shinyDomains } from "./shiny";
+import { ppUpStages } from "./pp";
+import {
+  checksumMasks,
+  checksumValues,
+  refineChecksumPayload,
+} from "./checksum";
 
-// Exact inference under pixels + explicit facts. No candidates, legality,
-// checksum guesses, or enumeration of 2^32 PIDs enter this module.
+// Domain inference under pixels + explicit facts, with exact-key checksum
+// refinement. No legality guesses or enumeration of 2^32 PIDs enter this module.
 // For each order, known plaintext restricts eight repeating XOR-key nibbles.
 // Digit DP enforces PID%24 and optionally PID%25, with OT choices as weights.
 type Rows = number[]; // low nibble -> bitset of allowed high nibbles (one byte).
@@ -116,6 +123,18 @@ export function knownPlaintext(facts: KnownFacts): number[] {
   bits(32, 32, facts.experience);
   bits(72, 8, facts.friendship);
   bits(64, 8, facts.ppBonuses);
+  if (facts.ppBonuses === undefined)
+    for (let i = 0; i < 4; i++) {
+      const stages = ppUpStages(facts.moves?.[i] ?? undefined, facts.pp?.[i]);
+      if (!stages.length) continue; // Editor flags impossible PP; preserve raw fixtures.
+      const nibble = 16 + Math.floor(i / 2),
+        shift = (i % 2) * 2;
+      plain[nibble] &= Array.from({ length: 16 }, (_, n) => n).reduce(
+        (mask, n) =>
+          stages.includes((n >>> shift) & 3) ? mask | (1 << n) : mask,
+        0,
+      );
+    }
   bits(352, 27, facts.ribbons);
   bits(379, 5, facts.ribbonTail);
   bits(80, 16, facts.growthPadding);
@@ -153,7 +172,11 @@ export function knownPlaintext(facts: KnownFacts): number[] {
   return plain;
 }
 
-export function analyzeConstraints(input: number[], supplied: KnownFacts = {}) {
+function analyzeUnshinyConstraints(
+  input: number[],
+  supplied: KnownFacts = {},
+  orderKeys?: number[][],
+) {
   if (
     input.length !== 160 ||
     input.some((m) => !Number.isInteger(m) || m < 0 || m > 65535)
@@ -162,9 +185,18 @@ export function analyzeConstraints(input: number[], supplied: KnownFacts = {}) {
   const facts = validateFacts(supplied),
     plain = knownPlaintext(facts);
   const baseHeader = applyFacts(input, facts);
+  if (plain.every((m) => m && !(m & (m - 1)))) {
+    const checksum = checksumMasks(
+      checksumValues(plain, baseHeader.slice(56, 60)),
+    );
+    checksum.forEach((m, n) => (baseHeader[56 + n] &= m));
+  }
   const bytes = Array.from({ length: 80 }, blankRows),
     plaintext = Array.from({ length: 48 }, blankRows);
   const keyMasks = Array<number>(8).fill(0),
+    orderKeyCounts = Array.from({ length: 24 }, () =>
+      Array.from({ length: 8 }, () => Array<number>(16).fill(0)),
+    ),
     orders: number[] = [],
     natures = new Set<number>();
   let pidCount = 0n,
@@ -190,7 +222,7 @@ export function analyzeConstraints(input: number[], supplied: KnownFacts = {}) {
     for (let order = 0; order < 24; order++) {
       if (header.some((m) => m === 0)) break;
       const positions = SUBSTRUCT_POSITIONS[order],
-        key = Array<number>(8).fill(0xffff);
+        key = orderKeys?.[order].slice() ?? Array<number>(8).fill(0xffff);
       for (let logical = 0; logical < 96; logical++) {
         const value = plain[logical];
         if (value === 0xffff) continue;
@@ -244,6 +276,33 @@ export function analyzeConstraints(input: number[], supplied: KnownFacts = {}) {
       models.push({ choices, weights, target, modulus });
       pidCount += distinct[target];
       headerPairCount += forward[8][target];
+      // With both trainer IDs fixed, each PID identifies exactly one key.
+      // Count its digit marginals without enumerating millions of PIDs. Keep
+      // orders separate: a changed field may occupy different screen pixels.
+      if (facts.tid !== undefined && facts.sid !== undefined) {
+        const suffix = Array.from(
+          { length: 9 },
+          () => new Float64Array(modulus),
+        );
+        suffix[8][0] = 1;
+        for (let i = 7; i >= 0; i--)
+          for (let r = 0; r < modulus; r++)
+            for (const p of choices[i])
+              suffix[i][(r + p * weights[i]) % modulus] += suffix[i + 1][r];
+        for (let i = 0; i < 8; i++)
+          for (const p of choices[i]) {
+            let count = 0;
+            for (let r = 0; r < modulus; r++)
+              count +=
+                Number(forward[i][r]) *
+                suffix[i + 1][
+                  (((target - r - p * weights[i]) % modulus) + modulus) %
+                    modulus
+                ];
+            const q = allowedValues(header[8 + i])[0];
+            orderKeyCounts[order][i][p ^ q] += count;
+          }
+      }
       if (facts.nature !== undefined) natures.add(facts.nature);
       else
         for (const r of residues(choices, weights600, 600))
@@ -357,18 +416,112 @@ export function analyzeConstraints(input: number[], supplied: KnownFacts = {}) {
     plaintextMasks,
     plaintextByteValues,
     keyMasks,
+    orderKeyCounts,
     orders,
     natures: [...natures].sort((a, b) => a - b),
     pidCount,
     pidValues,
     headerPairCount,
     secureCountsExact,
+    byteCountsExact: true,
     cryptoFacts: plain.some((v) => v !== 0xffff),
     reason:
       headerPairCount > 0n
         ? null
         : "No PID / trainer-ID pair and block order satisfies the pixels and supplied facts. Check painting, gender, ability, stats and trainer information.",
   };
+}
+export function analyzeConstraints(
+  input: number[],
+  supplied: KnownFacts = {},
+  orderKeys?: number[][],
+) {
+  const base = analyzeUnshinyConstraints(input, supplied, orderKeys);
+  // With one key/order, nibble domains describe independent payload variables;
+  // exact checksum support can safely refine the unencrypted checksum pixels.
+  const refineChecksum = <T extends typeof base>(result: T): T => {
+    if (
+      !result.consistent ||
+      result.orders.length !== 1 ||
+      result.keyMasks.some((m) => !m || m & (m - 1))
+    )
+      return result;
+    const values = checksumValues(
+      result.plaintextMasks,
+      result.masks.slice(56, 60),
+    );
+    const masks = result.masks.slice(),
+      cs = checksumMasks(values);
+    cs.forEach((m, n) => (masks[56 + n] &= m));
+    const plaintextMasks = result.masks.slice(56, 60).some((m) => m !== 65535)
+      ? refineChecksumPayload(result.plaintextMasks, cs)
+      : result.plaintextMasks;
+    const positions = SUBSTRUCT_POSITIONS[result.orders[0]];
+    plaintextMasks.forEach((m, n) => {
+      const physical = positions[Math.floor(n / 24)] * 24 + (n % 24);
+      masks[64 + physical] &= xorMask(
+        m,
+        allowedValues(result.keyMasks[physical % 8])[0],
+      );
+    });
+    return {
+      ...result,
+      masks,
+      consistent: !!values.length,
+      plaintextMasks,
+      secureCountsExact:
+        result.secureCountsExact &&
+        (result.masks.slice(56, 60).every((m) => m === 65535) ||
+          plaintextMasks.every((m) => m && !(m & (m - 1)))),
+      byteCountsExact:
+        result.byteCountsExact &&
+        plaintextMasks.every((m) => m && !(m & (m - 1))),
+      plaintextByteValues: Array.from({ length: 48 }, (_, i) =>
+        valuesFromRows(
+          cartesian(plaintextMasks[i * 2], plaintextMasks[i * 2 + 1]),
+        ),
+      ),
+      headerPairCount: values.length ? result.headerPairCount : 0n,
+      pidCount: values.length ? result.pidCount : 0n,
+      pidValues: values.length ? result.pidValues : [],
+      reason: values.length
+        ? result.reason
+        : "Known data and observed pixels cannot satisfy the 16-bit checksum.",
+      byteValues: result.byteValues.map((v, i) =>
+        i >= 28 ? valuesFromRows(cartesian(masks[i * 2], masks[i * 2 + 1])) : v,
+      ),
+    };
+  };
+  if (supplied.shiny === undefined) return refineChecksum(base);
+  const header = applyFacts(input, supplied);
+  for (let n = 56; n < 60; n++) header[n] &= base.masks[n];
+  const refined = shinyDomains(
+    header,
+    knownPlaintext(supplied),
+    supplied,
+    orderKeys,
+  );
+  const values = (masks: number[]) =>
+    Array.from({ length: masks.length / 2 }, (_, i) =>
+      allowedValues(masks[i * 2]).flatMap((lo) =>
+        allowedValues(masks[i * 2 + 1]).map((hi) => lo | (hi << 4)),
+      ),
+    );
+  return refineChecksum({
+    ...base,
+    ...refined,
+    consistent: refined.headerPairCount > 0n,
+    natures: refined.pidValues
+      ? [...new Set(refined.pidValues.map((p) => p % 25))].sort((a, b) => a - b)
+      : base.natures,
+    byteValues: values(refined.masks),
+    plaintextByteValues: values(refined.plaintextMasks),
+    secureCountsExact: false,
+    byteCountsExact: false,
+    reason: refined.headerPairCount
+      ? null
+      : "No compatible PID / trainer-ID pair satisfies the pixels, known facts and shiny status.",
+  });
 }
 export type Inference = ReturnType<typeof analyzeConstraints>;
 export function fieldPossibilities(
@@ -377,15 +530,20 @@ export function fieldPossibilities(
   offset: number,
   size: number,
   independent = false,
+  byteCountsExact = true,
 ) {
   const f = summarizeField(masks, offset, size);
   const count = bytes
     .slice(offset, offset + size)
     .reduce((n, b) => n * BigInt(b.length), 1n);
-  return { ...f, count, countExact: independent || size === 1 || count <= 1n };
+  return {
+    ...f,
+    count,
+    countExact: independent || (size === 1 && byteCountsExact) || count <= 1n,
+  };
 }
 // IVs cross nibble/byte boundaries. These projections deliberately expose an
-// upper bound unless singleton; checksum/legality/cross-field searches are absent.
+// upper bound unless singleton; broader cross-field correlations can remain.
 export function ivPossibilities(result: Inference, index: number): number[] {
   if (!Number.isInteger(index) || index < 0 || index > 5)
     throw Error("Invalid IV index");

@@ -4,15 +4,15 @@
 
 ## Everyday workflow
 
-On **Curtain**, draw only the black pixels. Mirrored edges share the same underlying observations. Click a black pixel again to erase it. After drawing, enter the information you know on the left. Choose **Calculate Pokémon data** when every displayed black pixel is present and your inputs are ready: the remaining displayed cells become observed transparent pixels, then Reconstruction opens.
+Choose Black, Transparent or Unknown to record verified curtain pixels. Mirrored edges share the same observations. Click a pixel again to erase it. Enter known information on the left; guaranteed pixels appear automatically. **Finish drawing** starts background calculation using explicit observations and known facts.
 
-Completing is an explicit assertion that those unmarked cells were transparent. Before completion they stay unknown internally, so unfinished drawings do not fabricate zero bytes. Undo can undo completion as one step.
+Unexamined cells stay unknown after finishing. Automatic predictions already constrain calculations through their underlying facts; you do not need to redraw them. Finishing does not confirm them as independent observations.
 
-The default view shows the main 80-byte record at 20× zoom. Its first editable row begins at PID byte 0. The extra top/bottom rows from slots 4/6 are hidden and remain unknown. Enable **Show neighboring slot rows** under More options if they matter; completing then also fills their displayed blanks.
+The default view shows the main 80-byte record at 20× zoom. Its first editable row begins at PID byte 0. The extra top/bottom rows from slots 4/6 are hidden and remain unknown. Enable **Show neighboring slot rows** under More options if they matter; record only pixels you verify.
 
 ## Completing an accurate drawing
 
-There is one drawing tool: black pixels. Recheck any area covered by a sprite or menu before choosing **Calculate Pokémon data**. This tells the solver that every remaining displayed cell was transparent. If the known information conflicts with the drawing, compare both with the game, correct mistakes and complete the drawing again.
+Choose Black, Transparent or Unknown to record only pixels verified in-game. Known facts automatically draw guaranteed pixels and already constrain calculations. Painting freezes predictions and pauses background deduction until **Finish drawing**. Unexamined pixels remain unknown; completing a drawing does not confirm automatic predictions. New experiments ask only about highlighted discriminating pixels and update candidates after each verified answer.
 
 Black permits nibble values 1–F; transparent establishes 0. Before completion, unmarked cells remain unknown internally and permit 0–F. Click or drag to draw black pixels; click a black pixel again to erase it. The first tile pixel is the low nibble of its byte. Hexadecimal text shows the high nibble first.
 
@@ -40,7 +40,7 @@ All guarantees are conditional on correct mapping, painting and supplied facts. 
 - Complete PID sets of at most 100 can be selected in the same field that accepts typed guesses. Larger lists stay hidden; fixed digits are shown in numeric PID order below the field. A short list does not establish Pokémon identity.
 - Decrypted domains are in a separate plaintext section. The main 80-byte hex grid always represents encrypted storage bytes.
 
-Checksum propagation, legality, EV totals, automatic level-from-EXP inference and inferred names are not implemented. Supplied level and summary stats are used by the IV calculator. IV inputs constrain exactly their five packed bits; projected output sets can still be upper bounds because some correlations are lost. See [trait/stat constraints](TRAIT_STATS_CONSTRAINTS.md).
+Checksum propagation now refines exact-key/order payloads and small joint projections; exact experiment deltas also link snapshot checksums. Automatic pixels remain separate from observations. Optional shiny status defaults to Unknown and constrains the key without requiring PID/SID. Broad projections can still be upper bounds. Legality, EV-total recovery and automatic level-from-EXP inference remain unsupported. Supplied level/summary stats feed the IV calculator. See [the updated model and limits](SMART_DEDUCTION.md) and [trait/stat constraints](TRAIT_STATS_CONSTRAINTS.md).
 
 ## Testing guesses without assuming them
 

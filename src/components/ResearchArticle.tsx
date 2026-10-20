@@ -587,6 +587,13 @@ seed = (Math.imul(seed, 0x41C64E6D) + 0x6073) >>> 0;`}</pre>
         <details>
           <summary>Implemented encounter scope and validation</summary>
           <p>
+            The separate Static option groups fixed encounters, starters and
+            ordinary gifts. It searches Method 1 or Method 4 with the same seed
+            and advance controls, without wild encounter-area or lead rolls.
+            Special gifts, events, trades, roamers and breeding need other
+            models.
+          </p>
+          <p>
             Supported tables include ordinary grass/cave, surfing, rods and Rock
             Smash. Supported lead models are no generation effect, Synchronize,
             Cute Charm and Pressure/Hustle/Vital Spirit. Safari/Pokéblocks,

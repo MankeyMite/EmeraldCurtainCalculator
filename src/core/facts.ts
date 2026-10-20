@@ -2,6 +2,7 @@ import type { KnownFacts } from "./constraints";
 import { validateFacts } from "./session";
 import captureDefaults from "../data/capture-defaults.json";
 import species from "../data/species.json";
+import { maxPp, ppUpStages } from "./pp";
 
 export const speciesNickname = (id: number | undefined) =>
   species.find((s) => s.id === id)?.name.toUpperCase();
@@ -125,9 +126,7 @@ export function moveMaxPp(
   move: number | undefined,
   ups = 0,
 ): number | undefined {
-  if (move === undefined) return undefined;
-  const pp = (captureDefaults.pp as Record<string, number>)[move];
-  return pp === undefined ? undefined : pp + Math.floor(pp / 5) * ups;
+  return maxPp(move, ups);
 }
 export function refreshCaptureDefaults(
   facts: KnownFacts,
@@ -188,6 +187,17 @@ export function refreshCaptureDefaults(
       if (pp === undefined) assumed.delete(`pp_${i}`);
       else assumed.add(`pp_${i}`);
     }
+  if (/^pp_[0-3]$/.test(edited) && assumed.has("ppBonuses")) {
+    const i = Number(edited.at(-1));
+    const stages = ppUpStages(next.moves?.[i] ?? undefined, next.pp?.[i]);
+    if (
+      stages.length &&
+      !stages.includes(((next.ppBonuses ?? 0) >>> (i * 2)) & 3)
+    ) {
+      delete next.ppBonuses;
+      assumed.delete("ppBonuses");
+    }
+  }
   next.assumed = [...assumed];
   return next;
 }
@@ -217,6 +227,12 @@ export function draftToFacts(
       continue;
     }
     if (!value.trim() || /^(ev|iv|contest|move|pp)_/.test(key)) continue;
+    if (key === "shiny") {
+      if (value !== "true" && value !== "false")
+        throw Error("Invalid shiny status");
+      next.shiny = value === "true";
+      continue;
+    }
     next[key] =
       key === "gender" || key === "otGender" || key === "notes"
         ? value

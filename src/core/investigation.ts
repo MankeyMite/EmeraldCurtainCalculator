@@ -13,9 +13,7 @@ import type { ActionDescription } from "./controlledExperiments";
 export const ORIGINS = [
   ["unknown", "Unknown / other origin"],
   ["wild", "Wild encounter"],
-  ["static", "Static encounter"],
-  ["starter", "Starter Pokémon"],
-  ["gift", "Gift Pokémon"],
+  ["static", "Static (encounters, starters and gifts)"],
   ["egg", "Egg / hatched Pokémon"],
   ["trade", "In-game trade"],
   ["event", "Event / Mystery Gift"],
@@ -36,6 +34,8 @@ export type Snapshot = {
     changed?: boolean;
     candidatesBefore?: number;
     action?: ActionDescription;
+    actionId?: string;
+    mode?: "pixels"; // Targeted evidence; only explicitly answered cells are stored.
   };
 };
 export type Investigation = {
@@ -54,6 +54,7 @@ export const IDENTITY_KEYS = new Set([
   "pid",
   "tid",
   "sid",
+  "shiny",
   "otName",
   "otGender",
   "species",
@@ -91,6 +92,8 @@ export function newSnapshot(
 }
 export function loadInvestigation(text: string): Investigation {
   const value = JSON.parse(text);
+  if (value?.origin === "starter" || value?.origin === "gift")
+    value.origin = "static";
   if (value?.format === "emerald-curtain-observations") {
     const old = loadSession(text),
       { identity, mutable } = splitFacts(old.knownFacts);
@@ -164,6 +167,11 @@ export function loadInvestigation(text: string): Investigation {
     if (s.itemTest !== undefined) {
       const test = s.itemTest;
       if (
+        test.actionId !== undefined &&
+        !/^(moves-[0-3]-[0-3]|rare-candy|vitamin-[0-5])$/.test(test.actionId)
+      )
+        throw Error("Invalid experiment action ID");
+      if (
         !test ||
         typeof test.sourceId !== "string" ||
         test.sourceId === s.id ||
@@ -172,9 +180,14 @@ export function loadInvestigation(text: string): Investigation {
         (test.candidatesBefore !== undefined &&
           (!Number.isSafeInteger(test.candidatesBefore) ||
             test.candidatesBefore < 0)) ||
-        (test.phase === "question" && test.changed !== undefined) ||
-        (test.phase === "editing" && test.changed !== true) ||
-        (test.phase === "recorded" && test.changed === undefined)
+        (test.mode !== undefined && test.mode !== "pixels") ||
+        (test.mode === "pixels" &&
+          (test.phase === "question" || !s.targets?.length)) ||
+        (!test.mode &&
+          test.phase === "question" &&
+          test.changed !== undefined) ||
+        (!test.mode && test.phase === "editing" && test.changed !== true) ||
+        (!test.mode && test.phase === "recorded" && test.changed === undefined)
       )
         throw Error("Invalid item test");
       if (

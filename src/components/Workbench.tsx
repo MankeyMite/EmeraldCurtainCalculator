@@ -5,7 +5,7 @@ import { PixelGrid } from "./PixelGrid";
 import { PixelInspector } from "./PixelInspector";
 import { GroupedHex } from "./GroupedHex";
 import { RecoveryOverview } from "./RecoveryOverview";
-import { stripLayout } from "./WorkbenchData";
+import { stripLayout, recordStripLayout, hitForNibble } from "./WorkbenchData";
 import { InvestigationResults, ObservationManager } from "./Investigator";
 import { ItemTestControls } from "./ItemTestControls";
 import { SidRngPanel } from "./SidRngPanel";
@@ -15,6 +15,7 @@ import { RecordInput } from "./RecordInput";
 import { ResearchArticle } from "./ResearchArticle";
 import { RESEARCH_EXAMPLES } from "../core/examples";
 import { isRecorded } from "../core/itemTests";
+import { useMobileLayout } from "../hooks/useMobileLayout";
 export function Workbench({
   lab,
   onClassic,
@@ -26,22 +27,51 @@ export function Workbench({
     [section, setSection] = useState("items"),
     [field, setField] = useState("hidden data");
   const [paint, setPaint] = useState(true),
-    [brush, setBrush] = useState<-1 | 0 | 1>(1);
+    [brush, setBrush] = useState<-1 | 0 | 1>(1),
+    [showCurtain, setShowCurtain] = useState(false),
+    [drawingOptions, setDrawingOptions] = useState(false),
+    [largeCurtain, setLargeCurtain] = useState(false),
+    [recoveryOpen, setRecoveryOpen] = useState(false);
+  const mobile = useMobileLayout(),
+    curtainOpen = mobile && showCurtain;
   const scroll = useRef<HTMLDivElement>(null),
-    layout = stripLayout(),
+    locateTarget = useRef<number | null>(null),
+    layout = mobile && !largeCurtain ? recordStripLayout() : stripLayout(),
     highlight = lab.hover ?? lab.selectedPixel;
   const open = (next: string, focus = "hidden data") => {
+    setShowCurtain(false);
     setTab("investigate");
     setSection(next);
     setField(focus);
   };
   useEffect(() => {
     scroll.current?.scrollTo({ top: 0 });
-  }, [tab, section]);
+    if (mobile) window.scrollTo({ top: 0 });
+    if (curtainOpen && locateTarget.current !== null) {
+      const index = locateTarget.current;
+      locateTarget.current = null;
+      if (!largeCurtain) return;
+      const frame = requestAnimationFrame(() => {
+        const hit = hitForNibble(index),
+          rect = lab.canvasRef.current?.getBoundingClientRect();
+        if (!hit || !rect) return;
+        const y =
+          rect.top +
+          window.scrollY +
+          (rect.height * (hit.displayY - layout.bounds.y + 0.5)) /
+            layout.bounds.h;
+        window.scrollTo({ top: Math.max(0, y - window.innerHeight * 0.55) });
+      });
+      return () => cancelAnimationFrame(frame);
+    }
+  }, [tab, section, curtainOpen, mobile, largeCurtain]);
+  useEffect(() => {
+    if (mobile) setPaint(false);
+  }, [mobile]);
   useEffect(() => {
     if (lab.pendingItemTest) {
       open("items");
-      setPaint(true);
+      setPaint(!mobile);
     }
   }, [lab.pendingItemTest?.id]);
   const finish = () => {
@@ -49,16 +79,20 @@ export function Workbench({
   };
   const newPokemon = () => {
     lab.resetSolver();
+    setShowCurtain(false);
     setTab("info");
     setSection("items");
     setField("hidden data");
-    setPaint(true);
+    setPaint(!mobile);
     setBrush(1);
     scroll.current?.scrollTo({ top: 0 });
   };
   return (
     <main
       className="workbench"
+      data-curtain-view={
+        curtainOpen ? (largeCurtain ? "large" : "compact") : undefined
+      }
       aria-label="Emerald Curtain Investigator workspace"
     >
       <section
@@ -95,6 +129,7 @@ export function Workbench({
         >
           {[
             ["info", "Pokémon info"],
+            ...(mobile ? [["curtain", "Curtain"]] : []),
             ["investigate", "Investigate"],
             ["about", "About"],
           ].map(([id, name]) => (
@@ -102,37 +137,55 @@ export function Workbench({
               role="tab"
               key={id}
               id={`work-tab-${id}`}
-              aria-selected={tab === id}
+              aria-selected={
+                id === "curtain" ? curtainOpen : !curtainOpen && tab === id
+              }
               aria-controls={`work-panel-${id}`}
-              tabIndex={tab === id ? 0 : -1}
+              tabIndex={
+                (id === "curtain" ? curtainOpen : !curtainOpen && tab === id)
+                  ? 0
+                  : -1
+              }
               onKeyDown={(e) => {
-                const ids = ["info", "investigate", "about"],
+                const ids = mobile
+                    ? ["info", "curtain", "investigate", "about"]
+                    : ["info", "investigate", "about"],
                   index = ids.indexOf(id);
                 const next =
                   e.key === "ArrowRight"
-                    ? (index + 1) % 3
+                    ? (index + 1) % ids.length
                     : e.key === "ArrowLeft"
-                      ? (index + 2) % 3
+                      ? (index + ids.length - 1) % ids.length
                       : e.key === "Home"
                         ? 0
                         : e.key === "End"
-                          ? 2
+                          ? ids.length - 1
                           : -1;
                 if (next < 0) return;
                 e.preventDefault();
-                setTab(ids[next]);
+                setShowCurtain(ids[next] === "curtain");
+                if (ids[next] !== "curtain") setTab(ids[next]);
                 document.getElementById(`work-tab-${ids[next]}`)?.focus();
               }}
-              onClick={() => setTab(id)}
+              onClick={() => {
+                setShowCurtain(id === "curtain");
+                if (id !== "curtain") setTab(id);
+              }}
             >
               {name}
             </button>
           ))}
         </nav>
-        <div className="left-scroll" ref={scroll}>
-          {(lab.error || lab.factError || lab.summaryError) && (
+        <div className="left-scroll" ref={scroll} hidden={curtainOpen}>
+          {(lab.error ||
+            lab.factError ||
+            lab.summaryError ||
+            lab.analysisError) && (
             <p className="alert error" role="alert">
-              {lab.error || lab.factError || lab.summaryError}
+              {lab.error ||
+                lab.factError ||
+                lab.summaryError ||
+                lab.analysisError}
               <button onClick={() => lab.setError("")}>Dismiss</button>
             </p>
           )}
@@ -204,7 +257,7 @@ export function Workbench({
                   ["items", "Experiments"],
                   ["sid", "SID Finder"],
                   ["data", "Data Recovery"],
-                  ["wild", "Wild RNG"],
+                  ["wild", "Encounter RNG"],
                 ].map(([id, name]) => (
                   <button
                     key={id}
@@ -216,8 +269,8 @@ export function Workbench({
                 ))}
               </nav>
               <div className="investigation-goal">
-                Investigating <strong>{field}</strong>. Every result uses saved
-                observations and active assumptions.
+                Investigating <strong>{field}</strong>. Every result uses
+                verified observations and active assumptions.
               </div>
               <ObservationManager lab={lab} />
               <ItemTestControls
@@ -226,8 +279,13 @@ export function Workbench({
                   lab.setMode("solver");
                   setPaint(true);
                   open("items", field);
+                  if (mobile) setShowCurtain(true);
                 }}
                 openResults={() => open("items", field)}
+                locatePixel={(index) => {
+                  if (mobile) locateTarget.current = index;
+                  setShowCurtain(true);
+                }}
               />
               {section === "sid" && <SidRngPanel lab={lab} />}
               {section === "data" && (
@@ -242,8 +300,8 @@ export function Workbench({
               {section === "wild" && (
                 <>
                   <p>
-                    Select Wild encounter under Pokémon info to use H1/H2/H4
-                    seed and advance searching.
+                    Select Wild or Static under Pokémon info to use the
+                    appropriate seed and advance search.
                   </p>
                   <WildRngPanel lab={lab} />
                 </>
@@ -266,9 +324,9 @@ export function Workbench({
               <details className="workspace-help">
                 <summary>Using this workspace</summary>
                 <p>
-                  Enter known Pokémon information on the left. The fixed right
-                  panel shows your curtain, remaining values and the 80-byte
-                  encrypted record. Unknown values stay unknown.
+                  Enter known Pokémon information under Pokémon info. On phones,
+                  open Curtain for drawing and recovered values. Larger screens
+                  keep the curtain beside the form. Unknown values stay unknown.
                 </p>
                 <p>
                   In English Emerald, place this Pokémon in Box 8 slot 5, keep
@@ -279,7 +337,8 @@ export function Workbench({
                 <p>
                   Click a hex digit or curtain pixel to pin their
                   correspondence. Inspector mode selects without painting.
-                  Predictions are outlines, not observations.
+                  Automatic pixels have dashed borders. Only pixels you record
+                  are observations.
                 </p>
                 <p>
                   Each experiment starts from the original drawing, saves its
@@ -360,10 +419,20 @@ export function Workbench({
         <footer className="workspace-footer">
           {lab.saveStatus} · {lab.currentSnapshots.filter(isRecorded).length}{" "}
           saved observations
+          {lab.drawingInProgress
+            ? " · Drawing: predictions paused until Finish drawing"
+            : lab.analysisBusy
+              ? " · Calculating in background…"
+              : ""}
         </footer>
       </section>
       <section
+        id="work-panel-curtain"
         className="visual-workspace"
+        data-curtain-size={mobile && !largeCurtain ? "compact" : "large"}
+        role={mobile ? "tabpanel" : undefined}
+        aria-labelledby={mobile ? "work-tab-curtain" : undefined}
+        hidden={mobile && !curtainOpen}
         aria-label="Fixed curtain and byte recovery"
       >
         <div className="visual-toolbar">
@@ -376,13 +445,13 @@ export function Workbench({
                   ? "Original curtain baseline"
                   : lab.activeSnapshot.name}
           </strong>
-          <div>
+          <div className="toolbar-primary">
             <button
               disabled={lab.mode === "renderer"}
               aria-pressed={paint}
               onClick={() => setPaint(!paint)}
             >
-              {paint ? "Draw" : "Inspect"}
+              {mobile ? "Draw" : paint ? "Draw" : "Inspect"}
             </button>
             <select
               aria-label="Pixel paint value"
@@ -394,25 +463,79 @@ export function Workbench({
               <option value={-1}>Unknown</option>
             </select>
             <button
-              aria-label="Pixel grid lines"
-              aria-pressed={lab.grid}
-              title="Show or hide the pixel helper lines"
-              onClick={() => lab.setGrid(!lab.grid)}
+              className={`finish-drawing${lab.drawingInProgress ? " drawing-pending" : ""}`}
+              disabled={lab.mode === "renderer"}
+              onClick={finish}
             >
-              {lab.grid ? "Lines on" : "Lines off"}
-            </button>
-            <button onClick={lab.undoStroke} disabled={!lab.canUndo}>
-              Undo
-            </button>
-            <button onClick={lab.redoStroke} disabled={!lab.canRedo}>
-              Redo
-            </button>
-            <button disabled={lab.mode === "renderer"} onClick={finish}>
-              {lab.pendingItemTest ? "Save test drawing" : "Calculate"}
+              Finish drawing
             </button>
           </div>
+          <details
+            className="drawing-options"
+            open={!mobile || drawingOptions}
+            onToggle={(e) => {
+              if (mobile) setDrawingOptions(e.currentTarget.open);
+            }}
+          >
+            <summary>Drawing options</summary>
+            <div className="toolbar-secondary">
+              {mobile && (
+                <button
+                  aria-pressed={largeCurtain}
+                  onClick={() => {
+                    setLargeCurtain(!largeCurtain);
+                    if (largeCurtain) {
+                      setDrawingOptions(false);
+                      setRecoveryOpen(false);
+                    }
+                  }}
+                >
+                  {largeCurtain
+                    ? "Fit curtain, inspector & bytes"
+                    : "Larger drawing & byte targets"}
+                </button>
+              )}
+              <button
+                aria-label="Pixel grid lines"
+                aria-pressed={lab.grid}
+                title="Show or hide the pixel helper lines"
+                onClick={() => lab.setGrid(!lab.grid)}
+              >
+                {lab.grid ? "Lines on" : "Lines off"}
+              </button>
+              <button onClick={lab.undoStroke} disabled={!lab.canUndo}>
+                Undo
+              </button>
+              <button onClick={lab.redoStroke} disabled={!lab.canRedo}>
+                Redo
+              </button>
+              <button
+                aria-pressed={lab.showPredictions}
+                title="Known facts and deductions already constrain the solver. This toggles their pixel display; you do not need to paint them again."
+                onClick={() => lab.setShowPredictions(!lab.showPredictions)}
+              >
+                Auto pixels {lab.showPredictions ? "on" : "off"}
+              </button>
+            </div>
+          </details>
         </div>
-        <div className="curtain-and-results">
+        <div className="mobile-only drawing-help">
+          {lab.pendingItemTest && (
+            <button onClick={() => open("items", field)}>
+              Back to experiment questions
+            </button>
+          )}
+          <p role="status" className="drawing-guidance">
+            {lab.drawingInProgress
+              ? "Predictions paused until Finish drawing."
+              : lab.analysisBusy
+                ? "Calculating in background…"
+                : paint
+                  ? "Draw is on: tap or drag to record pixels. Tap Draw again to inspect and scroll."
+                  : "Inspect: swipe to scroll, or tap a pixel for details. Choose Draw to record observations."}
+          </p>
+        </div>
+        <div className="curtain-workspace">
           <div className="curtain-viewport">
             <PixelGrid
               key={lab.activeId}
@@ -424,13 +547,19 @@ export function Workbench({
               annotated={false}
               gameBackground={lab.gameBackground}
               mainOnly={!lab.showNeighbors}
-              solver={lab.mode === "solver" && paint}
+              solver={lab.mode === "solver"}
+              editable={paint}
               memory={lab.memory}
               observations={lab.obs}
+              referenceObservations={lab.referenceObservations}
               tool={brush}
               contradictions={lab.conflicts}
               predictions={lab.showPredictions ? lab.predictions : undefined}
-              targets={lab.activeSnapshot.targets}
+              targets={
+                lab.pendingItemTest?.itemTest?.mode === "pixels"
+                  ? lab.experimentTargets
+                  : lab.activeSnapshot.targets
+              }
               highlightedNibble={highlight?.nibble}
               onSelect={lab.setSelectedPixel}
               onHover={lab.setHover}
@@ -439,15 +568,24 @@ export function Workbench({
               onEnd={lab.finish}
             />
           </div>
+          <PixelInspector lab={lab} />
+          <GroupedHex lab={lab} />
+        </div>
+        <details
+          className="recovery-details"
+          open={!mobile || recoveryOpen}
+          onToggle={(e) => {
+            if (mobile) setRecoveryOpen(e.currentTarget.open);
+          }}
+        >
+          <summary>Recovered values</summary>
           <RecoveryOverview
             lab={lab}
             onInvestigate={(name) =>
               open(name === "SID" ? "sid" : "items", name)
             }
           />
-        </div>
-        <PixelInspector lab={lab} />
-        <GroupedHex lab={lab} />
+        </details>
       </section>
       <input
         ref={lab.sessionRef}

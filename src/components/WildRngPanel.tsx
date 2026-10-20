@@ -6,7 +6,9 @@ import {
   validateRngSettings,
   WILD_AREAS,
   WILD_METHODS,
-  type WildMethod,
+  STATIC_METHODS,
+  type RngMethod,
+  rngAppliesToOrigin,
   type WildLead,
 } from "../core/rng";
 import { hex, NATURES } from "../core/pokemon";
@@ -22,17 +24,27 @@ const kinds: Record<string, string> = {
 };
 const statNames = ["HP", "Attack", "Defense", "Speed", "Sp. Atk", "Sp. Def"];
 export function WildRngPanel({ lab }: { lab: CurtainLab }) {
+  const isStatic = lab.origin === "static";
+  const availableMethods = isStatic ? STATIC_METHODS : WILD_METHODS;
   const [seed, setSeed] = useState("0"),
     [min, setMin] = useState("0"),
-    [max, setMax] = useState("99999");
+    [max, setMax] = useState("3600");
   const [areaId, setAreaId] = useState(""),
-    [methods, setMethods] = useState<WildMethod[]>([...WILD_METHODS]);
+    [methods, setMethods] = useState<RngMethod[]>(
+      isStatic ? ["Method1"] : [...WILD_METHODS],
+    );
   const [lead, setLead] = useState<WildLead>("none"),
     [sync, setSync] = useState(0),
     [error, setError] = useState("");
   const saved = JSON.stringify(lab.rngSettings);
   useEffect(() => {
     const settings = lab.rngSettings;
+    if (!rngAppliesToOrigin(settings, lab.origin)) {
+      setMethods(isStatic ? ["Method1"] : [...WILD_METHODS]);
+      setAreaId("");
+      setLead("none");
+      return;
+    }
     if (!settings) return;
     setSeed(String(settings.seed));
     setMin(String(settings.minAdvance));
@@ -41,10 +53,13 @@ export function WildRngPanel({ lab }: { lab: CurtainLab }) {
     setMethods(settings.methods);
     setLead(settings.lead);
     setSync(settings.synchronizeNature);
-  }, [saved]);
-  if (lab.origin !== "wild") return null;
+  }, [saved, lab.origin]);
+  if (lab.origin !== "wild" && !isStatic) return null;
   const areas = matchingAreas(lab.facts);
   const chosenArea = areaId || areas[0]?.id || "";
+  const activeSettings = rngAppliesToOrigin(lab.rngSettings, lab.origin)
+    ? lab.rngSettings
+    : undefined;
   const result = lab.wildRng.result;
   const pids = [...new Set(result?.spreads.map((s) => s.pid) ?? [])];
   const selected = WILD_AREAS.find((a) => a.id === lab.rngSettings?.areaId);
@@ -53,9 +68,9 @@ export function WildRngPanel({ lab }: { lab: CurtainLab }) {
   return (
     <section
       className="wild-rng-panel investigation-card"
-      aria-label="Wild encounter RNG search"
+      aria-label={isStatic ? "Static RNG search" : "Wild encounter RNG search"}
     >
-      <h3>Find PID and IVs from wild RNG</h3>
+      <h3>Find PID and IVs from {isStatic ? "static" : "wild"} RNG</h3>
       <p>
         Search your seed and advance range using known traits, summary stats and
         saved curtain drawings. A known PID is not required. Seed 0 is prefilled
@@ -67,12 +82,13 @@ export function WildRngPanel({ lab }: { lab: CurtainLab }) {
           try {
             lab.runRngSearch(
               validateRngSettings({
+                kind: isStatic ? "static" : "wild",
                 seed: parseRngNumber(seed),
                 minAdvance: parseRngNumber(min),
                 maxAdvance: parseRngNumber(max),
-                areaId: chosenArea,
+                areaId: isStatic ? "" : chosenArea,
                 methods,
-                lead,
+                lead: isStatic ? "none" : lead,
                 synchronizeNature: sync,
               }),
             );
@@ -108,31 +124,33 @@ export function WildRngPanel({ lab }: { lab: CurtainLab }) {
             />
           </label>
         </div>
-        <label>
-          Encounter area
-          <select
-            value={chosenArea}
-            onChange={(e) => setAreaId(e.target.value)}
-          >
-            {!areas.length && (
-              <option value="">No matching encounter area</option>
-            )}
-            {!!areaId && !areas.some((a) => a.id === areaId) && (
-              <option value={areaId}>
-                {WILD_AREAS.find((a) => a.id === areaId)?.name} (check known met
-                data)
-              </option>
-            )}
-            {areas.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.name} · {kinds[a.kind]}
-              </option>
-            ))}
-          </select>
-        </label>
+        {!isStatic && (
+          <label>
+            Encounter area
+            <select
+              value={chosenArea}
+              onChange={(e) => setAreaId(e.target.value)}
+            >
+              {!areas.length && (
+                <option value="">No matching encounter area</option>
+              )}
+              {!!areaId && !areas.some((a) => a.id === areaId) && (
+                <option value={areaId}>
+                  {WILD_AREAS.find((a) => a.id === areaId)?.name} (check known
+                  met data)
+                </option>
+              )}
+              {areas.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.name} · {kinds[a.kind]}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
         <fieldset className="rng-methods">
-          <legend>Wild methods to search</legend>
-          {WILD_METHODS.map((method) => (
+          <legend>{isStatic ? "Static" : "Wild"} methods to search</legend>
+          {availableMethods.map((method) => (
             <label key={method}>
               <input
                 type="checkbox"
@@ -145,62 +163,78 @@ export function WildRngPanel({ lab }: { lab: CurtainLab }) {
                   )
                 }
               />
-              {method}
+              {method.replace("Method", "Method ")}
             </label>
           ))}
         </fieldset>
-        <details>
-          <summary>Lead ability at the encounter</summary>
-          <label>
-            Lead effect
-            <select
-              value={lead}
-              onChange={(e) => setLead(e.target.value as WildLead)}
-            >
-              <option value="none">
-                No generation effect (e.g. starter's Blaze / Torrent / Overgrow)
-              </option>
-              <option value="synchronize">Synchronize</option>
-              <option value="cuteCharmM">Cute Charm · male lead</option>
-              <option value="cuteCharmF">Cute Charm · female lead</option>
-              <option value="pressure">Pressure / Hustle / Vital Spirit</option>
-            </select>
-          </label>
-          {lead === "synchronize" && (
+        {!isStatic && (
+          <details>
+            <summary>Lead ability at the encounter</summary>
             <label>
-              Lead's nature
+              Lead effect
               <select
-                value={sync}
-                onChange={(e) => setSync(Number(e.target.value))}
+                value={lead}
+                onChange={(e) => setLead(e.target.value as WildLead)}
               >
-                {NATURES.map((name, i) => (
-                  <option key={i} value={i}>
-                    {name}
-                  </option>
-                ))}
+                <option value="none">
+                  No generation effect (e.g. starter's Blaze / Torrent /
+                  Overgrow)
+                </option>
+                <option value="synchronize">Synchronize</option>
+                <option value="cuteCharmM">Cute Charm · male lead</option>
+                <option value="cuteCharmF">Cute Charm · female lead</option>
+                <option value="pressure">
+                  Pressure / Hustle / Vital Spirit
+                </option>
               </select>
             </label>
-          )}
+            {lead === "synchronize" && (
+              <label>
+                Lead's nature
+                <select
+                  value={sync}
+                  onChange={(e) => setSync(Number(e.target.value))}
+                >
+                  {NATURES.map((name, i) => (
+                    <option key={i} value={i}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            <p className="help">
+              Use the lead and species as they were when caught. Static, Magnet
+              Pull, Intimidate/Keen Eye extra calls, Safari Pokéblocks, Route
+              119 Feebas tiles and special encounters are outside this search.
+            </p>
+          </details>
+        )}
+        {isStatic && (
           <p className="help">
-            Use the lead and species as they were when caught. Static, Magnet
-            Pull, Intimidate/Keen Eye extra calls, Safari Pokéblocks, Route 119
-            Feebas tiles and special encounters are outside this search.
+            Static includes fixed encounters, starters and ordinary gifts using
+            Emerald random PID/IV generation. Special fixed-PID gifts, events,
+            trades, roamers and breeding require their own models.
           </p>
-        </details>
+        )}
         <p className="help">
           Both advance bounds are included; at most 1,000,000 advances per
-          search. Advance 0 is the seed before the encounter-slot call (before
-          the encounter check for Rock Smash). These are RNG calls, not elapsed
-          seconds.
+          search.{" "}
+          {isStatic
+            ? "Advance 0 is the seed immediately before the first PID call."
+            : "Advance 0 is the seed before the encounter-slot call (before the encounter check for Rock Smash)."}{" "}
+          These are RNG calls, not elapsed seconds.
         </p>
         <div className="inline-buttons">
           <button
-            disabled={!eligible || !chosenArea || !methods.length}
+            disabled={
+              !eligible || (!isStatic && !chosenArea) || !methods.length
+            }
             type="submit"
           >
             Search and use matching spreads
           </button>
-          {lab.rngSettings && (
+          {activeSettings && (
             <button type="button" onClick={lab.stopRngSearch}>
               {lab.wildRng.busy
                 ? "Cancel RNG search"
@@ -216,14 +250,24 @@ export function WildRngPanel({ lab }: { lab: CurtainLab }) {
         )}
         {error && <p role="alert">{error}</p>}
       </form>
-      {lab.rngSettings && (
+      {activeSettings && (
         <p className="help">
-          Active scope: seed 0x{hex(lab.rngSettings.seed, 8)}, advances{" "}
-          {lab.rngSettings.minAdvance.toLocaleString()}–
-          {lab.rngSettings.maxAdvance.toLocaleString()},{" "}
-          {lab.rngSettings.methods.join(" / ")}, {selected?.name} ·{" "}
-          {kinds[selected?.kind ?? ""]}, lead {lab.rngSettings.lead}. This scope
-          is saved with your investigation.
+          Active scope: seed 0x{hex(activeSettings.seed, 8)}, advances{" "}
+          {activeSettings.minAdvance.toLocaleString()}–
+          {activeSettings.maxAdvance.toLocaleString()},{" "}
+          {activeSettings.methods
+            .map((m) => m.replace("Method", "Method "))
+            .join(" / ")}
+          ,{" "}
+          {isStatic ? (
+            "static generation"
+          ) : (
+            <>
+              {selected?.name} · {kinds[selected?.kind ?? ""]}, lead{" "}
+              {activeSettings.lead}
+            </>
+          )}
+          . This scope is saved with your investigation.
         </p>
       )}
       {lab.wildRng.busy && (
@@ -255,9 +299,9 @@ export function WildRngPanel({ lab }: { lab: CurtainLab }) {
           </p>
           {!result.spreads.length ? (
             <p>
-              No match in this scope. Widen the range or check the seed, lead,
-              area, known facts and drawing. The search has not chosen a
-              substitute PID.
+              No match in this scope. Widen the range or check the seed,
+              generation settings, known facts and drawing. The search has not
+              chosen a substitute PID.
             </p>
           ) : (
             <>

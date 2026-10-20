@@ -26,6 +26,7 @@ export function RecoveredFields({
       offset,
       size,
       r.secureCountsExact,
+      r.byteCountsExact,
     );
   const format = (f: ReturnType<typeof numeric>) =>
     f.count === 0n

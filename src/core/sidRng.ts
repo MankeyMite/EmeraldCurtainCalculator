@@ -11,7 +11,7 @@ import { genderPidCases } from "./traits";
 import { xorMask } from "./cryptoConstraints";
 import { compileHypothesisValidator, makeHypothesis, solveSids } from "./sid";
 import type { Snapshot } from "./investigation";
-import { isRecorded } from "./itemTests";
+import { isEvidence } from "./itemTests";
 import {
   matchingDewfordCases,
   validateDewford,
@@ -220,7 +220,7 @@ export function searchUnknownPidSids(
   progress?: (done: number, total: number) => void,
 ): SidRngResult {
   if (identity.tid === undefined) throw Error("Enter the original trainer TID");
-  const snapshots = all.filter(isRecorded),
+  const snapshots = all.filter(isEvidence),
     models = modelsForSid(identity, snapshots),
     fits = compileHypothesisValidator(identity, snapshots);
   const rows: SidRngRow[] = [],
@@ -270,6 +270,15 @@ export function searchUnknownPidSids(
           return;
         }
         for (const p of choices[n]) {
+          if (identity.shiny === true && n >= 4) {
+            const lowKey =
+              ((pid >>> ((n - 4) * 4)) ^
+                ((row.sid * 65536 + identity.tid!) >>> ((n - 4) * 4))) &
+              15;
+            const highKey = p ^ ((row.sid >>> ((n - 4) * 4)) & 15);
+            if (n === 4 ? (lowKey ^ highKey) >= 8 : lowKey !== highKey)
+              continue;
+          }
           const next = (residue + p * weights[n]) % modulus,
             needed = (target - next + modulus) % modulus;
           if (suffix[n + 1] & (1n << BigInt(needed)))

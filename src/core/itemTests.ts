@@ -1,8 +1,53 @@
 import { newSnapshot, type Snapshot } from "./investigation";
 import { ITEM_CATALOG } from "./experiments";
+import { emptyObservations, type Observation } from "./constraints";
 
 export function isRecorded(snapshot: Snapshot): boolean {
   return !snapshot.itemTest || snapshot.itemTest.phase === "recorded";
+}
+export function isEvidence(snapshot: Snapshot): boolean {
+  return isRecorded(snapshot) || snapshot.itemTest?.mode === "pixels";
+}
+export function targetExperiment(snapshot: Snapshot): Snapshot {
+  if (!snapshot.itemTest || !snapshot.targets?.length)
+    throw Error("This experiment has no informative target pixels.");
+  return {
+    ...snapshot,
+    observations: emptyObservations(),
+    itemTest: {
+      ...snapshot.itemTest,
+      mode: "pixels",
+      phase: "editing",
+      changed: undefined,
+    },
+  };
+}
+export function answerExperimentPixel(
+  snapshot: Snapshot,
+  index: number,
+  value: Observation,
+): Snapshot {
+  if (
+    snapshot.itemTest?.mode !== "pixels" ||
+    !snapshot.targets?.includes(index)
+  )
+    throw Error("Select a highlighted experiment pixel.");
+  const observations = snapshot.observations.slice();
+  observations[index] = value;
+  const done = snapshot.targets.every((n) => observations[n] !== -1);
+  return {
+    ...snapshot,
+    observations,
+    itemTest: { ...snapshot.itemTest, phase: done ? "recorded" : "editing" },
+  };
+}
+export function finishPixelExperiment(snapshot: Snapshot): Snapshot {
+  if (
+    snapshot.itemTest?.mode !== "pixels" ||
+    !snapshot.observations.some((v) => v !== -1)
+  )
+    throw Error("Verify at least one target pixel first.");
+  return { ...snapshot, itemTest: { ...snapshot.itemTest, phase: "recorded" } };
 }
 export function itemTestBaseline(snapshots: Snapshot[]): Snapshot {
   const baseline = snapshots.find((snapshot) => !snapshot.itemTest);

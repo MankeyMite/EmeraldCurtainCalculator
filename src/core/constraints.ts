@@ -9,6 +9,7 @@ export type KnownFacts = {
   pid?: number;
   tid?: number;
   sid?: number;
+  shiny?: boolean; // Absent means unknown, never implicitly non-shiny.
   otGender?: "male" | "female"; // Stored original-trainer gender bit.
   otName?: string; // Exact visible name; trailing bytes after EOS stay unknown.
   nickname?: string; // Exact visible nickname; bytes after EOS stay unknown.
@@ -173,6 +174,11 @@ export function compareCandidate(
   const factContradictions: string[] = [];
   if (records[5]) {
     const p = decodePokemon(records[5]);
+    if (
+      facts.shiny !== undefined &&
+      facts.shiny !== ((p.key & 65535) ^ (p.key >>> 16)) < 8
+    )
+      factContradictions.push("Shiny status differs from supplied information");
     if (
       facts.nickname !== undefined &&
       !encodeNickname(facts.nickname).every(

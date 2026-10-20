@@ -1,6 +1,8 @@
 # Investigation model and validation
 
-Emerald Curtain Investigator extends the existing calculator. Implemented: joint stored-data recovery, fixed-baseline held-item/move/EXP/vitamin experiments, bounded Emerald wild H1/H2/H4 search and optional new-game SID RNG filtering. Other encounter generators, battle EV training and arbitrary full-record experiment discrimination remain open.
+The 2026-10-20 deduction update adds shared shiny status, cross-snapshot key propagation, linked checksum supports, combined experiment scoring and automatic black/transparent curtain assistance. See [the updated architecture, evidence boundaries, examples and limits](SMART_DEDUCTION.md). The original solver/workflow described below remains the foundation.
+
+Emerald Curtain Investigator extends the existing calculator. Implemented: joint stored-data recovery, fixed-baseline held-item/move/EXP/vitamin experiments, bounded Emerald wild H1/H2/H4 and ordinary static/starter/gift Method 1/4 searches and optional new-game SID RNG filtering. Other encounter generators, battle EV training and arbitrary full-record experiment discrimination remain open.
 
 ## Architecture and provenance
 
@@ -8,11 +10,11 @@ Emerald Curtain Investigator extends the existing calculator. Implemented: joint
 
 `core/investigation.ts` defines origin metadata and JSON. Shared identity contains PID, original trainer information, species, nature, gender, ability, IVs, met fields and language. Each snapshot owns its 192-nibble drawing, item, EVs, PP, EXP, friendship, contest condition, other mutable fields, summary observations, notes and optional targets. Imported mutable snapshots cannot override identity.
 
-Generic observations start with unknown mutable facts. Controlled tests copy the first original observation, change selected fields and clear friendship/checksum. “No” confirms the original pixels still match; unknown pixels remain unknown. “Yes” opens the original drawing as an excluded draft. Recording restores the original selection while preserving the new evidence. The user restores the Pokémon in-game too; consumable tests require a baseline save to reload. Legacy chained comparisons retain their recorded source. Only recorded tests enter inference. Correct copied facts if anything else changed.
+Generic observations start with unknown mutable facts. New controlled tests change the original facts and start with unknown observations, displaying prior manual pixels only as an unverified grey reference. Users answer Black/Transparent for highlighted discriminating pixels; partial verified answers immediately constrain inference. Unexamined pixels stay unknown, including checksum changes. Automatic predictions remain separate. Recording restores the original drawing and reranks recommendations; the user restores the Pokémon in-game too. Legacy Yes/No snapshots retain their old saved semantics, and unrecorded legacy drafts remain excluded. Correct copied facts if anything else changed.
 
 Legacy `emerald-curtain-observations` JSON is read without adding defaults. New `emerald-curtain-investigation` JSON stores identity, snapshots, origin, active snapshot and item-test phase/source/result metadata. Legacy owned-item lists remain compatible but do not filter recommendations. Validation checks mapping/version, values, lengths, IDs, test source/phase and fact placement. Local storage automatically preserves the investigation and pending draft; JSON remains a separate backup. Research examples pause autosave to preserve the previous workspace. Imported reference records never become observations.
 
-The obtaining taxonomy was compared with the locally accessible `Gen3ACEPokemonBuilder/src/domain/encounterAvailability.js` and `encounterBrowser.js`. Wild/static, trades, Eggs, distributions and other-game categories are compatible; starters/gifts remain separately selectable. No unrelated Builder logic or encounter implementation was copied.
+The obtaining taxonomy was compared with the locally accessible `Gen3ACEPokemonBuilder/src/domain/encounterAvailability.js` and `encounterBrowser.js`. Wild/static, trades, Eggs, distributions and other-game categories are compatible; starters/gifts now share the Static category. No unrelated Builder logic or encounter implementation was copied.
 
 ## Exact SID model
 
@@ -32,7 +34,7 @@ This determines whether at least one compatible payload satisfies the checksum w
 
 Counts are exact **under this supplied-bit, observed-nibble, nature/gender and checksum model**. They do not certify encounter legality, breeding/transfer generation, EV reachability or unresolved summary-stat IV ranges. The existing IV calculator keeps those ranges separate; exact IVs explicitly applied by the user enter the stored facts.
 
-Without RNG, a known PID bypasses PID searching; otherwise at most 32 inferred PIDs are jointly enumerated. Wild origins can instead generate correlated PID/IV spreads from seed and advance bounds and test every spread against all recorded observations. Key-domain filtering reduces SID enumeration and removes the 32-PID prerequisite for this path. Counts distinguish PID, SID and PID/SID/IV hypotheses. Neither path silently truncates candidates or chooses the first match. See [wild RNG](WILD_RNG.md) for scope and validation.
+Without RNG, a known PID bypasses PID searching; otherwise at most 32 inferred PIDs are jointly enumerated. Wild and ordinary Static origins can instead generate correlated PID/IV spreads from seed and advance bounds and test every spread against all recorded observations. Key-domain filtering reduces SID enumeration and removes the 32-PID prerequisite for this path. Counts distinguish PID, SID and PID/SID/IV hypotheses. Neither path silently truncates candidates or chooses the first match. See [wild RNG](WILD_RNG.md) for scope and validation.
 
 ### Projections, predictions and export
 
@@ -70,7 +72,7 @@ Next real-game checks: retain before/after snapshots; inspect header byte 0x1B f
 
 ## Deferred methods
 
-Emerald wild H1/H2/H4 is implemented and independently checked against numeric golden vectors and the reviewed Poochyena record. Seed 0, advances 0–99,999 leaves that record's PID and all six IVs uniquely; a broader range retains additional possibilities. RNG advances are not elapsed seconds. Unmodeled special wild/lead behaviors, static encounters, roamers, gifts, events and Eggs remain separate deferred methods. See [WILD_RNG.md](WILD_RNG.md).
+Emerald wild H1/H2/H4 is implemented and independently checked against numeric golden vectors and the reviewed Poochyena record. Seed 0, advances 0–99,999 leaves that record's PID and all six IVs uniquely; a broader range retains additional possibilities. RNG advances are not elapsed seconds. Ordinary static encounters, starters and gifts now use the separate [Method 1/4 path](STATIC_RNG.md). Unmodeled special wild/lead behaviors, roamers, special gifts, events and Eggs remain deferred. See [WILD_RNG.md](WILD_RNG.md).
 
 Battle EV recommendations remain deferred: they must model yields, Pokérus/Macho Brace, 255/stat and 510 total, and changed EXP/PP/friendship. Only single vitamin uses with known starting EVs and cap-limited gains are currently recommended. Future methods can extend the shared snapshot abstraction without enumerating impossible Cartesian products of unknown bytes.
 

@@ -7,8 +7,10 @@ import { FACT_CATALOGS } from "../core/catalogs";
 import { KnownFactsForm } from "./KnownFactsForm";
 import { SidRngPanel } from "./SidRngPanel";
 import { WildRngCompact } from "./WildRngCompact";
-import { moveMaxPp, speciesNickname } from "../core/facts";
+import { speciesNickname } from "../core/facts";
 import { ORIGINS } from "../core/investigation";
+import { ShinySetting } from "./ShinySetting";
+import { MovePpInput } from "./MovePpInput";
 export function PokemonInfoForm({
   lab,
   onSid,
@@ -23,6 +25,14 @@ export function PokemonInfoForm({
       aria-label={label}
       value={lab.factDraft[key] ?? ""}
       autoComplete="off"
+      autoCorrect="off"
+      autoCapitalize="none"
+      spellCheck={false}
+      inputMode={
+        ["metLevel", "tid", "sid", "experience"].includes(key)
+          ? "numeric"
+          : "text"
+      }
       placeholder={placeholder}
       className={assumed.has(key) ? "assumed-input" : ""}
       onChange={(e) => lab.editFact(key, e.target.value)}
@@ -41,6 +51,9 @@ export function PokemonInfoForm({
       entries={catalog}
       max={max}
       onChange={(value) => lab.editFact(key, value)}
+      zeroHint={
+        key.startsWith("move_") ? "Empty move · type a move name" : undefined
+      }
     />
   );
   const abilities =
@@ -88,6 +101,7 @@ export function PokemonInfoForm({
         </div>
         {named("metLocation", "Met location", FACT_CATALOGS.metLocations, 255)}
         <label>Met level{input("metLevel", "Met level")}</label>
+        <ShinySetting lab={lab} />
         <label>
           Nature
           <select
@@ -131,6 +145,14 @@ export function PokemonInfoForm({
             <option value="genderless">Genderless</option>
           </select>
         </label>
+        {lab.facts.ability !== undefined &&
+          new Set(abilities.map((a) => a.id)).size > 1 && (
+            <small className="ability-note">
+              Ability constrains the stored ability bit. PID counts narrow when
+              curtain pixels or the selected encounter RNG link that bit to the
+              identity.
+            </small>
+          )}
         <label>Trainer ID{input("tid", "Trainer ID")}</label>
         <label>Secret ID{input("sid", "Secret ID")}</label>
         {named("ball", "Poké Ball", FACT_CATALOGS.balls, 15)}
@@ -197,20 +219,7 @@ export function PokemonInfoForm({
           {Array.from({ length: 4 }, (_, i) => (
             <div className="move-row" key={i}>
               {named(`move_${i}`, `Move ${i + 1}`, FACT_CATALOGS.moves, 65535)}
-              <label>
-                Current PP{input(`pp_${i}`, `Move ${i + 1} current PP`)}
-                <small>
-                  {lab.facts.ppBonuses === undefined ? "Base " : "Max "}
-                  {moveMaxPp(
-                    lab.facts.moves?.[i] ?? undefined,
-                    ((lab.facts.ppBonuses ?? 0) >>> (i * 2)) & 3,
-                  ) ?? "?"}
-                  {lab.facts.ppBonuses === undefined &&
-                  lab.facts.moves?.[i] != null
-                    ? " · max ?"
-                    : ""}
-                </small>
-              </label>
+              <MovePpInput lab={lab} index={i} />
             </div>
           ))}
         </section>
@@ -265,7 +274,7 @@ export function PokemonInfoForm({
           Known PID (optional)
           {input("pid", "Known PID", "Decimal or 0x hexadecimal")}
         </label>
-        <KnownFactsForm lab={lab} />
+        <KnownFactsForm lab={lab} showShiny={false} />
       </details>
       <p className="entry-defaults-note micro">
         New tests start with English Emerald, normal non-Egg flags, empty move

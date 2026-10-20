@@ -43,6 +43,23 @@ export function hitForNibble(n: number) {
       }
   return null;
 }
+// A tighter viewport, not a new mapping: retain every main-record pixel and
+// crop only neighboring records and decorative school artwork.
+const recordHits = Array.from({ length: 160 }, (_, n) => hitForNibble(n + 16)!);
+const recordX = Math.min(...recordHits.map((h) => h.displayX)),
+  recordY = Math.min(...recordHits.map((h) => h.displayY));
+const recordLayout = {
+  placements: stripLayout().placements,
+  bounds: {
+    x: recordX,
+    y: recordY,
+    w: Math.max(...recordHits.map((h) => h.displayX)) - recordX + 1,
+    h: Math.max(...recordHits.map((h) => h.displayY)) - recordY + 1,
+  },
+};
+export function recordStripLayout() {
+  return recordLayout;
+}
 export function digit(mask: number) {
   const values = allowedValues(mask);
   return values.length === 1

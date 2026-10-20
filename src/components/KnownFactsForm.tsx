@@ -1,9 +1,11 @@
+import { MovePpInput } from "./MovePpInput";
 import type { CurtainLab } from "../hooks/useCurtainLab";
 import { NATURES } from "../core/pokemon";
 import { CONTEST_NAMES, STAT_NAMES } from "../core/facts";
 import { speciesTraits } from "../core/traits";
 import species from "../data/species.json";
 import { useId } from "react";
+import { ShinySetting } from "./ShinySetting";
 import { NamedIdInput } from "./NamedIdInput";
 import {
   FACT_CATALOGS,
@@ -11,7 +13,13 @@ import {
   type CatalogEntry,
 } from "../core/catalogs";
 
-export function KnownFactsForm({ lab }: { lab: CurtainLab }) {
+export function KnownFactsForm({
+  lab,
+  showShiny = true,
+}: {
+  lab: CurtainLab;
+  showShiny?: boolean;
+}) {
   const titleId = useId();
   const traits = speciesTraits(Number(lab.factDraft.species));
   const abilities =
@@ -32,6 +40,9 @@ export function KnownFactsForm({ lab }: { lab: CurtainLab }) {
       entries={entries}
       max={max}
       onChange={(value) => lab.editFact(key, value)}
+      zeroHint={
+        key.startsWith("move_") ? "Empty move · type a move name" : undefined
+      }
     />
   );
   const input = (key: string, label: string, max: number) => (
@@ -53,6 +64,7 @@ export function KnownFactsForm({ lab }: { lab: CurtainLab }) {
         Blank means unknown. Supplied values restrict reconstruction.
       </p>
       <div className="form-table">
+        {showShiny && <ShinySetting lab={lab} />}
         <label>
           Species
           <select
@@ -235,8 +247,9 @@ export function KnownFactsForm({ lab }: { lab: CurtainLab }) {
         <summary>Moves, PP &amp; where it was met</summary>
         <p className="help">
           Type a name and choose a suggestion. Its stored ID appears in the grey
-          box automatically. Blank means unknown; “No move” means a known empty
-          move slot. Origin game means the game where this Pokémon originated,
+          box automatically. An empty move field keeps ID 0; choose Unknown in
+          the suggestions to clear the fact. PP must match a restored maximum
+          for 0–3 PP Ups. Origin game means where this Pokémon originated,
           not necessarily the game you are playing now.
         </p>
         <div className="form-table">
@@ -244,10 +257,7 @@ export function KnownFactsForm({ lab }: { lab: CurtainLab }) {
             named(`move_${i}`, `Move ${i + 1}`, FACT_CATALOGS.moves, 65535),
           )}
           {Array.from({ length: 4 }, (_, i) => (
-            <label key={`pp-${i}`}>
-              Move {i + 1} current PP
-              {input(`pp_${i}`, `Move ${i + 1} current PP`, 255)}
-            </label>
+            <MovePpInput key={`pp-${i}`} lab={lab} index={i} />
           ))}
           {named(
             "metLocation",

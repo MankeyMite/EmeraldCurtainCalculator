@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { CurtainLab } from "../hooks/useCurtainLab";
 import { describeByte } from "../core/inspection";
 import { hex } from "../core/pokemon";
@@ -7,15 +8,29 @@ import { nibbleValue } from "../core/tiles";
 
 export function PixelInspector({ lab }: { lab: CurtainLab }) {
   const h = lab.hover ?? lab.selectedPixel;
-  const pid =
-    lab.mode === "renderer"
-      ? lab.imported?.pid
-      : lab.sidAnalysis &&
-          new Set(lab.sidAnalysis.candidates.map((h) => h.pid)).size === 1
-        ? lab.sidAnalysis.candidates[0]?.pid
-        : lab.inference.pidValues?.length === 1
-          ? lab.inference.pidValues[0]
-          : undefined;
+  const masks = useMemo(
+    () => workbenchMasks(lab),
+    [
+      lab.mode,
+      lab.suppliedMasks,
+      lab.recovery,
+      lab.inference,
+      lab.sidRngSettings,
+      lab.sidRngResult,
+    ],
+  );
+  const pid = useMemo(
+    () =>
+      lab.mode === "renderer"
+        ? lab.imported?.pid
+        : lab.sidAnalysis &&
+            new Set(lab.sidAnalysis.candidates.map((h) => h.pid)).size === 1
+          ? lab.sidAnalysis.candidates[0]?.pid
+          : lab.inference.pidValues?.length === 1
+            ? lab.inference.pidValues[0]
+            : undefined,
+    [lab.mode, lab.imported, lab.sidAnalysis, lab.inference],
+  );
   const field = h
     ? describeByte(h.offset, h.slot === 5 ? pid : undefined)
     : null;
@@ -33,13 +48,13 @@ export function PixelInspector({ lab }: { lab: CurtainLab }) {
     <section className="inspector" aria-label="Pixel inspector">
       <h2>Pixel inspector</h2>
       <p className="help">
-        Hover either a pixel or hex digit to link them. Click to pin; arrow keys
-        select, Space paints.
+        Tap or click a pixel or hex digit to pin its details. Hover links them;
+        arrow keys select, Space paints.
       </p>
       <dl className="inspector-grid">
         <div className="inspect-field">
           <dt>Pokémon field</dt>
-          <dd>{field?.name ?? "Move over a pixel"}</dd>
+          <dd>{field?.name ?? "Tap or hover over a pixel"}</dd>
           <small>
             {field
               ? `${field.block}${field.encrypted ? " · encrypted" : ""}`
@@ -75,7 +90,7 @@ export function PixelInspector({ lab }: { lab: CurtainLab }) {
             {h
               ? h.slot === 5
                 ? `Candidates: ${
-                    allowedValues(workbenchMasks(lab)[h.offset * 2 + h.side])
+                    allowedValues(masks[h.offset * 2 + h.side])
                       .map((n) => hex(n, 1))
                       .join(", ") || "none"
                   }`
@@ -84,6 +99,36 @@ export function PixelInspector({ lab }: { lab: CurtainLab }) {
           </small>
         </div>
       </dl>
+      {h &&
+        lab.referenceObservations?.[h.nibble] !== undefined &&
+        lab.referenceObservations[h.nibble] !== -1 &&
+        lab.obs[h.nibble] === -1 && (
+          <p className="inspector-prediction">
+            Original drawing reference:{" "}
+            {lab.referenceObservations[h.nibble] === 0
+              ? "transparent"
+              : "black"}
+            . Unverified for this experiment; it is not recorded as new
+            evidence.
+          </p>
+        )}
+      {lab.mode === "solver" && lab.assistance?.conflictReason && (
+        <p role="alert" className="inspector-prediction">
+          {lab.assistance.conflictReason}
+        </p>
+      )}
+      {h && lab.mode === "solver" && lab.predictions[h.nibble] !== -1 && (
+        <p className="inspector-detail inspector-prediction">
+          Automatic:{" "}
+          {lab.predictions[h.nibble] === 0
+            ? "Transparent (exactly zero)"
+            : "Black (every compatible digit is nonzero)"}
+          . {lab.assistance.reasons[h.nibble]}.
+          {lab.assistance.contradictions.has(h.nibble) &&
+            " Conflicts with your observation. Recheck this pixel, its known field and any assumptions; the observation has been preserved."}{" "}
+          Predictions are display assistance, never independent evidence.
+        </p>
+      )}
       {h && (
         <p className="inspector-detail">
           Tile {h.tile} · pixel ({h.x}, {h.y}){h.flipped ? " · mirrored" : ""}.{" "}

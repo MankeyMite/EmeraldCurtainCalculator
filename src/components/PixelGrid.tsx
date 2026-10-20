@@ -20,8 +20,10 @@ type Props = {
   gameBackground: boolean;
   mainOnly: boolean;
   solver: boolean;
+  editable?: boolean;
   memory: Memory;
   observations: Observations;
+  referenceObservations?: Observations;
   tool: Observation;
   contradictions: Set<number>;
   predictions?: Observations;
@@ -69,8 +71,21 @@ export function PixelGrid(p: Props) {
             n = nibbleValue(p.memory, a.nibble);
           // This is an editing scope, not an assertion of empty neighbors.
           if (p.mainOnly && a.slot !== 5) continue;
+          const observed = p.observations[a.nibble];
+          const predicted = p.predictions?.[a.nibble] ?? -1;
+          const automatic = p.solver && observed === -1 && predicted !== -1;
+          const reference =
+            p.solver &&
+            !automatic &&
+            observed === -1 &&
+            p.referenceObservations?.[a.nibble] !== undefined &&
+            p.referenceObservations[a.nibble] !== -1;
           const state = p.solver
-            ? p.observations[a.nibble]
+            ? automatic
+              ? predicted
+              : reference
+                ? p.referenceObservations![a.nibble]
+                : observed
             : n === null
               ? -1
               : n === 0
@@ -115,7 +130,7 @@ export function PixelGrid(p: Props) {
           }
           if (
             p.solver &&
-            state === -1 &&
+            automatic &&
             p.predictions &&
             p.predictions[a.nibble] !== -1
           ) {
@@ -123,6 +138,18 @@ export function PixelGrid(p: Props) {
               p.predictions[a.nibble] === 1 ? "#176db0" : "#00a595";
             ctx.lineWidth = Math.max(1, p.zoom / 8);
             ctx.setLineDash([Math.max(1, p.zoom / 5), Math.max(1, p.zoom / 7)]);
+            ctx.strokeRect(
+              px + 3,
+              py + 3,
+              Math.max(1, p.zoom - 6),
+              Math.max(1, p.zoom - 6),
+            );
+            ctx.setLineDash([]);
+          }
+          if (reference) {
+            ctx.strokeStyle = "#8a98a4";
+            ctx.lineWidth = Math.max(1, p.zoom / 12);
+            ctx.setLineDash([2, 3]);
             ctx.strokeRect(
               px + 3,
               py + 3,
@@ -244,13 +271,15 @@ export function PixelGrid(p: Props) {
         // Use the arrow's tip as the target, rather than a crosshair/help glyph
         // whose center or question-mark can look like a half-cell offset.
         cursor: "default",
-        touchAction: "none",
+        touchAction:
+          p.solver && p.editable !== false ? "none" : "pan-y pinch-zoom",
       }}
       onPointerDown={(e) => {
         const point = coordinates(e),
           selected = hitAt(point.x, point.y);
         if (selected) p.onSelect?.(selected);
-        if (e.button !== 0 || !p.solver) return;
+        if (!selected || e.button !== 0 || !p.solver || p.editable === false)
+          return;
         e.preventDefault();
         e.currentTarget.focus();
         drawing.current = true;
@@ -306,7 +335,7 @@ export function PixelGrid(p: Props) {
             flipped: false,
           });
         }
-        if (e.key === " " && p.solver) {
+        if (e.key === " " && p.solver && p.editable !== false) {
           e.preventDefault();
           p.onStart();
           p.onPaint([keyIndex.current], p.tool);

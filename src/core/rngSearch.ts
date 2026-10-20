@@ -1,9 +1,10 @@
 import { scanWildSpreads, type RngSettings, type RngSpread } from "./rng";
+import { scanStaticSpreads } from "./staticRng";
 import type { KnownFacts } from "./constraints";
 import { recordMasks } from "./constraints";
 import { analyzeConstraints } from "./inference";
 import type { Snapshot } from "./investigation";
-import { isRecorded } from "./itemTests";
+import { isEvidence } from "./itemTests";
 import { solveSids } from "./sid";
 import { generateSidRng, type SidRngSettings } from "./sidRng";
 
@@ -21,13 +22,10 @@ export function searchWild(
   input: RngSearchInput,
   progress?: (done: number, total: number) => void,
 ): RngSearchResult {
-  const snapshots = input.snapshots.filter(isRecorded);
-  const generated = scanWildSpreads(
-    input.settings,
-    input.identity,
-    snapshots,
-    progress,
-  );
+  const snapshots = input.snapshots.filter(isEvidence);
+  const generated = (
+    input.settings.kind === "static" ? scanStaticSpreads : scanWildSpreads
+  )(input.settings, input.identity, snapshots, progress);
   if (!generated.length)
     return {
       spreads: [],
