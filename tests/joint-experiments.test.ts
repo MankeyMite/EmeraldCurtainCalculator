@@ -555,7 +555,8 @@ test("unknown-SID UI explains joint bounds and distinguishes running, conflicts,
   assert.match(html, /Try Swap moves 1 and 4/);
   assert.match(html, /PID\/SID pair possibilities/);
   assert.match(html, /8,539,084/);
-  assert.match(html, /conservative single-pixel bounds/);
+  assert.match(html, /conservative best-pixel bound/);
+  assert.match(html, /additional targets rechecked after each answer/);
   assert.doesNotMatch(html, /Enter the original trainer TID and SID/);
   assert.match(render({ analysisBusy: true }), /Analysis still running/);
   assert.match(
@@ -568,7 +569,7 @@ test("unknown-SID UI explains joint bounds and distinguishes running, conflicts,
   );
   assert.match(
     render({ experimentStatus: "indistinguishable" }),
-    /indistinguishable identity outcomes/,
+    /No evaluated supported experiment distinguishes/,
   );
   assert.match(
     render({ experimentStatus: "computation-limited" }),
