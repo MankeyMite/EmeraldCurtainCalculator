@@ -78,7 +78,12 @@ export function ItemTestControls({
     comparison.id === baseline.id
       ? "original drawing"
       : "saved comparison drawing";
-  const disabled = !!(lab.factError || lab.summaryError || lab.ppError);
+  const disabled = !!(
+    lab.factError ||
+    lab.summaryError ||
+    lab.ppError ||
+    lab.analysisError
+  );
   if (active.itemTest!.mode === "pixels")
     return (
       <section
@@ -93,45 +98,73 @@ export function ItemTestControls({
           Put it in Box 8 slot 5, leave and reenter the school.
         </p>
         <p>
-          Inspect the highlighted pixels. Answer black or transparent for each
-          one you can verify. Other changes can be ignored. Grey dashed cells
-          show the original drawing as an unverified reference; automatic
-          deductions remain visible.
+          Inspect the highlighted pixel. Answer black or transparent. Other
+          changes can be ignored. Grey dashed cells show the original drawing as
+          an unverified reference; automatic deductions remain visible.
         </p>
-        {(lab.experimentTargets ?? active.targets ?? []).map((index) => (
-          <div className="target-question" key={index}>
-            <strong>
-              {index >= 72 && index < 76 ? "Checksum" : "Encrypted data"} · byte
-              0x{hex(Math.floor((index - 16) / 2))},{" "}
-              {index % 2 ? "high" : "low"} digit
-            </strong>
-            <button
-              onClick={() => {
-                lab.setHover(null);
-                lab.setSelectedPixel(hitForNibble(index));
-                locatePixel?.(index);
-              }}
-            >
-              Locate pixel
-            </button>
-            <button
-              disabled={disabled}
-              onClick={() => lab.answerTarget(index, 1)}
-            >
-              Black
-            </button>
-            <button
-              disabled={disabled}
-              onClick={() => lab.answerTarget(index, 0)}
-            >
-              Transparent
-            </button>
-            <small>Unexamined · leave unanswered if you cannot see it.</small>
-          </div>
-        ))}
+        {lab.analysisError ? (
+          <p role="alert">
+            Analysis could not complete: {lab.analysisError}. No predicted
+            answer has been recorded. Cancel this test and select it again after
+            correcting the problem; earlier saved observations are preserved.
+          </p>
+        ) : (
+          <p role="status">
+            {lab.sidAnalysis
+              ? `${lab.sidAnalysis.candidates.length.toLocaleString()} compatible hypotheses`
+              : `At most ${lab.investigationInference.headerPairCount.toLocaleString()} joint PID/SID possibilities`}
+            {" · Counts update after each verified answer."}
+          </p>
+        )}
+        {(lab.experimentTargets ?? active.targets ?? [])
+          .slice(0, 1)
+          .map((index) => (
+            <div className="target-question" key={index}>
+              <strong>
+                Checking pixel {(active.targets ?? []).indexOf(index) + 1} of{" "}
+                {active.targets?.length ?? 1}
+              </strong>
+              <strong>
+                {index >= 72 && index < 76 ? "Checksum" : "Encrypted data"} ·
+                byte 0x{hex(Math.floor((index - 16) / 2))},{" "}
+                {index % 2 ? "high" : "low"} digit
+              </strong>
+              <button
+                onClick={() => {
+                  lab.setHover(null);
+                  lab.setSelectedPixel(hitForNibble(index));
+                  locatePixel?.(index);
+                }}
+              >
+                Locate pixel
+              </button>
+              <button
+                disabled={disabled || lab.analysisBusy}
+                onClick={() => lab.answerTarget(index, 1)}
+              >
+                Black
+              </button>
+              <button
+                disabled={disabled || lab.analysisBusy}
+                onClick={() => lab.answerTarget(index, 0)}
+              >
+                Transparent
+              </button>
+              <small>Unexamined · leave unanswered if you cannot see it.</small>
+            </div>
+          ))}
         {lab.analysisBusy && (
           <p role="status">Updating candidates from verified answers…</p>
         )}
+        {!lab.analysisBusy &&
+          !lab.analysisError &&
+          !lab.experimentTargets?.length && (
+            <p role="status">
+              No remaining target can distinguish candidates under the current
+              model. Keep any verified answers, or cancel this test and choose
+              another experiment.
+            </p>
+          )}
         <div className="inline-buttons">
           <button
             disabled={disabled || !active.observations.some((v) => v !== -1)}

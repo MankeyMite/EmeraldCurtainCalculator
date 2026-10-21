@@ -9,6 +9,13 @@ import { validateSummaryStats, type SummaryStats } from "./stats";
 import { validateRngSettings, type RngSettings } from "./rng";
 import { validateSidRng, type SidRngSettings } from "./sidRng";
 import type { ActionDescription } from "./controlledExperiments";
+import speciesCatalog from "../data/species.json";
+
+export function investigationFileName(speciesId?: number): string {
+  const species =
+    speciesCatalog.find((s) => s.id === speciesId)?.name ?? "Pokemon";
+  return `${species.replace(/[<>:"/\\|?*\u0000-\u001f]/g, "-")}-Curtain.json`;
+}
 
 export const ORIGINS = [
   ["unknown", "Unknown / other origin"],
@@ -28,6 +35,7 @@ export type Snapshot = {
   knownFacts: KnownFacts;
   summaryStats?: SummaryStats;
   targets?: number[];
+  experimentPokeblock?: number[]; // Five flavors and Feel; configuration, never evidence.
   itemTest?: {
     sourceId: string;
     phase: "question" | "editing" | "recorded";
@@ -169,7 +177,9 @@ export function loadInvestigation(text: string): Investigation {
       const test = s.itemTest;
       if (
         test.actionId !== undefined &&
-        !/^(moves-[0-3]-[0-3]|rare-candy|vitamin-[0-5])$/.test(test.actionId)
+        !/^(moves-[0-3]-[0-3]|rare-candy(?:-(?:[1-9]\d?|100))?(?:-swap-[0-3]-[0-3])?|teach-\d{1,3}(?:-swap-[0-3]-[0-3])?|vitamin-[0-5]|pp-(up|max)-[0-3]|pokeblock)$/.test(
+          test.actionId,
+        )
       )
         throw Error("Invalid experiment action ID");
       if (
@@ -194,7 +204,9 @@ export function loadInvestigation(text: string): Investigation {
       if (
         test.action !== undefined &&
         (!test.action ||
-          !["moves", "candy", "vitamin"].includes(test.action.kind) ||
+          !["moves", "candy", "vitamin", "pp", "pokeblock", "learn"].includes(
+            test.action.kind,
+          ) ||
           [
             test.action.name,
             test.action.instructions,
@@ -203,6 +215,15 @@ export function loadInvestigation(text: string): Investigation {
       )
         throw Error("Invalid experiment action");
     }
+    if (
+      s.experimentPokeblock !== undefined &&
+      (!Array.isArray(s.experimentPokeblock) ||
+        s.experimentPokeblock.length !== 6 ||
+        s.experimentPokeblock.some(
+          (n) => !Number.isInteger(n) || n < 0 || n > 255,
+        ))
+    )
+      throw Error("Expected five Pokéblock flavors and Feel, each 0–255");
     return {
       id: s.id,
       name: s.name,
@@ -213,6 +234,9 @@ export function loadInvestigation(text: string): Investigation {
         ? {}
         : { summaryStats: validateSummaryStats(s.summaryStats) }),
       ...(s.targets === undefined ? {} : { targets: [...new Set(s.targets)] }),
+      ...(s.experimentPokeblock === undefined
+        ? {}
+        : { experimentPokeblock: s.experimentPokeblock.slice() }),
       ...(s.itemTest === undefined ? {} : { itemTest: { ...s.itemTest } }),
     };
   });

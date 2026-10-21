@@ -651,7 +651,7 @@ export function Workbench({
               predictions={lab.showPredictions ? lab.predictions : undefined}
               targets={
                 lab.pendingItemTest?.itemTest?.mode === "pixels"
-                  ? lab.experimentTargets
+                  ? lab.experimentTargets.slice(0, 1)
                   : lab.activeSnapshot.targets
               }
               highlightedNibble={highlight?.nibble}

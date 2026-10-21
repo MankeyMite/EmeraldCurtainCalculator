@@ -16,6 +16,7 @@ import species from "../data/species.json";
 import growth from "../data/growth-rates.json";
 import type { DomainQuestion } from "../core/domainExperiments";
 import { ExperimentProgress } from "./ExperimentProgress";
+import { PokeblockExperiment } from "./PokeblockExperiment";
 
 function DomainExplanation({ question }: { question?: DomainQuestion }) {
   if (!question) return null;
@@ -622,7 +623,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                     ? "Insufficient known information: enter the original trainer TID to predict joint identity experiments reliably."
                     : lab.experimentStatus === "computation-limited"
                       ? "The solver could not rank experiments within the current computation scope. Add verified observations or narrow the optional search."
-                      : "All evaluated questions have indistinguishable identity outcomes under the current model. More known plaintext may enable useful questions; vitamins require known EV effects."}
+                      : "No evaluated supported experiment distinguishes the remaining possibilities under the current model. More known data may enable predictions: vitamins need EVs; PP Up / PP Max need moves and packed PP Up counters; Pokéblocks need Nature, contest values and flavors. Other actions and uncertain side effects are not modeled."}
         </p>
         {lab.experimentLimitations?.map((message) => (
           <p className="help" key={message}>
@@ -632,9 +633,10 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
         <p>
           Every test starts from the original Pokémon and drawing. After
           recording, the drawing resets automatically; restore the Pokémon
-          in-game as instructed. For Rare Candy or vitamin tests, make a
-          baseline save and reload it afterwards.
+          in-game as instructed. For consumable tests, make a baseline save and
+          reload it afterwards.
         </p>
+        <PokeblockExperiment key={lab.itemTestBaseline.id} lab={lab} />
         {(lab.experiments.some((e) => e.groups > 1) ||
           lab.controlledExperiments.some((e) => e.groups > 1)) && (
           <ol className="investigation-cards">
@@ -651,6 +653,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                   worstCase: e.worstCase,
                   informationGain: e.informationGain,
                   groups: e.groups,
+                  cost: 1,
                   checksumContributes: e.checksumContributes,
                   select: () => lab.startItemTest(e.item.id),
                 })),
@@ -662,6 +665,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                   worstCase: e.worstCase,
                   informationGain: e.informationGain,
                   groups: e.groups,
+                  cost: e.action.cost ?? 1,
                   checksumContributes: e.checksumContributes,
                   select: () => lab.startControlledTest(e.action.id),
                 })),
@@ -669,7 +673,8 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
               .sort(
                 (a, b) =>
                   a.worstCase - b.worstCase ||
-                  b.informationGain - a.informationGain,
+                  b.informationGain - a.informationGain ||
+                  a.cost - b.cost,
               )
               .slice(0, 6)
               .map((e, i) => (
@@ -699,9 +704,10 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                     {e.worstCase.toLocaleString()}{" "}
                     {lab.domainQuestions[e.key]?.countBasis ?? "hypotheses"}
                     {lab.domainQuestions[e.key]
-                      ? lab.domainQuestions[e.key].combinedChecksum
+                      ? lab.domainQuestions[e.key].combinedOutcomes ||
+                        lab.domainQuestions[e.key].combinedChecksum
                         ? " · conservative combined bounds"
-                        : " · conservative single-pixel bounds"
+                        : " · conservative best-pixel bound; additional targets rechecked after each answer"
                       : ` · ${e.informationGain.toFixed(2)} bits (uniform identity / supported-outcome model)`}
                     {e.checksumContributes &&
                       " · Combined encrypted and checksum pixels improve this test."}
@@ -719,11 +725,16 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
           </ol>
         )}
         <details>
-          <summary>Move, EXP and EV experiments</summary>
+          <summary>
+            Move learning, swaps, Rare Candy, vitamin, PP and Pokéblock
+            experiments
+          </summary>
           <p>
             These tests use the original moves, current level and EVs. Move
-            swaps carry PP and PP Ups. Rare Candy requires four known occupied
-            move slots so you can decline new moves. Vitamins require all six
+            swaps carry PP and PP Ups. With a known empty slot, compatible
+            TMs/HMs and learning followed by a move swap are evaluated together.
+            Rare Candy also checks the next automatic move-learning level,
+            including the required EXP and PP changes. Vitamins require all six
             original EVs. Every compatible block order is considered when
             choosing useful target pixels.
           </p>
@@ -766,13 +777,42 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
             ))}
           {!lab.controlledExperiments.some((e) => e.groups > 1) && (
             <p>
-              No informative move, EXP or vitamin test is established by the
+              No informative supported controlled test is established by the
               current facts and candidate set. Check the original trainer TID,
               known moves and level. Unknown EVs prevent vitamin predictions,
-              but do not prevent move or eligible Rare Candy tests.
+              but do not prevent move or eligible Rare Candy tests. PP tests
+              require known counters and eligible moves; Pokéblocks require
+              known Nature, contest values and entered flavors. Unknown
+              friendship side effects disable linked checksum predictions, while
+              predictable encrypted fields can still be tested.
             </p>
           )}
         </details>
+        {!lab.analysisBusy &&
+          !lab.analysisError &&
+          !lab.pendingItemTest &&
+          lab.experimentStatus === "indistinguishable" &&
+          lab.identity.tid !== undefined &&
+          lab.identity.sid === undefined && (
+            <section className="investigation-card">
+              <h4>Try another Pokémon from the same original trainer</h4>
+              <p>
+                Save this investigation first. Catch another Pokémon with the
+                same original trainer and TID, then start a separate
+                investigation for it. Its SID is shared; its PID, XOR key and
+                block order must be deduced from that Pokémon’s own known
+                information and observations.
+              </p>
+              <p>
+                Record clearly transparent encrypted-data pixels and their black
+                neighbors. Once its details are entered, use the highlighted
+                useful questions to narrow its candidates and compare the
+                surviving SIDs with this investigation. A specific
+                discriminating pixel cannot be predicted before those details
+                are known.
+              </p>
+            </section>
+          )}
         <h3>Best items to try next</h3>
         {savedTest?.itemTest?.phase === "recorded" && (
           <p role="status">

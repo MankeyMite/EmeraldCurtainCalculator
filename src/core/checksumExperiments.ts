@@ -108,9 +108,38 @@ export function experimentChecksumDelta(
         (((bonuses >>> (b * 2)) & 3) << (a * 2));
       if (target.knownFacts.ppBonuses !== expected) return null;
     }
-  } else if (kind === "candy")
-    changed = Array.from({ length: 8 }, (_, i) => 8 + i);
-  else {
+  } else if (kind === "candy" || kind === "learn") {
+    changed =
+      kind === "candy" ? Array.from({ length: 8 }, (_, i) => 8 + i) : [];
+    // Learning, followed by a legal rearrangement, changes complete move
+    // words, the corresponding PP bytes and possibly packed PP Up counters.
+    for (let i = 0; i < 4; i++) {
+      if (source.knownFacts.moves?.[i] !== target.knownFacts.moves?.[i])
+        changed.push(...Array.from({ length: 4 }, (_, n) => 24 + i * 4 + n));
+      if (source.knownFacts.pp?.[i] !== target.knownFacts.pp?.[i])
+        changed.push(40 + i * 2, 41 + i * 2);
+    }
+    if (
+      /-swap-[0-3]-[0-3]$/.test(test.actionId ?? "") &&
+      (source.knownFacts.ppBonuses === undefined ||
+        target.knownFacts.ppBonuses === undefined)
+    )
+      return null;
+    if (source.knownFacts.ppBonuses !== target.knownFacts.ppBonuses)
+      changed.push(16, 17);
+  } else if (kind === "pokeblock")
+    changed = Array.from({ length: 12 }, (_, i) => 60 + i);
+  else if (kind === "pp") {
+    const id = /^pp-(up|max)-([0-3])$/.exec(test.actionId ?? "");
+    if (!id) return null;
+    changed = [16, 17, 40 + Number(id[2]) * 2, 41 + Number(id[2]) * 2];
+    for (let i = 0; i < 4; i++)
+      if (
+        i !== Number(id[2]) &&
+        source.knownFacts.pp?.[i] !== target.knownFacts.pp?.[i]
+      )
+        return null;
+  } else {
     const id = /^vitamin-([0-5])$/.exec(test.actionId ?? "");
     if (!id) return null;
     changed = [48 + Number(id[1]) * 2, 49 + Number(id[1]) * 2];
@@ -128,6 +157,8 @@ export function experimentChecksumDelta(
   if (
     kind === "candy" ||
     kind === "vitamin" ||
+    kind === "pp" ||
+    kind === "learn" ||
     (target.knownFacts.friendship !== undefined &&
       target.knownFacts.friendship !== source.knownFacts.friendship)
   ) {
@@ -145,8 +176,14 @@ export function experimentChecksumDelta(
       : kind === "moves"
         ? ["moves", "pp", "ppBonuses"]
         : kind === "candy"
-          ? ["experience"]
-          : ["evs"],
+          ? ["experience", "moves", "pp", "ppBonuses"]
+          : kind === "learn"
+            ? ["moves", "pp", "ppBonuses"]
+            : kind === "pokeblock"
+              ? ["contest"]
+              : kind === "pp"
+                ? ["ppBonuses", "pp"]
+                : ["evs"],
   );
   for (const [key, value] of Object.entries(target.knownFacts)) {
     if (

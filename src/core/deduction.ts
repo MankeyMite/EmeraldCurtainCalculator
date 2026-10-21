@@ -1,10 +1,15 @@
 import type { KnownFacts } from "./constraints";
 import { emptyObservations } from "./constraints";
 import type { Snapshot } from "./investigation";
-import { analyzeConstraints, ivPossibilities } from "./inference";
+import {
+  analyzeConstraints,
+  ivPossibilities,
+  knownPlaintext,
+} from "./inference";
 import { analyzeObservations } from "./jointInference";
 import { isEvidence, itemTestBaseline } from "./itemTests";
-import { solveSids, projectRecord } from "./sid";
+import { solveSids, projectRecord, compileChecksumSupport } from "./sid";
+import { rankPixelDomains } from "./experimentOutcomes";
 import { rankItemExperiments, isInformativeExperiment } from "./experiments";
 import { experimentProgress } from "./experimentProgress";
 import { judgeIvDomains } from "./ivJudge";
@@ -13,7 +18,7 @@ import {
   rankDomainExperiments,
   type DomainQuestion,
 } from "./domainExperiments";
-import { pixelAssistance, visibleState } from "./pixelAssistance";
+import { pixelAssistance } from "./pixelAssistance";
 import { scopeExperimentDomain } from "./experimentScope";
 import { estimateIVs } from "./stats";
 import { searchWild } from "./rngSearch";
@@ -151,13 +156,46 @@ export function computeDeduction(
     ...r,
     combined: judgeCombined[i],
   }));
-  const experimentTargets = (active.targets ?? []).filter(
-    (n) =>
-      active.observations[n] === -1 &&
-      (!recovery ||
-        !sidAnalysis?.candidates.length ||
-        visibleState(recovery.masks[n - 16]) === -1),
+  let experimentTargets = (active.targets ?? []).filter(
+    (n) => active.observations[n] === -1 && assistance.predictions[n] === -1,
   );
+  // Re-score the remaining questions after each real answer. This removes
+  // redundant columns without ever writing predicted values as observations.
+  if (
+    active.itemTest?.mode === "pixels" &&
+    sidAnalysis?.candidates.length &&
+    sidAnalysis.candidates.length <= 128 &&
+    experimentTargets.length
+  ) {
+    const wantsChecksum = experimentTargets.some((n) => n >= 72 && n < 76);
+    const supports = wantsChecksum
+      ? sidAnalysis.candidates.map(
+          compileChecksumSupport(identity, evidence, active),
+        )
+      : undefined;
+    if (
+      !supports ||
+      [...new Set(supports)].reduce((n, s) => n + s.length, 0) <= 131072
+    ) {
+      const verified = new Set(
+        Array.from({ length: 4 }, (_, i) => 72 + i).filter(
+          (n) => !experimentTargets.includes(n),
+        ),
+      );
+      const ranked = rankPixelDomains(
+        sidAnalysis.candidates,
+        knownPlaintext({ ...active.knownFacts, ...identity }),
+        experimentTargets.filter((n) => n >= 80),
+        supports,
+        wantsChecksum ? 0 : null,
+        verified,
+      );
+      if (ranked)
+        experimentTargets = experimentTargets.filter((n) =>
+          ranked.pixels.some((p) => p.index === n),
+        );
+    }
+  }
   let scopeRelaxed = false;
   // A SID search supplies allowed SIDs, never an exhaustive list of witness
   // PIDs. Small scopes are disjoint fixed-SID DP models. Large scopes use a
@@ -251,12 +289,28 @@ export function computeDeduction(
       domainQuestions[e.action.id] = domain!.questions[e.action.id];
     }
   const compare = (
-    a: { worstCase: number; informationGain: number },
-    b: { worstCase: number; informationGain: number },
-  ) => a.worstCase - b.worstCase || b.informationGain - a.informationGain;
+    a: {
+      worstCase: number;
+      informationGain: number;
+      action?: { cost?: number };
+    },
+    b: {
+      worstCase: number;
+      informationGain: number;
+      action?: { cost?: number };
+    },
+  ) =>
+    a.worstCase - b.worstCase ||
+    b.informationGain - a.informationGain ||
+    (a.action?.cost ?? 1) - (b.action?.cost ?? 1);
   items.sort(compare);
   controlled.sort(compare);
   const experimentLimitations = [
+    ...(domain?.outcomeLimited
+      ? [
+          "Some joint multi-pixel outcome tables exceed the computation budget. Those tests retain conservative individual-pixel bounds; remaining questions are rechecked after every answer.",
+        ]
+      : []),
     ...(identity.ivJudge && !input.rng
       ? [
           "IV judge maximum and total constraints use conservative packed-IV projections. Remaining identity counts may include unresolved IV/checksum correlations.",

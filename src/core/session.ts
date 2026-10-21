@@ -16,6 +16,30 @@ export type Session = {
   knownFacts: KnownFacts;
   summaryStats?: SummaryStats;
 };
+/** Zero-default labels describe the value currently stored in this snapshot.
+ * A controlled change can invalidate a label while its baseline assumption
+ * remains recorded in the original snapshot. */
+export function isActiveAssumption(facts: KnownFacts, key: string): boolean {
+  const match = /^(ev|contest|pp|move)_([0-5])$/.exec(key);
+  const value = match
+    ? facts[
+        match[1] === "ev"
+          ? "evs"
+          : match[1] === "pp"
+            ? "pp"
+            : match[1] === "move"
+              ? "moves"
+              : "contest"
+      ]?.[Number(match[2])]
+    : facts[key as keyof KnownFacts];
+  return key === "friendship" ||
+    key === "nickname" ||
+    key === "headerFlags" ||
+    key.startsWith("pp_") ||
+    key.startsWith("ev_")
+    ? value !== undefined && value !== null
+    : value === 0;
+}
 export function validateFacts(
   input: unknown,
   requireSpecies = true,
@@ -144,27 +168,7 @@ export function validateFacts(
   )
     throw Error("Gender and ability require a supported known species");
   for (const key of out.assumed ?? []) {
-    const match = /^(ev|contest|pp|move)_([0-5])$/.exec(key);
-    const value = match
-      ? out[
-          match[1] === "ev"
-            ? "evs"
-            : match[1] === "pp"
-              ? "pp"
-              : match[1] === "move"
-                ? "moves"
-                : "contest"
-        ]?.[Number(match[2])]
-      : out[key as keyof KnownFacts];
-    if (
-      key === "friendship" ||
-      key === "nickname" ||
-      key === "headerFlags" ||
-      key.startsWith("pp_") ||
-      key.startsWith("ev_")
-        ? value === undefined || value === null
-        : value !== 0
-    )
+    if (!isActiveAssumption(out, key))
       throw Error(
         "Default assumption metadata must reference an active zero value",
       );

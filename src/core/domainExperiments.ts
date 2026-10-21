@@ -10,6 +10,7 @@ import {
 import { compileChecksumSupport, type Hypothesis } from "./sid";
 import { checksumPixelOutcomes, scoreOutcomes } from "./checksum";
 import { experimentChecksumDelta } from "./checksumExperiments";
+import { rankPixelDomains } from "./experimentOutcomes";
 
 export type DomainQuestion = {
   index: number;
@@ -23,6 +24,7 @@ export type DomainQuestion = {
   countKind: "exact" | "upper-bound";
   scopeRelaxed: boolean;
   combinedChecksum?: boolean;
+  combinedOutcomes?: boolean;
 };
 export type ExperimentDomain = Pick<
   Inference,
@@ -52,6 +54,7 @@ export function rankDomainExperiments(
       controlledExperiments,
       questions,
       checksumLimited: false,
+      outcomeLimited: false,
     };
   const original = { ...source.knownFacts, ...identity };
   // Bound expensive nuisance-outcome materialization. Above this budget the
@@ -74,6 +77,7 @@ export function rankDomainExperiments(
       : undefined;
   const checksumLimited =
     !!candidates && (candidates.length > 256 || supportBudgetExceeded);
+  let outcomeLimited = false;
   const countBasis: DomainQuestion["countBasis"] = candidates?.some(
     (h) => h.rng,
   )
@@ -87,11 +91,14 @@ export function rankDomainExperiments(
       snapshot: s,
       plain: knownPlaintext({ ...s.knownFacts, ...identity }),
     }));
+  const actions = controlledActions(source, identity.species, identity);
   const rank = (id: string, changes: KnownFacts, logical: number[]) => {
     const facts = { ...original, ...changes };
     delete facts.checksum;
     // Match the recorded experiment's conservative side-effect policy.
-    delete facts.friendship;
+    const action = actions.find((a) => a.id === id);
+    if (action?.kind !== "moves" && changes.friendship === undefined)
+      delete facts.friendship;
     const plain = knownPlaintext(facts);
     const positions = new Set<number>();
     for (const order of inference.orders)
@@ -112,6 +119,7 @@ export function rankDomainExperiments(
         });
     }
     let best: DomainQuestion | null = null;
+    const useful: DomainQuestion[] = [];
     let checksumFallback: DomainQuestion | null = null;
     for (const index of positions) {
       if (verified.has(index)) continue;
@@ -154,6 +162,7 @@ export function rankDomainExperiments(
         Math.min(transparentCount, blackCount) >= total
       )
         continue;
+      useful.push(question);
       const worst = (q: DomainQuestion) =>
           Math.max(q.transparentCount, q.blackCount),
         bestCase = (q: DomainQuestion) =>
@@ -187,7 +196,13 @@ export function rankDomainExperiments(
       worstCase,
       expectedRemaining,
       informationGain,
-      pixels: [{ index: best.index, value: 0 }],
+      pixels: [...useful]
+        .sort(
+          (a, b) =>
+            Math.max(a.transparentCount, a.blackCount) -
+            Math.max(b.transparentCount, b.blackCount),
+        )
+        .map((q) => ({ index: q.index, value: 0 })),
       // Physical question + its per-order plaintext semantics define a test;
       // matching counts alone do not establish equivalence.
       signature:
@@ -223,16 +238,36 @@ export function rankDomainExperiments(
           ? {}
           : {
               actionId: id,
-              action: controlledActions(source, identity.species).find(
-                (a) => a.id === id,
-              ),
+              action,
             }),
       },
     };
     delete target.knownFacts.checksum;
-    delete target.knownFacts.friendship;
+    if (action?.kind !== "moves" && changes.friendship === undefined)
+      delete target.knownFacts.friendship;
     const delta = experimentChecksumDelta(source, target);
     ranked.checksumDelta = delta;
+    if (candidates && candidates.length <= 256) {
+      const positions = ranked.pixels.map((p) => p.index);
+      const joint = rankPixelDomains(
+        candidates,
+        plain,
+        positions,
+        checksumSupports,
+        delta,
+        verified,
+      );
+      if (!joint) outcomeLimited = true;
+      if (joint && joint.pixels.length && joint.worstCase <= worstCase) {
+        best.combinedOutcomes = true;
+        best.combinedChecksum = joint.checksumQuestions.length > 0;
+        return {
+          ...ranked,
+          ...joint,
+          checksumContributes: joint.checksumQuestions.length > 0,
+        };
+      }
+    }
     if (checksumSupports && candidates && delta !== null) {
       const checksumPatterns = new Map<
         number[],
@@ -278,18 +313,35 @@ export function rankDomainExperiments(
         item,
         questions: [],
         effort:
-          "One targeted pixel; all remaining PID block orders are considered. Counts are stored-data bounds.",
+          "Sequential useful pixels across every compatible block order; symbolic ranking uses the best single-pixel bound without multiplying marginals.",
       });
   }
-  for (const action of controlledActions(source, identity.species)) {
+  for (const action of actions) {
     const ranked = rank(action.id, action.changes, action.logical);
     if (ranked) controlledExperiments.push({ ...ranked, action });
   }
   const compare = (
-    a: { worstCase: number; informationGain: number },
-    b: { worstCase: number; informationGain: number },
-  ) => a.worstCase - b.worstCase || b.informationGain - a.informationGain;
+    a: {
+      worstCase: number;
+      informationGain: number;
+      action?: { cost?: number };
+    },
+    b: {
+      worstCase: number;
+      informationGain: number;
+      action?: { cost?: number };
+    },
+  ) =>
+    a.worstCase - b.worstCase ||
+    b.informationGain - a.informationGain ||
+    (a.action?.cost ?? 1) - (b.action?.cost ?? 1);
   experiments.sort(compare);
   controlledExperiments.sort(compare);
-  return { experiments, controlledExperiments, questions, checksumLimited };
+  return {
+    experiments,
+    controlledExperiments,
+    questions,
+    checksumLimited,
+    outcomeLimited,
+  };
 }

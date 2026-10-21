@@ -15,6 +15,7 @@ import {
 import {
   loadInvestigation,
   saveInvestigation,
+  investigationFileName,
   splitFacts,
   newSnapshot,
   type Snapshot,
@@ -333,11 +334,12 @@ export function useCurtainLab() {
     mode === "solver" && hexSource === "inferred"
       ? inference.masks
       : suppliedMasks;
-  const experimentTargets = deduction.current
-    ? deduction.data.experimentTargets
-    : (activeSnapshot.targets ?? []).filter(
-        (n) => activeSnapshot.observations[n] === -1,
-      );
+  const experimentTargets =
+    deduction.current && !deduction.error
+      ? deduction.data.experimentTargets
+      : (activeSnapshot.targets ?? []).filter(
+          (n) => activeSnapshot.observations[n] === -1,
+        );
   useEffect(() => {
     if (
       !deduction.current ||
@@ -351,7 +353,6 @@ export function useCurtainLab() {
       drawingInProgress ||
       activeSnapshot.itemTest?.mode !== "pixels" ||
       isRecorded(activeSnapshot) ||
-      !sidAnalysis?.candidates.length ||
       experimentTargets.length
     )
       return;
@@ -699,7 +700,7 @@ export function useCurtainLab() {
     }
     try {
       download(
-        "curtain-investigation.json",
+        investigationFileName(identity.species),
         new Blob(
           [
             saveInvestigation({
@@ -1240,6 +1241,14 @@ export function useCurtainLab() {
       setSummaryDraft({});
     },
     applyEstimatedIVs,
+    setExperimentPokeblock: (values?: number[]) =>
+      setSnapshots(
+        currentSnapshots.map((s) =>
+          s.id === originalItemBaseline.id
+            ? { ...s, experimentPokeblock: values }
+            : s,
+        ),
+      ),
     setIvJudge: (evidence: KnownFacts["ivJudge"]) =>
       editFact(
         "ivJudge",

@@ -154,7 +154,10 @@ test("move, EXP and EV predictions match independently modified encrypted record
       ),
       id,
     );
-    assert.equal(snapshot.knownFacts.friendship, undefined);
+    assert.equal(
+      snapshot.knownFacts.friendship,
+      action.kind === "moves" ? source.knownFacts.friendship : undefined,
+    );
     assert.equal(snapshot.knownFacts.checksum, undefined);
     if (action.kind !== "moves")
       assert.deepEqual(snapshot.summaryStats?.stats, Array(6).fill(null));
@@ -253,8 +256,8 @@ test("vitamin caps, missing EVs and level 100 prevent unsupported actions", () =
       },
       25,
     ).some((a) => a.kind === "candy"),
-    false,
-    "empty slots might automatically learn a move",
+    true,
+    "known empty slots use the actual next-level learnset",
   );
 });
 test("EXP checkpoints respect the six growth curves and integer division boundaries", () => {
