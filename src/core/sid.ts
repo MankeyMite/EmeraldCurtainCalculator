@@ -19,6 +19,7 @@ import {
   mod16,
 } from "./checksum";
 import { experimentChecksumDelta } from "./checksumExperiments";
+import { refineJudgePlaintext } from "./ivJudge";
 
 export type Hypothesis = {
   pid: number;
@@ -86,6 +87,7 @@ function prepare(
       () => new Map<number, number[]>(),
     ),
     checksumValuesCache: new Map<number, number[]>(),
+    judgeCache: new Map<number, boolean>(),
     valid:
       (!generated ||
         !suppliedIvs?.some((v, i) => v !== null && v !== generated.ivs[i])) &&
@@ -242,6 +244,21 @@ function headerFits(p: Prepared, h: Hypothesis) {
   return true;
 }
 function checksumFits(p: Prepared, h: Hypothesis, checksum?: number) {
+  if (p.facts.ivJudge) {
+    let fits = p.judgeCache.get(h.key);
+    if (fits === undefined) {
+      const positions = SUBSTRUCT_POSITIONS[h.pid % 24];
+      const logical = Array.from({ length: 96 }, (_, n) => {
+        const physical = positions[Math.floor(n / 24)] * 24 + (n % 24);
+        return p.plaintextDomains[physical][
+          (h.key >>> ((physical % 8) * 4)) & 15
+        ];
+      });
+      fits = refineJudgePlaintext(logical, p.facts.ivJudge).every(Boolean);
+      p.judgeCache.set(h.key, fits);
+    }
+    if (!fits) return false;
+  }
   if (
     checksum === undefined &&
     p.header.slice(56, 60).every((m) => m === 0xffff)
@@ -450,7 +467,9 @@ export function solveSids(
     eliminated,
     model: spreads
       ? "Conditional on the selected Emerald encounter RNG settings, generated PID/IV spreads, supplied facts, all saved pixels and the 16-bit checksum."
-      : "Exact for supplied stored facts, all observed zero/nonzero nibbles and the 16-bit checksum. Legality and unresolved summary-stat ranges are not searched.",
+      : identity.ivJudge
+        ? "Conservative compatibility bound for stored facts, judge answers, saved pixels and checksums. Joint IV maximum/total and checksum correlations may remain unresolved; no unseen tied stat is excluded."
+        : "Exact for supplied stored facts, all observed zero/nonzero nibbles and the 16-bit checksum. Legality and unresolved summary-stat ranges are not searched.",
   };
 }
 export function diagnoseHypothesis(

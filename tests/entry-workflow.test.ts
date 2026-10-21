@@ -133,8 +133,8 @@ test("target answers alone narrow/rerank candidates, preserving original and unr
   assert.equal(updated.sidAnalysis!.candidates.length, 14);
   assert.ok(updated.sidAnalysis!.sidValues.every((s) => s !== 1));
   assert.equal(
-    updated.experiments.find((e) => e.item.id === 1)!.groups,
-    1,
+    updated.experiments.some((e) => e.item.id === 1),
+    false,
     "already excluded key digit does not stay recommended",
   );
   assert.ok(updated.experiments.some((e) => e.groups > 1 && e.item.id !== 1));

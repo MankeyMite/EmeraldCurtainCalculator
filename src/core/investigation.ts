@@ -51,6 +51,7 @@ export type Investigation = {
   sidRng?: SidRngSettings;
 };
 export const IDENTITY_KEYS = new Set([
+  "ivJudge",
   "pid",
   "tid",
   "sid",

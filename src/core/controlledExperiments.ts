@@ -16,6 +16,14 @@ export type ActionDescription = {
   instructions: string;
   restore: string;
 };
+// Older investigations retain generated instructions in their action metadata.
+// Refresh the obsolete PP warning for display without rewriting saved evidence.
+export function displayActionInstructions(action: ActionDescription): string {
+  return action.instructions.replace(
+    "Do not use either move or change anything else.",
+    "Keep other data unchanged.",
+  );
+}
 export type ControlledAction = ActionDescription & {
   id: string;
   changes: KnownFacts;
@@ -87,7 +95,7 @@ export function controlledActions(
         id: `moves-${a}-${b}`,
         kind: "moves",
         name: `Swap moves ${a + 1} and ${b + 1}`,
-        instructions: `While boxed, open the PC summary and swap move slots ${a + 1} and ${b + 1}. Do not use either move or change anything else. Current PP and PP Ups follow their moves.`,
+        instructions: `While boxed, open the PC summary and swap move slots ${a + 1} and ${b + 1}. Keep other data unchanged. Current PP and PP Ups follow their moves.`,
         restore: `Swap moves ${a + 1} and ${b + 1} back before starting the next test. Restore the original held item too.`,
         changes: {
           moves,

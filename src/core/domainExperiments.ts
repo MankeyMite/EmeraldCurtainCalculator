@@ -1,4 +1,4 @@
-import { allowedValues, type KnownFacts } from "./constraints";
+import type { KnownFacts } from "./constraints";
 import { knownPlaintext, type Inference } from "./inference";
 import type { Snapshot } from "./investigation";
 import { SUBSTRUCT_POSITIONS } from "./pokemon";
@@ -7,6 +7,9 @@ import {
   controlledActions,
   type rankControlledExperiments,
 } from "./controlledExperiments";
+import { compileChecksumSupport, type Hypothesis } from "./sid";
+import { checksumPixelOutcomes, scoreOutcomes } from "./checksum";
+import { experimentChecksumDelta } from "./checksumExperiments";
 
 export type DomainQuestion = {
   index: number;
@@ -16,32 +19,68 @@ export type DomainQuestion = {
   blackCount: number;
   total: number;
   conditional: boolean;
+  countBasis: "PID" | "PID/SID pair" | "PID/SID/IV hypothesis";
+  countKind: "exact" | "upper-bound";
+  scopeRelaxed: boolean;
+  combinedChecksum?: boolean;
 };
+export type ExperimentDomain = Pick<
+  Inference,
+  "consistent" | "orders" | "headerPairCount" | "orderKeyCounts"
+>;
 
-/** Large PID sets stay in residue-DP form. Fixed trainer IDs make each PID a
- * unique key. Per-order key marginals count a SINGLE binary pixel question
- * exactly under the stored-data model, without treating digits as independent.
- * Unknown plaintext allows both outcomes, conservatively retaining the PID.
- * This deliberately does not invent checksum supports or RNG/IV/EV tuples.
+/** Joint identities stay in weighted residue-DP form, with key marginals kept
+ * separately for each order. A SINGLE question does not multiply marginals.
+ * Unknown plaintext retains the identity in both outcome sets. The symbolic
+ * model is an outer approximation when payload/checksum correlations remain.
+ * Small validated sets can also combine this question with linked checksums.
  */
 export function rankDomainExperiments(
   identity: KnownFacts,
   snapshots: Snapshot[],
   source: Snapshot,
-  inference: Inference,
+  inference: ExperimentDomain,
+  options: { candidates?: Hypothesis[]; scopeRelaxed?: boolean } = {},
 ) {
   const experiments: ReturnType<typeof rankItemExperiments> = [],
     controlledExperiments: ReturnType<typeof rankControlledExperiments> = [],
     questions: Record<string, DomainQuestion> = {};
-  const total = Number(inference.pidCount);
-  if (
-    identity.tid === undefined ||
-    identity.sid === undefined ||
-    !inference.consistent ||
-    total <= 1
-  )
-    return { experiments, controlledExperiments, questions };
+  const total = Number(inference.headerPairCount);
+  if (identity.tid === undefined || !inference.consistent || total <= 1)
+    return {
+      experiments,
+      controlledExperiments,
+      questions,
+      checksumLimited: false,
+    };
   const original = { ...source.knownFacts, ...identity };
+  // Bound expensive nuisance-outcome materialization. Above this budget the
+  // encrypted question remains valid; no candidate subset is substituted.
+  const candidates = options.candidates;
+  const supports =
+    candidates && candidates.length <= 256
+      ? candidates.map(compileChecksumSupport(identity, snapshots, source))
+      : undefined;
+  const distinctSupports = supports && [...new Set(supports)];
+  const supportBudgetExceeded =
+    !!distinctSupports &&
+    distinctSupports.reduce((size, values) => size + values.length, 0) > 131072;
+  const checksumSupports =
+    supports &&
+    !supportBudgetExceeded &&
+    !supports.every((s) => s === supports[0]) &&
+    !supports.every((s) => s.length === 65536)
+      ? supports
+      : undefined;
+  const checksumLimited =
+    !!candidates && (candidates.length > 256 || supportBudgetExceeded);
+  const countBasis: DomainQuestion["countBasis"] = candidates?.some(
+    (h) => h.rng,
+  )
+    ? "PID/SID/IV hypothesis"
+    : identity.sid === undefined
+      ? "PID/SID pair"
+      : "PID";
   const previous = snapshots
     .filter((s) => s.itemTest?.sourceId === source.id)
     .map((s) => ({
@@ -73,6 +112,7 @@ export function rankDomainExperiments(
         });
     }
     let best: DomainQuestion | null = null;
+    let checksumFallback: DomainQuestion | null = null;
     for (const index of positions) {
       if (verified.has(index)) continue;
       const physical = index - 80,
@@ -92,12 +132,6 @@ export function rankDomainExperiments(
           if (mask & (65535 ^ (1 << k))) blackCount += count;
         });
       }
-      if (
-        !transparentCount ||
-        !blackCount ||
-        Math.min(transparentCount, blackCount) >= total
-      )
-        continue;
       const question: DomainQuestion = {
         index,
         keyDigit,
@@ -106,7 +140,20 @@ export function rankDomainExperiments(
         blackCount,
         total,
         conditional: transparentCount + blackCount > total,
+        countBasis,
+        countKind:
+          candidates && transparentCount + blackCount === total
+            ? "exact"
+            : "upper-bound",
+        scopeRelaxed: !!options.scopeRelaxed,
       };
+      checksumFallback ??= question;
+      if (
+        !transparentCount ||
+        !blackCount ||
+        Math.min(transparentCount, blackCount) >= total
+      )
+        continue;
       const worst = (q: DomainQuestion) =>
           Math.max(q.transparentCount, q.blackCount),
         bestCase = (q: DomainQuestion) =>
@@ -118,17 +165,24 @@ export function rankDomainExperiments(
       )
         best = question;
     }
+    const encryptedInformative = !!best;
+    if (!best && checksumSupports) best = checksumFallback;
     if (!best) return null;
     questions[id] = best;
     const sizes = [best.transparentCount, best.blackCount],
       worstCase = Math.max(...sizes),
-      expectedRemaining = best.conditional
-        ? worstCase
-        : sizes.reduce((sum, n) => sum + (n * n) / total, 0),
-      informationGain = best.conditional
-        ? Math.log2(total / worstCase)
-        : sizes.reduce((sum, n) => sum - (n / total) * Math.log2(n / total), 0);
-    return {
+      expectedRemaining =
+        best.conditional || !candidates
+          ? worstCase
+          : sizes.reduce((sum, n) => sum + (n * n) / total, 0),
+      informationGain =
+        best.conditional || !candidates
+          ? 0
+          : sizes.reduce(
+              (sum, n) => sum - (n / total) * Math.log2(n / total),
+              0,
+            );
+    const ranked = {
       groups: 2,
       worstCase,
       expectedRemaining,
@@ -149,9 +203,71 @@ export function rankDomainExperiments(
           })
           .join(";"),
       checksumContributes: false,
-      checksumQuestions: [],
-      checksumDelta: null,
+      checksumQuestions: [] as {
+        index: number;
+        transparentCount: number;
+        blackCount: number;
+      }[],
+      checksumDelta: null as number | null,
     };
+    // With multiple positions, unknown plaintext at the selected physical
+    // pixel is a nuisance variable. Never use the candidate's own item/move
+    // location as though that location had already been observed.
+    const target = {
+      ...source,
+      knownFacts: { ...source.knownFacts, ...changes },
+      itemTest: {
+        sourceId: source.id,
+        phase: "question" as const,
+        ...(id.startsWith("item-")
+          ? {}
+          : {
+              actionId: id,
+              action: controlledActions(source, identity.species).find(
+                (a) => a.id === id,
+              ),
+            }),
+      },
+    };
+    delete target.knownFacts.checksum;
+    delete target.knownFacts.friendship;
+    const delta = experimentChecksumDelta(source, target);
+    ranked.checksumDelta = delta;
+    if (checksumSupports && candidates && delta !== null) {
+      const checksumPatterns = new Map<
+        number[],
+        ReturnType<typeof checksumPixelOutcomes>
+      >();
+      const outcomes = candidates.map((h, i) => {
+        const physical = best!.index - 80,
+          blocks = SUBSTRUCT_POSITIONS[h.pid % 24],
+          n = blocks.indexOf(Math.floor(physical / 24)) * 24 + (physical % 24),
+          mask = plain[n],
+          k = (h.key >>> ((physical % 8) * 4)) & 15,
+          binary = [
+            ...(mask & (1 << k) ? [0] : []),
+            ...(mask & (65535 ^ (1 << k)) ? [1] : []),
+          ];
+        let checksum = checksumPatterns.get(checksumSupports[i]);
+        if (!checksum) {
+          checksum = checksumPixelOutcomes(checksumSupports[i], delta);
+          checksumPatterns.set(checksumSupports[i], checksum);
+        }
+        return binary.flatMap((value) =>
+          checksum.map((cs) => [...cs, { index: best!.index, value }]),
+        );
+      });
+      const combined = scoreOutcomes(outcomes);
+      if (combined.worstCase < worstCase) {
+        best.combinedChecksum = true;
+        return { ...ranked, ...combined, checksumContributes: true };
+      }
+    }
+    if (!encryptedInformative) {
+      delete questions[id];
+      return null;
+    }
+    return ranked;
   };
   for (const item of ITEM_CATALOG) {
     if (!item.experiment || item.id === source.knownFacts.heldItem) continue;
@@ -175,5 +291,5 @@ export function rankDomainExperiments(
   ) => a.worstCase - b.worstCase || b.informationGain - a.informationGain;
   experiments.sort(compare);
   controlledExperiments.sort(compare);
-  return { experiments, controlledExperiments, questions };
+  return { experiments, controlledExperiments, questions, checksumLimited };
 }

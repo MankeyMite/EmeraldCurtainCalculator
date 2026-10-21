@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   controlledActions,
+  displayActionInstructions,
   createControlledTest,
   actionPixels,
   rankControlledExperiments,
@@ -33,6 +34,25 @@ import {
   draftToFacts,
   factsToDraft,
 } from "../src/core/facts";
+
+test("boxed move instructions omit PP-use warnings, including saved legacy actions", () => {
+  const source = newSnapshot("base", "Baseline", { moves: [52, 45, 116, 10] });
+  const actions = controlledActions(source);
+  assert.ok(actions.length > 0);
+  for (const action of actions) {
+    assert.doesNotMatch(action.instructions, /do not use|lower.*PP/i);
+    assert.match(action.instructions, /PP and PP Ups follow their moves/);
+  }
+  const legacy = {
+    ...actions[0],
+    instructions:
+      "Swap moves. Do not use either move or change anything else. Current PP and PP Ups follow their moves.",
+  };
+  const original = legacy.instructions;
+  assert.match(displayActionInstructions(legacy), /Keep other data unchanged/);
+  assert.doesNotMatch(displayActionInstructions(legacy), /Do not use/);
+  assert.equal(legacy.instructions, original);
+});
 
 function modify(
   bytes: Uint8Array,

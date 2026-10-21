@@ -13,7 +13,26 @@ const header: Field[] = [
   [28, 2, "Checksum"],
   [30, 2, "Padding / unknown"],
 ];
-const blocks = ["Growth", "Attacks", "EVs / condition", "Miscellaneous"];
+export const BLOCK_NAMES = [
+  "Growth",
+  "Attacks",
+  "EVs / condition",
+  "Miscellaneous",
+];
+export const BLOCK_CODES = ["G", "A", "E", "M"];
+
+/** Physical storage order. Name a position only if every remaining order
+ * assigns it the same logical block. An empty model establishes no names. */
+export function blockOrder(orders: number[]): (number | null)[] {
+  return Array.from({ length: 4 }, (_, physical) => {
+    const logical = orders.map((order) =>
+      SUBSTRUCT_POSITIONS[order].indexOf(physical),
+    );
+    return logical.length && logical.every((n) => n === logical[0])
+      ? logical[0]
+      : null;
+  });
+}
 const secure: Field[][] = [
   [
     [0, 2, "Species"],
@@ -54,36 +73,41 @@ const secure: Field[][] = [
   ],
 ];
 
-// Field names follow include/pokemon.h. An encrypted field's position is
-// established only when the active model (or rendered record) has an exact PID.
+// Preserve the exact-PID interface used by record inspection and legacy views.
 export function describeByte(offset: number, pid?: number) {
-  if (!Number.isInteger(offset) || offset < 0 || offset >= 80)
-    throw Error("Record byte out of range");
   if (
     pid !== undefined &&
     (!Number.isInteger(pid) || pid < 0 || pid > 0xffffffff)
   )
     throw Error("Invalid PID");
+  return describeByteWithOrders(offset, pid === undefined ? [] : [pid % 24]);
+}
+
+// The full PID is unnecessary: agreement on this physical block is sufficient.
+export function describeByteWithOrders(offset: number, orders: number[]) {
+  if (!Number.isInteger(offset) || offset < 0 || offset >= 80)
+    throw Error("Record byte out of range");
   const encrypted = offset >= 32;
-  if (encrypted && pid === undefined)
+  const logical = encrypted
+    ? blockOrder(orders)[Math.floor((offset - 32) / 12)]
+    : null;
+  if (encrypted && logical === null)
     return {
       name: "Encrypted data",
       block: `Physical block ${Math.floor((offset - 32) / 12) + 1}`,
       encrypted,
       byteInField: (offset - 32) % 12,
       fieldSize: 12,
-      detail: "An exact PID is needed to identify the field in this block.",
+      detail:
+        "The remaining permutations do not establish this block's field yet.",
     };
-  const logical = encrypted
-    ? SUBSTRUCT_POSITIONS[pid! % 24].indexOf(Math.floor((offset - 32) / 12))
-    : -1;
   const local = encrypted ? (offset - 32) % 12 : offset;
-  const [start, size, name] = (encrypted ? secure[logical] : header).find(
+  const [start, size, name] = (encrypted ? secure[logical!] : header).find(
     ([start, size]) => local >= start && local < start + size,
   )!;
   return {
     name,
-    block: encrypted ? blocks[logical] : "Unencrypted header",
+    block: encrypted ? BLOCK_NAMES[logical!] : "Unencrypted header",
     encrypted,
     byteInField: local - start,
     fieldSize: size,

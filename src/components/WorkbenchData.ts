@@ -2,6 +2,47 @@ import type { CurtainLab } from "../hooks/useCurtainLab";
 import { allowedValues } from "../core/constraints";
 import { pixelAddress } from "../core/tiles";
 import { windowLayout } from "../core/window";
+
+/** Only exhaustive candidate sets may refine order projections. SID RNG
+ * witnesses and marginal PID digits never establish a permutation. */
+export function workbenchOrders(lab: CurtainLab): number[] {
+  if (lab.mode === "renderer")
+    return lab.imported ? [lab.imported.pid % 24] : [];
+  if (lab.inference.consistent === false) return [];
+  if (lab.sidAnalysis)
+    return [...new Set(lab.sidAnalysis.candidates.map((h) => h.pid % 24))].sort(
+      (a, b) => a - b,
+    );
+  const orders = lab.inference.orders ?? [
+    ...new Set(lab.inference.pidValues?.map((pid) => pid % 24)),
+  ];
+  const pids = lab.sidRngResult?.pidValues;
+  return Array.isArray(pids)
+    ? orders.filter((o) => pids.some((pid) => pid % 24 === o))
+    : orders;
+}
+
+/** Conservative logical-byte EV projections; never substitute zero for an
+ * unknown field. Recovery nibble unions can retain extra byte combinations. */
+export function workbenchEvs(lab: CurtainLab): number[][] {
+  if (lab.mode === "renderer" && lab.imported)
+    return lab.imported.evs.map((v) => [v]);
+  const plain = lab.recovery?.plaintext ?? lab.inference.plaintextMasks;
+  return Array.from({ length: 6 }, (_, i) => {
+    const known = lab.mode === "renderer" ? undefined : lab.facts?.evs?.[i];
+    const byteValues = lab.inference.plaintextByteValues?.[24 + i];
+    const supported = byteValues && new Set(byteValues);
+    const lo = plain?.[48 + i * 2] ?? 65535,
+      hi = plain?.[49 + i * 2] ?? 65535;
+    return allowedValues(lo)
+      .flatMap((low) => allowedValues(hi).map((high) => low | (high << 4)))
+      .filter(
+        (v) =>
+          (known == null || v === known) && (!supported || supported.has(v)),
+      )
+      .sort((a, b) => a - b);
+  });
+}
 export function workbenchMasks(lab: CurtainLab) {
   if (lab.mode === "renderer") return lab.suppliedMasks;
   const masks = (lab.recovery?.masks ?? lab.inference.masks).slice();

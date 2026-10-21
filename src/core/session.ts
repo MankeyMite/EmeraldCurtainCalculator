@@ -7,6 +7,7 @@ import { PROFILE } from "./memory";
 import { speciesTraits } from "./traits";
 import { validateSummaryStats, type SummaryStats } from "./stats";
 import { encodeOtName, encodeNickname } from "./names";
+import { validateIvJudge } from "./ivJudge";
 export type Session = {
   format: "emerald-curtain-observations";
   schemaVersion: 1;
@@ -50,6 +51,10 @@ export function validateFacts(
     ribbonTail: 31,
   };
   for (const k of Object.keys(f)) {
+    if (k === "ivJudge") {
+      out.ivJudge = validateIvJudge(f[k]);
+      continue;
+    }
     if (k === "shiny") {
       if (typeof f[k] !== "boolean") throw Error("Invalid shiny status");
       out.shiny = f[k];

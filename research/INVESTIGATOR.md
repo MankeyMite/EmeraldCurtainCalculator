@@ -46,7 +46,7 @@ Predicted pixels use solver domains but live separately from observed pixels. Pr
 
 ## Held-item experiments
 
-`core/experiments.ts` predicts the four held-item ciphertext nibbles for each surviving hypothesis. Growth bytes 2–3 use key digits 4–7, with digit 0 least significant. Recommendations require only a shared Growth-block position, allowing multiple PIDs and differing orders of other substructures.
+`core/experiments.ts` predicts the four held-item ciphertext nibbles for each surviving hypothesis. Growth bytes 2–3 use key digits 4–7, with digit 0 least significant. Its finite-set fast path uses a shared Growth position. `domainExperiments.ts` supplies joint weighted-DP questions across every compatible position, with unknown PID and SID. See [joint ranking and the uploaded Torchic reproduction](JOINT_EXPERIMENTS.md).
 
 Candidates are grouped by **binary black/transparent patterns**, not exact ciphertext. Report group count, worst-case survivors, expected survivors and Shannon information gain. Expected values assume a stated uniform prior over PID/SID pairs, not in-game generation probabilities. Rank by worst case, then gain. Each proposed action has equal effort: one reversible no-battle item swap. Equivalent prediction functions are labeled.
 
@@ -58,7 +58,7 @@ Choose Try, answer whether the pixels changed, then save any drawing edits. The 
 
 The compact workbench keeps the curtain/inspector/grouped 80-byte view fixed and scrolls input tabs independently. Pixel and hex digit selection share a canonical nibble address. Completeness is singleton bytes divided by 80. Collapsed fields and the classic workspace preserve advanced tools. SID source sequence, exact intersections and conservative unknown-PID handling: [SID_RNG.md](SID_RNG.md).
 
-`controlledExperiments.ts` ranks binary outcomes alongside item tests. Move swaps carry PP and packed PP Ups. Rare Candy targets exact next-level growth-table EXP and requires four occupied known move slots; users decline new moves and cancel evolution. Vitamins require six known original EVs and enforce 100/stat and 510 total, including partial gains near caps. EXP/EV tests discard stale summary stats; derived values retain dependence on baseline assumptions. These are controlled item uses, not battle simulations. Affected blocks must share observable positions across candidates.
+`controlledExperiments.ts` ranks binary outcomes alongside item tests. Move swaps carry PP and packed PP Ups. Rare Candy targets exact next-level growth-table EXP and requires four occupied known move slots; users decline new moves and cancel evolution. Vitamins require six known original EVs and enforce 100/stat and 510 total, including partial gains near caps. EXP/EV tests discard stale summary stats; derived values retain dependence on baseline assumptions. These are controlled item uses, not battle simulations. The domain fallback evaluates differing physical positions and labels overlapping outcome counts as conservative bounds.
 
 New tests independently check all-SID results across all 24 permutations, nonzero plaintext, partial IV bits, genuine SID survival, ambiguous PID/SID sets, snapshots with changing items/checksums, actual encrypted target pixels, ranking metrics, exact/partial checksums, full original-byte synthetic recovery, blocked export for unknown header bytes, new facts in candidate comparison, legacy/new JSON and UI contracts. Existing rendering/capture/trait/stat/reconstruction tests remain.
 

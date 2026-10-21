@@ -4,6 +4,7 @@ import { validateFacts } from "./session";
 import { genderPidCases, speciesTraits } from "./traits";
 import { shinyDomains } from "./shiny";
 import { ppUpStages } from "./pp";
+import { refineJudgePlaintext } from "./ivJudge";
 import {
   checksumMasks,
   checksumValues,
@@ -169,7 +170,7 @@ export function knownPlaintext(facts: KnownFacts): number[] {
         for (let n = 0; n < 16; n++) if (n >>> 3 === slot) mask |= 1 << n;
     plain[87] &= mask; // Misc byte 7, bit 7. No PID-parity assumption.
   }
-  return plain;
+  return refineJudgePlaintext(plain, facts.ivJudge);
 }
 
 function analyzeUnshinyConstraints(
@@ -276,10 +277,10 @@ function analyzeUnshinyConstraints(
       models.push({ choices, weights, target, modulus });
       pidCount += distinct[target];
       headerPairCount += forward[8][target];
-      // With both trainer IDs fixed, each PID identifies exactly one key.
-      // Count its digit marginals without enumerating millions of PIDs. Keep
-      // orders separate: a changed field may occupy different screen pixels.
-      if (facts.tid !== undefined && facts.sid !== undefined) {
+      // Count joint PID/OT identities, not distinct PIDs. Each local OT digit
+      // is a separate choice; prefix and suffix retain its multiplicity.
+      // Known TID bounds the count by 2^48, exactly representable as a number.
+      if (facts.tid !== undefined) {
         const suffix = Array.from(
           { length: 9 },
           () => new Float64Array(modulus),
@@ -288,7 +289,8 @@ function analyzeUnshinyConstraints(
         for (let i = 7; i >= 0; i--)
           for (let r = 0; r < modulus; r++)
             for (const p of choices[i])
-              suffix[i][(r + p * weights[i]) % modulus] += suffix[i + 1][r];
+              suffix[i][(r + p * weights[i]) % modulus] +=
+                suffix[i + 1][r] * multiplicities[i][p];
         for (let i = 0; i < 8; i++)
           for (const p of choices[i]) {
             let count = 0;
@@ -299,8 +301,8 @@ function analyzeUnshinyConstraints(
                   (((target - r - p * weights[i]) % modulus) + modulus) %
                     modulus
                 ];
-            const q = allowedValues(header[8 + i])[0];
-            orderKeyCounts[order][i][p ^ q] += count;
+            for (const q of allowedValues(qs[i][p]))
+              orderKeyCounts[order][i][p ^ q] += count;
           }
       }
       if (facts.nature !== undefined) natures.add(facts.nature);
@@ -374,7 +376,7 @@ function analyzeUnshinyConstraints(
     byteValues = bytes.map(valuesFromRows);
   const exactKey = keyMasks.every((m) => allowedValues(m).length === 1);
   const secureCountsExact =
-    headerPairCount > 0n && exactKey && orders.length === 1;
+    headerPairCount > 0n && exactKey && orders.length === 1 && !facts.ivJudge;
   // List only small proven sets, pruning with suffix residues. No large PID
   // space is enumerated and no complete candidate Pokémon is invented.
   let pidValues: number[] | null = null;
@@ -423,7 +425,7 @@ function analyzeUnshinyConstraints(
     pidValues,
     headerPairCount,
     secureCountsExact,
-    byteCountsExact: true,
+    byteCountsExact: !facts.ivJudge,
     cryptoFacts: plain.some((v) => v !== 0xffff),
     reason:
       headerPairCount > 0n
@@ -446,16 +448,21 @@ export function analyzeConstraints(
       result.keyMasks.some((m) => !m || m & (m - 1))
     )
       return result;
-    const values = checksumValues(
+    const judgePlain = refineJudgePlaintext(
       result.plaintextMasks,
-      result.masks.slice(56, 60),
+      supplied.ivJudge,
     );
+    const values = checksumValues(judgePlain, result.masks.slice(56, 60));
     const masks = result.masks.slice(),
       cs = checksumMasks(values);
     cs.forEach((m, n) => (masks[56 + n] &= m));
     const plaintextMasks = result.masks.slice(56, 60).some((m) => m !== 65535)
-      ? refineChecksumPayload(result.plaintextMasks, cs)
-      : result.plaintextMasks;
+      ? refineJudgePlaintext(
+          refineChecksumPayload(judgePlain, cs),
+          supplied.ivJudge,
+        )
+      : judgePlain;
+    if (plaintextMasks.some((m) => !m)) values.length = 0;
     const positions = SUBSTRUCT_POSITIONS[result.orders[0]];
     plaintextMasks.forEach((m, n) => {
       const physical = positions[Math.floor(n / 24)] * 24 + (n % 24);

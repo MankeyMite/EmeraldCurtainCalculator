@@ -2,11 +2,12 @@
 
 The current recommendation engine also uses exact checksum deltas and joint encrypted/checksum outcomes. Move PP parity and packed PP Ups are handled separately; unknown consumable friendship effects use the encrypted-only fallback. See [the reproducible four-candidate improvement and mathematical limits](SMART_DEDUCTION.md).
 
-With both trainer IDs known, held-item, move-swap and eligible Rare Candy
-recommendations also work for broad PID sets without an encounter RNG limit.
-Per-order residue-DP key counts rank conservative, single-pixel questions; verified
-answers immediately update the PID bound. See the trained Combusken reproduction
-and limitations in [SMART_DEDUCTION.md](SMART_DEDUCTION.md#broad-pid-sets-with-known-trainer-ids).
+With the original TID known, held-item, move-swap and eligible Rare Candy
+recommendations work for broad joint PID/SID sets without an encounter RNG limit.
+Weighted per-order residue-DP key counts rank conservative pixel questions even
+when PID, SID, key and affected block position are unknown. Verified answers
+update the shared constraints. See [the uploaded Torchic regression, exact counts
+versus bounds, checksum support and SID RNG limits](JOINT_EXPERIMENTS.md).
 
 The subsequently supplied Poochyena JSON and encrypted reference now reproduce and explain its zero-PID input conflict: one origin-game mismatch and two pixel disagreements. See [the case report](POOCHYENA_CASE.md). The historical RNG/markings questions remain open; the review does not inject reference predictions as observations.
 

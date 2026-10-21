@@ -1,5 +1,67 @@
-import { checksumDifference } from "./checksum";
+import {
+  checksumDifference,
+  checksumValues,
+  checksumMasks,
+  mod16,
+} from "./checksum";
 import type { Snapshot } from "./investigation";
+
+/** Propagate linked modular sums before a concrete key is known. Plaintext
+ * digit domains are an outer approximation, so this can reject contradictions
+ * but never chooses a baseline checksum or removes a real identity. */
+export function constrainLinkedChecksums(
+  snapshots: Snapshot[],
+  headers: number[][],
+  plains: number[][],
+): boolean {
+  const links = snapshots.flatMap((target, j) => {
+    const i = snapshots.findIndex((s) => s.id === target.itemTest?.sourceId);
+    if (i < 0) return [];
+    const delta = experimentChecksumDelta(snapshots[i], target);
+    return delta === null ? [] : [{ i, j, delta }];
+  });
+  const done = new Set<number>();
+  for (const edge of links) {
+    if (done.has(edge.i)) continue;
+    const offsets = new Map<number, number>([[edge.i, 0]]),
+      queue = [edge.i];
+    for (const i of queue)
+      for (const link of links) {
+        const j = link.i === i ? link.j : link.j === i ? link.i : -1;
+        if (j < 0) continue;
+        const offset = mod16(
+          offsets.get(i)! + (link.i === i ? link.delta : -link.delta),
+        );
+        if (offsets.has(j)) {
+          if (offsets.get(j) !== offset) return false;
+        } else {
+          offsets.set(j, offset);
+          queue.push(j);
+        }
+      }
+    const supports = queue.map((i) => {
+      const values = checksumValues(plains[i], headers[i].slice(56, 60));
+      const membership = new Uint8Array(65536);
+      values.forEach((v) => (membership[v] = 1));
+      return { i, values, membership, offset: offsets.get(i)! };
+    });
+    const smallest = supports.reduce((a, b) =>
+      a.values.length <= b.values.length ? a : b,
+    );
+    const roots = smallest.values
+      .map((v) => mod16(v - smallest.offset))
+      .filter((root) =>
+        supports.every((s) => s.membership[mod16(root + s.offset)]),
+      );
+    if (!roots.length) return false;
+    for (const s of supports) {
+      const masks = checksumMasks(roots.map((root) => mod16(root + s.offset)));
+      masks.forEach((m, n) => (headers[s.i][56 + n] &= m));
+      done.add(s.i);
+    }
+  }
+  return true;
+}
 
 /** Recompute from current facts, never trust a stale imported numeric delta.
  * Item/move protocols require no other changes. Consumables need the resulting

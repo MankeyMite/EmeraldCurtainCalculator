@@ -15,17 +15,21 @@ import { diagnoseHypothesis, makeHypothesis } from "../core/sid";
 import species from "../data/species.json";
 import growth from "../data/growth-rates.json";
 import type { DomainQuestion } from "../core/domainExperiments";
+import { ExperimentProgress } from "./ExperimentProgress";
 
 function DomainExplanation({ question }: { question?: DomainQuestion }) {
   if (!question) return null;
   return (
     <p className="help">
-      Inspect byte 0x{hex(Math.floor((question.index - 16) / 2))},{" "}
+      {question.combinedChecksum ? "Encrypted component: byte" : "Inspect byte"}{" "}
+      0x{hex(Math.floor((question.index - 16) / 2))},{" "}
       {question.index % 2 ? "high" : "low"} digit. This tests XOR-key digit{" "}
-      {question.keyDigit} across all compatible block orders; with known
-      TID/SID, key restrictions also restrict PID. Transparent retains at most{" "}
-      {question.transparentCount.toLocaleString()} PID possibilities; black
-      retains at most {question.blackCount.toLocaleString()}.
+      {question.keyDigit} across all compatible block orders. With known
+      TID/SID, key restrictions also restrict PID; with unknown SID they jointly
+      constrain PID, SID, key and permutation. Transparent retains at most{" "}
+      {question.transparentCount.toLocaleString()} {question.countBasis}{" "}
+      possibilities; black retains at most{" "}
+      {question.blackCount.toLocaleString()}.
       {question.digits.length > 0 && question.digits.length < 16 && (
         <>
           {" "}
@@ -37,6 +41,10 @@ function DomainExplanation({ question }: { question?: DomainQuestion }) {
         " The sets can overlap because some block orders leave this pixel's plaintext unknown."}{" "}
       Counts are stored-data bounds; no encounter timing or zero EVs are
       assumed.
+      {question.combinedChecksum &&
+        " These counts describe the encrypted component alone. Follow all highlighted targets to combine it with linked checksum evidence."}
+      {question.scopeRelaxed &&
+        " The optional SID RNG scope uses a conservative digit envelope because exact scope ranking exceeds the computation budget."}
     </p>
   );
 }
@@ -374,7 +382,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                 : lab.identity.tid !== undefined &&
                     lab.identity.sid !== undefined
                   ? "Known TID and SID let pixel experiments narrow the XOR key and PID directly, even with millions of possibilities. RNG limits are optional. Counts remain stored-data bounds until joint validation is possible."
-                  : "Enter the original trainer TID and SID to rank key/PID experiments without encounter timing. Joint SID recovery uses TID and a small PID set; encounter RNG limits are optional."}
+                  : "The original trainer TID enables joint PID/SID, XOR-key and permutation experiments even when PID and SID are unknown. Encounter and new-game SID RNG limits are optional. Broad counts are conservative bounds."}
             </p>
           ) : (
             <>
@@ -399,7 +407,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                 </p>
               )}
               <details>
-                <summary>Exact SID list and elimination counts</summary>
+                <summary>Compatible SID list and elimination counts</summary>
                 <textarea
                   readOnly
                   aria-label="Compatible SID list"
@@ -601,6 +609,26 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
       )}
       <section className="next-item-experiments">
         <h3>Best next experiments</h3>
+        <p role="status">
+          {lab.analysisBusy
+            ? "Analysis still running; recommendations will update when it finishes."
+            : lab.analysisError
+              ? "Analysis could not complete. Resolve the computation message above."
+              : lab.experimentStatus === "inconsistent"
+                ? "Supplied observations or active RNG constraints are inconsistent. Resolve the conflicts before performing another experiment."
+                : lab.experimentStatus === "available"
+                  ? "Experiments available. They can discover block position and key digits while narrowing joint PID/SID possibilities. A test can rule out SID/key combinations while the distinct PID and SID counts stay unchanged."
+                  : lab.experimentStatus === "insufficient-information"
+                    ? "Insufficient known information: enter the original trainer TID to predict joint identity experiments reliably."
+                    : lab.experimentStatus === "computation-limited"
+                      ? "The solver could not rank experiments within the current computation scope. Add verified observations or narrow the optional search."
+                      : "All evaluated questions have indistinguishable identity outcomes under the current model. More known plaintext may enable useful questions; vitamins require known EV effects."}
+        </p>
+        {lab.experimentLimitations?.map((message) => (
+          <p className="help" key={message}>
+            {message}
+          </p>
+        ))}
         <p>
           Every test starts from the original Pokémon and drawing. After
           recording, the drawing resets automatically; restore the Pokémon
@@ -667,9 +695,14 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                   </button>
                   <small>
                     {e.groups} patterns · worst case{" "}
-                    {e.worstCase.toLocaleString()} hypotheses ·{" "}
-                    {lab.domainQuestions[e.key]?.conditional && "at least "}
-                    {e.informationGain.toFixed(2)} bits
+                    {lab.domainQuestions[e.key] && "at most "}
+                    {e.worstCase.toLocaleString()}{" "}
+                    {lab.domainQuestions[e.key]?.countBasis ?? "hypotheses"}
+                    {lab.domainQuestions[e.key]
+                      ? lab.domainQuestions[e.key].combinedChecksum
+                        ? " · conservative combined bounds"
+                        : " · conservative single-pixel bounds"
+                      : ` · ${e.informationGain.toFixed(2)} bits (uniform identity / supported-outcome model)`}
                     {e.checksumContributes &&
                       " · Combined encrypted and checksum pixels improve this test."}
                   </small>
@@ -705,8 +738,11 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                   question={lab.domainQuestions[e.action.id]}
                 />
                 <p>
-                  {e.groups} patterns; worst case {e.worstCase} compatible
-                  hypotheses remain.
+                  {e.groups} patterns; worst case{" "}
+                  {lab.domainQuestions[e.action.id] && "at most "}
+                  {e.worstCase.toLocaleString()} compatible{" "}
+                  {lab.domainQuestions[e.action.id]?.countBasis ?? "hypotheses"}{" "}
+                  remain.
                   {e.checksumContributes &&
                     " Combined encrypted and checksum pixels eliminate additional identities."}
                 </p>
@@ -731,7 +767,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
           {!lab.controlledExperiments.some((e) => e.groups > 1) && (
             <p>
               No informative move, EXP or vitamin test is established by the
-              current facts and candidate set. Check the original trainer IDs,
+              current facts and candidate set. Check the original trainer TID,
               known moves and level. Unknown EVs prevent vitamin predictions,
               but do not prevent move or eligible Rare Candy tests.
             </p>
@@ -741,11 +777,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
         {savedTest?.itemTest?.phase === "recorded" && (
           <p role="status">
             <strong>{savedTest.name} saved separately.</strong>{" "}
-            {lab.analysisBusy
-              ? "Updating candidates and recommendations…"
-              : savedTest.itemTest.candidatesBefore !== undefined
-                ? `${savedTest.itemTest.candidatesBefore.toLocaleString()} → ${(analysis?.candidates.length ?? Number(lab.investigationInference.pidCount)).toLocaleString()} ${analysis ? lab.hypothesisLabel : "PID possibilities (stored-data bound)"}. Ranking updated below.`
-                : "Findings and ranking updated below."}
+            <ExperimentProgress lab={lab} snapshotId={savedTest.id} />
           </p>
         )}
         <p>
@@ -770,7 +802,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
           <p>
             {lab.rngActive
               ? "Item recommendations appear when the encounter RNG search finishes with compatible hypotheses and the original trainer TID is entered."
-              : "Enter the original trainer TID and SID for experiments on a broad PID set. If both are known, no supported item currently distinguishes the remaining possibilities. RNG limits are optional."}
+              : "Joint experiments use the original trainer TID and saved observations. PID and SID may remain unknown. See the experiment status above for missing facts, conflicts or indistinguishable outcomes."}
           </p>
         ) : !useful.length ? (
           <p>
@@ -816,6 +848,7 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                       <summary>Why this item?</summary>
                       <p>
                         {e.groups} possible pixel patterns; worst case{" "}
+                        {lab.domainQuestions[`item-${e.item.id}`] && "at most "}
                         {e.worstCase.toLocaleString()} compatible hypotheses
                         remain.
                       </p>

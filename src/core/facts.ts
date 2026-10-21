@@ -240,6 +240,7 @@ export function factsToDraft(facts: KnownFacts): Record<string, string> {
   return Object.fromEntries(
     Object.entries(facts).flatMap(([key, value]) => {
       if (key === "assumed") return [];
+      if (key === "ivJudge") return [[key, JSON.stringify(value)]];
       if (key in FACT_ARRAYS)
         return (value as (number | null)[]).map((v, i) => [
           `${FACT_ARRAYS[key as keyof typeof FACT_ARRAYS]}_${i}`,
@@ -257,6 +258,10 @@ export function draftToFacts(
     /^(?:0x[\da-f]+|\d+)$/i.test(value.trim()) ? Number(value) : NaN;
   const next: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(draft)) {
+    if (key === "ivJudge") {
+      if (value.trim()) next.ivJudge = JSON.parse(value);
+      continue;
+    }
     if (key === "otName" || key === "nickname") {
       if (value !== "") next[key] = value;
       continue;

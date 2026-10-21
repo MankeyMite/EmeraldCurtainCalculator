@@ -265,6 +265,7 @@ export function PixelGrid(p: Props) {
         if (selected) {
           keyIndex.current = selected.nibble;
           p.onSelect?.(selected);
+          p.onHover(selected);
         }
         if (!selected || e.button !== 0 || !p.solver || p.editable === false)
           return;
@@ -283,7 +284,10 @@ export function PixelGrid(p: Props) {
       }}
       onPointerMove={move}
       onPointerUp={(e) => end(e)}
-      onPointerCancel={end}
+      onPointerCancel={(e) => {
+        end(e);
+        p.onHover(null);
+      }}
       onLostPointerCapture={() => {
         if (drawing.current) {
           drawing.current = false;
@@ -291,9 +295,8 @@ export function PixelGrid(p: Props) {
           p.onEnd();
         }
       }}
-      onPointerLeave={() => {
-        if (!drawing.current) p.onHover(null);
-      }}
+      onPointerLeave={() => p.onHover(null)}
+      onBlur={() => p.onHover(null)}
       onKeyDown={(e) => {
         const first = p.mainOnly ? 16 : 0,
           last = p.mainOnly ? 175 : 191;
@@ -311,7 +314,7 @@ export function PixelGrid(p: Props) {
             Math.min(last, keyIndex.current + changes[e.key]),
           );
           const n = keyIndex.current;
-          p.onHover({
+          const selected = {
             ...pixelAddress(
               791 + Math.floor(n / 64),
               n % 8,
@@ -320,7 +323,9 @@ export function PixelGrid(p: Props) {
             displayX: n % 8,
             displayY: Math.floor((n % 64) / 8),
             flipped: false,
-          });
+          };
+          p.onSelect?.(selected);
+          p.onHover(selected);
         }
         if (e.key === " " && p.solver && p.editable !== false) {
           e.preventDefault();

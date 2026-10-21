@@ -64,7 +64,7 @@ Summary inputs save separately as `summaryStats` in observation JSON. Old sessio
 
 ## Inspector
 
-Hover a pixel, or use arrows on the focused canvas. The inspector stays visible below the window and shows record offset, nibble, bit range, observation and mapped Pokémon field. It names encrypted fields only when the active solver has an exact PID. A candidate byte is explicitly labeled; it is not recovered information. A black pixel identifies a nonzero nibble, not any particular set bit.
+Hover a pixel, or use arrows on the focused canvas. The inspector stays visible below the window and shows record offset, nibble, bit range, observation and mapped Pokémon field. It names an encrypted field once all compatible permutations agree on that physical block, even when PID is unknown. The grouped record uses the same block labels. The recovery overview shows PID, SID, IVs, EV bounds, XOR key and physical permutation; unresolved permutation positions remain `?`. A candidate byte is explicitly labeled; it is not recovered information. A black pixel identifies a nonzero nibble, not any particular set bit.
 
 ## Byte experiments and candidates
 

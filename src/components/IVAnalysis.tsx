@@ -1,6 +1,7 @@
 import type { CurtainLab } from "../hooks/useCurtainLab";
 import { STAT_NAMES } from "../core/facts";
 import { valueRanges } from "../core/stats";
+import { IvJudgePanel } from "./IvJudgePanel";
 
 export function IVAnalysis({ lab }: { lab: CurtainLab }) {
   const exact = lab.ivEstimates.filter(
@@ -11,6 +12,7 @@ export function IVAnalysis({ lab }: { lab: CurtainLab }) {
   ).length;
   return (
     <section className="iv-analysis" aria-labelledby="iv-analysis-title">
+      <IvJudgePanel lab={lab} />
       <h3 id="iv-analysis-title">IV ranges</h3>
       <p className="micro">
         Enter level and summary stats under Known Pokémon information to combine
@@ -82,9 +84,9 @@ export function IVAnalysis({ lab }: { lab: CurtainLab }) {
         </button>
       )}
       <p className="micro">
-        Multi-value stat ranges are not yet propagated jointly into PID counts
-        or PID checks. Applied exact IVs are. This is a compatibility
-        calculation, not proof of legality or identity.
+        Judge answers are applied automatically. Summary-stat ranges remain
+        compatibility bounds; use the button to apply exact summary-derived IVs
+        to reconstruction. These results do not establish encounter legality.
       </p>
     </section>
   );

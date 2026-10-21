@@ -95,8 +95,8 @@ test("pinned pixel inspector and hex digit agree on byte, nibble and remaining c
   masks[0x4c * 2] = (1 << 1) | (1 << 5) | (1 << 12) | (1 << 13);
   const lab = {
     mode: "solver",
-    hover: null,
     selectedPixel: hit,
+    hover: hit,
     inference: { masks, pidValues: null },
     obs: Array(192).fill(-1),
     predictions: Array(192).fill(-1),
@@ -113,6 +113,16 @@ test("pinned pixel inspector and hex digit agree on byte, nibble and remaining c
   assert.equal((hex.match(/aria-pressed="true"/g) ?? []).length, 1);
   assert.match(hex, /Encrypted block 4/);
   assert.match(hex, /0\/80 bytes exact/);
+  const unhovered = { ...lab, hover: null };
+  const idleHex = renderToStaticMarkup(
+    createElement(GroupedHex, { lab: unhovered }),
+  );
+  assert.doesNotMatch(idleHex, /aria-pressed="true"|class="hex-digit selected/);
+  const idleInspector = renderToStaticMarkup(
+    createElement(PixelInspector, { lab: unhovered }),
+  );
+  assert.match(idleInspector, /0x4C/);
+  assert.match(idleInspector, /Candidates: 1, 5, C, D/);
 });
 test("SID controls show the actual intersection, advances, validation and reversible zero-result guidance", () => {
   const lab = {

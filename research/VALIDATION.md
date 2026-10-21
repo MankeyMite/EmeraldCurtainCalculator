@@ -1,5 +1,116 @@
 # Validation results
 
+## Battle Frontier IV judge - 2026-10-21
+
+- **214 tests** and the TypeScript/Vite production build pass.
+- Investigate IVs now opens judge guidance, selections for the named highest
+  stat and its exact English rating, optional total assessment, recorded
+  answers and IV ranges. Judge answers persist as shared identity evidence.
+- Independent small exhaustive models verify every range boundary, common
+  maximum and total constraints. All 24 packed-IV orders and multiple SIDs
+  retain compatible tuples. Generated spreads receive exact judge filtering.
+- Repeated flawless checks can confirm additional 31s, but never exclude
+  unmentioned ties. Conflicting judge, IV or curtain facts remain visible.
+- Broad packed-IV/checksum correlations remain conservative and are labeled
+  accordingly. See [judge mathematics and sources](IV_JUDGE.md).
+- Isolated browser checks follow Investigate IVs, record flawless Special
+  Attack and Speed answers, confirm both IVs become 31, and remove an answer.
+  Phone controls fit the viewport without horizontal overflow. The user's
+  live investigation is untouched.
+
+## Stable pixel inspection - 2026-10-21
+
+- Removed the per-pixel original-reference and automatic-prediction paragraphs
+  from the inspector. Prediction overlays, candidate digits and deductions
+  still operate; investigation-wide conflict messages remain available.
+- Reserved space for wrapped field names and the full candidate-digit list.
+  Inspecting known header, unknown header, EV, move and IV fields keeps the
+  curtain size, inspector height and hex position constant in desktop checks.
+  Phone checks likewise retain a constant layout, with no field overflow.
+- All 11 workbench/pixel-assistance tests and the production build pass.
+
+## Inspector clipping - 2026-10-21
+
+- Reproduced the reported clipping with an active experiment: the original
+  drawing reference and automatic prediction needed 131 px inside a 103 px
+  inspector, cutting off the second message above the hex display.
+- Inspector rows now fit their content at every desktop breakpoint. Recovery
+  values also establish their row's minimum height; the curtain canvas fits
+  that row rather than dictating it through its intrinsic bitmap height.
+  The right panel scrolls when the viewport cannot fit all sections.
+- Chrome checks at 1800 × 1000 and 1440 × 740 show both messages fully inside
+  the inspector, with the hex display following it and recovered values above
+  it. The 390 × 844 phone view retains complete wrapped messages and no
+  horizontal overflow. All **206 tests** and the production build pass.
+
+## Joint experiment feedback and navigation - 2026-10-21
+
+- All **206 automated tests** and the TypeScript/Vite production build pass.
+- The unmodified follow-up Torchic upload reproduces pair bounds
+  776,506 → 705,877 → 635,281 while the distinct PID bound stays 6,754.
+  Move slots 2/3 and Great Ball exclude upper-key digits 8 and 3 respectively.
+- Saved-test feedback now reports comparable joint bounds, distinct PID bounds
+  and excluded key digits. Comparisons use current stored-data facts before
+  optional RNG filtering; historical mixed-basis counts are not reused.
+- Both SID RNG modes retain useful recommendations. Answered questions are
+  omitted; a repeated move action may test a different, informative pixel.
+  Multiple nuisance outcomes shared by all identities cannot create a test.
+- Desktop and 390 × 844 phone checks start a test from a lower item card while
+  already on Experiments. Instructions and Black/Transparent controls scroll
+  into view; phone placement accounts for the sticky navigation tabs.
+
+## Compact EV bounds and transient inspection highlights - 2026-10-21
+
+- All **202 automated tests** and the TypeScript/Vite production build pass.
+- EV recovery values show minimum and maximum only; excluded intermediate
+  values remain excluded in the solver. Tests verify sparse sets are preserved.
+- Experiment wording refers to highlighted pixels without a screen-relative
+  position. Boxed move swaps omit the PP-use warning, including display of
+  saved legacy actions; stored observations and action metadata are preserved.
+- Canvas and hex highlights follow hover or keyboard inspection rather than
+  the last clicked pixel. The inspector can retain that pixel's details while
+  the highlight clears. Experiment target borders remain independent.
+- Isolated Chrome checks confirm one linked hex highlight during curtain/hex
+  inspection, zero after leaving either, retained inspector details and working
+  arrow-key inspection. The user's live investigation was untouched.
+
+## Permutation labels and EV recovery overview - 2026-10-21
+
+- All **199 automated tests** and the TypeScript/Vite production build pass.
+- The grouped encrypted record and pixel inspector now identify any physical
+  block shared by all compatible PID orders, without requiring an exact PID.
+  Partially solved orders show known positions and `?` elsewhere; widening
+  constraints retracts unsupported names. Empty/inconsistent models establish no
+  block labels, and SID RNG witness PIDs never establish an order.
+- Recovery values appear as PID, SID, IVs, EVs, XOR key and permutation. EV
+  displays use conservative logical-byte projections and explicit supplied EVs;
+  unknown values remain ranges, and imported records remain separate previews.
+- The contributed Torchic retains its existing 148,515 PID bound and displays
+  `M - A - G - E`. Its byte 0x21 inspector identifies Met location. Tests cover
+  all 24 permutations, partial consensus, EV projections and the summary order.
+
+## Joint unknown PID/SID experiments - 2026-10-21
+
+- All **194 automated tests** and the TypeScript/Vite production build pass.
+- The contributed Torchic JSON is retained byte-for-byte with unknown PID,
+  SID, EVs and IVs unchanged. The original selection path offers zero experiments
+  in both SID RNG modes. Weighted joint residue-DP ranking now offers 209 held
+  items, five move swaps and Rare Candy. Order 20 was already established by
+  these observations; separate all-order tests validate discovering positions.
+- Swapping moves 1/4 at byte 0x2C low nibble bounds survivors by 8,539,084
+  (transparent) or 8,538,426 (black), from a 17,077,510 pair bound. Both outcomes
+  match fresh multi-observation inference. Optional SID RNG advances 1–1800
+  retain 1,374 SID rows; their large-scope ranking envelope is explicitly
+  conservative, and no witness PID becomes an exhaustive candidate list.
+- Independent exhaustive PID/SID and byte-packing oracles cover weighted
+  key marginals, all 24 orders, shiny states, gender/nature, overlapping binary
+  outcomes, black-to-black ciphertext changes and transparent order elimination.
+  Linked checksum wraparound/conflicts, checksum-only improvements, unresolved
+  SID rows, enumeration fallback, JSON and UI statuses are also tested.
+- Existing known-SID broad-PID Combusken, known-PID recovery, automatic pixel
+  assistance and emulator mapping regressions pass. No new emulator capture or
+  encounter legality validation is claimed. See [mathematics and reproduction](JOINT_EXPERIMENTS.md).
+
 ## Navigation, PP Ups controls and dual SID display - 2026-10-20
 
 - All 183 automated tests and the TypeScript/Vite production build pass with `npm run check`.

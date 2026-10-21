@@ -2,6 +2,8 @@ import type { CurtainLab } from "../hooks/useCurtainLab";
 import { ITEM_CATALOG } from "../core/experiments";
 import { hitForNibble } from "./WorkbenchData";
 import { hex } from "../core/pokemon";
+import { displayActionInstructions } from "../core/controlledExperiments";
+import { ExperimentProgress } from "./ExperimentProgress";
 
 export function ItemTestControls({
   lab,
@@ -43,11 +45,7 @@ export function ItemTestControls({
         {active.id === baseline.id && (
           <>Original drawing “{baseline.name}” restored for the next test. </>
         )}
-        {lab.analysisBusy
-          ? "Updating candidates and recommendations…"
-          : savedTest.itemTest.candidatesBefore !== undefined
-            ? `${savedTest.itemTest.candidatesBefore.toLocaleString()} → ${(lab.sidAnalysis?.candidates.length ?? Number(lab.investigationInference.pidCount)).toLocaleString()} ${lab.sidAnalysis ? lab.hypothesisLabel : "PID possibilities (stored-data bound)"}.`
-            : "Findings updated."}{" "}
+        <ExperimentProgress lab={lab} snapshotId={savedTest.id} />{" "}
         <p>
           {savedTest.itemTest.action?.restore ??
             "Restore the original held item (or remove the test item if none was originally held) before the next test. The app restores the drawing only."}
@@ -90,14 +88,14 @@ export function ItemTestControls({
       >
         <h2>Testing {testName}</h2>
         <p>
-          {action?.instructions ??
+          {(action ? displayActionInstructions(action) : undefined) ??
             `Use the PC item controls without walking with this Pokemon in your party. Start from the original Pokémon state and give it ${item?.name}.`}{" "}
           Put it in Box 8 slot 5, leave and reenter the school.
         </p>
         <p>
-          Inspect only the highlighted pixels below. Answer black or transparent
-          for each one you can verify. Other changes can be ignored. Grey dashed
-          cells show the original drawing as an unverified reference; automatic
+          Inspect the highlighted pixels. Answer black or transparent for each
+          one you can verify. Other changes can be ignored. Grey dashed cells
+          show the original drawing as an unverified reference; automatic
           deductions remain visible.
         </p>
         {(lab.experimentTargets ?? active.targets ?? []).map((index) => (
@@ -162,7 +160,7 @@ export function ItemTestControls({
         <>
           <p>
             {action ? (
-              action.instructions
+              displayActionInstructions(action)
             ) : (
               <>
                 Start with the original Pokémon state. Give{" "}
@@ -207,9 +205,9 @@ export function ItemTestControls({
       ) : (
         <>
           <p>
-            The {reference} “{comparison.name}” is copied below. Edit only the
-            differences you see for <strong>{testName}</strong>, then save this
-            test. This draft does not affect the findings until saved.
+            Use the {reference} “{comparison.name}” for comparison. Edit only
+            the differences you see for <strong>{testName}</strong>, then save
+            this test. This draft does not affect the findings until saved.
           </p>
           <div className="inline-buttons">
             <button

@@ -8,6 +8,15 @@ import { rankCombinedPixels } from "./checksum";
 import { experimentChecksumDelta } from "./checksumExperiments";
 
 export const ITEM_CATALOG = items;
+/** Scorers discard nuisance-only targets even when several visible patterns
+ * remain. Multiple patterns alone do not prove that any identity is excluded.
+ */
+export function isInformativeExperiment(experiment: {
+  groups: number;
+  pixels: { index: number }[];
+}) {
+  return experiment.groups > 1 && experiment.pixels.length > 0;
+}
 export type ItemQuestion = {
   index: number;
   keyDigit: number;

@@ -602,15 +602,20 @@ body:has(.workbench) {
   color: #536c5b;
 }
 .visual-workspace {
+  --curtain-min-height: 210px;
   min-height: 0;
   min-width: 0;
   display: grid;
-  grid-template-rows: 42px minmax(210px, 1.25fr) 96px minmax(215px, 0.9fr);
+  grid-template-rows: 42px minmax(min-content, 1.25fr) max-content minmax(
+      215px,
+      0.9fr
+    );
   grid-template-columns: minmax(140px, 0.8fr) minmax(0, 1.2fr);
   grid-template-areas: "toolbar toolbar" "curtain recovery" "inspector inspector" "hex hex";
   padding: 8px 18px 14px;
   gap: 9px 22px;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .visual-toolbar {
   grid-area: toolbar;
@@ -650,7 +655,9 @@ body:has(.workbench) {
 }
 .curtain-viewport {
   grid-area: curtain;
-  min-height: 0;
+  min-height: var(--curtain-min-height);
+  /* The canvas fits the row; its intrinsic height must not size that row. */
+  contain: size;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -671,7 +678,7 @@ body:has(.workbench) {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  min-height: 0;
+  min-height: min-content;
   gap: 8px;
   padding: 2px 0;
 }
@@ -717,6 +724,32 @@ body:has(.workbench) {
   margin-top: 8px;
   font-size: clamp(10px, 0.95vw, 14px);
 }
+.iv-judge-panel {
+  margin: 14px 0;
+  padding: 14px;
+  border: 1px solid #c8dbcf;
+  border-radius: 4px;
+  background: #f6faf7;
+}
+.iv-judge-panel label {
+  display: grid;
+  gap: 5px;
+  margin: 10px 0;
+}
+.iv-judge-panel select {
+  width: 100%;
+  min-width: 0;
+}
+.iv-judge-records {
+  padding-left: 20px;
+}
+.iv-judge-records li {
+  margin: 8px 0;
+}
+.judge-repeat-guidance {
+  padding: 10px;
+  border-left: 3px solid #3d7955;
+}
 .visual-workspace .inspector {
   grid-area: inspector;
   margin: 0;
@@ -726,7 +759,9 @@ body:has(.workbench) {
   border-bottom: 1px solid #c8dbcf;
   border-radius: 0;
   background: none;
-  overflow: hidden;
+  /* Keep the inspector in flow, including any investigation-wide conflict. */
+  min-height: min-content;
+  overflow-wrap: anywhere;
 }
 .visual-workspace .inspector h2 {
   font-size: 13px;
@@ -742,6 +777,9 @@ body:has(.workbench) {
 .visual-workspace .inspector-grid {
   display: grid;
   grid-template-columns: 1.3fr 0.7fr 1fr 1fr;
+  /* Reserve room for wrapped field names and all sixteen candidate digits,
+     so changing the inspected pixel cannot resize the curtain or byte grid. */
+  grid-auto-rows: 64px;
   gap: 12px;
   margin: 0;
 }
@@ -924,8 +962,12 @@ body:has(.workbench) {
     margin-bottom: 14px;
   }
   .visual-workspace {
+    --curtain-min-height: 260px;
     padding: 14px 28px 20px;
-    grid-template-rows: 42px minmax(260px, 1.3fr) 105px minmax(245px, 0.85fr);
+    grid-template-rows: 42px minmax(min-content, 1.3fr) max-content minmax(
+        245px,
+        0.85fr
+      );
   }
 }
 @media (max-height: 790px) and (min-width: 1000px) {
@@ -933,7 +975,11 @@ body:has(.workbench) {
     grid-template-rows: minmax(61px, auto) 33px minmax(0, 1fr) 22px;
   }
   .visual-workspace {
-    grid-template-rows: 34px minmax(180px, 1fr) 80px minmax(205px, 0.85fr);
+    --curtain-min-height: 180px;
+    grid-template-rows: 34px minmax(min-content, 1fr) max-content minmax(
+        205px,
+        0.85fr
+      );
     gap: 6px;
     padding: 5px 12px 8px;
   }
@@ -1290,6 +1336,8 @@ body:has(.workbench) {
   }
   .curtain-viewport {
     order: 2;
+    contain: none;
+    min-height: 0;
     overflow: visible;
     padding: 2px;
   }
@@ -1342,6 +1390,7 @@ body:has(.workbench) {
   }
   .visual-workspace .inspector-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 104px;
     gap: 16px;
   }
   .visual-workspace .inspector h2 {
@@ -1526,6 +1575,7 @@ body:has(.workbench) {
   }
   .visual-workspace[data-curtain-size="compact"] .inspector-grid {
     grid-template-columns: 1.1fr 0.65fr 0.9fr 1.2fr;
+    grid-auto-rows: 90px;
     gap: 6px;
   }
   .visual-workspace[data-curtain-size="compact"] .inspector :is(dt, small) {

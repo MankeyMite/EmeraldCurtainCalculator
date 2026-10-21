@@ -1,7 +1,13 @@
 import { useMemo } from "react";
 import type { CurtainLab } from "../hooks/useCurtainLab";
-import { workbenchMasks, digit, hitForNibble } from "./WorkbenchData";
-import { hex, SUBSTRUCT_POSITIONS } from "../core/pokemon";
+import {
+  workbenchMasks,
+  workbenchOrders,
+  digit,
+  hitForNibble,
+} from "./WorkbenchData";
+import { hex } from "../core/pokemon";
+import { blockOrder, BLOCK_NAMES } from "../core/inspection";
 import { allowedValues, constraintHex } from "../core/constraints";
 const header = [
   { start: 0, size: 4, name: "PID" },
@@ -26,31 +32,17 @@ export function GroupedHex({ lab }: { lab: CurtainLab }) {
         lab.sidRngResult,
       ],
     ),
-    active = lab.hover ?? lab.selectedPixel;
-  const pids = useMemo(
-    () =>
-      lab.sidAnalysis
-        ? [...new Set(lab.sidAnalysis.candidates.map((h) => h.pid))]
-        : lab.inference.pidValues,
-    [lab.sidAnalysis, lab.inference],
-  );
-  const pid =
-    lab.mode === "renderer"
-      ? lab.imported?.pid
-      : pids?.length === 1
-        ? pids[0]
-        : undefined;
+    active = lab.hover;
+  const blocks = blockOrder(workbenchOrders(lab));
   const groups = [
     ...header,
     ...Array.from({ length: 4 }, (_, physical) => ({
       start: 32 + physical * 12,
       size: 12,
       name:
-        pid === undefined
+        blocks[physical] === null
           ? `Encrypted block ${physical + 1}`
-          : ["Growth", "Attacks", "EVs / condition", "Miscellaneous"][
-              SUBSTRUCT_POSITIONS[pid % 24].indexOf(physical)
-            ],
+          : BLOCK_NAMES[blocks[physical]!],
     })),
   ];
   const exactBytes = Array.from({ length: 80 }, (_, i) =>
@@ -110,9 +102,7 @@ export function GroupedHex({ lab }: { lab: CurtainLab }) {
                                     .map((n) => hex(n, 1))
                                     .join(", ") || "conflict"
                                 }`}
-                                aria-pressed={
-                                  lab.selectedPixel?.nibble === nibble
-                                }
+                                aria-pressed={active?.nibble === nibble}
                                 onMouseEnter={() =>
                                   lab.setHover(hitForNibble(nibble))
                                 }

@@ -16,6 +16,7 @@ import { ResearchArticle } from "./ResearchArticle";
 import { RESEARCH_EXAMPLES } from "../core/examples";
 import { isRecorded } from "../core/itemTests";
 import { useMobileLayout } from "../hooks/useMobileLayout";
+import { IVAnalysis } from "./IVAnalysis";
 export function Workbench({
   lab,
   onClassic,
@@ -37,7 +38,7 @@ export function Workbench({
     locateTarget = useRef<number | null>(null),
     previousPendingTest = useRef(lab.pendingItemTest?.id),
     layout = mobile && !largeCurtain ? recordStripLayout() : stripLayout(),
-    highlight = lab.hover ?? lab.selectedPixel;
+    highlight = lab.hover;
   const open = (next: string, focus = "hidden data") => {
     setShowCurtain(false);
     setTab("investigate");
@@ -75,6 +76,40 @@ export function Workbench({
     ) {
       open("items");
       setPaint(false);
+      // Starting another test can leave tab/section unchanged. Scroll on the
+      // test ID itself, after its instructions and answer controls have mounted.
+      const frame = requestAnimationFrame(() => {
+        const container = scroll.current,
+          target = container?.querySelector<HTMLElement>("#current-item-test");
+        if (!container || !target) return;
+        if (mobile) {
+          const tabsHeight =
+            container.parentElement
+              ?.querySelector(".workspace-tabs")
+              ?.getBoundingClientRect().height ?? 0;
+          window.scrollTo({
+            top: Math.max(
+              0,
+              window.scrollY +
+                target.getBoundingClientRect().top -
+                tabsHeight -
+                12,
+            ),
+            behavior: "smooth",
+          });
+        } else {
+          container.scrollTo({
+            top:
+              container.scrollTop +
+              target.getBoundingClientRect().top -
+              container.getBoundingClientRect().top -
+              12,
+            behavior: "smooth",
+          });
+        }
+      });
+      previousPendingTest.current = lab.pendingItemTest.id;
+      return () => cancelAnimationFrame(frame);
     }
     previousPendingTest.current = lab.pendingItemTest?.id;
   }, [lab.pendingItemTest?.id]);
@@ -262,6 +297,7 @@ export function Workbench({
               >
                 {[
                   ["items", "Experiments"],
+                  ["ivs", "IVs"],
                   ["sid", "SID Finder"],
                   ["data", "Data Recovery"],
                   ["wild", "Encounter RNG"],
@@ -269,7 +305,10 @@ export function Workbench({
                   <button
                     key={id}
                     aria-pressed={section === id}
-                    onClick={() => setSection(id)}
+                    onClick={() => {
+                      setSection(id);
+                      if (id === "ivs") setField("IVs");
+                    }}
                   >
                     {name}
                   </button>
@@ -279,6 +318,7 @@ export function Workbench({
                 Investigating <strong>{field}</strong>. Every result uses
                 verified observations and active assumptions.
               </div>
+              {section === "ivs" && <IVAnalysis lab={lab} />}
               <details className="observation-tools">
                 <summary>Saved observations and notes · advanced</summary>
                 <p>
@@ -636,7 +676,10 @@ export function Workbench({
           <RecoveryOverview
             lab={lab}
             onInvestigate={(name) =>
-              open(name === "SID" ? "sid" : "items", name)
+              open(
+                name === "SID" ? "sid" : name === "IVs" ? "ivs" : "items",
+                name,
+              )
             }
           />
         </details>

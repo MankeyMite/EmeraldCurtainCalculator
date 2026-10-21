@@ -3,6 +3,7 @@ import { applyFacts, recordMasks, type KnownFacts } from "./constraints";
 import type { Snapshot } from "./investigation";
 import { genderForPid, speciesTraits } from "./traits";
 import { calculateStat } from "./stats";
+import { judgeAllows } from "./ivJudge";
 
 export const WILD_AREAS = tables;
 export const WILD_METHODS = ["H1", "H2", "H4"] as const;
@@ -244,6 +245,7 @@ export function scanWildSpreads(
             ? ivsFromWords(b, c)
             : ivsFromWords(a, c);
       if (identity.ivs?.some((v, i) => v !== null && v !== ivs[i])) continue;
+      if (!judgeAllows(identity.ivJudge, ivs)) continue;
       if (!summaryMatchesSpread(encounter.species, pid, ivs, snapshots))
         continue;
       const key = `${pid}/${ivs.join(",")}/${abilitySlot}`;

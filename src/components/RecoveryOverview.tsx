@@ -4,8 +4,21 @@ import { speciesTraits } from "../core/traits";
 import { allowedValues } from "../core/constraints";
 import { hex } from "../core/pokemon";
 import { valueRanges } from "../core/stats";
-import { workbenchMasks, digit } from "./WorkbenchData";
+import {
+  workbenchMasks,
+  workbenchOrders,
+  workbenchEvs,
+  digit,
+} from "./WorkbenchData";
 import { sidDisplay } from "../core/sidDisplay";
+import { blockOrder, BLOCK_CODES } from "../core/inspection";
+
+function evBounds(values: number[]) {
+  if (!values.length) return "None";
+  const min = Math.min(...values),
+    max = Math.max(...values);
+  return min === max ? String(min) : `${min}–${max}`;
+}
 export function RecoveryOverview({
   lab,
   onInvestigate,
@@ -114,6 +127,9 @@ export function RecoveryOverview({
       .map(digit)
       .reverse()
       .join("");
+  const evs = workbenchEvs(lab),
+    orders = workbenchOrders(lab),
+    blocks = blockOrder(orders);
   return (
     <section className="recovery-overview" aria-label="Live recovery values">
       <h2>
@@ -142,6 +158,18 @@ export function RecoveryOverview({
         )}
       </div>
       <div>
+        <h3>
+          SID: <code>{sidText}</code>
+        </h3>
+        <small>
+          {sidCount.toLocaleString()}{" "}
+          {sidValues ? "surviving SIDs" : "possible values · upper bound"}
+        </small>
+        {sidCount !== 1 && (
+          <button onClick={() => onInvestigate("SID")}>Investigate SID</button>
+        )}
+      </div>
+      <div>
         <h3>IVs</h3>
         {lab.ivEstimates?.some((row) => row.note) && (
           <small>
@@ -162,6 +190,23 @@ export function RecoveryOverview({
         )}
       </div>
       <div>
+        <h3>EVs</h3>
+        <small>
+          Minimum–maximum bounds; some intermediate values may be excluded.
+        </small>
+        <div className="iv-overview ev-overview">
+          {[0, 1, 2, 4, 5, 3].map((i) => (
+            <span key={i}>
+              <b>{["HP", "ATK", "DEF", "Speed", "Sp.Atk", "Sp.Def"][i]}:</b>{" "}
+              {evBounds(evs[i])}
+            </span>
+          ))}
+        </div>
+        {evs.some((v) => v.length !== 1) && (
+          <button onClick={() => onInvestigate("EVs")}>Investigate EVs</button>
+        )}
+      </div>
+      <div>
         <h3>
           XOR key: <code>0x{key.slice().reverse().map(digit).join("")}</code>
         </h3>
@@ -173,15 +218,19 @@ export function RecoveryOverview({
       </div>
       <div>
         <h3>
-          SID: <code>{sidText}</code>
+          Permutation:{" "}
+          <code>
+            {blocks.map((b) => (b === null ? "?" : BLOCK_CODES[b])).join(" - ")}
+          </code>
         </h3>
         <small>
-          {sidCount.toLocaleString()}{" "}
-          {sidValues ? "surviving SIDs" : "possible values · upper bound"}
+          Physical block order · G Growth · A Attacks · E EVs/condition · M Misc
         </small>
-        {sidCount !== 1 && (
-          <button onClick={() => onInvestigate("SID")}>Investigate SID</button>
-        )}
+        <small>
+          {orders.length
+            ? `${orders.length} compatible ${orders.length === 1 ? "permutation" : "permutations"}`
+            : "No compatible permutation established"}
+        </small>
       </div>
       {(lab.wildRng.busy || lab.sidRngBusy) && (
         <small role="status">RNG search running…</small>

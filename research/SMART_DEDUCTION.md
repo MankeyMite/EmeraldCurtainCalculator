@@ -3,6 +3,11 @@
 Implemented 2026-10-20 on the existing residue-DP solver, joint PID/SID search,
 experiment lifecycle, drawing editor and verified curtain geometry.
 
+Extended 2026-10-21: [joint PID/SID ranking](JOINT_EXPERIMENTS.md) removes the
+known-SID and shared-position prerequisites, retains linked checksum support,
+and reproduces the contributed unknown-SID Torchic file. The known-ID section
+below records the initial implementation; joint weighted counts now extend it.
+
 ## Implementation
 
 `jointInference.ts` intersects shared PID/OT header masks and eight repeating
@@ -212,10 +217,10 @@ cross-snapshot plaintext equality. Some provable pixels can remain unknown.
 Broad generic PID counts precede per-identity checksum validation and remain
 stored-data bounds; separately reported joint candidates include checksums and
 relations. Checksum-to-payload joint refinement is limited to 32 identities;
-larger projections safely keep wider domains. Recommendations still need shared
-affected positions. Unknown side effects use the existing encrypted fallback.
+larger projections safely keep wider domains. Recommendations consider differing
+affected positions through joint per-order pixel questions. Unknown side effects use the existing encrypted fallback.
 Unbounded generic joint searches are not enumerated: at most 32 PIDs and
-200,000 identity/IV hypotheses are accepted before asking for narrower facts.
+200,000 identity/IV hypotheses are enumerated before falling back to symbolic bounds.
 A worker failure leaves prior results visible with an error and disables new
 experiment selection. Subsequent [Static Method 1/4 support](STATIC_RNG.md) uses the same recovery pipeline. No additional Pokéblocks, NPC interactions or other glitches were added.
 

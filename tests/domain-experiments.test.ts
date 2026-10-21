@@ -262,7 +262,7 @@ test("move/Candy binary survivor counts match full multi-observation inference a
   }
 });
 
-test("domain recommendations require both trainer IDs and never rank deterministic pixels or an inconsistent model", () => {
+test("domain recommendations require TID and matching joint marginals, and never rank deterministic pixels or an inconsistent model", () => {
   const snapshot = newSnapshot("empty", "Empty"),
     inf = analyzeObservations({}, [snapshot], snapshot);
   assert.deepEqual(
@@ -382,15 +382,17 @@ test("Investigation UI renders actionable broad-set recommendations, mapped targ
     createElement(ItemTestControls, {
       lab: {
         ...lab,
+        ...computeDeduction({
+          identity,
+          snapshots: [snapshot, completed],
+          activeId: snapshot.id,
+        }),
         lastCompletedItemTest: completed,
-        investigationInference: {
-          ...result.investigationInference,
-          pidCount: 10675313n,
-        },
       } as CurtainLab,
       openEditor: () => {},
       openResults: () => {},
     }),
   );
-  assert.match(saved, /10,984,833 → 10,675,313 PID possibilities/);
+  assert.match(saved, /10,984,833 → 10,675,313 compatible PID\/SID pairs/);
+  assert.match(saved, /Distinct PID bound: 10,984,833 → 10,675,313/);
 });

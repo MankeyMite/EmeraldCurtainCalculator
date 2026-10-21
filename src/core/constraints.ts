@@ -6,6 +6,7 @@ import { encodeOtName, encodeNickname, matchesOtName } from "./names";
 export type Observation = -1 | 0 | 1; // unknown, transparent, black
 export type Observations = Observation[];
 export type KnownFacts = {
+  ivJudge?: import("./ivJudge").IvJudgeEvidence;
   pid?: number;
   tid?: number;
   sid?: number;

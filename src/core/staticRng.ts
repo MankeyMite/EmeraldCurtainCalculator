@@ -2,6 +2,7 @@ import { applyFacts, recordMasks, type KnownFacts } from "./constraints";
 import type { Snapshot } from "./investigation";
 import { genderForPid, speciesTraits } from "./traits";
 import { fitsShiny } from "./shiny";
+import { judgeAllows } from "./ivJudge";
 import {
   advanceSeed,
   nextSeed,
@@ -83,6 +84,7 @@ export function scanStaticSpreads(
         (b >>> 10) & 31,
       ];
       if (identity.ivs?.some((v, i) => v != null && v !== ivs[i])) continue;
+      if (!judgeAllows(identity.ivJudge, ivs)) continue;
       if (!summaryMatchesSpread(identity.species!, pid, ivs, snapshots))
         continue;
       const key = `${pid}/${ivs.join(",")}/${abilitySlot}`,

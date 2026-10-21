@@ -149,7 +149,9 @@ export function shinyDomains(
         });
         supported.push(local);
         for (const o of local) {
-          if (facts.tid !== undefined && facts.sid !== undefined) {
+          // rest counts every OT choice in the other three paired factors.
+          // Each q/r pair here contributes once to each key marginal.
+          if (facts.tid !== undefined) {
             const needed = (target - o.residue + mod) % mod;
             const count = rest.reduce(
               (sum, row, flag) =>

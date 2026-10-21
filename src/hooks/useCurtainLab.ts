@@ -299,6 +299,9 @@ export function useCurtainLab() {
     experiments,
     controlledExperiments,
     domainQuestions,
+    experimentStatus,
+    experimentLimitations,
+    experimentProgress,
     ivEstimates,
     curtainSidAnalysis,
     sidAnalysis,
@@ -1145,6 +1148,9 @@ export function useCurtainLab() {
     startControlledTest,
     controlledExperiments,
     domainQuestions,
+    experimentStatus,
+    experimentLimitations,
+    experimentProgress,
     answerTarget,
     saveVerifiedTargets,
     experimentTargets,
@@ -1234,6 +1240,11 @@ export function useCurtainLab() {
       setSummaryDraft({});
     },
     applyEstimatedIVs,
+    setIvJudge: (evidence: KnownFacts["ivJudge"]) =>
+      editFact(
+        "ivJudge",
+        evidence === undefined ? "" : JSON.stringify(evidence),
+      ),
     canvasRef,
     fileRef,
     sessionRef,

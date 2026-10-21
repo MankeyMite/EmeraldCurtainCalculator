@@ -9,6 +9,7 @@ import {
   isRecorded,
   itemTestBaseline,
   recordItemTest,
+  targetExperiment,
 } from "../src/core/itemTests";
 import { emptyObservations, observeMemory } from "../src/core/constraints";
 import {
@@ -27,6 +28,31 @@ import {
 import { AUTOSAVE_KEY, readAutosave } from "../src/core/autosave";
 import { ItemTestControls } from "../src/components/ItemTestControls";
 import type { CurtainLab } from "../src/hooks/useCurtainLab";
+
+test("targeted experiment instructions identify highlights without a screen-relative position", () => {
+  const baseline = newSnapshot("base", "Baseline", { heldItem: 0 });
+  const pending = targetExperiment(
+    createItemTest(baseline, "pending", 4, [84]),
+  );
+  const html = renderToStaticMarkup(
+    createElement(ItemTestControls, {
+      lab: {
+        pendingItemTest: pending,
+        activeSnapshot: pending,
+        itemTestBaseline: baseline,
+        currentSnapshots: [baseline, pending],
+        experimentTargets: [84],
+      } as unknown as CurtainLab,
+      openEditor: () => {},
+      openResults: () => {},
+    }),
+  );
+  assert.match(html, /Inspect the highlighted pixels/);
+  assert.doesNotMatch(
+    html,
+    /pixels below|pixels above|on the right|on the left/,
+  );
+});
 
 test("selecting an item keeps a separate editable draft and never applies it as observed evidence", () => {
   const source = {

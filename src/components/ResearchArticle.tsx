@@ -1023,14 +1023,15 @@ KEY_A XOR KEY_B = PID_A XOR PID_B`}</pre>
           growth table’s exact next-level EXP and require known occupied moves;
           follow instructions to decline new moves and cancel evolution.
           Predictable PP-use experiments are mathematically useful, but
-          arbitrary PP-use recommendations are still deferred. Each proposal
-          requires a common identifiable physical position for its affected
-          block across candidates.
+          arbitrary PP-use recommendations are still deferred. Joint per-order
+          questions also work when PID, SID and affected block positions remain
+          unknown, provided the original trainer TID is known.
         </p>
         <p>
-          Current rankings measure worst-case survivors and information gain
-          under a uniform candidate prior; that prior is not a claim about
-          gameplay probabilities. Item swaps have comparable effort.
+          Finite candidate rankings measure worst-case survivors and estimated
+          information under an explicit uniform identity/supported-outcome
+          model. Broad joint domains use conservative survivor bounds and do not
+          claim entropy for unknown fields. Item swaps have comparable effort.
           Recommendations are not yet a proven optimization of travel time, item
           availability, reversibility and every possible experiment.
         </p>
