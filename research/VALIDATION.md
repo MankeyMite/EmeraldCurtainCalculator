@@ -1,5 +1,89 @@
 # Validation results
 
+## RNG encounter IVs in the Spinda SID guide - 2026-10-22
+
+- **267 tests** and the TypeScript/Vite production build pass.
+- Complete matcher results now supply IV/flag words for the exact guide PID,
+  without requiring caught data or transferring a PID into Pokemon info.
+- All compatible words contribute to SID deduction; no first-spread assumption.
+  Black answers preserve existential alternatives. Cross-digit contradictions
+  and manual SID limits reject an entire word before projecting the union.
+- Six new regressions cover actual inclusive advance-zero generation, packed
+  nibbles across all 24 permutations, exact/ambiguous IVs, black/transparent
+  evidence, word correlations, manual overrides, entered-IV contradictions,
+  missing/mismatched results, invalid drafts, UI and JSON recomputation.
+- IVs remain conditional on the visual PID and complete current RNG scope.
+  They are derived without overwriting Pokemon info or saved pixel evidence.
+
+## Confirmed baselines, linked projection and SID digit limits - 2026-10-22
+
+- **261 tests** and the TypeScript/Vite production build pass.
+- At the user's request, Finish drawing now confirms the complete visible
+  main-record pattern: unchanged automatic pixels become saved observations,
+  explicit paint/eraser overrides survive, and remaining blanks become
+  transparent. Hidden predictions are excluded when assistance is off. Undo
+  restores the preceding state. Targeted experiments still record only their
+  answered pixels. This supersedes earlier completion semantics below.
+- Reproduced common black answers in a move-swap experiment from the supplied
+  Spinda investigation. These retained over 1,000 SIDs and previously spent
+  roughly 27 to 29 seconds in linked checksum work. Lazy exact checksum witnesses,
+  shared support membership and conservative projection-domain coverage reduce
+  those answers to a few seconds locally. Timings vary by machine.
+- Regression tests compare retained SIDs against independent encrypted-pixel
+  filtering, verify linked checksum supports and carry/wrap behavior, and check
+  that baseline observations remain intact. No SID pool is truncated.
+- Reversible S1 through S4 hexadecimal toggles constrain inference, wild RNG
+  recovery, new-game SID intersections, experiment rankings and the Spinda
+  guide. Tests cover nibble ordering, empty contradictions, restoration, unknown
+  PID/TID inference, UI controls, autosave/JSON and legacy compatibility.
+  Limits save with the investigation and clear for a new Pokemon or example;
+  exclusions from earlier Pokemon apply only to the same original trainer.
+
+## Automatic Spinda guide plaintext - 2026-10-22
+
+- **254 tests** and the TypeScript/Vite production build pass.
+- The SID guide reads exact logical nibbles directly from the existing Pokémon
+  info plaintext engine. The selected dropdown, twelve-field table and all
+  four SID digit calculations use the same resolved values.
+- Regression tests verify all 48 relevant nibbles across all 24 permutations,
+  including items, EXP, padding, moves/PP, EVs, contest values, Origins, IVs and
+  ribbon flags. Unknown bits in partial packed values are not guessed.
+- Entered values update automatically; assumptions remain labeled. Manual
+  overrides (including Unknown) persist until reset. Clearing Pokémon info
+  clears its derived values without changing guide observations. Different
+  species, blank-form defaults and invalid drafts cannot silently supply it.
+- Parent/guide integration tests verify the selected hex option, live info
+  changes, manual-reset controls and invalid-input feedback. Automatic values
+  remain derived rather than being saved as stale manual overrides.
+
+## Spinda finish-drawing performance and observed gender - 2026-10-22
+
+- **250 tests** and the TypeScript/Vite production build pass.
+- Reproduced the supplied level-16 Route 113 Spinda investigation with its
+  estimated PID applied. Generation finds one spread at advance 636 in about
+  3 ms; SID filtering retains 1,716 candidates in about 13 ms. The expensive
+  step was subsequent experiment ranking, while the UI mislabeled the entire
+  deduction job as an RNG search.
+- Item and controlled-action rankers now share the existing domain ranker's
+  optional checksum budget: at most 256 identities and 131,072 distinct
+  checksum support entries. Above that budget, encrypted-pixel rankings use
+  every identity and display the limitation; no candidate pool is truncated.
+- Large-set recovery skips repeated checksum support enumeration only when
+  the accumulated checksum nibble union already covers that candidate's full
+  header domain. Small-set payload refinement and linked-checksum processing
+  retain their existing behavior. Tests compare the result to an exact union.
+- A fresh process completes the original supplied JSON in **947 ms** locally;
+  simulating Finish drawing completes in **854 ms**, still with all 1,716 SID
+  candidates. Timings vary by machine. The original download is unchanged.
+- Deduction reports constraints, encounter/SID search, recovery and experiment
+  ranking stages. A 60-second worker deadline stops a stalled calculation with
+  a visible error and preserved drawing, and discards late responses.
+- Observed Spinda gender is visible above the spot editor. Its existing wild
+  filter partitions the complete PID pool by the Emerald gender threshold;
+  a mismatching dragged PID gets a notice without moving spots automatically.
+  Regression tests cover both genders, all candidates, Finish drawing,
+  checksum projections, deadline completion/cancellation and late events.
+
 ## Battle Frontier IV judge - 2026-10-21
 
 - **214 tests** and the TypeScript/Vite production build pass.

@@ -46,23 +46,44 @@ export function checksumValues(
   plain: number[],
   masks = [65535, 65535, 65535, 65535],
 ): number[] {
+  const plan = checksumPlan(plain, masks);
+  return "values" in plan
+    ? plan.values
+    : [...walkChecksums(plan.transitions, masks)];
+}
+/** Lazy exact supports let linked-checksum existence checks stop at their
+ * first witness instead of materializing 50,000 sums per surviving SID. */
+export function* iterateChecksumValues(
+  plain: number[],
+  masks = [65535, 65535, 65535, 65535],
+): Generator<number> {
+  const plan = checksumPlan(plain, masks);
+  if ("values" in plan) yield* plan.values;
+  else yield* walkChecksums(plan.transitions, masks);
+}
+function checksumPlan(
+  plain: number[],
+  masks: number[],
+): { values: number[] } | { transitions: number[][][] } {
   if (plain.length !== 96 || masks.length !== 4)
     throw Error("Invalid checksum domains");
-  if (plain.some((m) => !m) || masks.some((m) => !m)) return [];
+  if (plain.some((m) => !m) || masks.some((m) => !m)) return { values: [] };
   if (
     Array.from({ length: 24 }, (_, w) =>
       plain.slice(w * 4, w * 4 + 4).every((m) => m === 65535),
     ).some(Boolean)
   ) {
-    return headerValues(masks);
+    return { values: headerValues(masks) };
   }
   if (plain.every((m) => !(m & (m - 1)))) {
     let sum = 0;
     plain.forEach((m, n) => (sum += (31 - Math.clz32(m)) * 16 ** (n % 4)));
     sum &= 65535;
-    return masks.every((m, n) => m & (1 << ((sum >>> (n * 4)) & 15)))
-      ? [sum]
-      : [];
+    return {
+      values: masks.every((m, n) => m & (1 << ((sum >>> (n * 4)) & 15)))
+        ? [sum]
+        : [],
+    };
   }
   const transitions: number[][][] = [];
   for (let column = 0; column < 4; column++) {
@@ -100,23 +121,32 @@ export function checksumValues(
     transitions.every((rows, n) =>
       rows.every((row) => allowedValues(masks[n]).every((d) => row[d] !== 0)),
     )
-  )
-    return headerValues(masks);
-  const result: number[] = [];
-  const visit = (column: number, carries: number, value: number) => {
+  ) {
+    return { values: headerValues(masks) };
+  }
+  return { transitions };
+}
+function* walkChecksums(
+  transitions: number[][][],
+  masks: number[],
+): Generator<number> {
+  function* visit(
+    column: number,
+    carries: number,
+    value: number,
+  ): Generator<number> {
     if (column === 4) {
-      result.push(value);
+      yield value;
       return;
     }
     for (const digit of allowedValues(masks[column])) {
       let next = 0;
       for (let carry = 0; carry < 24; carry++)
         if (carries & (1 << carry)) next |= transitions[column][carry][digit];
-      if (next) visit(column + 1, next, value | (digit << (column * 4)));
+      if (next) yield* visit(column + 1, next, value | (digit << (column * 4)));
     }
-  };
-  visit(0, 1, 0);
-  return result;
+  }
+  yield* visit(0, 1, 0);
 }
 
 export function checksumMasks(values: number[]) {

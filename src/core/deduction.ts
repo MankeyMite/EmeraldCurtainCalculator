@@ -1,4 +1,9 @@
 import type { KnownFacts } from "./constraints";
+import {
+  allowedSidValues,
+  sidAllowed,
+  validateSidDigitFilters,
+} from "./sidDigitFilters";
 import { emptyObservations } from "./constraints";
 import type { Snapshot } from "./investigation";
 import {
@@ -36,14 +41,27 @@ export type DeductionInput = {
   activeId: string;
   rng?: RngSettings;
   sidRng?: SidRngSettings;
+  sidDigitFilters?: number[];
   renderMasks?: number[];
 };
+export const DEDUCTION_PHASE_LABELS = {
+  waiting: "Waiting to calculate…",
+  inference: "Checking curtain constraints…",
+  rng: "Searching encounter spreads and SIDs…",
+  sid: "Filtering Secret ID candidates…",
+  recovery: "Projecting recovered pixels…",
+  experiments: "Ranking next experiments…",
+} as const;
+export type DeductionPhase = keyof typeof DEDUCTION_PHASE_LABELS;
 /** All expensive deduction runs in a worker. Pure core entry point also makes
  * complete multi-observation/reranking behavior reproducible in tests. */
 export function computeDeduction(
   input: DeductionInput,
   progress?: (done: number, total: number) => void,
+  phase?: (phase: DeductionPhase) => void,
 ) {
+  phase?.("inference");
+  if (input.sidDigitFilters) validateSidDigitFilters(input.sidDigitFilters);
   const { identity, snapshots } = input,
     active = snapshots.find((s) => s.id === input.activeId)!;
   const evidence = snapshots.filter(isEvidence),
@@ -55,6 +73,7 @@ export function computeDeduction(
     identity,
     evidence,
     reference,
+    input.sidDigitFilters,
   );
   const inference = input.renderMasks
     ? analyzeConstraints(input.renderMasks)
@@ -63,6 +82,7 @@ export function computeDeduction(
     identity.pid !== undefined
       ? [identity.pid]
       : investigationInference.pidValues;
+  if (input.rng) phase?.("rng");
   const wildResult = input.rng
     ? searchWild(
         {
@@ -70,16 +90,25 @@ export function computeDeduction(
           identity,
           snapshots: evidence,
           ...(input.sidRng ? { sidRng: input.sidRng } : {}),
+          sidDigitFilters: input.sidDigitFilters,
         },
         progress,
       )
     : null;
+  phase?.("sid");
   let candidateLimit = false;
   const solveSmallSet = () => {
     if (identity.tid === undefined || !pids?.length || pids.length > 32)
       return null;
     try {
-      return solveSids(identity, evidence, pids, undefined, 200000);
+      return solveSids(
+        identity,
+        evidence,
+        pids,
+        undefined,
+        200000,
+        allowedSidValues(input.sidDigitFilters),
+      );
     } catch (error) {
       if (
         !(error instanceof Error) ||
@@ -95,7 +124,9 @@ export function computeDeduction(
     : solveSmallSet();
   const sidRows =
     input.sidRng && identity.tid !== undefined
-      ? generateSidRng(identity.tid, input.sidRng)
+      ? generateSidRng(identity.tid, input.sidRng).filter((r) =>
+          sidAllowed(r.sid, input.sidDigitFilters),
+        )
       : [];
   const sidResult =
     !input.sidRng || identity.tid === undefined
@@ -108,13 +139,14 @@ export function computeDeduction(
     : curtainSidAnalysis;
   // A pending experiment previews facts/key deductions without treating unseen
   // baseline pixels as observations of the changed record.
+  phase?.("recovery");
   const recovery = sidAnalysis
     ? projectRecord(identity, active, sidAnalysis.candidates, evidence)
     : null;
   const previewInference =
     active === reference
       ? inference
-      : analyzeObservations(identity, evidence, active);
+      : analyzeObservations(identity, evidence, active, input.sidDigitFilters);
   const assistance = pixelAssistance(
     active.observations,
     { ...active.knownFacts, ...identity },
@@ -241,6 +273,7 @@ export function computeDeduction(
       })()
     : scopedInference;
   const sidScopeAllows = !input.sidRng || !!sidResult?.rows.length;
+  phase?.("experiments");
   const domain =
     (!input.rng || sidAnalysis) && sidScopeAllows
       ? rankDomainExperiments(identity, evidence, baseline, domainInference, {
@@ -316,9 +349,9 @@ export function computeDeduction(
           "IV judge maximum and total constraints use conservative packed-IV projections. Remaining identity counts may include unresolved IV/checksum correlations.",
         ]
       : []),
-    ...(domain?.checksumLimited && Object.keys(domainQuestions).length
+    ...(domain?.checksumLimited
       ? [
-          "The multi-position checksum ranking budget was exceeded; these questions use encrypted-pixel counts only.",
+          "Checksum experiment ranking exceeded its computation budget; encrypted-pixel ranking still uses every surviving identity. No candidates were discarded.",
         ]
       : []),
     ...(scopeRelaxed
@@ -359,6 +392,7 @@ export function computeDeduction(
       baseline,
       active,
       investigationInference,
+      input.sidDigitFilters,
     ),
     experimentStatus,
     experimentLimitations,

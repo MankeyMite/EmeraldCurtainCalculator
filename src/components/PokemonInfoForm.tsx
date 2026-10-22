@@ -271,7 +271,10 @@ export function PokemonInfoForm({
       <details className="remaining-fields">
         <summary>View and edit remaining fields</summary>
         <label>
-          Known PID (optional)
+          {lab.spindaMatcher?.appliedPid !== undefined &&
+          lab.spindaMatcher.appliedPid === lab.facts.pid
+            ? "Visually estimated PID (unverified)"
+            : "Known PID (optional)"}
           {input("pid", "Known PID", "Decimal or 0x hexadecimal")}
         </label>
         <KnownFactsForm lab={lab} showShiny={false} />

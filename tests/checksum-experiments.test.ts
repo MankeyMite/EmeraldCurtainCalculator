@@ -3,11 +3,49 @@ import assert from "node:assert/strict";
 import {
   checksumDifference,
   checksumValues,
+  iterateChecksumValues,
   mod16,
   rankCombinedPixels,
   refineChecksumPayload,
   scoreOutcomes,
 } from "../src/core/checksum";
+
+test("lazy checksum supports match independent modular sums and can stop after one witness", () => {
+  const plain = Array<number>(96).fill(1);
+  plain[0] = (1 << 0) | (1 << 1);
+  plain[1] = (1 << 0) | (1 << 15);
+  plain[4] = (1 << 2) | (1 << 9);
+  for (let n = 92; n < 96; n++) plain[n] = 1 << 15;
+  const expected = [
+    ...new Set(
+      [0, 1].flatMap((a) =>
+        [0, 15].flatMap((b) =>
+          [2, 9].map((c) => (65535 + a + b * 16 + c) & 65535),
+        ),
+      ),
+    ),
+  ].sort((a, b) => a - b);
+  assert.deepEqual(
+    checksumValues(plain)
+      .slice()
+      .sort((a, b) => a - b),
+    expected,
+  );
+  assert.deepEqual(
+    [...iterateChecksumValues(plain)].sort((a, b) => a - b),
+    expected,
+  );
+  const iterator = iterateChecksumValues(plain);
+  assert.ok(expected.includes(iterator.next().value!));
+  iterator.return(undefined);
+  assert.equal(iterator.next().done, true);
+  assert.deepEqual(
+    [...iterateChecksumValues(plain, [1, 65535, 65535, 65535])].sort(
+      (a, b) => a - b,
+    ),
+    expected.filter((v) => (v & 15) === 0),
+  );
+});
 import { experimentChecksumDelta } from "../src/core/checksumExperiments";
 import {
   controlledActions,

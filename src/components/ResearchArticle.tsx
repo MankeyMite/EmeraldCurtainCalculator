@@ -314,8 +314,9 @@ export function ResearchArticle() {
         <p>
           A black pixel does not distinguish 1 from F. Treating black as F would
           invent information. Blank drawing cells look transparent but stay
-          unrecorded until Finish drawing confirms the pattern. Automatic pixels
-          remain derived; experiment questions record only verified answers.
+          unrecorded until Finish drawing confirms the whole visible pattern,
+          including unchanged automatic pixels. Experiment questions record only
+          the highlighted answers you verify.
         </p>
         <NibbleExample />
         <p>

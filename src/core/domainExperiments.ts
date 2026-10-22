@@ -7,7 +7,7 @@ import {
   controlledActions,
   type rankControlledExperiments,
 } from "./controlledExperiments";
-import { compileChecksumSupport, type Hypothesis } from "./sid";
+import { experimentChecksumSupports, type Hypothesis } from "./sid";
 import { checksumPixelOutcomes, scoreOutcomes } from "./checksum";
 import { experimentChecksumDelta } from "./checksumExperiments";
 import { rankPixelDomains } from "./experimentOutcomes";
@@ -60,23 +60,16 @@ export function rankDomainExperiments(
   // Bound expensive nuisance-outcome materialization. Above this budget the
   // encrypted question remains valid; no candidate subset is substituted.
   const candidates = options.candidates;
-  const supports =
-    candidates && candidates.length <= 256
-      ? candidates.map(compileChecksumSupport(identity, snapshots, source))
-      : undefined;
-  const distinctSupports = supports && [...new Set(supports)];
-  const supportBudgetExceeded =
-    !!distinctSupports &&
-    distinctSupports.reduce((size, values) => size + values.length, 0) > 131072;
+  const supports = candidates
+    ? experimentChecksumSupports(identity, snapshots, source, candidates)
+    : undefined;
   const checksumSupports =
     supports &&
-    !supportBudgetExceeded &&
     !supports.every((s) => s === supports[0]) &&
     !supports.every((s) => s.length === 65536)
       ? supports
       : undefined;
-  const checksumLimited =
-    !!candidates && (candidates.length > 256 || supportBudgetExceeded);
+  const checksumLimited = !!candidates && !supports;
   let outcomeLimited = false;
   const countBasis: DomainQuestion["countBasis"] = candidates?.some(
     (h) => h.rng,

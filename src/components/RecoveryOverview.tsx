@@ -232,9 +232,7 @@ export function RecoveryOverview({
             : "No compatible permutation established"}
         </small>
       </div>
-      {(lab.wildRng.busy || lab.sidRngBusy) && (
-        <small role="status">RNG search running…</small>
-      )}
+      {lab.analysisBusy && <small role="status">{lab.analysisStatus}</small>}
     </section>
   );
 }

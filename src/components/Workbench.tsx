@@ -17,6 +17,8 @@ import { RESEARCH_EXAMPLES } from "../core/examples";
 import { isRecorded } from "../core/itemTests";
 import { useMobileLayout } from "../hooks/useMobileLayout";
 import { IVAnalysis } from "./IVAnalysis";
+import { SpindaMatcher } from "./SpindaMatcher";
+import { spindaSidTargets } from "../core/spindaSidGuide";
 export function Workbench({
   lab,
   onClassic,
@@ -32,6 +34,13 @@ export function Workbench({
     [drawingOptions, setDrawingOptions] = useState(false),
     [largeCurtain, setLargeCurtain] = useState(false),
     [recoveryOpen, setRecoveryOpen] = useState(false);
+  const [guideFocus, setGuideFocus] = useState<number | null>(null);
+  const spindaGuide =
+    section === "sid" &&
+    tab === "investigate" &&
+    lab.spindaMatcher?.guide?.enabled
+      ? lab.spindaMatcher.guide
+      : undefined;
   const mobile = useMobileLayout(),
     curtainOpen = mobile && showCurtain;
   const scroll = useRef<HTMLDivElement>(null),
@@ -318,6 +327,16 @@ export function Workbench({
                 Investigating <strong>{field}</strong>. Every result uses
                 verified observations and active assumptions.
               </div>
+              {lab.spindaMatcher?.appliedPid !== undefined &&
+                lab.spindaMatcher.appliedPid === lab.facts.pid && (
+                  <p className="spinda-estimate-notice" role="status">
+                    The Spinda PID is a visual estimate. All recovery results
+                    are conditional on this unverified input.
+                    <button onClick={() => lab.editFact("pid", "")}>
+                      Remove estimated PID constraint
+                    </button>
+                  </p>
+                )}
               {section === "ivs" && <IVAnalysis lab={lab} />}
               <details className="observation-tools">
                 <summary>Saved observations and notes · advanced</summary>
@@ -342,7 +361,22 @@ export function Workbench({
                   setShowCurtain(true);
                 }}
               />
-              {section === "sid" && <SidRngPanel lab={lab} />}
+              {section === "sid" && (
+                <>
+                  <SpindaMatcher
+                    lab={lab}
+                    locatePixel={(index) => {
+                      setGuideFocus(index);
+                      lab.setHover(null);
+                      lab.setSelectedPixel(hitForNibble(index));
+                      lab.setMode("solver");
+                      if (mobile) locateTarget.current = index;
+                      setShowCurtain(true);
+                    }}
+                  />
+                  <SidRngPanel lab={lab} />
+                </>
+              )}
               {section === "data" && (
                 <>
                   <SidRngPanel lab={lab} />
@@ -435,9 +469,8 @@ export function Workbench({
                   Click a hex digit or curtain pixel to pin their
                   correspondence. Inspector mode selects without painting.
                   Automatic pixels have dashed borders. Click toggles black and
-                  transparent. Finish drawing confirms the remaining blank cells
-                  as transparent; automatic pixels stay derived, without adding
-                  independent observations.
+                  transparent. Finish drawing saves the whole visible baseline,
+                  including unchanged automatic pixels and transparent blanks.
                 </p>
                 <p>
                   Each experiment starts from the original drawing, saves its
@@ -521,7 +554,7 @@ export function Workbench({
           {lab.drawingInProgress
             ? " · Drawing: predictions paused until Finish drawing"
             : lab.analysisBusy
-              ? " · Calculating in background…"
+              ? ` · ${lab.analysisStatus}`
               : ""}
         </footer>
       </section>
@@ -543,6 +576,14 @@ export function Workbench({
                 : lab.activeId === lab.itemTestBaseline.id
                   ? "Original curtain baseline"
                   : lab.activeSnapshot.name}
+            {spindaGuide && (
+              <small>
+                {" "}
+                · Orange: Spinda S{spindaGuide.digit} pixels, estimated PID 0x
+                {spindaGuide.pid.toString(16).toUpperCase().padStart(8, "0")}.
+                Guide answers are separate.
+              </small>
+            )}
           </strong>
           <div className="toolbar-primary">
             <button
@@ -558,7 +599,7 @@ export function Workbench({
               title={
                 lab.activeSnapshot.itemTest
                   ? "Calculate using only verified experiment pixels. Unexamined cells stay unrecorded."
-                  : "Confirm the whole pattern: remaining blank cells are transparent. Automatic pixels remain derived."
+                  : "Confirm and save the visible pattern, including unchanged automatic pixels. Blank cells are transparent."
               }
               onClick={finish}
             >
@@ -626,7 +667,7 @@ export function Workbench({
               : lab.analysisBusy
                 ? "Calculating in background…"
                 : paint
-                  ? "Tap to toggle black / transparent; drag to paint or erase. Finish drawing confirms blank cells as transparent."
+                  ? "Tap to toggle black / transparent; drag to paint or erase. Finish drawing saves the visible pattern, including automatic pixels."
                   : "Inspect: swipe to scroll, or tap a pixel for details. Choose Draw to record observations."}
           </p>
         </div>
@@ -650,11 +691,17 @@ export function Workbench({
               contradictions={lab.conflicts}
               predictions={lab.showPredictions ? lab.predictions : undefined}
               targets={
-                lab.pendingItemTest?.itemTest?.mode === "pixels"
-                  ? lab.experimentTargets.slice(0, 1)
-                  : lab.activeSnapshot.targets
+                spindaGuide
+                  ? spindaSidTargets(spindaGuide.pid, spindaGuide.digit).map(
+                      (t) => t.nibble,
+                    )
+                  : lab.pendingItemTest?.itemTest?.mode === "pixels"
+                    ? lab.experimentTargets.slice(0, 1)
+                    : lab.activeSnapshot.targets
               }
-              highlightedNibble={highlight?.nibble}
+              highlightedNibble={
+                highlight?.nibble ?? (spindaGuide ? guideFocus : null)
+              }
               onSelect={lab.setSelectedPixel}
               onHover={lab.setHover}
               onStart={lab.start}

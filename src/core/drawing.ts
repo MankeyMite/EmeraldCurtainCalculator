@@ -1,7 +1,8 @@
 import type { Observation } from "./constraints";
 
 /** Display defaults are not evidence. Only painting or completing a drawing
- * records them; automatic pixels and experiment references remain separate. */
+ * records them. Finish confirms visible automatic pixels only for a full
+ * baseline; experiment references are never silently recorded as answers. */
 export function drawingPixelState(
   observed: Observation,
   predicted: Observation = -1,

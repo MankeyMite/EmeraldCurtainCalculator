@@ -14,6 +14,7 @@ export function experimentProgress(
   baseline: Snapshot,
   active: Snapshot,
   current: Inference,
+  sidDigitFilters?: number[],
 ) {
   const completed =
     active.itemTest?.phase === "recorded"
@@ -32,11 +33,12 @@ export function experimentProgress(
     identity,
     evidence.filter((s) => s.id !== completed.id),
     baseline,
+    sidDigitFilters,
   );
   const after =
     active.id === baseline.id
       ? current
-      : analyzeObservations(identity, evidence, baseline);
+      : analyzeObservations(identity, evidence, baseline, sidDigitFilters);
   if (!before.consistent || !after.consistent) return null;
   return {
     snapshotId: completed.id,

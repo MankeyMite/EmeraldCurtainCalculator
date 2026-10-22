@@ -10,6 +10,11 @@ import { validateRngSettings, type RngSettings } from "./rng";
 import { validateSidRng, type SidRngSettings } from "./sidRng";
 import type { ActionDescription } from "./controlledExperiments";
 import speciesCatalog from "../data/species.json";
+import { validateSidDigitFilters } from "./sidDigitFilters";
+import {
+  validateSpindaMatcher,
+  type SpindaMatcherState,
+} from "./spindaMatcher";
 
 export function investigationFileName(speciesId?: number): string {
   const species =
@@ -57,6 +62,8 @@ export type Investigation = {
   ownedItems: number[];
   rng?: RngSettings;
   sidRng?: SidRngSettings;
+  sidDigitFilters?: number[];
+  spindaMatcher?: SpindaMatcherState;
 };
 export const IDENTITY_KEYS = new Set([
   "ivJudge",
@@ -272,6 +279,12 @@ export function loadInvestigation(text: string): Investigation {
     ...(value.sidRng === undefined
       ? {}
       : { sidRng: validateSidRng(value.sidRng) }),
+    ...(value.sidDigitFilters === undefined
+      ? {}
+      : { sidDigitFilters: validateSidDigitFilters(value.sidDigitFilters) }),
+    ...(value.spindaMatcher === undefined
+      ? {}
+      : { spindaMatcher: validateSpindaMatcher(value.spindaMatcher) }),
   };
 }
 export function saveInvestigation(value: Investigation): string {

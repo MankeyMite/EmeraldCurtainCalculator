@@ -11,7 +11,7 @@ import { newSnapshot } from "./investigation";
 import { isRecorded } from "./itemTests";
 import { SUBSTRUCT_POSITIONS } from "./pokemon";
 import type { Hypothesis } from "./sid";
-import { compileChecksumSupport } from "./sid";
+import { experimentChecksumSupports } from "./sid";
 import { rankCombinedPixels } from "./checksum";
 import { experimentChecksumDelta } from "./checksumExperiments";
 import { isActiveAssumption } from "./session";
@@ -278,8 +278,12 @@ export function rankControlledExperiments(
   snapshots: Snapshot[] = [source],
 ) {
   if (!candidates.length) return [];
-  const support = compileChecksumSupport(identity, snapshots, source),
-    supports = candidates.map(support);
+  const supports = experimentChecksumSupports(
+    identity,
+    snapshots,
+    source,
+    candidates,
+  );
   return controlledActions(source, species, identity)
     .flatMap((action) => {
       const plaintext = knownPlaintext({

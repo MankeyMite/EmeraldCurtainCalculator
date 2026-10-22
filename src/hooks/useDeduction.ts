@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import {
   EMPTY_DEDUCTION,
+  DEDUCTION_PHASE_LABELS,
+  type DeductionPhase,
   type DeductionInput,
   type DeductionResult,
 } from "../core/deduction";
@@ -17,10 +19,18 @@ export function useDeduction(
     data: DeductionResult;
     error: string;
     progress: number;
-  }>({ key: "", data: EMPTY_DEDUCTION, error: "", progress: 0 });
+    phase: DeductionPhase;
+  }>({
+    key: "",
+    data: EMPTY_DEDUCTION,
+    error: "",
+    progress: 0,
+    phase: "waiting",
+  });
   const [completedRevision, setCompletedRevision] = useState(revision);
   useEffect(() => {
     if (paused || !enabled) return;
+    setState((s) => ({ ...s, phase: "waiting", progress: 0 }));
     return scheduleDeduction(
       input,
       () =>
@@ -29,9 +39,17 @@ export function useDeduction(
         }),
       ({ data }) => {
         if (data.type === "result") {
-          setState({ key, data: data.result, error: "", progress: 100 });
+          setState((s) => ({
+            ...s,
+            key,
+            data: data.result,
+            error: "",
+            progress: 100,
+          }));
           setCompletedRevision(revision);
-        } else if (data.type === "progress")
+        } else if (data.type === "phase")
+          setState((s) => ({ ...s, phase: data.phase, progress: 0 }));
+        else if (data.type === "progress")
           setState((s) => ({
             ...s,
             progress: Math.round((data.done / Math.max(1, data.total)) * 100),
@@ -41,11 +59,12 @@ export function useDeduction(
           setCompletedRevision(revision);
         }
       },
-      () => {
+      (message) => {
         setState((s) => ({
           ...s,
           key,
           error:
+            message ??
             "Deduction could not finish. Review inputs and try Finish drawing again.",
           progress: 0,
         }));
@@ -61,5 +80,6 @@ export function useDeduction(
     current,
     error: current ? state.error : "",
     progress: state.progress,
+    status: DEDUCTION_PHASE_LABELS[state.phase],
   };
 }

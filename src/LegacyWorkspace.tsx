@@ -427,10 +427,10 @@ export default function LegacyWorkspace({ lab }: { lab: CurtainLab }) {
             <div className="partial-pattern">
               <strong>Partial drawing</strong>
               <p>
-                Blank cells look transparent while editing. Finish drawing
-                confirms the remaining blanks as transparent. Automatic pixels
-                remain derived from known facts; experiment questions record
-                only the pixels you verify.
+                Blank cells look transparent while editing. Finish drawing saves
+                the whole visible baseline, including unchanged automatic pixels
+                and transparent blanks; experiment questions record only the
+                pixels you verify.
               </p>
               <button
                 onClick={lab.completeDrawing}

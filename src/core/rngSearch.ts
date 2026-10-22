@@ -7,12 +7,14 @@ import type { Snapshot } from "./investigation";
 import { isEvidence } from "./itemTests";
 import { solveSids } from "./sid";
 import { generateSidRng, type SidRngSettings } from "./sidRng";
+import { allowedSidValues, sidAllowed } from "./sidDigitFilters";
 
 export type RngSearchInput = {
   settings: RngSettings;
   identity: KnownFacts;
   snapshots: Snapshot[];
   sidRng?: SidRngSettings;
+  sidDigitFilters?: number[];
 };
 export type RngSearchResult = {
   spreads: RngSpread[];
@@ -51,8 +53,10 @@ export function searchWild(
       generated,
       200000,
       input.sidRng
-        ? generateSidRng(input.identity.tid, input.sidRng).map((r) => r.sid)
-        : undefined,
+        ? generateSidRng(input.identity.tid, input.sidRng)
+            .map((r) => r.sid)
+            .filter((s) => sidAllowed(s, input.sidDigitFilters))
+        : allowedSidValues(input.sidDigitFilters),
     );
     const alive = new Set(
       analysis.candidates.map(

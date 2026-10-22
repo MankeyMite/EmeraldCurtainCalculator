@@ -143,6 +143,7 @@ export function scanWildSpreads(
   identity: KnownFacts,
   snapshots: Snapshot[],
   progress?: (done: number, total: number) => void,
+  onOccurrence?: (spread: RngSpread) => void,
 ): RngSpread[] {
   const settings = validateRngSettings(input);
   if (settings.kind === "static")
@@ -248,6 +249,16 @@ export function scanWildSpreads(
       if (!judgeAllows(identity.ivJudge, ivs)) continue;
       if (!summaryMatchesSpread(encounter.species, pid, ivs, snapshots))
         continue;
+      onOccurrence?.({
+        pid,
+        ivs,
+        abilitySlot,
+        advance,
+        lastAdvance: advance,
+        methods: [method],
+        slot,
+        level,
+      });
       const key = `${pid}/${ivs.join(",")}/${abilitySlot}`;
       const old = found.get(key);
       if (old) {

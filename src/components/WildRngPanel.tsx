@@ -270,13 +270,7 @@ export function WildRngPanel({ lab }: { lab: CurtainLab }) {
           . This scope is saved with your investigation.
         </p>
       )}
-      {lab.wildRng.busy && (
-        <p role="status">
-          {lab.wildRng.progress < 100
-            ? `Searching advances… ${lab.wildRng.progress}%`
-            : "Checking matching spreads against saved observations and possible SIDs…"}
-        </p>
-      )}
+      {lab.wildRng.busy && <p role="status">{lab.analysisStatus}</p>}
       {lab.wildRng.error && <p role="alert">{lab.wildRng.error}</p>}
       {result && (
         <div className="rng-findings" role="status">

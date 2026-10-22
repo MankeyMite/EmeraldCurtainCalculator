@@ -14,17 +14,18 @@ export function completeAssistedDrawing(
   includeNeighbors = false,
 ): Observations {
   return observations.map((value, n) =>
-    value === -1 &&
-    predictions[n] === -1 &&
-    (includeNeighbors || (n >= 16 && n < 176))
-      ? 0
+    value === -1 && (includeNeighbors || (n >= 16 && n < 176))
+      ? predictions[n] === -1
+        ? 0
+        : predictions[n]
       : value,
   );
 }
 const independentCache = new Map<string, Inference>();
 
-/** Render-only assistance. The input observations are never mutated, completed,
- * persisted or promoted to facts. Superset projections can miss deductions but
+/** Render-only assistance until the player explicitly confirms the full visible
+ * pattern with Finish drawing. This function never mutates observations.
+ * Superset projections can miss deductions but
  * cannot invent a guarantee by choosing one representative hypothesis. */
 export function pixelAssistance(
   observations: Observations,

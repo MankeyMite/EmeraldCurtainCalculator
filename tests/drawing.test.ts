@@ -48,7 +48,7 @@ test("blank drawing cells look transparent without recording evidence; clicking 
   );
 });
 
-test("finishing a full drawing confirms blanks, keeps automatic pixels derived and preserves manual paint, the source drawing and hidden neighbors", () => {
+test("finishing a full drawing saves visible automatic pixels and preserves manual overrides, the source drawing and hidden neighbors", () => {
   const observations = emptyObservations(),
     predictions = emptyObservations();
   observations[16] = 1;
@@ -57,24 +57,26 @@ test("finishing a full drawing confirms blanks, keeps automatic pixels derived a
   predictions[18] = 1;
   predictions[19] = 0;
   predictions[16] = 0; // An explicit contradiction must survive.
+  predictions[17] = 1; // Erasing an automatic black pixel stays transparent.
+  predictions[176] = 1; // Hidden neighboring records are outside Finish's scope.
   const before = observations.slice();
   const completed = completeAssistedDrawing(observations, predictions);
   assert.deepEqual(observations, before);
-  assert.deepEqual(completed.slice(16, 21), [1, 0, -1, -1, 0]);
+  assert.deepEqual(completed.slice(16, 21), [1, 0, 1, 0, 0]);
   assert.deepEqual(completed.slice(0, 16), before.slice(0, 16));
   assert.deepEqual(completed.slice(176), before.slice(176));
   assert.equal(drawingPixelState(completed[18], predictions[18]), 1);
   assert.equal(drawingPixelState(completed[19], predictions[19]), 0);
-  // Removing a fact retracts its derived pixel, rather than preserving false evidence.
-  assert.equal(drawingPixelState(completed[18], -1), 0);
-  assert.equal(completed[18], -1);
+  // Finish is an explicit confirmation of the visible whole baseline.
+  assert.equal(drawingPixelState(completed[18], -1), 1);
+  assert.equal(completed[18], 1);
   assert.deepEqual(
     loadSession(saveSession(completed, {})).observations,
     completed,
   );
 });
 
-test("drawing only missing black pixels and finishing retains the genuine Skarmory without copying automatic evidence", () => {
+test("confirming the visible assisted Skarmory saves all 160 pixels and retains the genuine record", () => {
   const { session, records } = loadResearchExample("skarmory"),
     observations = emptyObservations(),
     predictions = pixelAssistance(observations, session.knownFacts).predictions;
@@ -90,12 +92,12 @@ test("drawing only missing black pixels and finishing retains the genuine Skarmo
     comparison = compareCandidate(completed, records, session.knownFacts);
   assert.deepEqual(comparison.contradictions, []);
   assert.deepEqual(comparison.factContradictions, []);
-  assert.equal(comparison.observed, 160 - automatic);
+  assert.equal(comparison.observed, 160);
   for (let n = 16; n < 176; n++) {
     assert.equal(
       drawingPixelState(completed[n], predictions[n]),
       session.observations[n],
     );
-    if (predictions[n] !== -1) assert.equal(completed[n], -1);
+    assert.equal(completed[n], session.observations[n]);
   }
 });

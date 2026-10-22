@@ -20,14 +20,14 @@ import { newSnapshot } from "../src/core/investigation";
 import { analyzeObservations } from "../src/core/jointInference";
 import { solveSids } from "../src/core/sid";
 
-test("drawing completion does not record automatic black or transparent cells as observations", () => {
+test("drawing completion explicitly records visible automatic black and transparent cells", () => {
   const obs = emptyObservations(),
     predictions = pixelAssistance(obs, { tid: 0x0010 }).predictions;
   assert.equal(predictions[24], 0);
   assert.equal(predictions[25], 1);
   const completed = completeAssistedDrawing(obs, predictions);
-  assert.equal(completed[24], -1);
-  assert.equal(completed[25], -1);
+  assert.equal(completed[24], 0);
+  assert.equal(completed[25], 1);
   assert.equal(completed[100], 0);
   assert.equal(completed[0], -1);
   assert.ok(obs.every((p) => p === -1));
@@ -111,8 +111,8 @@ test("changed/removed facts retract predictions, preserve manual observations an
   const complete = completeAssistedDrawing(obs, a.predictions);
   assert.equal(
     complete[25],
-    -1,
-    "automatic transparency is not confirmed by completing remaining unknown cells",
+    0,
+    "automatic transparency is confirmed by Finish drawing",
   );
   assert.equal(complete[24], 1, "manual contradictory observation is retained");
   assert.equal(

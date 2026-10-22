@@ -1,7 +1,7 @@
 import items from "../data/items.json";
 import { SUBSTRUCT_POSITIONS } from "./pokemon";
 import type { Hypothesis } from "./sid";
-import { compileChecksumSupport } from "./sid";
+import { experimentChecksumSupports } from "./sid";
 import type { Snapshot } from "./investigation";
 import type { KnownFacts } from "./constraints";
 import { rankCombinedPixels } from "./checksum";
@@ -78,9 +78,14 @@ export function rankItemExperiments(
     return [];
   const questions = questionBuilder(candidates);
   if (source) {
-    const support = compileChecksumSupport(identity, snapshots, source);
-    const supports = candidates.map(support);
+    const supports = experimentChecksumSupports(
+      identity,
+      snapshots,
+      source,
+      candidates,
+    );
     if (
+      !supports ||
       supports.every((s) => s === supports[0]) ||
       supports.every((s) => s.length === 65536)
     )

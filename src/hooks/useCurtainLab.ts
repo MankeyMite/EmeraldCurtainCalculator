@@ -47,6 +47,7 @@ import { EMPTY_DEDUCTION } from "../core/deduction";
 import { ppInputError } from "../core/pp";
 import { PROFILE } from "../core/memory";
 import { completeAssistedDrawing } from "../core/pixelAssistance";
+import { validateSidDigitFilters } from "../core/sidDigitFilters";
 import { loadResearchExample, type ResearchExampleId } from "../core/examples";
 import {
   freshCapturePreset,
@@ -58,6 +59,12 @@ import {
   wildStoragePreset,
 } from "../core/facts";
 import { windowLayout } from "../core/window";
+import {
+  defaultSpindaMatcher,
+  spindaEstimatedFacts,
+  validateSpindaMatcher,
+  type SpindaMatcherState,
+} from "../core/spindaMatcher";
 import { fieldPossibilities } from "../core/inference";
 import {
   summaryFromDraft,
@@ -129,7 +136,13 @@ export function useCurtainLab() {
   const [sidRngSettings, setSidRngSettings] = useState<
     SidRngSettings | undefined
   >(restored?.sidRng);
+  const [sidDigitFilters, setSidDigitFilters] = useState<number[] | undefined>(
+    restored?.sidDigitFilters,
+  );
   const [sidCandidateCheck, setSidCandidateCheck] = useState("");
+  const [spindaMatcher, setSpindaMatcher] = useState<SpindaMatcherState>(
+    () => restored?.spindaMatcher ?? defaultSpindaMatcher(),
+  );
   const [snapshots, setSnapshots] = useState<Snapshot[]>(
     restored?.snapshots ?? [newSnapshot("first", "Observation 1")],
   );
@@ -207,6 +220,8 @@ export function useCurtainLab() {
       ownedItems,
       rngSettings,
       sidRngSettings,
+      sidDigitFilters,
+      spindaMatcher,
     };
   }
   const autosaveText = useMemo(() => {
@@ -223,6 +238,8 @@ export function useCurtainLab() {
         ownedItems,
         ...(rngSettings ? { rng: rngSettings } : {}),
         ...(sidRngSettings ? { sidRng: sidRngSettings } : {}),
+        ...(sidDigitFilters ? { sidDigitFilters } : {}),
+        spindaMatcher,
       });
     } catch {
       return null;
@@ -238,6 +255,8 @@ export function useCurtainLab() {
     ownedItems,
     rngSettings,
     sidRngSettings,
+    sidDigitFilters,
+    spindaMatcher,
   ]);
   useEffect(() => {
     if (!autosaveText) {
@@ -287,6 +306,7 @@ export function useCurtainLab() {
         ? { rng: rngSettings }
         : {}),
       ...(sidRngSettings ? { sidRng: sidRngSettings } : {}),
+      ...(sidDigitFilters ? { sidDigitFilters } : {}),
       ...(mode === "renderer" ? { renderMasks: suppliedMasks } : {}),
     },
     drawingInProgress,
@@ -522,6 +542,7 @@ export function useCurtainLab() {
       setOrigin("unknown");
       setRngSettings(undefined);
       setSidRngSettings(undefined);
+      setSidDigitFilters(undefined);
       setOwnedItems([]);
       setRecords(example.records);
       setNames({
@@ -564,6 +585,8 @@ export function useCurtainLab() {
     setOrigin(before.origin);
     setRngSettings(before.rngSettings);
     setSidRngSettings(before.sidRngSettings);
+    setSidDigitFilters(before.sidDigitFilters);
+    setSpindaMatcher(before.spindaMatcher);
     setOwnedItems(before.ownedItems);
     setRecords(before.records);
     setNames(before.names);
@@ -628,6 +651,8 @@ export function useCurtainLab() {
       setOrigin(investigation.origin);
       setRngSettings(investigation.rng);
       setSidRngSettings(investigation.sidRng);
+      setSidDigitFilters(investigation.sidDigitFilters);
+      setSpindaMatcher(investigation.spindaMatcher ?? defaultSpindaMatcher());
       setOwnedItems(investigation.ownedItems);
       exampleBackup.current = null;
       setActiveResearchExample(null);
@@ -714,6 +739,8 @@ export function useCurtainLab() {
               ownedItems,
               ...(rngSettings ? { rng: rngSettings } : {}),
               ...(sidRngSettings ? { sidRng: sidRngSettings } : {}),
+              ...(sidDigitFilters ? { sidDigitFilters } : {}),
+              spindaMatcher,
             }),
           ],
           {
@@ -740,6 +767,7 @@ export function useCurtainLab() {
     setSnapshots([newSnapshot(id, "Observation 1")]);
     setRngSettings(undefined);
     setSidRngSettings(undefined);
+    setSidDigitFilters(undefined);
     setActiveId(id);
     setOrigin("unknown");
     setOwnedItems([]);
@@ -753,6 +781,7 @@ export function useCurtainLab() {
     setHover(null);
     setSelectedPixel(null);
     setSidCandidateCheck("");
+    setSpindaMatcher(defaultSpindaMatcher());
     setError("");
     setActiveResearchExample(null);
     exampleBackup.current = null;
@@ -848,17 +877,22 @@ export function useCurtainLab() {
       setError(factError || summaryState.error || ppError);
       return false;
     }
-    // Finishing the main drawing verifies its blank cells as transparent.
-    // Never complete an experiment's unexamined cells or promote predictions.
+    // Finish explicitly confirms the whole visible baseline, including any
+    // untouched automatic pixels. Targeted experiments save only real answers.
     if (!activeSnapshot.itemTest)
-      change(completeAssistedDrawing(obsRef.current, predictions));
+      change(
+        completeAssistedDrawing(
+          obsRef.current,
+          showPredictions ? predictions : emptyObservations(),
+        ),
+      );
     setDrawingInProgress(false);
     setAnalysisRevision((n) => n + 1);
     setMode("solver");
     setNotice(
       activeSnapshot.itemTest
         ? "Verified experiment pixels submitted. Unexamined pixels stay unrecorded."
-        : "Drawing complete: remaining blank cells confirmed transparent. Automatic pixels remain derived from known facts, not separate observations.",
+        : "Visible drawing confirmed and saved, including unchanged automatic pixels. Painted overrides are preserved; remaining blanks are transparent. Undo can restore the previous drawing.",
     );
     return true;
   }
@@ -1096,6 +1130,30 @@ export function useCurtainLab() {
     setNotice("Draft item test cancelled. Earlier observations are preserved.");
   }
   return {
+    spindaMatcher,
+    sidDigitFilters,
+    setSidDigitFilters: (masks?: number[]) =>
+      setSidDigitFilters(masks ? validateSidDigitFilters(masks) : undefined),
+    setSpindaMatcher: (next: SpindaMatcherState) =>
+      setSpindaMatcher(validateSpindaMatcher(next)),
+    applySpindaEstimate: (pid: number) => {
+      const next = spindaEstimatedFacts(facts, pid);
+      if (!next || pendingItemTest || factError || summaryState.error)
+        return false;
+      // The panel explicitly confirms the PID and fills an unspecified species.
+      // Existing drawings, snapshots, encounter scopes and IVs remain intact.
+      setFacts(next);
+      setFactDraft(factsToDraft(next));
+      setSpindaMatcher((s) => ({
+        ...s,
+        appliedPid: pid,
+        shortlist: [...new Set([...s.shortlist, pid])],
+      }));
+      setNotice(
+        "Visually estimated Spinda PID applied as a conditional input. It is not independently verified; recheck against caught data and curtain pixels.",
+      );
+      return true;
+    },
     sidRngSettings,
     sidRngRows,
     sidRngResult,
@@ -1164,6 +1222,7 @@ export function useCurtainLab() {
     drawingInProgress,
     ppError,
     analysisBusy: deduction.busy,
+    analysisStatus: deduction.status,
     analysisError: deduction.error,
     reportItemChange,
     confirmItemTest,

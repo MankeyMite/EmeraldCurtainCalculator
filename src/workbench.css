@@ -1,6 +1,250 @@
 body:has(.workbench) {
   overflow: hidden;
 }
+
+/* The Spinda editor uses Emerald's original 64-pixel coordinate system. */
+.spinda-matcher {
+  margin: 12px 0 20px;
+  container-type: inline-size;
+}
+.spinda-matcher > summary {
+  color: #235d48;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.spinda-workflow {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.85fr) minmax(240px, 1.3fr);
+  gap: 18px;
+  align-items: start;
+}
+.spinda-config,
+.spinda-editor {
+  min-width: 0;
+}
+.spinda-config .rng-inputs {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.spinda-matcher select,
+.spinda-matcher input:not([type="checkbox"]) {
+  width: 100%;
+  min-width: 0;
+}
+.spinda-matcher label {
+  margin: 7px 0;
+}
+.spinda-matcher input[type="checkbox"] {
+  width: auto;
+}
+.spinda-matcher .rng-methods {
+  gap: 10px;
+  padding: 6px;
+}
+.spinda-matcher .rng-methods label {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+}
+.spinda-pid-line small {
+  display: block;
+  overflow-wrap: anywhere;
+  margin: 4px 0 8px;
+}
+.spinda-pid-line input {
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.12em;
+  font-size: 17px;
+}
+.spinda-stage {
+  position: relative;
+  width: 100%;
+  max-width: 448px;
+  aspect-ratio: 1;
+  margin: auto;
+  border: 1px solid #b8ccbf;
+  border-radius: 8px;
+  background: #e5eee7;
+  overflow: hidden;
+}
+.spinda-sprite {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+}
+.spinda-stage > .spinda-sprite {
+  position: absolute;
+  inset: 0;
+}
+.spinda-drag-layer {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  user-select: none;
+}
+.spinda-drag-layer g {
+  cursor: grab;
+  outline: none;
+}
+.spinda-drag-layer g:active {
+  cursor: grabbing;
+}
+.spinda-spot-handle,
+.spinda-spot-hit {
+  fill: transparent;
+  pointer-events: all;
+}
+.spinda-spot-handle {
+  fill: none;
+  pointer-events: none;
+  stroke: #58745d;
+  stroke-width: 0.15;
+  stroke-dasharray: 0.35 0.4;
+}
+.selected .spinda-spot-handle {
+  stroke: #1b5b8c;
+  stroke-width: 0.2;
+}
+.spinda-drag-layer g:focus .spinda-spot-handle {
+  stroke: #1b5b8c;
+  stroke-width: 0.4;
+}
+.spinda-spot-number {
+  font-family: Arial, sans-serif;
+  font-size: 2.6px;
+  fill: #fff;
+  stroke: #214c3d;
+  paint-order: stroke;
+  stroke-width: 0.6px;
+  pointer-events: none;
+}
+.spinda-spots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin: 8px 0;
+}
+.spinda-spots button {
+  padding: 5px 2px;
+}
+.spinda-spots code {
+  display: block;
+}
+.spinda-spots button[aria-pressed="true"] {
+  background: #235c3d;
+  color: white;
+}
+.spinda-nudge {
+  justify-content: center;
+}
+.spinda-nudge button {
+  min-width: 42px;
+  min-height: 38px;
+  font-size: 20px;
+}
+.spinda-results {
+  border-top: 1px solid #cdded5;
+  margin-top: 16px;
+  padding-top: 15px;
+}
+.spinda-match-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+.spinda-match {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #d3dfd7;
+  background: #fff;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow-wrap: anywhere;
+}
+.spinda-match.best {
+  border: 2px solid #44835a;
+  background: #f1f8f2;
+}
+.spinda-match-preview {
+  background: #e5eee7;
+  border: 0;
+  width: 100%;
+  padding: 0;
+  border-radius: 4px;
+}
+.spinda-match-preview .spinda-sprite {
+  max-width: 160px;
+  margin: auto;
+}
+.spinda-match details {
+  margin: 6px 0;
+}
+.spinda-match .table-scroll {
+  max-height: 220px;
+  overflow: auto;
+}
+.spinda-match table {
+  white-space: nowrap;
+  font-size: 11px;
+}
+.spinda-match > button:last-child {
+  margin-top: auto;
+}
+.spinda-match > button[aria-pressed="true"] {
+  background: #e1f0e3;
+}
+.spinda-comparison {
+  display: grid;
+  grid-template-columns: minmax(130px, 240px) 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 10px;
+  background: #e5eee7;
+  border-radius: 7px;
+}
+.spinda-enlarged {
+  min-width: 0;
+}
+.spinda-confirm,
+.spinda-estimate-notice {
+  border: 1px solid #c5a45c;
+  background: #fff8df;
+  padding: 12px;
+  margin: 10px 0;
+}
+.spinda-confirm button,
+.spinda-estimate-notice button {
+  margin: 4px;
+}
+@container (max-width: 460px) {
+  .spinda-workflow {
+    grid-template-columns: 1fr;
+  }
+  .spinda-config .rng-inputs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+  }
+  .spinda-comparison {
+    grid-template-columns: 1fr;
+  }
+  .spinda-enlarged {
+    max-width: 240px;
+    margin: auto;
+    width: 100%;
+  }
+  .spinda-match-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 .workbench {
   height: 100dvh;
   width: 100%;
@@ -1627,6 +1871,151 @@ body:has(.workbench) {
     )
     .curtain-workspace {
     height: max(360px, calc(100dvh - 220px));
+  }
+}
+.sid-digit-options {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 5px;
+  margin-block: 8px;
+}
+.sid-digit-controls fieldset {
+  margin-block: 12px;
+  min-width: 0;
+}
+.sid-digit-options button {
+  min-width: 0;
+  min-height: 36px;
+}
+.sid-digit-options button[aria-pressed="true"] {
+  background: #245e43;
+  color: white;
+}
+.sid-digit-options button[aria-pressed="false"] {
+  color: #765e5e;
+  background: #f5eded;
+  text-decoration: line-through;
+}
+.sid-digit-options button.evidence-excluded {
+  background: #e4e8e5;
+  color: #59655d;
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+.spinda-sid-guide {
+  margin-block: 16px;
+  min-width: 0;
+}
+.spinda-sid-digits {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+.spinda-sid-digits button {
+  display: grid;
+  gap: 4px;
+  text-align: center;
+}
+.spinda-sid-digits strong {
+  font-size: 24px;
+}
+.spinda-guide-options {
+  display: grid;
+  gap: 10px;
+  margin-block: 16px;
+}
+.spinda-guide-options label {
+  display: flex;
+  align-items: start;
+  gap: 8px;
+}
+.spinda-guide-options input {
+  flex: 0 0 auto;
+}
+.spinda-guide-workspace {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.spinda-guide-map {
+  display: grid;
+  grid-template-columns: 24px repeat(8, 27px);
+  gap: 1px;
+  width: max-content;
+}
+.spinda-guide-map small {
+  text-align: center;
+  align-self: center;
+  font: 11px monospace;
+  color: #476055;
+}
+.spinda-guide-row {
+  display: contents;
+}
+.spinda-guide-map button {
+  padding: 0;
+  min-width: 0;
+  min-height: 27px;
+  border-radius: 1px;
+  border: 1px solid #bbc7c0;
+  background: #e7ece9;
+  color: #53675c;
+  font: 15px monospace;
+}
+.spinda-guide-map button:disabled {
+  opacity: 0.55;
+}
+.spinda-guide-map .target {
+  border: 2px solid #c87706;
+  background: #ffedcf;
+  color: #624109;
+}
+.spinda-guide-map .black {
+  background: #151b17;
+  color: white;
+}
+.spinda-guide-map .transparent {
+  background: white;
+}
+.spinda-guide-map .selected {
+  outline: 3px solid #16744d;
+  outline-offset: -4px;
+}
+.spinda-guide-answer {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #b9cec1;
+  border-radius: 6px;
+  background: #f2f7f4;
+}
+.spinda-guide-answer h4 {
+  margin-top: 0;
+}
+.spinda-guide-answer label {
+  display: grid;
+  gap: 5px;
+  margin-block: 16px;
+}
+.spinda-guide-answer select {
+  width: 100%;
+  min-height: 40px;
+}
+.spinda-guide-fields {
+  margin-block: 16px;
+}
+.spinda-guide-fields td {
+  vertical-align: middle;
+}
+.spinda-guide-fields tr.selected {
+  background: #e5f0e9;
+}
+@media (max-width: 1100px) {
+  .spinda-guide-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .spinda-guide-map {
+    margin-inline: auto;
   }
 }
 @media (max-width: 600px) {

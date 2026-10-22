@@ -14,11 +14,15 @@ import type { RngSpread } from "./rng";
 import { fitsShiny } from "./shiny";
 import {
   checksumValues,
+  iterateChecksumValues,
   checksumMasks,
   refineChecksumPayload,
   mod16,
 } from "./checksum";
-import { experimentChecksumDelta } from "./checksumExperiments";
+import {
+  experimentChecksumDelta,
+  constrainLinkedChecksums,
+} from "./checksumExperiments";
 import { refineJudgePlaintext } from "./ivJudge";
 
 export type Hypothesis = {
@@ -191,13 +195,40 @@ function linkedChecksumValues(
         .reduce((v, m) => v * allowedValues(m).length, 1),
     }));
     const smallest = supports.reduce((a, b) => (a.size <= b.size ? a : b));
-    const values = possibleChecksums(prepared[smallest.i], h);
+    const smallestPrepared = prepared[smallest.i];
+    const values =
+      index === undefined
+        ? iterateChecksumValues(
+            smallestPrepared.plain.map(
+              (_, n) =>
+                smallestPrepared.plaintextDomains[n][
+                  (h.key >>> ((n % 8) * 4)) & 15
+                ],
+            ),
+            smallestPrepared.header.slice(56, 60),
+          )
+        : possibleChecksums(smallestPrepared, h);
+    // A projection needs every root, rather than a single witness. Enumerate
+    // each snapshot's exact support once and intersect by constant-time lookup
+    // instead of re-running four-column carry checks for every checksum value.
+    const memberships =
+      index === undefined
+        ? undefined
+        : supports.map((s) => {
+            const membership = new Uint8Array(65536);
+            if (checksumFits(prepared[s.i], h))
+              for (const value of possibleChecksums(prepared[s.i], h))
+                membership[value] = 1;
+            return membership;
+          });
     const roots: number[] = [];
     for (const v of values) {
       const root = mod16(v - smallest.offset);
       if (
-        supports.every((s) =>
-          checksumFits(prepared[s.i], h, mod16(root + s.offset)),
+        supports.every((s, n) =>
+          memberships
+            ? memberships[n][mod16(root + s.offset)]
+            : checksumFits(prepared[s.i], h, mod16(root + s.offset)),
         )
       ) {
         roots.push(root);
@@ -234,6 +265,31 @@ export function compileChecksumSupport(
     }
     return linkedChecksumValues(prepared, h, links, index) as number[];
   };
+}
+/** Bound optional experiment scoring, never the identity candidate set. Broad
+ * sets still rank all identities using encrypted pixels. Avoid materializing
+ * thousands of large nuisance checksum supports for every catalog action. */
+export function experimentChecksumSupports(
+  identity: KnownFacts,
+  snapshots: Snapshot[],
+  source: Snapshot,
+  candidates: Hypothesis[],
+) {
+  if (!candidates.length || candidates.length > 256) return undefined;
+  const support = compileChecksumSupport(identity, snapshots, source),
+    distinct = new Set<number[]>(),
+    supports: number[][] = [];
+  let size = 0;
+  for (const h of candidates) {
+    const values = support(h);
+    if (!distinct.has(values)) {
+      size += values.length;
+      if (size > 131072) return undefined;
+      distinct.add(values);
+    }
+    supports.push(values);
+  }
+  return supports;
 }
 function headerFits(p: Prepared, h: Hypothesis) {
   if (!p.valid) return false;
@@ -512,6 +568,26 @@ export function projectRecord(
   const linkedSupport = checksumLinks(snapshots).length
     ? compileChecksumSupport(identity, snapshots, snapshot)
     : null;
+  let checksumUpper: number[] | undefined;
+  if (linkedSupport) {
+    const all = snapshots.some((s) => s.id === snapshot.id)
+      ? snapshots
+      : [snapshot, ...snapshots];
+    const headers = all.map((s) =>
+      applyFacts(recordMasks(s.observations, 5), {
+        ...s.knownFacts,
+        ...identity,
+      }),
+    );
+    const consistent = constrainLinkedChecksums(
+      all,
+      headers,
+      all.map((s) => knownPlaintext({ ...s.knownFacts, ...identity })),
+    );
+    checksumUpper = consistent
+      ? headers[all.findIndex((s) => s.id === snapshot.id)].slice(56, 60)
+      : [0, 0, 0, 0];
+  }
   for (const h of candidates) {
     const signature = `${h.pid}/${h.rng?.ivs.join(",") ?? ""}/${h.rng?.abilitySlot ?? ""}`;
     let p = prepared.get(signature);
@@ -520,9 +596,20 @@ export function projectRecord(
       prepared.set(signature, p);
     }
     const header = applyFacts(p.header, { pid: h.pid, tid: h.tid, sid: h.sid });
-    const checksum = checksumMasks(
-      linkedSupport ? linkedSupport(h) : possibleChecksums(p, h),
-    );
+    // For large sets, payload refinement is disabled below. Once the checksum
+    // union already contains this candidate's entire header domain, computing
+    // its (often 50,000-value) support cannot add another projected digit.
+    const checksum =
+      candidates.length <= 32 ||
+      p.header
+        .slice(56, 60)
+        .some((m, n) => !!(m & (checksumUpper?.[n] ?? 65535) & ~masks[56 + n]))
+        ? checksumMasks(
+            linkedSupport ? linkedSupport(h) : possibleChecksums(p, h),
+          )
+        : p.header
+            .slice(56, 60)
+            .map((m, n) => m & (checksumUpper?.[n] ?? 65535));
     checksum.forEach((m, n) => (header[56 + n] &= m));
     const refinedDomains =
       candidates.length <= 32 && checksum.some((m) => m !== 65535)
