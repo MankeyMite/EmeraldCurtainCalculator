@@ -28,6 +28,7 @@ import {
 import { AUTOSAVE_KEY, readAutosave } from "../src/core/autosave";
 import { ItemTestControls } from "../src/components/ItemTestControls";
 import type { CurtainLab } from "../src/hooks/useCurtainLab";
+import { EMPTY_DEDUCTION } from "../src/core/deduction";
 
 test("targeted experiment instructions identify highlights without a screen-relative position", () => {
   const baseline = newSnapshot("base", "Baseline", { heldItem: 0 });
@@ -37,6 +38,7 @@ test("targeted experiment instructions identify highlights without a screen-rela
   const html = renderToStaticMarkup(
     createElement(ItemTestControls, {
       lab: {
+        ...EMPTY_DEDUCTION,
         pendingItemTest: pending,
         activeSnapshot: pending,
         itemTestBaseline: baseline,
@@ -47,7 +49,7 @@ test("targeted experiment instructions identify highlights without a screen-rela
       openResults: () => {},
     }),
   );
-  assert.match(html, /Inspect the highlighted pixels/);
+  assert.match(html, /Inspect the highlighted pixel\./);
   assert.doesNotMatch(
     html,
     /pixels below|pixels above|on the right|on the left/,

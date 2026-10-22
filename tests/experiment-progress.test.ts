@@ -93,14 +93,15 @@ test("latest uploaded investigation only offers questions that can narrow its jo
       assert.equal(q.transparentCount + q.blackCount, q.total);
     }
     // Great Ball's only unknown item nibble was answered. The same move swap
-    // can still test a different PP nibble; never ask the answered pixel again.
+    // can still test both nibbles of another move; never ask the answered
+    // PP pixel again. The questions are presented and rechecked in sequence.
     assert.ok(!result.experiments.some((e) => e.item.id === 3));
     const swap = result.controlledExperiments.find(
       (e) => e.action.id === "moves-1-2",
     )!;
     assert.deepEqual(
       swap.pixels.map((p) => p.index),
-      [108],
+      [108, 109],
     );
     assert.ok(!swap.pixels.some((p) => p.index === 124));
 

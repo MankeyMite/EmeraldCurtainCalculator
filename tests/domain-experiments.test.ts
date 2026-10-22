@@ -17,6 +17,7 @@ import {
   createItemTest,
   targetExperiment,
   answerExperimentPixel,
+  finishPixelExperiment,
 } from "../src/core/itemTests";
 import { createControlledTest } from "../src/core/controlledExperiments";
 import { diagnoseHypothesis, makeHypothesis } from "../src/core/sid";
@@ -97,13 +98,19 @@ test("symbolic key counts match independent exhaustive PID enumeration across al
   }
 });
 
-function truth(snapshot: Snapshot, index: number) {
+function referenceMask(snapshot: Snapshot, index: number) {
   const physical = index - 80,
     blocks = SUBSTRUCT_POSITIONS[h.pid % 24],
     logical = blocks.indexOf(Math.floor(physical / 24)) * 24 + (physical % 24),
     mask = knownPlaintext({ ...snapshot.knownFacts, ...fixture.identity })[
       logical
     ];
+  return mask;
+}
+
+function truth(snapshot: Snapshot, index: number) {
+  const mask = referenceMask(snapshot, index),
+    physical = index - 80;
   assert.ok(
     mask && !(mask & (mask - 1)),
     "reference outcome uses a known field, never guessed EVs",
@@ -245,6 +252,7 @@ test("move/Candy binary survivor counts match full multi-observation inference a
     ranked = rankDomainExperiments(identity, [snapshot], snapshot, inference);
   for (const e of ranked.controlledExperiments) {
     const q = ranked.questions[e.action.id];
+    const survivingAnswers: number[] = [];
     for (const value of [0, 1] as const) {
       const draft = targetExperiment(
           createControlledTest(snapshot, e.action.id, e.action, [q.index]),
@@ -256,9 +264,16 @@ test("move/Candy binary survivor counts match full multi-observation inference a
         value ? q.blackCount : q.transparentCount,
         `${e.action.id}/${value}`,
       );
-      if (value === truth(draft, q.index))
+      if (diagnoseHypothesis(identity, answered, h) === null)
+        survivingAnswers.push(value);
+      const mask = referenceMask(draft, q.index);
+      // With several possible block orders, a useful physical pixel can land
+      // on unknown plaintext for the reference Pokemon. Do not invent EVs or
+      // friendship to choose its actual answer.
+      if (mask && !(mask & (mask - 1)) && value === truth(draft, q.index))
         assert.equal(diagnoseHypothesis(identity, answered, h), null);
     }
+    assert.ok(survivingAnswers.length > 0, `${e.action.id} keeps the reference`);
   }
 });
 
@@ -373,11 +388,15 @@ test("Investigation UI renders actionable broad-set recommendations, mapped targ
   assert.match(pending, />Black<\/button>/);
   assert.match(pending, />Transparent<\/button>/);
   assert.match(pending, /Unexamined/);
-  const completed = answerExperimentPixel(
-    draft,
-    draft.targets![0],
-    truth(draft, draft.targets![0]),
+  const completed = finishPixelExperiment(
+    answerExperimentPixel(
+      draft,
+      draft.targets![0],
+      truth(draft, draft.targets![0]),
+    ),
   );
+  assert.equal(completed.itemTest?.phase, "recorded");
+  assert.equal(completed.observations.filter((v) => v !== -1).length, 1);
   const saved = renderToStaticMarkup(
     createElement(ItemTestControls, {
       lab: {
