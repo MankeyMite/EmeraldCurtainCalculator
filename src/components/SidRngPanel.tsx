@@ -33,10 +33,11 @@ export function SidRngPanel({
   return (
     <>
       <SidDigitControls lab={lab} />
-      <section
-        className={`sid-rng-panel ${compact ? "compact" : ""}`}
+      <details
+        className={`sid-rng-panel investigation-card ${compact ? "compact" : ""}`}
         aria-label="New-game SID RNG Filter"
       >
+        <summary>New-game SID RNG Filter</summary>
         <label className="check-label">
           <input
             type="checkbox"
@@ -276,7 +277,7 @@ export function SidRngPanel({
             )}
           </>
         )}
-      </section>
+      </details>
     </>
   );
 }

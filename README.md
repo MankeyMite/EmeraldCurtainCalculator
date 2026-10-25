@@ -8,6 +8,12 @@ Calculations, imported files and autosave stay in your browser. No ROM, account,
 
 **Verified mapping: English Pokémon Emerald only.** Other language versions have not been validated. Pokémon received from other Gen 3 games can be investigated as stored records in English Emerald; their original generation method is not assumed to be Emerald's.
 
+**New Game SID Finder → Shiny Starter:** open the optional guide from About or
+SID Finder for six steps from new-game timing and starter identification through
+curtain SID recovery, shiny target selection and calibration. Progress saves
+separately from the advanced investigator. Game screenshots can be added later;
+the guide currently shows labeled references. See [mechanics and limitations](research/STARTER_GUIDE.md).
+
 ## Latest update — 19 October 2026
 
 - **Compact workspace:** Pokémon info, Investigate and About on the scrolling left; a fixed curtain, live recovery values, pixel inspector and grouped 80-byte hex on the right. Mobile screens stack the panels.
@@ -163,7 +169,9 @@ Diagnostics identify failed header/secure byte nibbles and checksum incompatibil
 
 ## Run and verify locally
 
-**Spinda before-catch PID matcher:** open **Investigate → SID Finder → Find Spinda PID from its spot pattern**. Set the wild RNG range (default seed 0, advances 0–3000, Route 113), then drag the four spots. Each movement snaps to a sprite pixel and updates its PID byte. Background matching ranks all generated PIDs; preserve plausible alternatives or explicitly confirm an unverified estimate for Pokémon info. Choose **Use this pattern PID: show SID pixels** to highlight S1–S4 curtain pixels by permutation without filling any Pokémon info. Black/transparent guide answers narrow conditional SID digits and save separately from curtain observations, alongside the spots, filters and shortlist. The SID guide also uses the selected exact PID’s encounter IVs from the current complete RNG search. Exact packed IV nibbles fill automatically; alternative spreads remain alternatives when interpreting answers. See [rendering, matching and limitations](research/SPINDA_MATCHER.md).
+**Spinda before-catch PID matcher:** open **Investigate → SID Finder → Find Spinda PID from its spot pattern**. Set the wild RNG range (default seed 0, advances 0–3000, Route 113), then drag the four spots. Matches show distinct useful, untested SID digit counts for H1, H2 and H4, respecting remaining candidates and manual limits. A ball is suggested when it supplies an additional untested digit. Choose **Use this PID** to confirm the match, fold the Painter and open the existing SID Pixel Guide. Enter summary stats to narrow the method and IV spread; the guide shows known plaintext, including IV bytes, and highlights only useful pixels for the selected permutation. Black/transparent answers advance through distinct SID tests. **Catch next Spinda** preserves the exact remaining SID candidates and tested digits while starting a fresh record. Use catches from the same original trainer. See [rendering, matching and limitations](research/SPINDA_MATCHER.md).
+
+Current guide answers update the main SID solver and experiment planner immediately and remain editable in the existing guide table. Next experiments compare item swaps, controlled tests and another Spinda by estimated information per minute: 4 minutes per catch/check, 30 seconds per item swap, 10 seconds per vitamin, and 60 seconds per training battle including the return to check (30 seconds battling alone). These estimates never filter evidence. Defense/Speed EV tests use vitamin checkpoints up to 100, then exact battle gains based on the recorded Pokérus/item and EV caps. Targets above 110 EVs are last resorts. Unknown battle side effects do not become plaintext or checksum constraints. Restore the held item before checking and reload the saved baseline after each training test.
 
 **Manual SID digit limits:** in SID Finder, open **Manually limit SID digit candidates** and toggle hexadecimal values off or on for S1–S4. S1 is the highest digit. Limits update recovery, the Spinda guide and next-experiment rankings, and save with the investigation. Each digit has an allow-all reset, plus a reset for all four digits. Reuse exclusions from an earlier Pokémon only for the same original trainer; public TID alone does not establish that. Starting a new Pokémon clears manual limits.
 

@@ -204,7 +204,7 @@ test("Rare Candy and vitamins fall back when side effects are unknown, and known
     summaryStats: { level: 10, stats: Array(6).fill(null) },
   };
   for (const action of controlledActions(source, 25).filter(
-    (a) => a.kind !== "moves",
+    (a) => a.kind === "candy" || a.kind === "vitamin",
   )) {
     const target = createControlledTest(source, action.id, action, []);
     assert.equal(experimentChecksumDelta(source, target), null);

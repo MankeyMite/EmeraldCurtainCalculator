@@ -1,4 +1,5 @@
 import { MAPPING } from "../core/tiles";
+import { GuideImage } from "./StarterGuideParts";
 import {
   NibbleExample,
   RecordDiagram,
@@ -77,18 +78,23 @@ export function ResearchArticle() {
         </p>
       </header>
       <aside className="research-callout">
-        <strong>The newest connection: your visible TID is a seed.</strong>
+        <strong>A new game, a known SID, then a shiny starter.</strong>
         <p>
-          During a normal Emerald new game, the public Trainer ID seeds the RNG
-          before a later output supplies the Secret ID. Intersecting that
-          sequence with curtain evidence can remove many candidates before you
-          change an item. It is a useful filter, with a timing hypothesis you
-          can widen or disable.
+          The optional New Game SID Finder guide brings the RNG searches, route
+          planning and curtain experiments together. Your starter’s own PID and
+          IVs help decide which items, moves and EVs are useful on the way to
+          Rustboro. Once the SID is found, return to your protected save to
+          target a shiny starter.
         </p>
-        <a href="#research-sid-rng">Read the SID RNG investigation ↓</a>
+        <a href="#research-starter-guide">How the guided workflow works ↓</a>
       </aside>
       <details className="research-contents" open>
         <summary>In this article</summary>
+        <p>
+          <a href="#research-starter-guide">
+            New Game SID Finder → Shiny Starter
+          </a>
+        </p>
         <ol>
           {chapters.map(([id, name]) => (
             <li key={id}>
@@ -97,6 +103,152 @@ export function ResearchArticle() {
           ))}
         </ol>
       </details>
+
+      <section id="research-starter-guide">
+        <p className="research-eyebrow">Optional beginner guide</p>
+        <h3>New Game SID Finder → Shiny Starter</h3>
+        <p>
+          Start with a new English Emerald game and an unknown Secret ID. The
+          six-step guide takes you from timed trainer-ID generation to a
+          starter-specific Rustboro checklist, then helps read the SID from the
+          school’s curtains. Finally, it uses that SID to find shiny starter
+          targets. Each screen asks only for the information needed next; the
+          existing advanced investigator remains available.
+        </p>
+
+        <h4>Two RNG histories, one investigation</h4>
+        <p>
+          First, an audible two-stage timer marks when to confirm your trainer
+          name and advance Birch’s final message. Your public TID seeds the
+          new-game RNG sequence, so entering it gives a bounded list of possible
+          SIDs. The guide starts with ±60 RNG calls around its estimated target,
+          including an adjustable dialogue-delay estimate. Timing remains a
+          hypothesis: a countdown cannot guarantee the game’s actual RNG
+          advance.
+        </p>
+        <p>
+          Next, save before Birch’s bag and keep that save untouched. A second
+          timer helps reproduce the starter selection after an in-game soft
+          reset. Species, nature, gender, ability and all six summary stats are
+          checked against Method 1 PID/IV spreads in the selected advance
+          window. The first Zigzagoon’s Speed EV is already included. The guide
+          asks beginners to retry if more than one spread matches; one matching
+          spread supplies the working PID and exact generated IVs, conditional
+          on that search window and the entered information.
+        </p>
+
+        <h4>A route built around your starter’s data</h4>
+        <p>
+          Two starters of the same species can need different setups. The PID
+          determines the encryption key’s relationship to SID and the order of
+          the Pokémon’s four data blocks. The IVs supply known values in the
+          encrypted record. Together with the remaining SIDs, these tell the
+          planner which changes could actually separate candidates.
+        </p>
+        <ul>
+          <li>
+            <strong>IVs become useful curtain tests.</strong> The tool packs the
+            generated IVs into their stored data, finds the relevant plaintext
+            digits and maps their pixels through the PID’s data permutation. No
+            manual hexadecimal conversion is needed.
+          </li>
+          <li>
+            <strong>Battles and EVs shape the plan.</strong> The route includes
+            the modeled journey battles and your starter’s different rival
+            opponent. Checking off a listed battle records its EVs. Extra
+            Defense or Speed training is compared with other supported options,
+            rather than recommended simply because it changes a digit.
+          </li>
+          <li>
+            <strong>Moves and PP are part of the evidence.</strong> The planner
+            compares legal arrangements of occupied move slots, useful level-up
+            moves and compatible early TMs/HMs. PP follows each move, and PC
+            storage restores PP for the curtain setup.
+          </li>
+          <li>
+            <strong>Items earn their place on the checklist.</strong> The
+            built-in early-game catalogue supplies obtainable pickups and
+            purchases. The planner keeps a set that covers available SID
+            distinctions without redundant items, groups shop purchases and
+            tells you which item to hold before the first deposit. Two items
+            that test the same SID digit do not automatically deserve two
+            collection trips.
+          </li>
+        </ul>
+        <p>
+          The goal is to distinguish surviving SIDs, not collect the largest
+          list of different hex digits. Candidate separation and practical
+          action costs rank the supported setups. This produces a tailored plan,
+          not a guarantee of the shortest possible route or of finding SID from
+          one drawing.
+        </p>
+        <p>
+          Before travelling, a table shows the estimated SID target and five
+          advances on each side. Each SID is compared against the entire timing
+          window. Green means drawing only; yellow shows estimated experiments
+          with EV targets up to 10 per stat; red flags training beyond 10 in a
+          stat. Estimates use known plaintext, early items, move swaps and
+          manual Defense/Speed training after the planned route. You can
+          continue or optionally try another starter with a target shifted by 20
+          advances. This preserves calibration and the full SID window. The bold
+          target SID is unverified, and the estimates do not prove a grind is
+          unavoidable or that a different PID will appear.
+        </p>
+
+        <h4>Draw the curtains, then ask only useful questions</h4>
+        <div className="starter-guide-images">
+          <GuideImage
+            name="box-placement"
+            caption="Your prepared starter goes in Box 8, slot 5."
+          />
+          <GuideImage
+            name="trainer-school"
+            caption="The school’s curtains become your SID evidence."
+          />
+        </div>
+        <p>
+          Put the starter in Box 8, slot 5 with slots 4 and 6 empty, then enter
+          Rustboro Trainer’s School. Copy the visible black and transparent
+          pixels into the curtain drawing. Marked boxes are pre-drawn from known
+          Pokémon information, but still need checking against the game.
+          Calculations wait until you choose Finish drawing, keeping painting
+          responsive.
+        </p>
+        <p>
+          A transparent pixel means its encrypted hex digit is exactly zero;
+          black means it is nonzero. With known plaintext and PID, that can
+          confirm or rule out a particular SID digit. The guide applies the
+          whole drawing together with your Pokémon information, then suggests
+          useful held-item changes, move swaps or EV experiments if several SIDs
+          remain. It highlights the relevant pixels and records your Black or
+          Transparent answers. The decimal SID and four hex digits update as
+          evidence accumulates, with remaining possibilities shown for each
+          position. Reenter the school after each in-game change.
+        </p>
+
+        <h4>Return to the original save for the shiny attempt</h4>
+        <p>
+          Once one SID remains under the recorded evidence and timing window,
+          reset to the protected save before choosing a starter. Browse shiny
+          Method 1 targets by advance, PID, nature, gender, ability and IVs.
+          Selecting a target configures the two-stage timer automatically.
+          Nearby predictions and an optional summary check help identify where
+          an attempt landed and suggest a calibration correction. Getting close
+          helps with consistency, but the exact target advance is still required
+          for the chosen shiny.
+        </p>
+        <p>
+          Guide notes, battle logs and curtain evidence are saved on this device
+          between sessions; they do not save the game. Keeping the original
+          pre-starter save is what lets the SID investigation and the final
+          shiny attempt share the same trainer. See the{" "}
+          <a href="#research-sid-rng">SID RNG source audit below</a> and the{" "}
+          <Research path="research/STARTER_GUIDE.md">
+            guide implementation notes
+          </Research>{" "}
+          for the mechanics, supported scope and assumptions.
+        </p>
+      </section>
 
       <section id="research-origins">
         <h3>1. From a graphical glitch to data recovery</h3>
@@ -923,18 +1075,16 @@ KEY_A XOR KEY_B = PID_A XOR PID_B`}</pre>
           </div>
           <figcaption>
             Each Pokémon retains its own PID and record model; only the trainer
-            identity is shared. This is a proposed multi-Pokémon workflow, not
-            the current snapshot data model.
+            identity is shared. The Spinda SID guide carries the remaining SID
+            candidates between catches.
           </figcaption>
         </figure>
         <p>
-          <strong>Current implementation limit:</strong> saved observations in
-          one investigation represent changes to <em>one</em> Pokémon and share
-          its PID. They must not be used to combine different catches. At
-          present, investigate each Pokémon separately, save its investigation,
-          and compare/intersect the resulting SID sets outside the dedicated
-          workflow. A future trainer-level aggregator could perform the
-          intersection while preserving each Pokémon’s own PID possibilities.
+          Saved curtain observations represent changes to <em>one</em> Pokémon
+          and share its PID. For successive Spinda catches, use the SID pixel
+          guide’s <strong>Catch next Spinda</strong> button: it saves the
+          remaining SID candidates and tested digits, then starts a fresh record
+          for the next catch. Use catches from the same original trainer.
         </p>
         <p>
           Several catches may prove more efficient than repeated item changes on
@@ -1012,10 +1162,14 @@ KEY_A XOR KEY_B = PID_A XOR PID_B`}</pre>
           Small known EV changes can test digits that available items do not
           reach. The implemented vitamin recommendations require all six
           starting EVs and apply Generation 3’s vitamin/stat and total caps,
-          including partial gains. Battle training and EV-reducing berry
-          recommendations are not implemented. Battles can also change EXP, PP
-          and friendship; those changes must be accounted for before treating
-          their drawings as controlled evidence.
+          including partial gains. Defense and Speed training recommendations
+          also choose exact checkpoints using vitamins followed by battles,
+          accounting for recorded Pokérus, Macho Brace and EV caps. Targets
+          above 110 EVs are last resorts. Training tests use only predictable EV
+          pixels; unknown EXP, PP, friendship and other battle side effects do
+          not become plaintext or linked checksum constraints. Restore the
+          baseline after each test. EV-reducing berry recommendations are not
+          implemented.
         </p>
         <h4>Moves, PP and EXP</h4>
         <p>
@@ -1033,8 +1187,13 @@ KEY_A XOR KEY_B = PID_A XOR PID_B`}</pre>
           information under an explicit uniform identity/supported-outcome
           model. Broad joint domains use conservative survivor bounds and do not
           claim entropy for unknown fields. Item swaps have comparable effort.
-          Recommendations are not yet a proven optimization of travel time, item
-          availability, reversibility and every possible experiment.
+          For a confirmed Spinda PID, next-step estimates compare experiments
+          with another catch by information per minute: four minutes per catch,
+          30 seconds per item swap, 10 seconds per vitamin and 60 seconds per
+          training battle including the return to check. Catch estimates sample
+          encounters in the configured RNG scope and assume stats resolve the IV
+          spread. This is a planning model, not a measured success rate or an
+          optimization of every possible experiment and item availability.
         </p>
         <aside className="research-callout">
           <strong>Always return to the original baseline</strong>
@@ -1154,7 +1313,7 @@ KEY_A XOR KEY_B = PID_A XOR PID_B`}</pre>
             <strong>EV investigation.</strong> Existing stored training
             information can be constrained by the key, pixels and summary facts.
             Exact recovery may require additional controlled observations;
-            generic battle-training recommendations remain future work.
+            broader training histories remain future work.
           </li>
           <li>
             <strong>Pokémon preservation.</strong> Export exact reconstructed

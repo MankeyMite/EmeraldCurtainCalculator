@@ -15,6 +15,7 @@ export type RngSearchInput = {
   snapshots: Snapshot[];
   sidRng?: SidRngSettings;
   sidDigitFilters?: number[];
+  sidCandidates?: number[];
 };
 export type RngSearchResult = {
   spreads: RngSpread[];
@@ -46,6 +47,7 @@ export function searchWild(
             },
     };
   if (input.identity.tid !== undefined) {
+    const carriedSids = input.sidCandidates && new Set(input.sidCandidates);
     const analysis = solveSids(
       input.identity,
       snapshots,
@@ -55,8 +57,14 @@ export function searchWild(
       input.sidRng
         ? generateSidRng(input.identity.tid, input.sidRng)
             .map((r) => r.sid)
-            .filter((s) => sidAllowed(s, input.sidDigitFilters))
-        : allowedSidValues(input.sidDigitFilters),
+            .filter(
+              (s) =>
+                sidAllowed(s, input.sidDigitFilters) &&
+                (!carriedSids || carriedSids.has(s)),
+            )
+        : (input.sidCandidates?.filter((s) =>
+            sidAllowed(s, input.sidDigitFilters),
+          ) ?? allowedSidValues(input.sidDigitFilters)),
     );
     const alive = new Set(
       analysis.candidates.map(

@@ -297,12 +297,11 @@ test("SID guide renders useful pixel locations immediately with no Pokémon fiel
       onChange: () => {},
     }),
   );
-  assert.match(html, /No Pokémon info or TID is required/);
-  assert.match(html, /12 highlighted pixels/);
+  assert.ok(html.includes("0 useful pixels"));
+
   assert.match(html, /row \d+, column \d+/);
-  assert.match(html, /Unknown digits stay open/);
-  assert.equal((html.match(/class="target/g) || []).length, 12);
-  assert.match(html, /Unobserved/);
+  assert.equal((html.match(/class="target/g) || []).length, 0);
+  assert.ok(!html.includes(">Transparent</button>"));
 });
 
 test("Pokémon info automatically supplies all 48 SID plaintext nibbles across every permutation", () => {
@@ -473,41 +472,21 @@ test("live Pokémon info updates guide SID implications without replacing manual
   assert.deepEqual(guide.observations, before.observations);
 });
 
-test("matcher wires Pokémon info into the selected plaintext dropdown, with manual reset and invalid-draft feedback", () => {
+test("matcher reuses the guide with live known plaintext, manual overrides and invalid-input feedback", () => {
+  const state = defaultSpindaMatcher();
+  state.guide = newSpindaSidGuide(state.pid);
   const lab = {
-    spindaMatcher: defaultSpindaMatcher(),
+    spindaMatcher: state,
     facts: { species: 308, heldItem: 0x1234 },
     setSpindaMatcher: () => {},
   } as unknown as CurtainLab;
   const render = () =>
     renderToStaticMarkup(createElement(SpindaMatcher, { lab }));
-  const dropdown = (html: string) =>
-    html.match(
-      /<select aria-label="Known plaintext nibble"[\s\S]*?<\/select>/,
-    )![0];
-  let html = render();
-  assert.match(dropdown(html), /<option value="1" selected="">1<\/option>/);
-  assert.match(html, /Automatically from Pokémon info/);
+  assert.ok(render().includes("Plaintext <code>1</code>"));
   lab.facts = { ...lab.facts, heldItem: 0xabcd };
-  assert.match(
-    dropdown(render()),
-    /<option value="10" selected="">A<\/option>/,
-  );
-  lab.spindaMatcher.guide = newSpindaSidGuide(lab.spindaMatcher.pid);
-  lab.spindaMatcher.guide.plaintext[7] = 9;
-  html = render();
-  assert.match(dropdown(html), /<option value="9" selected="">9<\/option>/);
-  assert.match(html, /Use automatic value for this field/);
-  assert.match(html, /Use automatic plaintext for all fields/);
-  lab.spindaMatcher.guide.plaintext = {};
+  assert.ok(render().includes("Plaintext <code>A</code>"));
+  state.guide.plaintext[7] = 9;
+  assert.ok(render().includes("Plaintext <code>9</code>"));
   lab.factError = "Invalid input";
-  html = render();
-  assert.match(
-    dropdown(html),
-    /<option value="-1" selected="">Unknown<\/option>/,
-  );
-  assert.match(
-    html,
-    /Correct the invalid Pokémon info inputs to resume automatic plaintext/,
-  );
+  assert.ok(render().includes("or summary stats before checking pixels"));
 });

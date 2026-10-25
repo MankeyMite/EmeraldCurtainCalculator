@@ -1,0 +1,286 @@
+{
+  "scope": "Conservative catalogue feasibility, not a rerun of the actual UI or an optimized experiment tree",
+  "assumptions": [
+    "Same 100 TID/SID candidate windows",
+    "Fixed feasible move set at level 6–11, occupied-slot swaps, all early held items",
+    "No IV/PID or true SID supplied to the screen; known PID/IVs come from unique level-5 search",
+    "Checksum and unknown nuisance fields excluded",
+    "EV cap is per stat, ordinary +1 training, monotonic targets; no vitamins",
+    "Pass means every candidate SID has a distinct joint binary pattern across the allowed catalogue; it does not bound the number of item tests"
+  ],
+  "results": [
+    {
+      "starter": "Treecko",
+      "additionalEVsPerStat": 0,
+      "maximumExtraBattles": 0,
+      "originalSafe": 0,
+      "anySafeWorlds": 0,
+      "meanEligibleProbability": 0,
+      "meanAttemptsFromReset": null,
+      "worstEligibleProbability": 0,
+      "examples": [
+        {
+          "trial": 1,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 2,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 3,
+          "eligibleAdvances": 0
+        }
+      ]
+    },
+    {
+      "starter": "Torchic",
+      "additionalEVsPerStat": 0,
+      "maximumExtraBattles": 0,
+      "originalSafe": 0,
+      "anySafeWorlds": 1,
+      "meanEligibleProbability": 0.00008264462809917356,
+      "meanAttemptsFromReset": null,
+      "worstEligibleProbability": 0,
+      "examples": [
+        {
+          "trial": 1,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 2,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 3,
+          "eligibleAdvances": 0
+        }
+      ]
+    },
+    {
+      "starter": "Mudkip",
+      "additionalEVsPerStat": 0,
+      "maximumExtraBattles": 0,
+      "originalSafe": 0,
+      "anySafeWorlds": 3,
+      "meanEligibleProbability": 0.00024793388429752067,
+      "meanAttemptsFromReset": null,
+      "worstEligibleProbability": 0,
+      "examples": [
+        {
+          "trial": 1,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 2,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 3,
+          "eligibleAdvances": 0
+        }
+      ]
+    },
+    {
+      "starter": "Treecko",
+      "additionalEVsPerStat": 4,
+      "maximumExtraBattles": 8,
+      "originalSafe": 0,
+      "anySafeWorlds": 0,
+      "meanEligibleProbability": 0,
+      "meanAttemptsFromReset": null,
+      "worstEligibleProbability": 0,
+      "examples": [
+        {
+          "trial": 1,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 2,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 3,
+          "eligibleAdvances": 0
+        }
+      ]
+    },
+    {
+      "starter": "Torchic",
+      "additionalEVsPerStat": 4,
+      "maximumExtraBattles": 8,
+      "originalSafe": 2,
+      "anySafeWorlds": 27,
+      "meanEligibleProbability": 0.0036363636363636364,
+      "meanAttemptsFromReset": null,
+      "worstEligibleProbability": 0,
+      "examples": [
+        {
+          "trial": 1,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 2,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 3,
+          "eligibleAdvances": 0
+        }
+      ]
+    },
+    {
+      "starter": "Mudkip",
+      "additionalEVsPerStat": 4,
+      "maximumExtraBattles": 8,
+      "originalSafe": 0,
+      "anySafeWorlds": 25,
+      "meanEligibleProbability": 0.0028925619834710746,
+      "meanAttemptsFromReset": null,
+      "worstEligibleProbability": 0,
+      "examples": [
+        {
+          "trial": 1,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 2,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 3,
+          "eligibleAdvances": 0
+        }
+      ]
+    },
+    {
+      "starter": "Treecko",
+      "additionalEVsPerStat": 8,
+      "maximumExtraBattles": 16,
+      "originalSafe": 0,
+      "anySafeWorlds": 20,
+      "meanEligibleProbability": 0.0028925619834710746,
+      "meanAttemptsFromReset": null,
+      "worstEligibleProbability": 0,
+      "examples": [
+        {
+          "trial": 1,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 2,
+          "eligibleAdvances": 0
+        },
+        {
+          "trial": 3,
+          "eligibleAdvances": 0
+        }
+      ]
+    },
+    {
+      "starter": "Torchic",
+      "additionalEVsPerStat": 8,
+      "maximumExtraBattles": 16,
+      "originalSafe": 3,
+      "anySafeWorlds": 62,
+      "meanEligibleProbability": 0.019586776859504128,
+      "meanAttemptsFromReset": null,
+      "worstEligibleProbability": 0,
+      "examples": [
+        {
+          "trial": 1,
+          "eligibleAdvances": 1,
+          "first": 1245
+        },
+        {
+          "trial": 2,
+          "eligibleAdvances": 1,
+          "first": 1242
+        },
+        {
+          "trial": 3,
+          "eligibleAdvances": 1,
+          "first": 1209
+        }
+      ]
+    },
+    {
+      "starter": "Mudkip",
+      "additionalEVsPerStat": 8,
+      "maximumExtraBattles": 16,
+      "originalSafe": 0,
+      "anySafeWorlds": 45,
+      "meanEligibleProbability": 0.007190082644628096,
+      "meanAttemptsFromReset": null,
+      "worstEligibleProbability": 0,
+      "examples": [
+        {
+          "trial": 1,
+          "eligibleAdvances": 1,
+          "first": 1245
+        },
+        {
+          "trial": 2,
+          "eligibleAdvances": 2,
+          "first": 1237
+        },
+        {
+          "trial": 3,
+          "eligibleAdvances": 0
+        }
+      ]
+    }
+  ],
+  "heavyCases": [
+    {
+      "trial": 42,
+      "starter": "Mudkip",
+      "cheapTestStillSeparatesFinalSet": false
+    },
+    {
+      "trial": 50,
+      "starter": "Mudkip",
+      "cheapTestStillSeparatesFinalSet": false
+    },
+    {
+      "trial": 50,
+      "starter": "Torchic",
+      "cheapTestStillSeparatesFinalSet": false
+    },
+    {
+      "trial": 60,
+      "starter": "Mudkip",
+      "cheapTestStillSeparatesFinalSet": false
+    },
+    {
+      "trial": 60,
+      "starter": "Torchic",
+      "cheapTestStillSeparatesFinalSet": false
+    },
+    {
+      "trial": 60,
+      "starter": "Treecko",
+      "cheapTestStillSeparatesFinalSet": false
+    },
+    {
+      "trial": 81,
+      "starter": "Mudkip",
+      "cheapTestStillSeparatesFinalSet": false
+    },
+    {
+      "trial": 81,
+      "starter": "Treecko",
+      "cheapTestStillSeparatesFinalSet": false
+    },
+    {
+      "trial": 86,
+      "starter": "Mudkip",
+      "cheapTestStillSeparatesFinalSet": false
+    },
+    {
+      "trial": 86,
+      "starter": "Treecko",
+      "cheapTestStillSeparatesFinalSet": false
+    }
+  ]
+}

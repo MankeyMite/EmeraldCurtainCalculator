@@ -11,12 +11,12 @@ import {
   constraintHex,
 } from "../core/constraints";
 import { hex, recordHex } from "../core/pokemon";
-import { diagnoseHypothesis, makeHypothesis } from "../core/sid";
 import species from "../data/species.json";
 import growth from "../data/growth-rates.json";
 import type { DomainQuestion } from "../core/domainExperiments";
 import { ExperimentProgress } from "./ExperimentProgress";
 import { PokeblockExperiment } from "./PokeblockExperiment";
+import { compareSidSteps, experimentSeconds } from "../core/nextSidStep";
 
 function DomainExplanation({ question }: { question?: DomainQuestion }) {
   if (!question) return null;
@@ -310,10 +310,15 @@ export function ObservationManager({ lab }: { lab: CurtainLab }) {
   );
 }
 
-export function InvestigationResults({ lab }: { lab: CurtainLab }) {
+export function InvestigationResults({
+  lab,
+  onCatchSpinda,
+}: {
+  lab: CurtainLab;
+  onCatchSpinda?: () => void;
+}) {
   const [itemQuery, setItemQuery] = useState(""),
-    [showAll, setShowAll] = useState(false),
-    [trialSid, setTrialSid] = useState("");
+    [showAll, setShowAll] = useState(false);
   const analysis = lab.sidAnalysis,
     recovery = isRecorded(lab.activeSnapshot) ? lab.recovery : null;
   const useful = lab.experiments.filter(
@@ -332,27 +337,73 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
     ? [...new Set(lab.wildRng.result.spreads.map((s) => s.pid))]
     : null;
   const targets = lab.activeSnapshot.targets ?? [];
-  const tryDiagnostic = () => {
-    if (
-      !/^\d+$/.test(trialSid) ||
-      Number(trialSid) > 65535 ||
-      lab.identity.pid === undefined ||
-      lab.identity.tid === undefined
-    )
-      return "Enter a known PID, TID and a trial SID (0–65535).";
-    const h = makeHypothesis(
-      lab.identity.pid,
-      lab.identity.tid,
-      Number(trialSid),
-    );
-    return (
-      lab.currentSnapshots
-        .map((s) => diagnoseHypothesis(lab.identity, s, h))
-        .filter(Boolean)
-        .join(" ") ||
-      "Compatible with every snapshot under the stated model; identity is not proven."
-    );
-  };
+  const sidPlanning =
+    lab.identity.species === 308 &&
+    lab.identity.pid !== undefined &&
+    lab.identity.sid === undefined;
+  const steps = [
+    ...lab.experiments
+      .filter(
+        (e) =>
+          e.groups > 1 &&
+          e.item.id !== lab.itemTestBaseline.knownFacts.heldItem,
+      )
+      .map((e) => ({
+        key: `item-${e.item.id}`,
+        name: `Hold ${e.item.name}`,
+        worstCase: e.worstCase,
+        informationGain: e.informationGain,
+        groups: e.groups,
+        cost: 1,
+        seconds: experimentSeconds(),
+        lastResort: false,
+        catch: false,
+        checksumContributes: e.checksumContributes,
+        select: () => lab.startItemTest(e.item.id),
+      })),
+    ...lab.controlledExperiments
+      .filter((e) => e.groups > 1)
+      .map((e) => ({
+        key: e.action.id,
+        name: e.action.name,
+        worstCase: e.worstCase,
+        informationGain: e.informationGain,
+        groups: e.groups,
+        cost: e.action.cost ?? 1,
+        seconds: experimentSeconds(e.action),
+        lastResort: e.action.training?.lastResort ?? false,
+        catch: false,
+        checksumContributes: e.checksumContributes,
+        select: () => lab.startControlledTest(e.action.id),
+      })),
+    ...(sidPlanning &&
+    onCatchSpinda &&
+    lab.nextSpinda &&
+    lab.nextSpinda.informationGain > 0
+      ? [
+          {
+            key: "catch-spinda",
+            name: "Catch next Spinda",
+            worstCase: 0,
+            groups: 0,
+            cost: 1,
+            informationGain: lab.nextSpinda.informationGain,
+            seconds: lab.nextSpinda.seconds,
+            lastResort: false,
+            catch: true,
+            checksumContributes: false,
+            select: onCatchSpinda,
+          },
+        ]
+      : []),
+  ].sort((a, b) =>
+    sidPlanning
+      ? compareSidSteps(a, b)
+      : Number(a.lastResort) - Number(b.lastResort) ||
+        a.worstCase - b.worstCase ||
+        b.informationGain - a.informationGain ||
+        a.cost - b.cost,
+  );
   return (
     <section className="investigation-results">
       <h2>Investigation findings</h2>
@@ -403,8 +454,8 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                 <p role="alert">
                   No compatible PID/SID pair survives every snapshot. Recheck
                   copied mutable facts, assumptions, drawing accuracy and
-                  snapshot refresh. Use the candidate diagnostics below to
-                  locate a contradiction.
+                  snapshot refresh. Use the SID Finder to locate a
+                  contradiction.
                 </p>
               )}
               <details>
@@ -563,23 +614,6 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
               )}
             </>
           )}
-          <details>
-            <summary>Candidate diagnostics</summary>
-            <p>
-              Test a suspected SID without adding it as a fact. Contradictions
-              depend on the entered facts and drawing, not on an assumed
-              encounter time.
-            </p>
-            <label>
-              Trial SID
-              <input
-                inputMode="numeric"
-                value={trialSid}
-                onChange={(e) => setTrialSid(e.target.value)}
-              />
-            </label>
-            {trialSid && <p>{tryDiagnostic()}</p>}
-          </details>
         </>
       )}
       {targets.length > 0 && (
@@ -617,13 +651,15 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
               ? "Analysis could not complete. Resolve the computation message above."
               : lab.experimentStatus === "inconsistent"
                 ? "Supplied observations or active RNG constraints are inconsistent. Resolve the conflicts before performing another experiment."
-                : lab.experimentStatus === "available"
-                  ? "Experiments available. They can discover block position and key digits while narrowing joint PID/SID possibilities. A test can rule out SID/key combinations while the distinct PID and SID counts stay unchanged."
-                  : lab.experimentStatus === "insufficient-information"
-                    ? "Insufficient known information: enter the original trainer TID to predict joint identity experiments reliably."
-                    : lab.experimentStatus === "computation-limited"
-                      ? "The solver could not rank experiments within the current computation scope. Add verified observations or narrow the optional search."
-                      : "No evaluated supported experiment distinguishes the remaining possibilities under the current model. More known data may enable predictions: vitamins need EVs; PP Up / PP Max need moves and packed PP Up counters; Pokéblocks need Nature, contest values and flavors. Other actions and uncertain side effects are not modeled."}
+                : sidPlanning && steps.length
+                  ? `Suggested next: ${steps[0].name}. EV targets above 110 are a last resort.`
+                  : lab.experimentStatus === "available"
+                    ? "Experiments available. They can discover block position and key digits while narrowing joint PID/SID possibilities. A test can rule out SID/key combinations while the distinct PID and SID counts stay unchanged."
+                    : lab.experimentStatus === "insufficient-information"
+                      ? "Insufficient known information: enter the original trainer TID to predict joint identity experiments reliably."
+                      : lab.experimentStatus === "computation-limited"
+                        ? "The solver could not rank experiments within the current computation scope. Add verified observations or narrow the optional search."
+                        : "No evaluated supported experiment distinguishes the remaining possibilities under the current model. More known data may enable predictions: vitamins need EVs; PP Up / PP Max need moves and packed PP Up counters; Pokéblocks need Nature, contest values and flavors. Other actions and uncertain side effects are not modeled."}
         </p>
         {lab.experimentLimitations?.map((message) => (
           <p className="help" key={message}>
@@ -637,97 +673,64 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
           reload it afterwards.
         </p>
         <PokeblockExperiment key={lab.itemTestBaseline.id} lab={lab} />
-        {(lab.experiments.some((e) => e.groups > 1) ||
-          lab.controlledExperiments.some((e) => e.groups > 1)) && (
+        {!!steps.length && (
           <ol className="investigation-cards">
-            {[
-              ...lab.experiments
-                .filter(
-                  (e) =>
-                    e.groups > 1 &&
-                    e.item.id !== lab.itemTestBaseline.knownFacts.heldItem,
-                )
-                .map((e) => ({
-                  key: `item-${e.item.id}`,
-                  name: `Hold ${e.item.name}`,
-                  worstCase: e.worstCase,
-                  informationGain: e.informationGain,
-                  groups: e.groups,
-                  cost: 1,
-                  checksumContributes: e.checksumContributes,
-                  select: () => lab.startItemTest(e.item.id),
-                })),
-              ...lab.controlledExperiments
-                .filter((e) => e.groups > 1)
-                .map((e) => ({
-                  key: e.action.id,
-                  name: e.action.name,
-                  worstCase: e.worstCase,
-                  informationGain: e.informationGain,
-                  groups: e.groups,
-                  cost: e.action.cost ?? 1,
-                  checksumContributes: e.checksumContributes,
-                  select: () => lab.startControlledTest(e.action.id),
-                })),
-            ]
-              .sort(
-                (a, b) =>
-                  a.worstCase - b.worstCase ||
-                  b.informationGain - a.informationGain ||
-                  a.cost - b.cost,
-              )
-              .slice(0, 6)
-              .map((e, i) => (
-                <li className="investigation-card" key={e.key}>
-                  <h4>
-                    {i + 1}. {e.name}
-                  </h4>
-                  <button
-                    disabled={
-                      !!lab.pendingItemTest ||
-                      !!(
-                        lab.factError ||
-                        lab.summaryError ||
-                        lab.ppError ||
-                        lab.analysisError ||
-                        lab.analysisBusy ||
-                        lab.drawingInProgress
-                      )
-                    }
-                    onClick={e.select}
-                  >
-                    Try {e.name}
-                  </button>
-                  <small>
-                    {e.groups} patterns · worst case{" "}
-                    {lab.domainQuestions[e.key] && "at most "}
-                    {e.worstCase.toLocaleString()}{" "}
-                    {lab.domainQuestions[e.key]?.countBasis ?? "hypotheses"}
-                    {lab.domainQuestions[e.key]
-                      ? lab.domainQuestions[e.key].combinedOutcomes ||
-                        lab.domainQuestions[e.key].combinedChecksum
-                        ? " · conservative combined bounds"
-                        : " · conservative best-pixel bound; additional targets rechecked after each answer"
-                      : ` · ${e.informationGain.toFixed(2)} bits (uniform identity / supported-outcome model)`}
-                    {e.checksumContributes &&
-                      " · Combined encrypted and checksum pixels improve this test."}
-                  </small>
-                  {lab.domainQuestions[e.key] && (
-                    <details>
-                      <summary>Why this experiment?</summary>
-                      <DomainExplanation
-                        question={lab.domainQuestions[e.key]}
-                      />
-                    </details>
+            {steps.slice(0, 6).map((e, i) => (
+              <li className="investigation-card" key={e.key}>
+                <h4>
+                  {i + 1}. {e.name}
+                </h4>
+                <button
+                  disabled={
+                    !!lab.pendingItemTest ||
+                    !!(
+                      lab.factError ||
+                      lab.summaryError ||
+                      lab.ppError ||
+                      lab.analysisError ||
+                      lab.analysisBusy ||
+                      lab.drawingInProgress
+                    )
+                  }
+                  onClick={e.select}
+                >
+                  {e.catch ? e.name : `Try ${e.name}`}
+                </button>
+                <small>
+                  {e.lastResort && "Last resort · "}
+                  {e.catch ? (
+                    `Estimated ${e.informationGain.toFixed(2)} bits after checking stats and useful pixels (${lab.nextSpinda?.samples} simulated encounters).`
+                  ) : (
+                    <>
+                      {e.groups} patterns · worst case{" "}
+                      {lab.domainQuestions[e.key] && "at most "}
+                      {e.worstCase.toLocaleString()}{" "}
+                      {lab.domainQuestions[e.key]?.countBasis ?? "hypotheses"}
+                      {lab.domainQuestions[e.key]
+                        ? lab.domainQuestions[e.key].combinedOutcomes ||
+                          lab.domainQuestions[e.key].combinedChecksum
+                          ? " · conservative combined bounds"
+                          : " · conservative best-pixel bound; additional targets rechecked after each answer"
+                        : ` · ${e.informationGain.toFixed(2)} bits (uniform identity / supported-outcome model)`}
+                      {e.checksumContributes &&
+                        " · Combined encrypted and checksum pixels improve this test."}
+                    </>
                   )}
-                </li>
-              ))}
+                </small>
+                {lab.domainQuestions[e.key] && (
+                  <details>
+                    <summary>Why this experiment?</summary>
+                    <DomainExplanation question={lab.domainQuestions[e.key]} />
+                  </details>
+                )}
+              </li>
+            ))}
           </ol>
         )}
         <details>
           <summary>
-            Move learning, swaps, Rare Candy, vitamin, PP and Pokéblock
-            experiments
+            Move learning, swaps, Rare Candy, EV training, vitamin, PP and
+            Pokéblock experiments
           </summary>
           <p>
             These tests use the original moves, current level and EVs. Move
@@ -736,10 +739,26 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
             Rare Candy also checks the next automatic move-learning level,
             including the required EXP and PP changes. Vitamins require all six
             original EVs. Every compatible block order is considered when
-            choosing useful target pixels.
+            choosing useful target pixels. Defense and Speed EV checkpoints use
+            vitamins first, then 1, 2 or 4 EVs per battle according to the
+            recorded Pokérus and Macho Brace.
           </p>
           {lab.controlledExperiments
             .filter((e) => e.groups > 1)
+            .sort((a, b) =>
+              compareSidSteps(
+                {
+                  informationGain: a.informationGain,
+                  seconds: experimentSeconds(a.action),
+                  lastResort: a.action.training?.lastResort,
+                },
+                {
+                  informationGain: b.informationGain,
+                  seconds: experimentSeconds(b.action),
+                  lastResort: b.action.training?.lastResort,
+                },
+              ),
+            )
             .map((e) => (
               <article className="investigation-card" key={e.action.id}>
                 <h4>{e.action.name}</h4>
@@ -753,7 +772,8 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
                   {lab.domainQuestions[e.action.id] && "at most "}
                   {e.worstCase.toLocaleString()} compatible{" "}
                   {lab.domainQuestions[e.action.id]?.countBasis ?? "hypotheses"}{" "}
-                  remain.
+                  remain
+                  {e.action.training?.lastResort ? " · last resort" : ""}.
                   {e.checksumContributes &&
                     " Combined encrypted and checksum pixels eliminate additional identities."}
                 </p>
@@ -793,7 +813,8 @@ export function InvestigationResults({ lab }: { lab: CurtainLab }) {
           !lab.pendingItemTest &&
           lab.experimentStatus === "indistinguishable" &&
           lab.identity.tid !== undefined &&
-          lab.identity.sid === undefined && (
+          lab.identity.sid === undefined &&
+          !(sidPlanning && onCatchSpinda) && (
             <section className="investigation-card">
               <h4>Try another Pokémon from the same original trainer</h4>
               <p>

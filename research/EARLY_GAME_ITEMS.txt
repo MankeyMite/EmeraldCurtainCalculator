@@ -1,0 +1,247 @@
+
+POKEMON EMERALD (GBA) — EARLY-GAME ITEM DATABASE
+
+RULES:
+- No Cut, Surf, Rock Smash, Strength, etc.
+- Hidden items are allowed without Itemfinder.
+- Includes Littleroot to Rustboro, southern Route 115,
+  western Route 116, and Rustboro side of Rusturf Tunnel.
+- EARLY = accessible upon reaching location.
+- GYM = after defeating Roxanne.
+- RESCUE = after Devon Goods / Peeko rescue.
+- RANDOM = not a guaranteed pickup.
+
+=====================================
+LITTLEROOT TOWN — EARLY
+=====================================
+Potion x1 — PC in player's bedroom
+Pokedex x1 — Professor Birch, after first rival battle
+Poke Ball x5 — rival gift after Pokedex
+Running Shoes x1 — Mom
+
+ROUTE 101 — EARLY
+No fixed item pickups.
+
+OLDALE TOWN — EARLY
+Potion x1 — free gift from Poke Mart employee
+
+ROUTE 103 (WEST) — EARLY
+No accessible fixed item pickups or Berry trees.
+
+=====================================
+ROUTE 102 — EARLY
+=====================================
+Potion x1 — visible ball
+Oran Berry x2 — Berry trees
+Pecha Berry x2 — Berry trees
+
+PETALBURG CITY — EARLY
+No accessible fixed items.
+Poke Mart available.
+
+=====================================
+ROUTE 104 SOUTH — EARLY
+=====================================
+Poke Ball x1 — visible ball, ledge accessed from
+                southeast exit of Petalburg Woods
+Antidote x1 — hidden, beach
+Heart Scale x1 — hidden, beach
+Potion x1 — hidden, beach near pier
+Oran Berry x2 — Berry trees
+Pecha Berry x2 — Berry trees
+
+=====================================
+PETALBURG WOODS — EARLY
+=====================================
+Potion x1 — hidden, southeast grass patch
+Parlyz Heal x1 — visible ball, southwest
+Great Ball x1 — NPC gift after Aqua grunt
+Poke Ball x1 — hidden, northwest area
+Ether x1 — visible ball, northwest corner
+
+=====================================
+ROUTE 104 NORTH — EARLY
+=====================================
+TM09 Bullet Seed x1 — NPC boy south of Flower Shop
+Oran Berry x2 — Berry trees near Flower Shop
+Cheri Berry x2 — Berry trees near Flower Shop
+Potion x1 — visible ball behind Flower Shop
+Poke Ball x1 — hidden behind Flower Shop
+Super Potion x1 — hidden behind Flower Shop
+Wailmer Pail x1 — NPC gift inside Flower Shop
+Chesto Berry x1 — old woman east of bridge
+Cheri Berry x2 — Berry trees east of bridge
+Leppa Berry x2 — Berry trees east of bridge
+
+DAILY RANDOM BERRY — Flower Shop:
+1 berry per day, selected from:
+Cheri Berry
+Chesto Berry
+Pecha Berry
+Rawst Berry
+Aspear Berry
+Leppa Berry
+Oran Berry
+Persim Berry
+
+=====================================
+RUSTBORO CITY — EARLY
+=====================================
+X Defend x1 — visible ball, southeast fence
+Premier Ball x1 — NPC boy upstairs in southwest building
+Quick Claw x1 — teacher in Trainers' School
+HM01 Cut x1 — man in Cutter's House
+Chesto Berry x1 — held by traded Seedot (Dots);
+                 requires trading a Ralts
+
+RUSTBORO GYM — GYM
+TM39 Rock Tomb x1 — Roxanne reward
+Stone Badge — gym reward (not bag item)
+
+=====================================
+ROUTE 115 SOUTH — EARLY
+=====================================
+Super Potion x1 — visible ball at end of southern beach
+
+Only southern first-visit area included.
+Hidden Heart Scale near Battle Girl Cyndy is NOT
+accessible within the defined area.
+
+=====================================
+ROUTE 116 WEST — EARLY
+=====================================
+Repel x1 — visible ball near Rustboro entrance
+X Special x1 — visible ball east of tunnel entrance
+               (also called X Sp. Atk)
+
+=====================================
+RUSTURF TUNNEL — RUSTBORO SIDE
+=====================================
+Poke Ball x1 — visible ball, northwest corner
+
+Devon Goods x1 — RESCUE, temporary story key item
+                  recovered from Team Aqua grunt
+
+=====================================
+RUSTBORO CITY — AFTER RESCUE
+=====================================
+Great Ball x1 — Devon employee
+Letter x1 — Mr. Stone (key item)
+PokeNav x1 — Mr. Stone (key item)
+
+=====================================
+POKE MARTS — ITEMS AND PRICES
+=====================================
+
+OLDALE TOWN:
+Poke Ball       200  (after Pokedex)
+Potion          300
+Antidote        100
+Parlyz Heal     200
+Awakening       250
+
+PETALBURG CITY:
+Poke Ball       200
+Potion          300
+Antidote        100
+Parlyz Heal     200
+Awakening       250
+Escape Rope     550
+Repel           350
+X Speed         350
+X Attack        500
+X Defend        550
+Orange Mail      50
+
+Petalburg Great Ball and Super Potion:
+NOT AVAILABLE until 4 badges.
+
+RUSTBORO CITY:
+Poke Ball       200
+Potion          300
+Super Potion    700
+Antidote        100
+Parlyz Heal     200
+Escape Rope     550
+Repel           350
+X Speed         350
+X Attack        500
+X Defend        550
+
+Rustboro Repeat Ball and Timer Ball:
+NOT AVAILABLE until later Slateport story progression.
+
+ALL ELIGIBLE POKE MARTS:
+Buying 10+ Poke Balls in one transaction grants
+a free Premier Ball. Repeatable.
+
+=====================================
+BERRY TREE TOTALS (INITIAL HARVEST)
+=====================================
+Oran Berry    x6
+Pecha Berry   x4
+Cheri Berry   x4
+Leppa Berry   x2
+
+Additional Chesto Berry:
+1 from Route 104 NPC
+1 optional from Rustboro in-game trade
+
+Daily random Berry gifts and replanted Berry harvests
+are repeatable sources.
+
+=====================================
+OPTIONAL: RANDOM ITEM SOURCES
+=====================================
+
+PICKUP ABILITY — LEVEL 1-10 ZIGZAGOON:
+Potion
+Antidote
+Super Potion
+Great Ball
+Repel
+Escape Rope
+X Attack
+Full Heal
+Ultra Ball
+Hyper Potion
+Nugget
+
+These are random, repeatable possibilities,
+not guaranteed map pickups.
+
+HIGHER-LEVEL PICKUP:
+Can unlock additional items without any HMs by
+grinding levels, including Rare Candy, King's Rock,
+TM44 Rest, TM01 Focus Punch, TM26 Earthquake,
+Leftovers, and others.
+
+WILD POKEMON HELD ITEMS:
+Poochyena -> Pecha Berry (5%)
+Zigzagoon -> Oran Berry (5%)
+Whismur -> Chesto Berry (5%)
+Skitty -> Leppa Berry (5%)
+Abra -> TwistedSpoon (5%)
+
+Catch the Pokemon to obtain its held item.
+
+=====================================
+IMPORTANT EXCLUSIONS
+=====================================
+Route 103 eastern items and Berry trees
+Petalburg City's Surf-only items
+Petalburg Woods Cut-only area
+Route 104 X Accuracy and Surf-only PP Up
+Route 104 White Herb (requires Dynamo Badge)
+Route 115 inaccessible northern area
+Route 116 Cut-only items and Berry trees
+Route 116 isolated eastern area
+Rusturf Tunnel far-side Max Ether
+HM04 Strength
+Rustboro Exp. Share (requires Steven delivery)
+Repeat Ball gift (requires Slateport delivery)
+Rustboro Repeat/Timer Ball shop unlock
+ORAS-exclusive items and gifts
+
+Never confuse owning HM01 Cut with being allowed
+to access items that require actually using Cut.

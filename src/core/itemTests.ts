@@ -6,7 +6,10 @@ export function isRecorded(snapshot: Snapshot): boolean {
   return !snapshot.itemTest || snapshot.itemTest.phase === "recorded";
 }
 export function isEvidence(snapshot: Snapshot): boolean {
-  return isRecorded(snapshot) || snapshot.itemTest?.mode === "pixels";
+  return (
+    !snapshot.supersededBy &&
+    (isRecorded(snapshot) || snapshot.itemTest?.mode === "pixels")
+  );
 }
 export function targetExperiment(snapshot: Snapshot): Snapshot {
   if (!snapshot.itemTest || !snapshot.targets?.length)
@@ -19,6 +22,8 @@ export function targetExperiment(snapshot: Snapshot): Snapshot {
       mode: "pixels",
       phase: "editing",
       changed: undefined,
+      answerOrder: [],
+      recheckPixel: undefined,
     },
   };
 }
@@ -38,8 +43,51 @@ export function answerExperimentPixel(
   return {
     ...snapshot,
     observations,
-    itemTest: { ...snapshot.itemTest, phase: done ? "recorded" : "editing" },
+    itemTest: {
+      ...snapshot.itemTest,
+      phase: done ? "recorded" : "editing",
+      answerOrder: [
+        ...experimentAnswerOrder(snapshot).filter((n) => n !== index),
+        ...(value === -1 ? [] : [index]),
+      ],
+      recheckPixel:
+        snapshot.itemTest.recheckPixel === index
+          ? undefined
+          : snapshot.itemTest.recheckPixel,
+    },
   };
+}
+// Old saves have no ordering metadata; use their saved target order.
+function experimentAnswerOrder(snapshot: Snapshot): number[] {
+  const answered = (snapshot.targets ?? []).filter(
+    (n) => snapshot.observations[n] !== -1,
+  );
+  const ordered = snapshot.itemTest?.answerOrder ?? [];
+  return [
+    ...answered.filter((n) => !ordered.includes(n)),
+    ...ordered.filter((n) => answered.includes(n)),
+  ];
+}
+export function experimentToUndo(snapshots: Snapshot[]): Snapshot | undefined {
+  const pending = snapshots.find((s) => !isRecorded(s));
+  const eligible = (s: Snapshot) =>
+    !s.supersededBy &&
+    s.itemTest?.mode === "pixels" &&
+    experimentAnswerOrder(s).length > 0 &&
+    !snapshots.some((child) => child.itemTest?.sourceId === s.id);
+  // Never switch away from an unfinished experiment or invalidate a child's source.
+  return pending
+    ? eligible(pending)
+      ? pending
+      : undefined
+    : [...snapshots].reverse().find(eligible);
+}
+export function undoExperimentAnswer(snapshot: Snapshot): Snapshot {
+  const index = experimentAnswerOrder(snapshot).at(-1);
+  if (snapshot.itemTest?.mode !== "pixels" || index === undefined)
+    throw Error("No experiment answer to undo.");
+  const next = answerExperimentPixel(snapshot, index, -1);
+  return { ...next, itemTest: { ...next.itemTest!, recheckPixel: index } };
 }
 export function finishPixelExperiment(snapshot: Snapshot): Snapshot {
   if (
@@ -47,10 +95,19 @@ export function finishPixelExperiment(snapshot: Snapshot): Snapshot {
     !snapshot.observations.some((v) => v !== -1)
   )
     throw Error("Verify at least one target pixel first.");
-  return { ...snapshot, itemTest: { ...snapshot.itemTest, phase: "recorded" } };
+  return {
+    ...snapshot,
+    itemTest: {
+      ...snapshot.itemTest,
+      phase: "recorded",
+      recheckPixel: undefined,
+    },
+  };
 }
 export function itemTestBaseline(snapshots: Snapshot[]): Snapshot {
-  const baseline = snapshots.find((snapshot) => !snapshot.itemTest);
+  const baseline = snapshots.find(
+    (snapshot) => !snapshot.itemTest && !snapshot.supersededBy,
+  );
   if (!baseline)
     throw Error("An original observation is needed before testing items.");
   return baseline;

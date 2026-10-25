@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
@@ -23,7 +24,19 @@ import { hex, NATURES } from "../core/pokemon";
 import { genderForPid } from "../core/traits";
 import { SpindaSprite } from "./SpindaSprite";
 import type { SpindaWorkerResponse } from "../core/spindaWorker";
-import { newSpindaSidGuide } from "../core/spindaSidGuide";
+import {
+  emptySpindaProgress,
+  sidCandidateMasks,
+  spindaUsefulness,
+} from "../core/spindaUsefulness";
+import { FACT_CATALOGS } from "../core/catalogs";
+import { spindaInfoPlaintext, spindaRngEvidence } from "../core/spindaSidGuide";
+import {
+  spindaRemainingSids,
+  spindaStatCandidate,
+  testedSpindaDigits,
+} from "../core/spindaUsefulness";
+import { summaryFromDraft, summaryToDraft } from "../core/stats";
 import { SpindaSidGuide } from "./SpindaSidGuide";
 
 const names = [
@@ -63,31 +76,87 @@ type SearchState = {
 export function SpindaMatcher({
   lab,
   locatePixel,
+  onTargetsChange,
 }: {
   lab: CurtainLab;
   locatePixel?: (nibble: number) => void;
+  onTargetsChange?: (targets: number[]) => void;
 }) {
   const value = lab.spindaMatcher ?? defaultSpindaMatcher();
   const update = (next: SpindaMatcherState) =>
     lab.setSpindaMatcher(validateSpindaMatcher(next));
   const guideRef = useRef<HTMLDetailsElement>(null);
+  const painterRef = useRef<HTMLDetailsElement>(null);
+  const progress = value.sidProgress ?? emptySpindaProgress();
+  const liveSids = useMemo(
+    () =>
+      !lab.analysisBusy && !lab.analysisError
+        ? (lab.spindaBaseSidValues ??
+          lab.sidAnalysis?.sidValues ??
+          lab.sidRngResult?.rows.map((row) => row.sid))
+        : undefined,
+    [
+      lab.analysisBusy,
+      lab.analysisError,
+      lab.spindaBaseSidValues,
+      lab.sidAnalysis,
+      lab.sidRngResult,
+    ],
+  );
+  const baseSids = useMemo(() => {
+    if (!liveSids) return progress.remainingSids;
+    const saved = progress.remainingSids && new Set(progress.remainingSids);
+    return liveSids.filter((sid) => !saved || saved.has(sid));
+  }, [liveSids, progress.remainingSids]);
+  const remaining = sidCandidateMasks(baseSids).map(
+    (mask, n) =>
+      mask &
+      (lab.sidDigitFilters?.[n] ?? 65535) &
+      (lab.facts.sid === undefined
+        ? 65535
+        : 1 << ((lab.facts.sid >>> (n * 4)) & 15)) &
+      (!lab.analysisBusy && !lab.analysisError
+        ? (lab.investigationInference?.masks[12 + n] ?? 65535)
+        : 65535),
+  );
   const useGuide = (pid: number) => {
-    update({
-      ...value,
-      guide: { ...(value.guide ?? newSpindaSidGuide(pid)), pid, enabled: true },
+    const candidate = matches.find((m) => m.pid === pid);
+    const suggestion =
+      candidate &&
+      spindaUsefulness(
+        candidate,
+        countRemaining,
+        countTested,
+        lab.facts.otGender,
+      );
+    const levels = new Set(candidate?.encounters.map((e) => e.level));
+    if (
+      !lab.useSpindaPid(
+        pid,
+        suggestion?.ball ?? 4,
+        levels.size === 1 ? [...levels][0] : undefined,
+      )
+    ) {
+      setError(
+        "Finish the current experiment and correct invalid inputs first.",
+      );
+      return;
+    }
+    setOpen(false);
+    requestAnimationFrame(() => {
+      if (guideRef.current) {
+        guideRef.current.open = true;
+        guideRef.current.scrollIntoView({ block: "start", behavior: "smooth" });
+      }
     });
-    requestAnimationFrame(() =>
-      guideRef.current?.scrollIntoView({ block: "start", behavior: "smooth" }),
-    );
   };
-  const [open, setOpen] = useState(!!value.guide?.enabled),
+  const [open, setOpen] = useState(false),
     [selectedSpot, setSelectedSpot] = useState(0),
     [handles, setHandles] = useState(true),
     [shiny, setShiny] = useState(false),
     [selectedPid, setSelectedPid] = useState<number | null>(null),
     [overlay, setOverlay] = useState(false),
     [limit, setLimit] = useState(10),
-    [confirm, setConfirm] = useState<number | null>(null),
     [error, setError] = useState(""),
     [revision, setRevision] = useState(0),
     [cancelled, setCancelled] = useState(false),
@@ -135,7 +204,7 @@ export function SpindaMatcher({
     [value.settings.seed, value.settings.minAdvance, value.settings.maxAdvance],
   );
   useEffect(() => {
-    if (!open || cancelled || !validNumbers) return;
+    if ((!open && !value.guide?.enabled) || cancelled || !validNumbers) return;
     setSearch({
       key,
       pid: latestPid.current,
@@ -205,7 +274,7 @@ export function SpindaMatcher({
       worker.current?.terminate();
       worker.current = null;
     };
-  }, [key, open, revision, cancelled, validNumbers]);
+  }, [key, open || !!value.guide?.enabled, revision, cancelled, validNumbers]);
   useEffect(() => {
     if (!worker.current || cancelled) return;
     setSearch((s) => ({ ...s, busy: true }));
@@ -225,6 +294,47 @@ export function SpindaMatcher({
   const matches = ready ? search.matches : [],
     selected = matches.find((m) => m.pid === selectedPid),
     positions = spindaPositions(value.pid);
+  const guideProgress = useMemo(() => {
+    const guide = value.guide;
+    if (!guide?.enabled || lab.factError || lab.summaryError) return undefined;
+    const guideFacts = lab.activeSnapshot?.itemTest
+      ? { ...lab.itemTestBaseline.knownFacts, ...lab.identity }
+      : lab.facts;
+    const info = spindaInfoPlaintext(guideFacts);
+    const candidate = spindaStatCandidate(
+      matches.find((m) => m.pid === guide.pid),
+      guideFacts,
+      lab.activeSnapshot?.itemTest
+        ? lab.itemTestBaseline.summaryStats
+        : lab.summaryDraft
+          ? summaryFromDraft(lab.summaryDraft)
+          : undefined,
+    );
+    const rng = spindaRngEvidence(guide.pid, candidate, info);
+    return {
+      remaining: sidCandidateMasks(
+        spindaRemainingSids(guide, baseSids, remaining, info, rng?.plaintexts),
+      ),
+      tested: testedSpindaDigits(guide, info, rng?.masks),
+    };
+  }, [
+    value.guide,
+    baseSids,
+    remaining.join(),
+    ready,
+    search.matches,
+    lab.facts,
+    lab.factError,
+    lab.summaryDraft,
+    lab.summaryError,
+    lab.itemTestBaseline,
+    lab.identity,
+    lab.activeSnapshot,
+  ]);
+  const countRemaining = guideProgress?.remaining ?? remaining;
+  const countTested = progress.tested.map(
+    (m, n) => m | (guideProgress?.tested[n] ?? 0),
+  );
   const drag = useRef<{
     pointer: number;
     spot: number;
@@ -234,20 +344,13 @@ export function SpindaMatcher({
     scale: number;
   } | null>(null);
   const svg = useRef<SVGSVGElement>(null);
-  const comparisonRef = useRef<HTMLDivElement>(null),
-    confirmationRef = useRef<HTMLDivElement>(null);
+  const comparisonRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     comparisonRef.current?.scrollIntoView({
       block: "nearest",
       behavior: "smooth",
     });
   }, [selectedPid]);
-  useEffect(() => {
-    confirmationRef.current?.scrollIntoView({
-      block: "nearest",
-      behavior: "smooth",
-    });
-  }, [confirm]);
   const setPid = (pid: number) => {
     update({ ...value, pid });
     setError("");
@@ -301,20 +404,6 @@ export function SpindaMatcher({
       setError((e as Error).message);
     }
   }
-  function shortlist(pid: number) {
-    if (!value.shortlist.includes(pid) && value.shortlist.length >= 5000) {
-      setError(
-        "The saved shortlist is full. Remove an earlier estimate first.",
-      );
-      return;
-    }
-    update({
-      ...value,
-      shortlist: value.shortlist.includes(pid)
-        ? value.shortlist.filter((p) => p !== pid)
-        : [...value.shortlist, pid],
-    });
-  }
   const configurable = (patch: Partial<SpindaMatcherState>) => {
     try {
       update({ ...value, ...patch });
@@ -327,684 +416,639 @@ export function SpindaMatcher({
   const settings = (patch: Partial<SpindaMatcherState["settings"]>) =>
     configurable({ settings: { ...value.settings, ...patch } });
   return (
-    <details
-      className="spinda-matcher investigation-card"
-      open={open}
-      onToggle={(e) => setOpen(e.currentTarget.open)}
-    >
-      <summary>Find Spinda PID from its spot pattern</summary>
-      <p>
-        Soft reset Emerald, encounter a wild Spinda, then match its settled
-        front pose here before catching it. No trainer ID, IVs or curtain
-        drawing needed.
-      </p>
-      <div className="spinda-workflow">
-        <section
-          className="spinda-config"
-          aria-label="Spinda encounter RNG settings"
-        >
-          <h3>1. RNG range</h3>
-          <div className="rng-inputs">
-            {(
-              [
-                ["seed", "Initial seed"],
-                ["minAdvance", "Minimum advance"],
-                ["maxAdvance", "Maximum advance"],
-              ] as const
-            ).map(([k, label]) => (
-              <label key={k}>
-                {label}
-                <input
-                  value={numbers[k]}
-                  inputMode={k === "seed" ? "text" : "numeric"}
-                  onChange={(e) => changeNumber(k, e.target.value)}
-                />
-              </label>
-            ))}
-          </div>
-          <label>
-            Encounter location
-            <select
-              value={value.settings.areaId}
-              onChange={(e) => settings({ areaId: e.target.value })}
-            >
-              {SPINDA_AREAS.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.name} · {a.kind === "land" ? "grass / cave" : a.kind}
-                </option>
+    <>
+      <details
+        ref={painterRef}
+        className="spinda-matcher investigation-card"
+        open={open}
+        onToggle={(e) => setOpen(e.currentTarget.open)}
+      >
+        <summary>Find Spinda PID from its spot pattern</summary>
+        <p>
+          Soft reset Emerald, encounter a wild Spinda, then match its settled
+          front pose here before catching it. No trainer ID, IVs or curtain
+          drawing needed.
+        </p>
+        <div className="spinda-workflow">
+          <section
+            className="spinda-config"
+            aria-label="Spinda encounter RNG settings"
+          >
+            <h3>1. RNG range</h3>
+            <div className="rng-inputs">
+              {(
+                [
+                  ["seed", "Initial seed"],
+                  ["minAdvance", "Minimum advance"],
+                  ["maxAdvance", "Maximum advance"],
+                ] as const
+              ).map(([k, label]) => (
+                <label key={k}>
+                  {label}
+                  <input
+                    value={numbers[k]}
+                    inputMode={k === "seed" ? "text" : "numeric"}
+                    onChange={(e) => changeNumber(k, e.target.value)}
+                  />
+                </label>
               ))}
-            </select>
-          </label>
-          <fieldset className="rng-methods">
-            <legend>Wild methods</legend>
-            {WILD_METHODS.map((m) => (
-              <label key={m}>
-                <input
-                  type="checkbox"
-                  checked={value.settings.methods.includes(m)}
+            </div>
+            <label>
+              Encounter location
+              <select
+                value={value.settings.areaId}
+                onChange={(e) => settings({ areaId: e.target.value })}
+              >
+                {SPINDA_AREAS.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.name} · {a.kind === "land" ? "grass / cave" : a.kind}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <fieldset className="rng-methods">
+              <legend>Wild methods</legend>
+              {WILD_METHODS.map((m) => (
+                <label key={m}>
+                  <input
+                    type="checkbox"
+                    checked={value.settings.methods.includes(m)}
+                    onChange={(e) =>
+                      settings({
+                        methods: e.target.checked
+                          ? [...value.settings.methods, m]
+                          : value.settings.methods.filter((v) => v !== m),
+                      })
+                    }
+                  />
+                  {m}
+                </label>
+              ))}
+            </fieldset>
+            <label>
+              Lead effect
+              <select
+                value={value.settings.lead}
+                onChange={(e) => settings({ lead: e.target.value as WildLead })}
+              >
+                <option value="none">None / ordinary lead</option>
+                <option value="synchronize">Synchronize</option>
+                <option value="cuteCharmM">Cute Charm · male lead</option>
+                <option value="cuteCharmF">Cute Charm · female lead</option>
+                <option value="pressure">
+                  Pressure / Hustle / Vital Spirit
+                </option>
+              </select>
+            </label>
+            {value.settings.lead === "synchronize" && (
+              <label>
+                Lead nature
+                <select
+                  value={value.settings.synchronizeNature}
                   onChange={(e) =>
-                    settings({
-                      methods: e.target.checked
-                        ? [...value.settings.methods, m]
-                        : value.settings.methods.filter((v) => v !== m),
+                    settings({ synchronizeNature: Number(e.target.value) })
+                  }
+                >
+                  {NATURES.map((n, i) => (
+                    <option key={n} value={i}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            <details>
+              <summary>Optional observed traits</summary>
+              <label>
+                Encounter level
+                <input
+                  type="number"
+                  min={1}
+                  max={100}
+                  value={value.level ?? ""}
+                  onChange={(e) =>
+                    configurable({
+                      level:
+                        e.target.value === ""
+                          ? undefined
+                          : Number(e.target.value),
                     })
                   }
                 />
-                {m}
               </label>
-            ))}
-          </fieldset>
-          <label>
-            Lead effect
-            <select
-              value={value.settings.lead}
-              onChange={(e) => settings({ lead: e.target.value as WildLead })}
-            >
-              <option value="none">None / ordinary lead</option>
-              <option value="synchronize">Synchronize</option>
-              <option value="cuteCharmM">Cute Charm · male lead</option>
-              <option value="cuteCharmF">Cute Charm · female lead</option>
-              <option value="pressure">Pressure / Hustle / Vital Spirit</option>
-            </select>
-          </label>
-          {value.settings.lead === "synchronize" && (
-            <label>
-              Lead nature
-              <select
-                value={value.settings.synchronizeNature}
-                onChange={(e) =>
-                  settings({ synchronizeNature: Number(e.target.value) })
-                }
-              >
-                {NATURES.map((n, i) => (
-                  <option key={n} value={i}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
-          <details>
-            <summary>Optional observed traits</summary>
-            <label>
-              Encounter level
-              <input
-                type="number"
-                min={1}
-                max={100}
-                value={value.level ?? ""}
-                onChange={(e) =>
-                  configurable({
-                    level:
-                      e.target.value === ""
-                        ? undefined
-                        : Number(e.target.value),
-                  })
-                }
-              />
-            </label>
-            <label>
-              Nature
-              <select
-                value={value.nature ?? ""}
-                onChange={(e) =>
-                  configurable({
-                    nature:
-                      e.target.value === ""
-                        ? undefined
-                        : Number(e.target.value),
-                  })
-                }
-              >
-                <option value="">Unknown</option>
-                {NATURES.map((n, i) => (
-                  <option key={n} value={i}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </details>
-          <p className="help">
-            Inclusive RNG-call bounds; advance 0 is the seed before the
-            encounter-slot call. Decimal or 0x hex. This searches wild
-            encounters, separately from TID-seeded new-game SID RNG.
-          </p>
-          <p className="help">
-            Ordinary Emerald encounters only; extra effects such as Static,
-            Magnet Pull, Intimidate / Keen Eye, Safari blocks and special
-            encounters are outside this model.
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              setCancelled(false);
-              setRevision((n) => n + 1);
-            }}
-          >
-            Search again
-          </button>
-          {search.busy && (
-            <button type="button" onClick={() => setCancelled(true)}>
-              Cancel search
-            </button>
-          )}
-        </section>
-        <section className="spinda-editor" aria-label="Spinda spot editor">
-          <h3>2. Drag the four spots</h3>
-          <label>
-            Observed Spinda gender
-            <select
-              aria-label="Observed Spinda gender"
-              value={value.gender ?? ""}
-              onChange={(e) =>
-                configurable({
-                  gender:
-                    e.target.value === ""
-                      ? undefined
-                      : (e.target.value as "male" | "female"),
-                })
-              }
-            >
-              <option value="">Unknown / either</option>
-              <option value="male">Male ♂</option>
-              <option value="female">Female ♀</option>
-            </select>
-          </label>
-          <p className="help">
-            Choose the gender shown in battle to filter RNG candidates before
-            matching. This is the encountered Spinda’s gender, separately from
-            any Cute Charm lead.
-          </p>
-          <div className="spinda-pid-line">
-            <label>
-              Pattern PID (hex)
-              <input
-                aria-label="Spinda pattern PID hexadecimal"
-                value={pidText}
-                maxLength={10}
-                spellCheck={false}
-                onChange={(e) => {
-                  setPidText(e.target.value);
-                  try {
-                    const text = e.target.value.replace(/^0x/i, "");
-                    if (!/^[0-9a-f]{8}$/i.test(text))
-                      throw Error("Enter all eight hexadecimal PID digits");
-                    setPid(Number.parseInt(text, 16));
-                  } catch (err) {
-                    setError((err as Error).message);
+              <label>
+                Nature
+                <select
+                  value={value.nature ?? ""}
+                  onChange={(e) =>
+                    configurable({
+                      nature:
+                        e.target.value === ""
+                          ? undefined
+                          : Number(e.target.value),
+                    })
                   }
-                }}
-              />
-            </label>
-            <small>
-              {value.pid.toLocaleString()} decimal · {NATURES[value.pid % 25]} ·{" "}
-              {genderForPid(SPINDA_SPECIES, value.pid)}
-            </small>
-          </div>
-          {value.gender &&
-            genderForPid(SPINDA_SPECIES, value.pid) !== value.gender && (
-              <p role="status">
-                This dragged pattern’s PID is{" "}
-                {genderForPid(SPINDA_SPECIES, value.pid)}, but you selected{" "}
-                {value.gender}. Matching results use your observed gender.
-                Recheck the first spot or compare the closest compatible
-                candidates; the spots have not been moved automatically.
-              </p>
-            )}
-          <div
-            className="spinda-stage"
-            onKeyDown={(e) => {
-              const d = (
-                {
-                  ArrowLeft: [-1, 0],
-                  ArrowRight: [1, 0],
-                  ArrowUp: [0, -1],
-                  ArrowDown: [0, 1],
-                } as Record<string, number[]>
-              )[e.key];
-              if (d) {
-                e.preventDefault();
-                nudge(d[0], d[1]);
-              }
-            }}
-          >
-            <SpindaSprite
-              pid={value.pid}
-              shiny={shiny}
-              overlayPid={overlay ? selected?.pid : undefined}
-            />
-            <svg
-              ref={svg}
-              viewBox="0 0 64 64"
-              aria-label="Drag a spot one sprite pixel at a time"
-              className="spinda-drag-layer"
-              onPointerMove={pointerMove}
-              onPointerUp={() => {
-                drag.current = null;
-              }}
-              onPointerCancel={() => {
-                drag.current = null;
-              }}
-              onLostPointerCapture={() => {
-                drag.current = null;
+                >
+                  <option value="">Unknown</option>
+                  {NATURES.map((n, i) => (
+                    <option key={n} value={i}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </details>
+            <p className="help">
+              Inclusive RNG-call bounds; advance 0 is the seed before the
+              encounter-slot call. Decimal or 0x hex. This searches wild
+              encounters, separately from TID-seeded new-game SID RNG.
+            </p>
+            <p className="help">
+              Ordinary Emerald encounters only; extra effects such as Static,
+              Magnet Pull, Intimidate / Keen Eye, Safari blocks and special
+              encounters are outside this model.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setCancelled(false);
+                setRevision((n) => n + 1);
               }}
             >
-              {positions.map((p, i) => (
-                <g
-                  key={i}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`${names[i]}, drag or use arrow keys`}
-                  aria-pressed={selectedSpot === i}
-                  onFocus={() => setSelectedSpot(i)}
-                  onPointerDown={(e) => pointerDown(e, i)}
-                  className={selectedSpot === i ? "selected" : ""}
-                >
-                  <path
-                    transform={`translate(${p.x} ${p.y})`}
-                    d={maskPaths[i]}
-                    className="spinda-spot-hit"
-                  />
-                  {handles && (
-                    <path
-                      transform={`translate(${p.x} ${p.y})`}
-                      d={maskOutlines[i]}
-                      className="spinda-spot-handle"
-                    />
-                  )}
-                  {handles && (
-                    <text
-                      x={p.x + 5}
-                      y={p.y + 6}
-                      textAnchor="middle"
-                      className="spinda-spot-number"
-                    >
-                      {i + 1}
-                    </text>
-                  )}
-                </g>
-              ))}
-            </svg>
-          </div>
-          <div className="spinda-spots" aria-label="Select a spot">
-            {positions.map((p, i) => (
-              <button
-                key={i}
-                aria-pressed={selectedSpot === i}
-                onClick={() => setSelectedSpot(i)}
-                title={names[i]}
+              Search again
+            </button>
+            {search.busy && (
+              <button type="button" onClick={() => setCancelled(true)}>
+                Cancel search
+              </button>
+            )}
+          </section>
+          <section className="spinda-editor" aria-label="Spinda spot editor">
+            <h3>2. Drag the four spots</h3>
+            <label>
+              Observed Spinda gender
+              <select
+                aria-label="Observed Spinda gender"
+                value={value.gender ?? ""}
+                onChange={(e) =>
+                  configurable({
+                    gender:
+                      e.target.value === ""
+                        ? undefined
+                        : (e.target.value as "male" | "female"),
+                  })
+                }
               >
-                Spot {i + 1}{" "}
-                <code>{hex((value.pid >>> (i * 8)) & 255, 2)}</code>
-              </button>
-            ))}
-          </div>
-          <div className="inline-buttons spinda-nudge">
-            <button
-              aria-label="Move spot left one pixel"
-              onClick={() => nudge(-1, 0)}
-            >
-              ←
-            </button>
-            <button
-              aria-label="Move spot up one pixel"
-              onClick={() => nudge(0, -1)}
-            >
-              ↑
-            </button>
-            <button
-              aria-label="Move spot down one pixel"
-              onClick={() => nudge(0, 1)}
-            >
-              ↓
-            </button>
-            <button
-              aria-label="Move spot right one pixel"
-              onClick={() => nudge(1, 0)}
-            >
-              →
-            </button>
-          </div>
-          <p className="help">
-            Drag or use arrows. Every step snaps to one original sprite pixel.
-            Spot {selectedSpot + 1}: X digit{" "}
-            {((value.pid >>> (selectedSpot * 8)) & 15)
-              .toString(16)
-              .toUpperCase()}
-            , Y digit{" "}
-            {((value.pid >>> (selectedSpot * 8 + 4)) & 15)
-              .toString(16)
-              .toUpperCase()}
-            . Each has 16 positions per axis.
-          </p>
-          <div className="inline-buttons">
-            <label>
-              <input
-                type="checkbox"
-                checked={handles}
-                onChange={(e) => setHandles(e.target.checked)}
-              />{" "}
-              Spot handles
+                <option value="">Unknown / either</option>
+                <option value="male">Male ♂</option>
+                <option value="female">Female ♀</option>
+              </select>
             </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={shiny}
-                onChange={(e) => setShiny(e.target.checked)}
-              />{" "}
-              Shiny palette
-            </label>
-          </div>
-          <p className="help">
-            Outlines show draggable masks, including hidden parts. Turn handles
-            off to compare the actual clipped Emerald pattern. Wait for the
-            battle entrance animation to settle.
-          </p>
-          <button onClick={() => useGuide(value.pid)}>
-            Use this pattern PID: show SID pixels
-          </button>
-          <button onClick={() => setConfirm(value.pid)}>
-            Use pattern PID in Pokémon info…
-          </button>
-          <p className="help">
-            Start immediately from the spots. No Pokémon info fields or RNG
-            result are required for the pixel guide.
-          </p>
-        </section>
-      </div>
-      <details
-        ref={guideRef}
-        open={value.guide?.enabled ?? false}
-        onToggle={(e) => {
-          const enabled = e.currentTarget.open;
-          if (enabled !== (value.guide?.enabled ?? false))
-            update({
-              ...value,
-              guide: {
-                ...(value.guide ?? newSpindaSidGuide(value.pid)),
-                enabled,
-              },
-            });
-        }}
-      >
-        <summary>SID pixel guide · highlight by estimated PID</summary>
-        <SpindaSidGuide
-          value={value.guide ?? newSpindaSidGuide(value.pid)}
-          facts={lab.facts}
-          infoError={!!lab.factError}
-          sidDigitFilters={lab.sidDigitFilters}
-          rngCandidate={
-            ready
-              ? matches.find((m) => m.pid === (value.guide?.pid ?? value.pid))
-              : undefined
-          }
-          rngStatus={
-            !validNumbers
-              ? "Correct the RNG range to use encounter IVs."
-              : cancelled
-                ? "Search cancelled; encounter IVs are not applied."
-                : search.error
-                  ? "Search failed; encounter IVs are not applied."
-                  : !ready
-                    ? "Searching the current RNG scope for this PID's IVs..."
-                    : "This exact PID was not found in the current RNG scope. Encounter IVs are not applied; review the pattern or widen the range."
-          }
-          onChange={(guide) => update({ ...value, guide })}
-          onLocate={locatePixel}
-        />
-        {value.guide && value.guide.pid !== value.pid && (
-          <button onClick={() => useGuide(value.pid)}>
-            Switch guide to current editor PID 0x{hex(value.pid, 8)}
-          </button>
-        )}
-      </details>
-      {(error || search.error) && <p role="alert">{error || search.error}</p>}
-      <section
-        className="spinda-results"
-        aria-label="Best matching Spinda PIDs"
-      >
-        <h3>3. Best matching PIDs</h3>
-        {cancelled ? (
-          <p role="status">
-            Search cancelled. No partial candidate pool is shown. Search again
-            to rank the full range.
-          </p>
-        ) : !ready ? (
-          <p role="status">
-            {search.error
-              ? "No complete results available."
-              : !validNumbers
-                ? "Correct the RNG inputs to search."
-                : `Searching / matching… ${search.progress}%`}
-          </p>
-        ) : (
-          <>
-            <p role="status">
-              {matches.length.toLocaleString()} distinct wild Spinda PIDs in
-              this scope. Showing {Math.min(limit, matches.length)}. All
-              advances, methods and IV variants are retained.
+            <p className="help">
+              Choose the gender shown in battle to filter RNG candidates before
+              matching. This is the encountered Spinda’s gender, separately from
+              any Cute Charm lead.
             </p>
-            {!!matches.length && (
-              <p>
-                {matches[0].score < 65
-                  ? "No close visual match. Widen the range, adjust the spots or review the encounter settings."
-                  : matches.filter((m) => m.score >= matches[0].score - 3)
-                        .length > 1
-                    ? "Several candidates are visually plausible. Compare them and preserve the alternatives."
-                    : "The highlighted pattern ranks first in this scope; its PID is still a visual estimate."}{" "}
-                Similarity is not certainty or a probability.
-              </p>
-            )}
-            {!matches.length && (
-              <p>
-                No wild Spinda candidates in this scope. Widen the advance range
-                or review the seed, location, lead and observed traits.
-              </p>
-            )}
-            {selected && (
-              <div className="spinda-comparison" ref={comparisonRef}>
-                <div className="spinda-enlarged">
-                  <SpindaSprite pid={selected.pid} shiny={shiny} />
-                </div>
-                <div>
-                  <strong>Selected 0x{hex(selected.pid, 8)}</strong>
-                  <p>
-                    {selected.score.toFixed(1)}% visual similarity ·{" "}
-                    {selected.identicalPatterns} PID(s) share this exact visible
-                    pattern in the scope.
-                  </p>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={overlay}
-                      onChange={(e) => setOverlay(e.target.checked)}
-                    />{" "}
-                    Overlay differences on editor
-                  </label>
-                  <p className="help">
-                    Cyan: candidate-only spots. Pink: editor-only spots. The
-                    editor PID stays unchanged.
-                  </p>
-                  <button onClick={() => setConfirm(selected.pid)}>
-                    Use estimated PID in Pokémon info…
-                  </button>
-                  <button onClick={() => useGuide(selected.pid)}>
-                    Show SID pixels for this candidate
-                  </button>
-                </div>
-              </div>
-            )}
-            <div className="spinda-match-grid">
-              {matches.slice(0, limit).map((m, i) => (
-                <article
-                  key={m.pid}
-                  className={`spinda-match ${i === 0 ? "best" : ""}`}
-                >
-                  <button
-                    className="spinda-match-preview"
-                    onClick={() => setSelectedPid(m.pid)}
-                    aria-label={`Inspect PID ${hex(m.pid, 8)}`}
-                  >
-                    <SpindaSprite pid={m.pid} shiny={shiny} />
-                  </button>
-                  <strong>
-                    {i === 0 ? "Best in scope · " : ""}0x{hex(m.pid, 8)}
-                  </strong>
-                  <span>{m.pid} decimal</span>
-                  <span>{m.score.toFixed(1)}% similarity</span>
-                  <span>
-                    {NATURES[m.pid % 25]} ·{" "}
-                    {genderForPid(SPINDA_SPECIES, m.pid)}
-                  </span>
-                  {m.identicalPatterns > 1 && (
-                    <strong>
-                      {m.identicalPatterns} visually identical PIDs
-                    </strong>
-                  )}
-                  <details>
-                    <summary>
-                      {new Set(m.encounters.map((e) => e.advance)).size}{" "}
-                      possible advance(s) ·{" "}
-                      {[
-                        ...new Set(m.encounters.flatMap((e) => e.methods)),
-                      ].join(" / ")}
-                    </summary>
-                    <div className="table-scroll">
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Advance</th>
-                            <th>Method</th>
-                            <th>Slot / level</th>
-                            <th>IVs: HP/Atk/Def/Spe/SpA/SpD</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {m.encounters.map((e, j) => (
-                            <tr key={j}>
-                              <td>{e.advance}</td>
-                              <td>{e.methods.join("/")}</td>
-                              <td>
-                                {e.slot + 1} / {e.level}
-                              </td>
-                              <td>{e.ivs.join("/")}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </details>
-                  <button
-                    aria-pressed={value.shortlist.includes(m.pid)}
-                    onClick={() => shortlist(m.pid)}
-                  >
-                    {value.shortlist.includes(m.pid)
-                      ? "Saved as plausible"
-                      : "Keep as plausible"}
-                  </button>
-                </article>
-              ))}
+            <div className="spinda-pid-line">
+              <label>
+                Pattern PID (hex)
+                <input
+                  aria-label="Spinda pattern PID hexadecimal"
+                  value={pidText}
+                  maxLength={10}
+                  spellCheck={false}
+                  onChange={(e) => {
+                    setPidText(e.target.value);
+                    try {
+                      const text = e.target.value.replace(/^0x/i, "");
+                      if (!/^[0-9a-f]{8}$/i.test(text))
+                        throw Error("Enter all eight hexadecimal PID digits");
+                      setPid(Number.parseInt(text, 16));
+                    } catch (err) {
+                      setError((err as Error).message);
+                    }
+                  }}
+                />
+              </label>
+              <small>
+                {value.pid.toLocaleString()} decimal · {NATURES[value.pid % 25]}{" "}
+                · {genderForPid(SPINDA_SPECIES, value.pid)}
+              </small>
             </div>
-            {limit < matches.length && (
-              <button onClick={() => setLimit((n) => n + 20)}>
-                Show 20 more patterns
-              </button>
-            )}
-          </>
-        )}
-        {confirm !== null && (
-          <div
-            className="spinda-confirm"
-            ref={confirmationRef}
-            role="group"
-            aria-label="Confirm estimated PID transfer"
-          >
-            <p>
-              Apply <strong>0x{hex(confirm, 8)}</strong> as an{" "}
-              <strong>unverified visual estimate</strong> to this Spinda? This
-              replaces the current PID input
-              {lab.facts.pid === undefined
-                ? ""
-                : ` (0x${hex(lab.facts.pid, 8)})`}
-              . Recovery will be conditional on it. Saved curtain observations
-              and other facts are preserved.
-            </p>
-            {lab.facts.species !== undefined &&
-              lab.facts.species !== SPINDA_SPECIES && (
-                <p>
-                  First choose Spinda in Pokémon info for the Pokémon you intend
-                  to investigate. Save your current investigation before
-                  switching Pokémon.
+            {value.gender &&
+              genderForPid(SPINDA_SPECIES, value.pid) !== value.gender && (
+                <p role="status">
+                  This dragged pattern’s PID is{" "}
+                  {genderForPid(SPINDA_SPECIES, value.pid)}, but you selected{" "}
+                  {value.gender}. Matching results use your observed gender.
+                  Recheck the first spot or compare the closest compatible
+                  candidates; the spots have not been moved automatically.
                 </p>
               )}
-            {lab.facts.species === undefined && (
-              <p>
-                Species will be set to Spinda automatically. No other Pokémon
-                info is required.
-              </p>
-            )}
-            {(lab.pendingItemTest || lab.factError || lab.summaryError) && (
-              <p>
-                Finish the current experiment and correct invalid inputs before
-                transferring.
-              </p>
-            )}
-            <button
-              disabled={
-                (lab.facts.species !== undefined &&
-                  lab.facts.species !== SPINDA_SPECIES) ||
-                !!lab.pendingItemTest ||
-                !!lab.factError ||
-                !!lab.summaryError
-              }
-              onClick={() => {
-                if (lab.applySpindaEstimate(confirm)) setConfirm(null);
+            <div
+              className="spinda-stage"
+              onKeyDown={(e) => {
+                const d = (
+                  {
+                    ArrowLeft: [-1, 0],
+                    ArrowRight: [1, 0],
+                    ArrowUp: [0, -1],
+                    ArrowDown: [0, 1],
+                  } as Record<string, number[]>
+                )[e.key];
+                if (d) {
+                  e.preventDefault();
+                  nudge(d[0], d[1]);
+                }
               }}
             >
-              Confirm: apply estimated PID
-            </button>
-            <button onClick={() => setConfirm(null)}>Cancel transfer</button>
-          </div>
-        )}
-        {!!value.shortlist.length && (
-          <details>
-            <summary>
-              {value.shortlist.length} saved plausible PID(s) · advisory only
-            </summary>
-            <p>
-              Preserved in investigation backups; these PIDs do not constrain
-              the solver until you explicitly apply one.
+              <SpindaSprite
+                pid={value.pid}
+                shiny={shiny}
+                overlayPid={overlay ? selected?.pid : undefined}
+              />
+              <svg
+                ref={svg}
+                viewBox="0 0 64 64"
+                aria-label="Drag a spot one sprite pixel at a time"
+                className="spinda-drag-layer"
+                onPointerMove={pointerMove}
+                onPointerUp={() => {
+                  drag.current = null;
+                }}
+                onPointerCancel={() => {
+                  drag.current = null;
+                }}
+                onLostPointerCapture={() => {
+                  drag.current = null;
+                }}
+              >
+                {positions.map((p, i) => (
+                  <g
+                    key={i}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${names[i]}, drag or use arrow keys`}
+                    aria-pressed={selectedSpot === i}
+                    onFocus={() => setSelectedSpot(i)}
+                    onPointerDown={(e) => pointerDown(e, i)}
+                    className={selectedSpot === i ? "selected" : ""}
+                  >
+                    <path
+                      transform={`translate(${p.x} ${p.y})`}
+                      d={maskPaths[i]}
+                      className="spinda-spot-hit"
+                    />
+                    {handles && (
+                      <path
+                        transform={`translate(${p.x} ${p.y})`}
+                        d={maskOutlines[i]}
+                        className="spinda-spot-handle"
+                      />
+                    )}
+                    {handles && (
+                      <text
+                        x={p.x + 5}
+                        y={p.y + 6}
+                        textAnchor="middle"
+                        className="spinda-spot-number"
+                      >
+                        {i + 1}
+                      </text>
+                    )}
+                  </g>
+                ))}
+              </svg>
+            </div>
+            <div className="spinda-spots" aria-label="Select a spot">
+              {positions.map((p, i) => (
+                <button
+                  key={i}
+                  aria-pressed={selectedSpot === i}
+                  onClick={() => setSelectedSpot(i)}
+                  title={names[i]}
+                >
+                  Spot {i + 1}{" "}
+                  <code>{hex((value.pid >>> (i * 8)) & 255, 2)}</code>
+                </button>
+              ))}
+            </div>
+            <div className="inline-buttons spinda-nudge">
+              <button
+                aria-label="Move spot left one pixel"
+                onClick={() => nudge(-1, 0)}
+              >
+                ←
+              </button>
+              <button
+                aria-label="Move spot up one pixel"
+                onClick={() => nudge(0, -1)}
+              >
+                ↑
+              </button>
+              <button
+                aria-label="Move spot down one pixel"
+                onClick={() => nudge(0, 1)}
+              >
+                ↓
+              </button>
+              <button
+                aria-label="Move spot right one pixel"
+                onClick={() => nudge(1, 0)}
+              >
+                →
+              </button>
+            </div>
+            <p className="help">
+              Drag or use arrows. Every step snaps to one original sprite pixel.
+              Spot {selectedSpot + 1}: X digit{" "}
+              {((value.pid >>> (selectedSpot * 8)) & 15)
+                .toString(16)
+                .toUpperCase()}
+              , Y digit{" "}
+              {((value.pid >>> (selectedSpot * 8 + 4)) & 15)
+                .toString(16)
+                .toUpperCase()}
+              . Each has 16 positions per axis.
             </p>
-            {value.shortlist.map((pid) => (
-              <div key={pid} className="inline-buttons">
-                <code>0x{hex(pid, 8)}</code>
-                {!matches.some((m) => m.pid === pid) && (
-                  <small>Outside current results</small>
-                )}
-                <button onClick={() => setConfirm(pid)}>Use estimate…</button>
-                <button onClick={() => useGuide(pid)}>Show SID pixels</button>
-                <button onClick={() => shortlist(pid)}>Remove</button>
+            <div className="inline-buttons">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={handles}
+                  onChange={(e) => setHandles(e.target.checked)}
+                />{" "}
+                Spot handles
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={shiny}
+                  onChange={(e) => setShiny(e.target.checked)}
+                />{" "}
+                Shiny palette
+              </label>
+            </div>
+            <p className="help">
+              Outlines show draggable masks, including hidden parts. Turn
+              handles off to compare the actual clipped Emerald pattern. Wait
+              for the battle entrance animation to settle.
+            </p>
+            <button onClick={() => useGuide(value.pid)}>Use this PID</button>
+            <p className="help">
+              Start immediately from the spots. No Pokémon info fields or RNG
+              result are required for the pixel guide.
+            </p>
+          </section>
+        </div>
+        {(error || search.error) && <p role="alert">{error || search.error}</p>}
+        <section
+          className="spinda-results"
+          aria-label="Best matching Spinda PIDs"
+        >
+          <h3>3. Best matching PIDs</h3>
+          {cancelled ? (
+            <p role="status">
+              Search cancelled. No partial candidate pool is shown. Search again
+              to rank the full range.
+            </p>
+          ) : !ready ? (
+            <p role="status">
+              {search.error
+                ? "No complete results available."
+                : !validNumbers
+                  ? "Correct the RNG inputs to search."
+                  : `Searching / matching… ${search.progress}%`}
+            </p>
+          ) : (
+            <>
+              <p role="status">
+                {matches.length.toLocaleString()} distinct wild Spinda PIDs in
+                this scope. Showing {Math.min(limit, matches.length)}. All
+                advances, methods and IV variants are retained.
+              </p>
+              {!!matches.length && (
+                <p>
+                  {matches[0].score < 65
+                    ? "No close visual match. Widen the range, adjust the spots or review the encounter settings."
+                    : matches.filter((m) => m.score >= matches[0].score - 3)
+                          .length > 1
+                      ? "Several patterns match closely. Compare their spots."
+                      : "The highlighted pattern is the closest match."}
+                </p>
+              )}
+              {!matches.length && (
+                <p>
+                  No wild Spinda candidates in this scope. Widen the advance
+                  range or review the seed, location, lead and observed traits.
+                </p>
+              )}
+              {selected && (
+                <div className="spinda-comparison" ref={comparisonRef}>
+                  <div className="spinda-enlarged">
+                    <SpindaSprite pid={selected.pid} shiny={shiny} />
+                  </div>
+                  <div>
+                    <strong>Selected 0x{hex(selected.pid, 8)}</strong>
+                    <p>
+                      {selected.score.toFixed(1)}% visual similarity ·{" "}
+                      {selected.identicalPatterns} PID(s) share this exact
+                      visible pattern in the scope.
+                    </p>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={overlay}
+                        onChange={(e) => setOverlay(e.target.checked)}
+                      />{" "}
+                      Overlay differences on editor
+                    </label>
+                    <p className="help">
+                      Cyan: candidate-only spots. Pink: editor-only spots. The
+                      editor PID stays unchanged.
+                    </p>
+                    <button onClick={() => useGuide(selected.pid)}>
+                      Use this PID
+                    </button>
+                  </div>
+                </div>
+              )}
+              <div className="spinda-match-grid">
+                {matches.slice(0, limit).map((m, i) => {
+                  const usefulness = spindaUsefulness(
+                    m,
+                    countRemaining,
+                    countTested,
+                    lab.facts.otGender,
+                  );
+                  return (
+                    <article
+                      key={m.pid}
+                      className={`spinda-match ${i === 0 ? "best" : ""}`}
+                    >
+                      <button
+                        className="spinda-match-preview"
+                        onClick={() => setSelectedPid(m.pid)}
+                        aria-label={`Inspect PID ${hex(m.pid, 8)}`}
+                      >
+                        <SpindaSprite pid={m.pid} shiny={shiny} />
+                      </button>
+                      <strong>
+                        {i === 0 ? "Best in scope · " : ""}0x{hex(m.pid, 8)}
+                      </strong>
+                      <small
+                        className="spinda-usefulness"
+                        aria-label="Useful untested SID digits"
+                      >
+                        {WILD_METHODS.map(
+                          (method) =>
+                            method +
+                            ": " +
+                            (m.encounters.some((e) =>
+                              e.methods.includes(method),
+                            )
+                              ? usefulness.counts[method]
+                              : "—"),
+                        ).join(" · ")}{" "}
+                        useful digits
+                      </small>
+                      {usefulness.suggested && (
+                        <small>
+                          Catch in{" "}
+                          {
+                            FACT_CATALOGS.balls.find(
+                              (b) => b.id === usefulness.ball,
+                            )?.name
+                          }
+                        </small>
+                      )}
+                      <span>{m.score.toFixed(1)}% similarity</span>
+                      <span>
+                        {NATURES[m.pid % 25]} ·{" "}
+                        {genderForPid(SPINDA_SPECIES, m.pid)}
+                      </span>
+                      {m.identicalPatterns > 1 && (
+                        <strong>
+                          {m.identicalPatterns} visually identical PIDs
+                        </strong>
+                      )}
+                      <details>
+                        <summary>
+                          {new Set(m.encounters.map((e) => e.advance)).size}{" "}
+                          possible advance(s) ·{" "}
+                          {[
+                            ...new Set(m.encounters.flatMap((e) => e.methods)),
+                          ].join(" / ")}
+                        </summary>
+                        <div className="table-scroll">
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Advance</th>
+                                <th>Method</th>
+                                <th>Slot / level</th>
+                                <th>IVs: HP/Atk/Def/Spe/SpA/SpD</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {m.encounters.map((e, j) => (
+                                <tr key={j}>
+                                  <td>{e.advance}</td>
+                                  <td>{e.methods.join("/")}</td>
+                                  <td>
+                                    {e.slot + 1} / {e.level}
+                                  </td>
+                                  <td>{e.ivs.join("/")}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </details>
+                      <button onClick={() => useGuide(m.pid)}>
+                        Use this PID
+                      </button>
+                    </article>
+                  );
+                })}
               </div>
-            ))}
+              {limit < matches.length && (
+                <button onClick={() => setLimit((n) => n + 20)}>
+                  Show 20 more patterns
+                </button>
+              )}
+            </>
+          )}
+          <details>
+            <summary>How patterns are compared</summary>
+            <p>
+              65% exact pixel overlap and 35% overlap within two sprite pixels,
+              with symmetric penalties for extra and missing spots. Only pixels
+              that can carry a PID spot are compared. The score is visual
+              similarity, not a probability. Hidden or overlapping spots can
+              leave multiple PIDs indistinguishable.
+            </p>
           </details>
-        )}
-        <details>
-          <summary>How patterns are compared</summary>
-          <p>
-            65% exact pixel overlap and 35% overlap within two sprite pixels,
-            with symmetric penalties for extra and missing spots. Only pixels
-            that can carry a PID spot are compared. The score is visual
-            similarity, not a probability. Hidden or overlapping spots can leave
-            multiple PIDs indistinguishable.
-          </p>
+        </section>
+      </details>
+      {value.guide?.enabled && (
+        <details ref={guideRef} className="investigation-card" tabIndex={-1}>
+          <summary>SID Pixel Guide</summary>
+          <SpindaSidGuide
+            value={value.guide}
+            facts={
+              lab.activeSnapshot?.itemTest
+                ? { ...lab.itemTestBaseline.knownFacts, ...lab.identity }
+                : lab.facts
+            }
+            infoError={
+              !!lab.factError || !!lab.summaryError || !!lab.pendingItemTest
+            }
+            sidDigitFilters={remaining}
+            baseSids={baseSids}
+            tested={progress.tested}
+            rngCandidate={
+              ready
+                ? matches.find((m) => m.pid === value.guide?.pid)
+                : undefined
+            }
+            rngStatus={
+              !ready
+                ? "Searching encounter IVs…"
+                : "PID not found in this RNG range."
+            }
+            summaryDraft={
+              lab.activeSnapshot?.itemTest
+                ? summaryToDraft(lab.itemTestBaseline.summaryStats)
+                : lab.summaryDraft
+            }
+            onSummaryChange={
+              lab.activeSnapshot?.itemTest ? undefined : lab.editSummaryStat
+            }
+            onBallChange={
+              lab.activeSnapshot?.itemTest
+                ? undefined
+                : (ball) => lab.editFact("ball", String(ball))
+            }
+            onChange={(guide) => update({ ...value, guide })}
+            onLocate={locatePixel}
+            onTargetsChange={onTargetsChange}
+            analysisPending={lab.analysisBusy || !!lab.analysisError}
+            onNext={(next) => {
+              lab.catchNextSpinda(next);
+              setSelectedPid(null);
+              setOverlay(false);
+              setOpen(false);
+              requestAnimationFrame(() =>
+                painterRef.current?.scrollIntoView({
+                  block: "start",
+                  behavior: "smooth",
+                }),
+              );
+            }}
+          />
         </details>
-      </section>
-      <p className="help">
-        After comparing, catch the Spinda and use its curtain pixels and known
-        facts to check your estimate and recover SID. Spots, filters and
-        plausible PIDs save separately with your investigation.
-      </p>
-    </details>
+      )}
+    </>
   );
 }

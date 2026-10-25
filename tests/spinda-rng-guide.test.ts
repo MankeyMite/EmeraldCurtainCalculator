@@ -174,7 +174,7 @@ test("entered IV constraints, manual overrides and explicit unknown retain prece
   );
 });
 
-test("guide UI shows conditional IVs and uses them in the dropdown and SID answers, dropping missing or mismatched scope", () => {
+test("guide UI shows method IVs and exact hex bytes, dropping missing or mismatched scope", () => {
   const guide = newSpindaSidGuide(0),
     target = spindaSidTargets(0, 1)[10];
   guide.observations[target.nibble] = 0;
@@ -191,10 +191,10 @@ test("guide UI shows conditional IVs and uses them in the dropdown and SID answe
     );
   const html = render(found);
   assert.match(html, /Encounter IVs for this exact PID/);
-  assert.match(html, /1 possible IV spread/);
+  assert.ok(html.includes("00 / 00"));
+  assert.ok(html.includes("H1"));
   assert.match(html, /0x0\?\?\?/);
-  assert.match(html, /Conditional on the estimated PID/);
-  assert.match(html, /Packed IVs \/ flags, byte 4/);
+  assert.ok(html.includes("IV bytes 3 / 4 (hex)"));
   assert.match(render(), /0x\?\?\?\?/);
   assert.doesNotMatch(render(), /Encounter IVs for this exact PID/);
   assert.doesNotMatch(
@@ -205,7 +205,7 @@ test("guide UI shows conditional IVs and uses them in the dropdown and SID answe
   const ambiguous = render(
     candidate(0, [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 8]),
   );
-  assert.match(ambiguous, /2 possible IV spread/);
+  assert.ok(ambiguous.includes("00 / 10"));
   assert.match(ambiguous, /2 possible<\/small>/);
 });
 

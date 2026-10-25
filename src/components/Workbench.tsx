@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { CurtainLab } from "../hooks/useCurtainLab";
 import { PokemonInfoForm } from "./PokemonInfoForm";
 import { PixelGrid } from "./PixelGrid";
@@ -18,13 +18,15 @@ import { isRecorded } from "../core/itemTests";
 import { useMobileLayout } from "../hooks/useMobileLayout";
 import { IVAnalysis } from "./IVAnalysis";
 import { SpindaMatcher } from "./SpindaMatcher";
-import { spindaSidTargets } from "../core/spindaSidGuide";
+
 export function Workbench({
   lab,
   onClassic,
+  onStarterGuide,
 }: {
   lab: CurtainLab;
   onClassic: () => void;
+  onStarterGuide?: () => void;
 }) {
   const [tab, setTab] = useState("about"),
     [section, setSection] = useState("items"),
@@ -34,7 +36,12 @@ export function Workbench({
     [drawingOptions, setDrawingOptions] = useState(false),
     [largeCurtain, setLargeCurtain] = useState(false),
     [recoveryOpen, setRecoveryOpen] = useState(false);
+  const [spindaTargets, setSpindaTargets] = useState<number[]>([]);
   const [guideFocus, setGuideFocus] = useState<number | null>(null);
+  const handleSpindaTargets = useCallback((targets: number[]) => {
+    setSpindaTargets(targets);
+    setGuideFocus(targets[0] ?? null);
+  }, []);
   const spindaGuide =
     section === "sid" &&
     tab === "investigate" &&
@@ -327,26 +334,19 @@ export function Workbench({
                 Investigating <strong>{field}</strong>. Every result uses
                 verified observations and active assumptions.
               </div>
-              {lab.spindaMatcher?.appliedPid !== undefined &&
-                lab.spindaMatcher.appliedPid === lab.facts.pid && (
-                  <p className="spinda-estimate-notice" role="status">
-                    The Spinda PID is a visual estimate. All recovery results
-                    are conditional on this unverified input.
-                    <button onClick={() => lab.editFact("pid", "")}>
-                      Remove estimated PID constraint
-                    </button>
-                  </p>
-                )}
               {section === "ivs" && <IVAnalysis lab={lab} />}
-              <details className="observation-tools">
-                <summary>Saved observations and notes · advanced</summary>
-                <p>
-                  Experiments save their observations automatically. Use these
-                  controls to review or name saved snapshots, or add a separate
-                  observation of this same Pokémon after another change.
-                </p>
-                <ObservationManager lab={lab} />
-              </details>
+              {section !== "sid" && (
+                <details className="observation-tools">
+                  <summary>Saved observations and notes · advanced</summary>
+                  <p>
+                    Experiments save their observations automatically. Use these
+                    controls to review or name saved snapshots, or add a
+                    separate observation of this same Pokémon after another
+                    change.
+                  </p>
+                  <ObservationManager lab={lab} />
+                </details>
+              )}
               <ItemTestControls
                 lab={lab}
                 openEditor={() => {
@@ -365,6 +365,7 @@ export function Workbench({
                 <>
                   <SpindaMatcher
                     lab={lab}
+                    onTargetsChange={handleSpindaTargets}
                     locatePixel={(index) => {
                       setGuideFocus(index);
                       lab.setHover(null);
@@ -375,6 +376,16 @@ export function Workbench({
                     }}
                   />
                   <SidRngPanel lab={lab} />
+                  <p>
+                    {onStarterGuide && (
+                      <button onClick={onStarterGuide}>
+                        New Game SID Finder → Shiny Starter
+                      </button>
+                    )}
+                    <button onClick={() => open("items")}>
+                      Test experiments for further deduction
+                    </button>
+                  </p>
                 </>
               )}
               {section === "data" && (
@@ -395,9 +406,18 @@ export function Workbench({
                   <WildRngPanel lab={lab} />
                 </>
               )}
-              {section !== "wild" && (
+              {section !== "wild" && section !== "sid" && (
                 <div id="panel-2" data-investigation-focus={section}>
-                  <InvestigationResults lab={lab} />
+                  <InvestigationResults
+                    lab={lab}
+                    onCatchSpinda={() => {
+                      lab.catchNextSpinda();
+                      setSpindaTargets([]);
+                      setGuideFocus(null);
+                      open("sid");
+                      scroll.current?.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                  />
                 </div>
               )}
             </section>
@@ -450,6 +470,11 @@ export function Workbench({
                 <button onClick={() => setTab("info")}>
                   Start with Pokémon info
                 </button>
+                {onStarterGuide && (
+                  <button onClick={onStarterGuide}>
+                    New Game SID Finder → Shiny Starter
+                  </button>
+                )}
               </section>
               <ResearchArticle />
               <details className="workspace-help">
@@ -579,7 +604,7 @@ export function Workbench({
             {spindaGuide && (
               <small>
                 {" "}
-                · Orange: Spinda S{spindaGuide.digit} pixels, estimated PID 0x
+                · Orange: Spinda S{spindaGuide.digit} pixels, PID 0x
                 {spindaGuide.pid.toString(16).toUpperCase().padStart(8, "0")}.
                 Guide answers are separate.
               </small>
@@ -692,9 +717,7 @@ export function Workbench({
               predictions={lab.showPredictions ? lab.predictions : undefined}
               targets={
                 spindaGuide
-                  ? spindaSidTargets(spindaGuide.pid, spindaGuide.digit).map(
-                      (t) => t.nibble,
-                    )
+                  ? spindaTargets
                   : lab.pendingItemTest?.itemTest?.mode === "pixels"
                     ? lab.experimentTargets.slice(0, 1)
                     : lab.activeSnapshot.targets

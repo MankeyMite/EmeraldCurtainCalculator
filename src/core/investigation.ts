@@ -39,6 +39,8 @@ export type Snapshot = {
   observations: Observations;
   knownFacts: KnownFacts;
   summaryStats?: SummaryStats;
+  starterCheckpointId?: string; // Separates genuine training checkpoints from edits.
+  supersededBy?: string; // Preserved revision; the replacement supplies evidence.
   targets?: number[];
   experimentPokeblock?: number[]; // Five flavors and Feel; configuration, never evidence.
   itemTest?: {
@@ -49,6 +51,8 @@ export type Snapshot = {
     action?: ActionDescription;
     actionId?: string;
     mode?: "pixels"; // Targeted evidence; only explicitly answered cells are stored.
+    answerOrder?: number[]; // Answered target indices, oldest first; persisted for undo.
+    recheckPixel?: number; // Explicitly undone answer to show even if now redundant.
   };
 };
 export type Investigation = {
@@ -171,6 +175,12 @@ export function loadInvestigation(text: string): Investigation {
     )
       throw Error("Expected 192 observations");
     const knownFacts = validateFacts(s.knownFacts, false);
+    for (const key of ["starterCheckpointId", "supersededBy"] as const)
+      if (
+        s[key] !== undefined &&
+        (typeof s[key] !== "string" || !s[key] || s[key]!.length > 100)
+      )
+        throw Error("Invalid starter checkpoint reference");
     if (Object.keys(knownFacts).some((k) => IDENTITY_KEYS.has(k)))
       throw Error("Identity field in mutable snapshot");
     validateFacts({ ...identity, ...knownFacts });
@@ -184,7 +194,7 @@ export function loadInvestigation(text: string): Investigation {
       const test = s.itemTest;
       if (
         test.actionId !== undefined &&
-        !/^(moves-[0-3]-[0-3]|rare-candy(?:-(?:[1-9]\d?|100))?(?:-swap-[0-3]-[0-3])?|teach-\d{1,3}(?:-swap-[0-3]-[0-3])?|vitamin-[0-5]|pp-(up|max)-[0-3]|pokeblock)$/.test(
+        !/^(moves-[0-3]-[0-3]|rare-candy(?:-(?:[1-9]\d?|100))?(?:-swap-[0-3]-[0-3])?|teach-\d{1,3}(?:-swap-[0-3]-[0-3])?|vitamin-[0-5]|ev-[23]-(?:[1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])|pp-(up|max)-[0-3]|pokeblock)$/.test(
           test.actionId,
         )
       )
@@ -211,9 +221,15 @@ export function loadInvestigation(text: string): Investigation {
       if (
         test.action !== undefined &&
         (!test.action ||
-          !["moves", "candy", "vitamin", "pp", "pokeblock", "learn"].includes(
-            test.action.kind,
-          ) ||
+          ![
+            "moves",
+            "candy",
+            "vitamin",
+            "pp",
+            "pokeblock",
+            "learn",
+            "ev",
+          ].includes(test.action.kind) ||
           [
             test.action.name,
             test.action.instructions,
@@ -221,6 +237,29 @@ export function loadInvestigation(text: string): Investigation {
           ].some((s) => typeof s !== "string" || !s.trim() || s.length > 2000))
       )
         throw Error("Invalid experiment action");
+      if (
+        test.answerOrder !== undefined &&
+        (test.mode !== "pixels" ||
+          !Array.isArray(test.answerOrder) ||
+          test.answerOrder.length > 160 ||
+          new Set(test.answerOrder).size !== test.answerOrder.length ||
+          !test.answerOrder.every(
+            (n) =>
+              Number.isInteger(n) &&
+              s.targets?.includes(n) &&
+              s.observations[n] !== -1,
+          ))
+      )
+        throw Error("Invalid experiment answer order");
+      if (
+        test.recheckPixel !== undefined &&
+        (test.mode !== "pixels" ||
+          test.phase !== "editing" ||
+          !Number.isInteger(test.recheckPixel) ||
+          !s.targets?.includes(test.recheckPixel) ||
+          s.observations[test.recheckPixel] !== -1)
+      )
+        throw Error("Invalid experiment recheck pixel");
     }
     if (
       s.experimentPokeblock !== undefined &&
@@ -237,6 +276,10 @@ export function loadInvestigation(text: string): Investigation {
       notes: s.notes,
       observations: s.observations.slice(),
       knownFacts,
+      ...(s.starterCheckpointId === undefined
+        ? {}
+        : { starterCheckpointId: s.starterCheckpointId }),
+      ...(s.supersededBy === undefined ? {} : { supersededBy: s.supersededBy }),
       ...(s.summaryStats === undefined
         ? {}
         : { summaryStats: validateSummaryStats(s.summaryStats) }),
@@ -249,6 +292,14 @@ export function loadInvestigation(text: string): Investigation {
   });
   if (!ids.has(value.activeId)) throw Error("Unknown active observation");
   for (const snapshot of snapshots) {
+    if (
+      snapshot.supersededBy &&
+      (snapshot.supersededBy === snapshot.id ||
+        !snapshots.some(
+          (s) => s.id === snapshot.supersededBy && !s.supersededBy,
+        ))
+    )
+      throw Error("Missing replacement for superseded observation");
     if (snapshot.itemTest && !ids.has(snapshot.itemTest.sourceId))
       throw Error("Missing previous observation for item test");
     const source =

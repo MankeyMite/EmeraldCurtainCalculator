@@ -1,0 +1,175 @@
+{
+  "actualPk3Hex": "aff42e885ebe0fc1cec9ccbdc2c3bdff01000202c7d5e2dfd9edff00e8f3000018010000ac020000006300000a002d00340074002328191e04030201000000000000000000108521dc00a20f00000000",
+  "identity": {
+    "pid": 2284778671,
+    "ivs": [28, 6, 0, 4, 26, 7],
+    "species": 280,
+    "tid": 48734,
+    "nature": 21,
+    "gender": "male",
+    "ability": 66,
+    "metGame": 3,
+    "metLevel": 5,
+    "ball": 4,
+    "language": 2
+  },
+  "sidRng": {
+    "minAdvance": 1185,
+    "maxAdvance": 1305
+  },
+  "snapshots": [
+    {
+      "id": "starter-checkpoint-1792887735118",
+      "name": "Starter curtain",
+      "notes": "",
+      "observations": [
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1
+      ],
+      "knownFacts": {
+        "isEgg": 0,
+        "evs": [5, 3, 2, 1, 0, 0],
+        "moves": [10, 45, 52, 116],
+        "pp": [35, 40, 25, 30],
+        "ppBonuses": 0,
+        "heldItem": 183,
+        "pokerus": 0,
+        "contest": [0, 0, 0, 0, 0, 0],
+        "ribbons": 0,
+        "ribbonTail": 0,
+        "growthPadding": 0,
+        "headerPadding": 0,
+        "headerFlags": 2
+      },
+      "starterCheckpointId": "starter-checkpoint-1792887735118",
+      "summaryStats": {
+        "stats": [null, null, null, null, null, null]
+      }
+    },
+    {
+      "id": "5d7ed009-d210-49a0-b722-75241679cd34",
+      "name": "Earlier summary stats",
+      "notes": "",
+      "observations": [
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+      ],
+      "knownFacts": {
+        "evs": [0, 0, 0, 1, 0, 0]
+      },
+      "summaryStats": {
+        "level": 5,
+        "stats": [20, 11, 8, 9, 13, 11]
+      }
+    },
+    {
+      "id": "16797ad4-99a2-4a41-bf1f-111dd47ebc82",
+      "name": "AWAKENING test",
+      "notes": "Held-item test: AWAKENING. Comparison drawing: Starter curtain. No battles or other edits. Friendship and checksum left unknown.",
+      "observations": [
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+      ],
+      "knownFacts": {
+        "isEgg": 0,
+        "evs": [5, 3, 2, 1, 0, 0],
+        "moves": [10, 45, 52, 116],
+        "pp": [35, 40, 25, 30],
+        "ppBonuses": 0,
+        "heldItem": 17,
+        "pokerus": 0,
+        "contest": [0, 0, 0, 0, 0, 0],
+        "ribbons": 0,
+        "ribbonTail": 0,
+        "growthPadding": 0,
+        "headerPadding": 0,
+        "headerFlags": 2
+      },
+      "summaryStats": {
+        "stats": [null, null, null, null, null, null]
+      },
+      "targets": [108],
+      "itemTest": {
+        "sourceId": "starter-checkpoint-1792887735118",
+        "phase": "recorded",
+        "candidatesBefore": 3,
+        "mode": "pixels"
+      }
+    },
+    {
+      "id": "9de67447-8412-4be7-8d9c-e2d42275fe29",
+      "name": "Swap moves 3 and 4",
+      "notes": "While boxed, open the PC summary and swap move slots 3 and 4. Keep other data unchanged. Current PP and PP Ups follow their moves.\nSwap moves 3 and 4 back before starting the next test. Restore the original held item too.",
+      "observations": [
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+      ],
+      "knownFacts": {
+        "isEgg": 0,
+        "evs": [5, 3, 2, 1, 0, 0],
+        "moves": [10, 45, 116, 52],
+        "pp": [35, 40, 30, 25],
+        "ppBonuses": 0,
+        "heldItem": 183,
+        "pokerus": 0,
+        "contest": [0, 0, 0, 0, 0, 0],
+        "ribbons": 0,
+        "ribbonTail": 0,
+        "growthPadding": 0,
+        "headerPadding": 0,
+        "headerFlags": 2
+      },
+      "targets": [102],
+      "summaryStats": {
+        "stats": [null, null, null, null, null, null]
+      },
+      "itemTest": {
+        "sourceId": "starter-checkpoint-1792887735118",
+        "phase": "recorded",
+        "candidatesBefore": 2,
+        "action": {
+          "kind": "moves",
+          "name": "Swap moves 3 and 4",
+          "instructions": "While boxed, open the PC summary and swap move slots 3 and 4. Keep other data unchanged. Current PP and PP Ups follow their moves.",
+          "restore": "Swap moves 3 and 4 back before starting the next test. Restore the original held item too."
+        },
+        "actionId": "moves-2-3",
+        "mode": "pixels"
+      }
+    }
+  ]
+}

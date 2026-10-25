@@ -6,7 +6,7 @@ import { hex } from "../core/pokemon";
 export function SidDigitControls({ lab }: { lab: CurtainLab }) {
   const masks = lab.sidDigitFilters ?? [65535, 65535, 65535, 65535],
     active = masks.some((m) => m !== 65535);
-  const [open, setOpen] = useState(active);
+  const [open, setOpen] = useState(false);
   return (
     <details
       className="sid-digit-controls investigation-card"

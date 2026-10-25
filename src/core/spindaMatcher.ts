@@ -17,6 +17,7 @@ import {
   type SpindaSidGuideState,
 } from "./spindaSidGuide";
 import type { KnownFacts } from "./constraints";
+import type { SpindaSidProgress } from "./spindaUsefulness";
 
 /** Called only after explicit transfer confirmation. Never relabel another species. */
 export function spindaEstimatedFacts(
@@ -43,8 +44,9 @@ export type SpindaMatcherState = {
   nature?: number;
   gender?: "male" | "female";
   shortlist: number[]; // Advisory only, never solver evidence.
-  appliedPid?: number; // Provenance for a user-confirmed conditional PID.
-  guide?: SpindaSidGuideState; // Separate advisory pixels, never solver evidence.
+  appliedPid?: number; // PID confirmed by the player.
+  guide?: SpindaSidGuideState; // Current catch; completed SID evidence is carried in sidProgress.
+  sidProgress?: SpindaSidProgress;
 };
 export function defaultSpindaMatcher(): SpindaMatcherState {
   return {
@@ -95,6 +97,21 @@ export function validateSpindaMatcher(value: unknown): SpindaMatcherState {
     throw Error("Invalid Spinda nature");
   if (v.gender !== undefined && !["male", "female"].includes(v.gender))
     throw Error("Invalid Spinda gender");
+  if (
+    v.sidProgress &&
+    (!Array.isArray(v.sidProgress.tested) ||
+      v.sidProgress.tested.length !== 4 ||
+      v.sidProgress.tested.some(
+        (m) => !Number.isInteger(m) || m < 0 || m > 65535,
+      ) ||
+      (v.sidProgress.remainingSids !== undefined &&
+        (!Array.isArray(v.sidProgress.remainingSids) ||
+          v.sidProgress.remainingSids.length > 65536 ||
+          v.sidProgress.remainingSids.some(
+            (s) => !Number.isInteger(s) || s < 0 || s > 65535,
+          ))))
+  )
+    throw Error("Invalid Spinda SID progress");
   return {
     pid: v.pid,
     settings,
@@ -106,6 +123,16 @@ export function validateSpindaMatcher(value: unknown): SpindaMatcherState {
     ...(v.guide === undefined
       ? {}
       : { guide: validateSpindaSidGuide(v.guide) }),
+    ...(v.sidProgress
+      ? {
+          sidProgress: {
+            tested: v.sidProgress.tested.slice(),
+            ...(v.sidProgress.remainingSids
+              ? { remainingSids: [...new Set(v.sidProgress.remainingSids)] }
+              : {}),
+          },
+        }
+      : {}),
   };
 }
 export type SpindaCandidate = { pid: number; encounters: RngSpread[] };

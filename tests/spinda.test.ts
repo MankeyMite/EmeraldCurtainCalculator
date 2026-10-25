@@ -495,6 +495,6 @@ test("Spinda UI exposes draggable pixel spots, shared RNG settings and distinct 
   assert.match(html, /Route 113/);
   assert.match(html, /TID-seeded new-game SID RNG/);
   assert.match(html, /one original sprite pixel/);
-  assert.match(html, /Use this pattern PID: show SID pixels/);
+  assert.match(html, /Use this PID/);
   assert.doesNotMatch(html, /brush|Undo|Redo|Clear drawing/i);
 });

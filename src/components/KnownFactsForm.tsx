@@ -1,3 +1,4 @@
+import { SummaryStatInputs } from "./SummaryStatInputs";
 import { MovePpInput } from "./MovePpInput";
 import type { CurtainLab } from "../hooks/useCurtainLab";
 import { NATURES } from "../core/pokemon";
@@ -201,34 +202,10 @@ export function KnownFactsForm({
           (the number after /), not remaining HP. Species, level, nature and EVs
           determine the IV ranges.
         </p>
-        <div className="form-table">
-          <label>
-            Current level
-            <input
-              aria-label="Current level"
-              inputMode="numeric"
-              autoComplete="off"
-              placeholder="1–100"
-              value={lab.summaryDraft.level ?? ""}
-              onChange={(e) => lab.editSummaryStat("level", e.target.value)}
-            />
-          </label>
-          {STAT_NAMES.map((name, i) => (
-            <label key={name}>
-              {i === 0 ? "Maximum HP" : name}
-              <input
-                aria-label={`Summary ${i === 0 ? "maximum HP" : name}`}
-                inputMode="numeric"
-                autoComplete="off"
-                placeholder="Unknown"
-                value={lab.summaryDraft[`stat_${i}`] ?? ""}
-                onChange={(e) =>
-                  lab.editSummaryStat(`stat_${i}`, e.target.value)
-                }
-              />
-            </label>
-          ))}
-        </div>
+        <SummaryStatInputs
+          draft={lab.summaryDraft}
+          onChange={lab.editSummaryStat}
+        />
         {lab.summaryError && (
           <p className="error-text" role="alert">
             {lab.summaryError}
@@ -249,8 +226,8 @@ export function KnownFactsForm({
           Type a name and choose a suggestion. Its stored ID appears in the grey
           box automatically. An empty move field keeps ID 0; choose Unknown in
           the suggestions to clear the fact. PP must match a restored maximum
-          for 0–3 PP Ups. Origin game means where this Pokémon originated,
-          not necessarily the game you are playing now.
+          for 0–3 PP Ups. Origin game means where this Pokémon originated, not
+          necessarily the game you are playing now.
         </p>
         <div className="form-table">
           {Array.from({ length: 4 }, (_, i) =>

@@ -51,6 +51,14 @@ export function ItemTestControls({
             "Restore the original held item (or remove the test item if none was originally held) before the next test. The app restores the drawing only."}
         </p>
         <button onClick={showNextItems}>Choose the next test</button>
+        {lab.canUndoExperimentAnswer && (
+          <button
+            disabled={lab.analysisBusy || lab.drawingInProgress}
+            onClick={lab.undoLastExperimentAnswer}
+          >
+            Undo last experiment answer
+          </button>
+        )}
       </section>
     );
   }
@@ -166,6 +174,14 @@ export function ItemTestControls({
             </p>
           )}
         <div className="inline-buttons">
+          {lab.canUndoExperimentAnswer && (
+            <button
+              disabled={disabled || lab.analysisBusy}
+              onClick={lab.undoLastExperimentAnswer}
+            >
+              Undo last experiment answer
+            </button>
+          )}
           <button
             disabled={disabled || !active.observations.some((v) => v !== -1)}
             onClick={lab.saveVerifiedTargets}

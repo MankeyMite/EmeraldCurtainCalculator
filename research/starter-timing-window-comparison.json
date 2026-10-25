@@ -1,0 +1,410 @@
+{
+  "setup": {
+    "species": "Torchic",
+    "level": 5,
+    "evs": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "timing": {
+      "first": 15,
+      "second": 20,
+      "uncertainty": 100,
+      "offset": 0,
+      "calibration": -254
+    },
+    "target": 941,
+    "range": {
+      "minAdvance": 841,
+      "maxAdvance": 1041
+    },
+    "randomSeed": 3237998130,
+    "errorModel": "Uniform net input error [-1, +1] seconds; calibrated center assumed correct",
+    "inputs": "All six level-5 stats, nature, gender, Blaze; no exact IVs, PID, shininess or curtain pixels supplied",
+    "statOrder": "HP / Atk / Def / Spe / SpA / SpD"
+  },
+  "ambiguous": [
+    {
+      "trial": 24,
+      "actual": 958,
+      "actualVsTarget": 17,
+      "extras": [
+        {
+          "advance": 968,
+          "differenceFromActual": 10,
+          "differenceFromTarget": 27
+        }
+      ]
+    },
+    {
+      "trial": 30,
+      "actual": 912,
+      "actualVsTarget": -29,
+      "extras": [
+        {
+          "advance": 864,
+          "differenceFromActual": -48,
+          "differenceFromTarget": -77
+        }
+      ]
+    },
+    {
+      "trial": 35,
+      "actual": 892,
+      "actualVsTarget": -49,
+      "extras": [
+        {
+          "advance": 865,
+          "differenceFromActual": -27,
+          "differenceFromTarget": -76
+        },
+        {
+          "advance": 993,
+          "differenceFromActual": 101,
+          "differenceFromTarget": 52
+        }
+      ]
+    },
+    {
+      "trial": 36,
+      "actual": 967,
+      "actualVsTarget": 26,
+      "extras": [
+        {
+          "advance": 956,
+          "differenceFromActual": -11,
+          "differenceFromTarget": 15
+        }
+      ]
+    },
+    {
+      "trial": 42,
+      "actual": 928,
+      "actualVsTarget": -13,
+      "extras": [
+        {
+          "advance": 989,
+          "differenceFromActual": 61,
+          "differenceFromTarget": 48
+        }
+      ]
+    },
+    {
+      "trial": 45,
+      "actual": 971,
+      "actualVsTarget": 30,
+      "extras": [
+        {
+          "advance": 871,
+          "differenceFromActual": -100,
+          "differenceFromTarget": -70
+        }
+      ]
+    },
+    {
+      "trial": 53,
+      "actual": 920,
+      "actualVsTarget": -21,
+      "extras": [
+        {
+          "advance": 841,
+          "differenceFromActual": -79,
+          "differenceFromTarget": -100
+        }
+      ]
+    },
+    {
+      "trial": 59,
+      "actual": 993,
+      "actualVsTarget": 52,
+      "extras": [
+        {
+          "advance": 865,
+          "differenceFromActual": -128,
+          "differenceFromTarget": -76
+        },
+        {
+          "advance": 892,
+          "differenceFromActual": -101,
+          "differenceFromTarget": -49
+        }
+      ]
+    },
+    {
+      "trial": 74,
+      "actual": 928,
+      "actualVsTarget": -13,
+      "extras": [
+        {
+          "advance": 989,
+          "differenceFromActual": 61,
+          "differenceFromTarget": 48
+        }
+      ]
+    },
+    {
+      "trial": 79,
+      "actual": 971,
+      "actualVsTarget": 30,
+      "extras": [
+        {
+          "advance": 871,
+          "differenceFromActual": -100,
+          "differenceFromTarget": -70
+        }
+      ]
+    },
+    {
+      "trial": 86,
+      "actual": 968,
+      "actualVsTarget": 27,
+      "extras": [
+        {
+          "advance": 958,
+          "differenceFromActual": -10,
+          "differenceFromTarget": 17
+        }
+      ]
+    },
+    {
+      "trial": 92,
+      "actual": 988,
+      "actualVsTarget": 47,
+      "extras": [
+        {
+          "advance": 921,
+          "differenceFromActual": -67,
+          "differenceFromTarget": -20
+        }
+      ]
+    },
+    {
+      "trial": 98,
+      "actual": 920,
+      "actualVsTarget": -21,
+      "extras": [
+        {
+          "advance": 841,
+          "differenceFromActual": -79,
+          "differenceFromTarget": -100
+        }
+      ]
+    }
+  ],
+  "distinct": [
+    {
+      "trial": 24,
+      "actual": 958,
+      "actualVsTarget": 17,
+      "extras": [
+        {
+          "advance": 968,
+          "differenceFromActual": 10,
+          "differenceFromTarget": 27
+        }
+      ]
+    },
+    {
+      "trial": 30,
+      "actual": 912,
+      "actualVsTarget": -29,
+      "extras": [
+        {
+          "advance": 864,
+          "differenceFromActual": -48,
+          "differenceFromTarget": -77
+        }
+      ]
+    },
+    {
+      "trial": 35,
+      "actual": 892,
+      "actualVsTarget": -49,
+      "extras": [
+        {
+          "advance": 865,
+          "differenceFromActual": -27,
+          "differenceFromTarget": -76
+        },
+        {
+          "advance": 993,
+          "differenceFromActual": 101,
+          "differenceFromTarget": 52
+        }
+      ]
+    },
+    {
+      "trial": 36,
+      "actual": 967,
+      "actualVsTarget": 26,
+      "extras": [
+        {
+          "advance": 956,
+          "differenceFromActual": -11,
+          "differenceFromTarget": 15
+        }
+      ]
+    },
+    {
+      "trial": 74,
+      "actual": 928,
+      "actualVsTarget": -13,
+      "extras": [
+        {
+          "advance": 989,
+          "differenceFromActual": 61,
+          "differenceFromTarget": 48
+        }
+      ]
+    },
+    {
+      "trial": 79,
+      "actual": 971,
+      "actualVsTarget": 30,
+      "extras": [
+        {
+          "advance": 871,
+          "differenceFromActual": -100,
+          "differenceFromTarget": -70
+        }
+      ]
+    },
+    {
+      "trial": 98,
+      "actual": 920,
+      "actualVsTarget": -21,
+      "extras": [
+        {
+          "advance": 841,
+          "differenceFromActual": -79,
+          "differenceFromTarget": -100
+        }
+      ]
+    },
+    {
+      "trial": 59,
+      "actual": 993,
+      "actualVsTarget": 52,
+      "extras": [
+        {
+          "advance": 865,
+          "differenceFromActual": -128,
+          "differenceFromTarget": -76
+        },
+        {
+          "advance": 892,
+          "differenceFromActual": -101,
+          "differenceFromTarget": -49
+        }
+      ]
+    },
+    {
+      "trial": 86,
+      "actual": 968,
+      "actualVsTarget": 27,
+      "extras": [
+        {
+          "advance": 958,
+          "differenceFromActual": -10,
+          "differenceFromTarget": 17
+        }
+      ]
+    },
+    {
+      "trial": 92,
+      "actual": 988,
+      "actualVsTarget": 47,
+      "extras": [
+        {
+          "advance": 921,
+          "differenceFromActual": -67,
+          "differenceFromTarget": -20
+        }
+      ]
+    }
+  ],
+  "comparison": [
+    {
+      "radius": 50,
+      "correctRetained": 86,
+      "uniqueCorrect": 80,
+      "ambiguousCorrect": 6,
+      "noMatches": 13,
+      "falseOnly": 1
+    },
+    {
+      "radius": 59,
+      "correctRetained": 100,
+      "uniqueCorrect": 92,
+      "ambiguousCorrect": 8,
+      "noMatches": 0,
+      "falseOnly": 0
+    },
+    {
+      "radius": 60,
+      "correctRetained": 100,
+      "uniqueCorrect": 92,
+      "ambiguousCorrect": 8,
+      "noMatches": 0,
+      "falseOnly": 0
+    },
+    {
+      "radius": 65,
+      "correctRetained": 100,
+      "uniqueCorrect": 92,
+      "ambiguousCorrect": 8,
+      "noMatches": 0,
+      "falseOnly": 0
+    },
+    {
+      "radius": 70,
+      "correctRetained": 100,
+      "uniqueCorrect": 90,
+      "ambiguousCorrect": 10,
+      "noMatches": 0,
+      "falseOnly": 0
+    },
+    {
+      "radius": 75,
+      "correctRetained": 100,
+      "uniqueCorrect": 90,
+      "ambiguousCorrect": 10,
+      "noMatches": 0,
+      "falseOnly": 0
+    },
+    {
+      "radius": 80,
+      "correctRetained": 100,
+      "uniqueCorrect": 89,
+      "ambiguousCorrect": 11,
+      "noMatches": 0,
+      "falseOnly": 0
+    },
+    {
+      "radius": 90,
+      "correctRetained": 100,
+      "uniqueCorrect": 89,
+      "ambiguousCorrect": 11,
+      "noMatches": 0,
+      "falseOnly": 0
+    },
+    {
+      "radius": 100,
+      "correctRetained": 100,
+      "uniqueCorrect": 87,
+      "ambiguousCorrect": 13,
+      "noMatches": 0,
+      "falseOnly": 0
+    }
+  ],
+  "falseCloserToTarget": [
+    36,
+    59,
+    86,
+    92
+  ]
+}

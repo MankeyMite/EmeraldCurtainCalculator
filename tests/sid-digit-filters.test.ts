@@ -162,8 +162,6 @@ test("SID controls display individual hex toggles, reset controls and a shared-t
     }),
   );
   assert.match(guideHtml, /0x1234/);
-  assert.match(
-    guideHtml,
-    /Manual SID digit limits from SID Finder are also applied here/,
-  );
+  assert.ok(guideHtml.includes("0 useful pixels"));
+  assert.equal((guideHtml.match(/class="target/g) ?? []).length, 0);
 });

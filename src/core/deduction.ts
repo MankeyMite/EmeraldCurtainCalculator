@@ -12,7 +12,8 @@ import {
   knownPlaintext,
 } from "./inference";
 import { analyzeObservations } from "./jointInference";
-import { isEvidence, itemTestBaseline } from "./itemTests";
+import { isEvidence, isRecorded, itemTestBaseline } from "./itemTests";
+import { usefulStarterPixels, type SidQuestion } from "./starterRoute";
 import { solveSids, projectRecord, compileChecksumSupport } from "./sid";
 import { rankPixelDomains } from "./experimentOutcomes";
 import { rankItemExperiments, isInformativeExperiment } from "./experiments";
@@ -27,7 +28,18 @@ import { pixelAssistance } from "./pixelAssistance";
 import { scopeExperimentDomain } from "./experimentScope";
 import { estimateIVs } from "./stats";
 import { searchWild } from "./rngSearch";
-import type { RngSettings } from "./rng";
+import { scanWildSpreads, type RngSettings } from "./rng";
+import {
+  spindaInfoPlaintext,
+  spindaRngEvidence,
+  type SpindaSidGuideState,
+} from "./spindaSidGuide";
+import {
+  spindaRemainingSids,
+  spindaStatCandidate,
+  testedSpindaDigits,
+} from "./spindaUsefulness";
+import { estimateNextSpinda } from "./nextSidStep";
 import {
   generateSidRng,
   intersectSidCandidates,
@@ -42,7 +54,11 @@ export type DeductionInput = {
   rng?: RngSettings;
   sidRng?: SidRngSettings;
   sidDigitFilters?: number[];
+  sidCandidates?: number[];
   renderMasks?: number[];
+  spindaGuide?: { guide: SpindaSidGuideState; settings: RngSettings };
+  spindaPlanning?: { settings: RngSettings; tested: number[] };
+  starterGuide?: boolean; // The guided questions use encrypted pixels, not checksums.
 };
 export const DEDUCTION_PHASE_LABELS = {
   waiting: "Waiting to calculate…",
@@ -66,9 +82,12 @@ export function computeDeduction(
     active = snapshots.find((s) => s.id === input.activeId)!;
   const evidence = snapshots.filter(isEvidence),
     baseline = itemTestBaseline(snapshots);
+  const pendingExperiment = snapshots.some((s) => !isRecorded(s));
   const reference = isEvidence(active)
     ? active
-    : snapshots.find((s) => s.id === active.itemTest!.sourceId)!;
+    : snapshots.find(
+        (s) => s.id === (active.supersededBy ?? active.itemTest!.sourceId),
+      )!;
   const investigationInference = analyzeObservations(
     identity,
     evidence,
@@ -91,11 +110,13 @@ export function computeDeduction(
           snapshots: evidence,
           ...(input.sidRng ? { sidRng: input.sidRng } : {}),
           sidDigitFilters: input.sidDigitFilters,
+          sidCandidates: input.sidCandidates,
         },
         progress,
       )
     : null;
   phase?.("sid");
+  const carriedSids = input.sidCandidates && new Set(input.sidCandidates);
   let candidateLimit = false;
   const solveSmallSet = () => {
     if (identity.tid === undefined || !pids?.length || pids.length > 32)
@@ -107,7 +128,9 @@ export function computeDeduction(
         pids,
         undefined,
         200000,
-        allowedSidValues(input.sidDigitFilters),
+        input.sidCandidates?.filter((s) =>
+          sidAllowed(s, input.sidDigitFilters),
+        ) ?? allowedSidValues(input.sidDigitFilters),
       );
     } catch (error) {
       if (
@@ -124,8 +147,10 @@ export function computeDeduction(
     : solveSmallSet();
   const sidRows =
     input.sidRng && identity.tid !== undefined
-      ? generateSidRng(identity.tid, input.sidRng).filter((r) =>
-          sidAllowed(r.sid, input.sidDigitFilters),
+      ? generateSidRng(identity.tid, input.sidRng).filter(
+          (r) =>
+            sidAllowed(r.sid, input.sidDigitFilters) &&
+            (!carriedSids || carriedSids.has(r.sid)),
         )
       : [];
   const sidResult =
@@ -134,9 +159,92 @@ export function computeDeduction(
       : curtainSidAnalysis
         ? intersectSidCandidates(curtainSidAnalysis, sidRows)
         : searchUnknownPidSids(identity, evidence, sidRows, progress);
-  const sidAnalysis = input.sidRng
+  let sidAnalysis = input.sidRng
     ? (sidResult?.analysis ?? null)
     : curtainSidAnalysis;
+  // Keep the pre-guide set separate: editing or clearing a guide answer must
+  // be able to bring candidates back. Interpret baseline pixels using baseline
+  // facts even while a changed-item or training experiment is active.
+  const spindaBaseSidValues = sidAnalysis?.sidValues;
+  let spindaGuideProgress:
+    { remainingSids: number[]; tested: number[] } | undefined;
+  if (
+    input.spindaGuide &&
+    identity.species === 308 &&
+    input.spindaGuide.guide.pid === identity.pid
+  ) {
+    const { guide, settings } = input.spindaGuide;
+    const facts = { ...baseline.knownFacts, ...identity };
+    const info = spindaInfoPlaintext(facts);
+    const encounters = scanWildSpreads(
+      settings,
+      { species: 308, pid: guide.pid },
+      [],
+    );
+    const candidate = encounters.length
+      ? spindaStatCandidate(
+          { pid: guide.pid, encounters },
+          facts,
+          baseline.summaryStats,
+        )
+      : undefined;
+    const rng = spindaRngEvidence(guide.pid, candidate, info);
+    const remainingSids = spindaRemainingSids(
+      guide,
+      spindaBaseSidValues ?? input.sidCandidates,
+      input.sidDigitFilters ?? Array(4).fill(65535),
+      info,
+      rng?.plaintexts,
+    );
+    spindaGuideProgress = {
+      remainingSids,
+      tested: testedSpindaDigits(guide, info, rng?.masks),
+    };
+    const allowed = new Set(remainingSids);
+    if (sidAnalysis) {
+      const perIvWord = new Map<string, Set<number>>();
+      const candidates = sidAnalysis.candidates.filter((h) => {
+        if (!allowed.has(h.sid)) return false;
+        if (!h.rng) return true;
+        const key = `${h.rng.ivs.join(",")}/${h.rng.abilitySlot}`;
+        let supported = perIvWord.get(key);
+        if (!supported) {
+          const word =
+            (h.rng.ivs.reduce((v, iv, n) => v | (iv << (n * 5)), 0) |
+              (h.rng.abilitySlot << 31)) >>>
+            0;
+          const plain = Array<number>(96).fill(65535);
+          for (let n = 0; n < 8; n++)
+            plain[80 + n] = 1 << ((word >>> (n * 4)) & 15);
+          supported = new Set(
+            spindaRemainingSids(
+              guide,
+              remainingSids,
+              input.sidDigitFilters ?? Array(4).fill(65535),
+              info,
+              [plain],
+            ),
+          );
+          perIvWord.set(key, supported);
+        }
+        return supported.has(h.sid);
+      });
+      const supportedSids = [...new Set(candidates.map((h) => h.sid))].sort(
+        (a, b) => a - b,
+      );
+      sidAnalysis = {
+        ...sidAnalysis,
+        candidates,
+        sidValues: supportedSids,
+      };
+      spindaGuideProgress.remainingSids = supportedSids;
+    }
+    if (sidResult) {
+      sidResult.analysis = sidAnalysis;
+      const supported = new Set(sidAnalysis?.sidValues ?? remainingSids);
+      sidResult.rows = sidResult.rows.filter((r) => supported.has(r.sid));
+    }
+  }
   // A pending experiment previews facts/key deductions without treating unseen
   // baseline pixels as observations of the changed record.
   phase?.("recovery");
@@ -229,6 +337,17 @@ export function computeDeduction(
     }
   }
   let scopeRelaxed = false;
+  const starterQuestions =
+    input.starterGuide &&
+    active.itemTest?.mode === "pixels" &&
+    !isRecorded(active) &&
+    sidAnalysis
+      ? usefulStarterPixels(
+          sidAnalysis.candidates,
+          { ...active.knownFacts, ...identity },
+          active.observations,
+        ).filter((q) => active.targets?.includes(q.index))
+      : [];
   // A SID search supplies allowed SIDs, never an exhaustive list of witness
   // PIDs. Small scopes are disjoint fixed-SID DP models. Large scopes use a
   // digit envelope, explicitly an outer bound (including unresolved rows).
@@ -273,30 +392,39 @@ export function computeDeduction(
       })()
     : scopedInference;
   const sidScopeAllows = !input.sidRng || !!sidResult?.rows.length;
-  phase?.("experiments");
+  // Answer the chosen test first. Ranking the entire catalogue here can cost
+  // tens of seconds after linked tests, while none of those results is visible.
+  if (!pendingExperiment) phase?.("experiments");
   const domain =
-    (!input.rng || sidAnalysis) && sidScopeAllows
+    !pendingExperiment &&
+    !input.starterGuide &&
+    (!input.rng || sidAnalysis) &&
+    sidScopeAllows
       ? rankDomainExperiments(identity, evidence, baseline, domainInference, {
           candidates: domainCandidates,
           scopeRelaxed,
         })
       : null;
-  const items = sidAnalysis
-    ? rankItemExperiments(
-        sidAnalysis.candidates,
-        undefined,
+  const items =
+    !pendingExperiment && sidAnalysis
+      ? rankItemExperiments(
+          sidAnalysis.candidates,
+          undefined,
+          input.starterGuide ? undefined : baseline,
+          identity,
+          evidence,
+        )
+      : [];
+  const controlled = pendingExperiment
+    ? []
+    : rankControlledExperiments(
         baseline,
+        identity.species,
+        sidAnalysis?.candidates ?? [],
         identity,
         evidence,
-      )
-    : [];
-  const controlled = rankControlledExperiments(
-    baseline,
-    identity.species,
-    sidAnalysis?.candidates ?? [],
-    identity,
-    evidence,
-  );
+        !input.starterGuide,
+      );
   // Prefer the existing joint/checksum ranker wherever it can score the action.
   // Domain questions also cover small sets with differing block positions.
   const domainQuestions: Record<string, DomainQuestion> = {};
@@ -377,7 +505,8 @@ export function computeDeduction(
     (sidAnalysis && !sidAnalysis.candidates.length) ||
     (sidResult && !sidResult.rows.length)
       ? "inconsistent"
-      : items.some(isInformativeExperiment) ||
+      : pendingExperiment ||
+          items.some(isInformativeExperiment) ||
           controlled.some(isInformativeExperiment)
         ? "available"
         : identity.tid === undefined
@@ -385,6 +514,20 @@ export function computeDeduction(
           : input.rng && !sidAnalysis
             ? "computation-limited"
             : "indistinguishable";
+  const nextSpinda =
+    !pendingExperiment &&
+    input.spindaPlanning &&
+    sidAnalysis?.sidValues.length &&
+    experimentStatus !== "inconsistent"
+      ? estimateNextSpinda(
+          input.spindaPlanning.settings,
+          sidAnalysis.sidValues,
+          input.spindaPlanning.tested.map(
+            (m, n) => m | (spindaGuideProgress?.tested[n] ?? 0),
+          ),
+          identity.otGender,
+        )
+      : null;
   return {
     experimentProgress: experimentProgress(
       identity,
@@ -404,10 +547,14 @@ export function computeDeduction(
     sidRows,
     sidResult,
     sidAnalysis,
+    spindaBaseSidValues,
+    spindaGuideProgress,
+    nextSpinda,
     recovery,
     assistance,
     ivEstimates,
     experimentTargets,
+    starterQuestions,
     experiments: items.filter(isInformativeExperiment),
     controlledExperiments: controlled.filter(isInformativeExperiment),
   };
@@ -420,6 +567,7 @@ export const EMPTY_DEDUCTION: DeductionResult = {
   experimentLimitations: [],
   domainQuestions: {} as Record<string, DomainQuestion>,
   experimentTargets: [],
+  starterQuestions: [] as SidQuestion[],
   investigationInference: emptyInference,
   inference: emptyInference,
   wildResult: null,
@@ -427,6 +575,9 @@ export const EMPTY_DEDUCTION: DeductionResult = {
   sidRows: [],
   sidResult: null,
   sidAnalysis: null,
+  spindaBaseSidValues: undefined,
+  spindaGuideProgress: undefined,
+  nextSpinda: null,
   recovery: null,
   assistance: {
     predictions: emptyObservations(),

@@ -1,0 +1,4142 @@
+{
+  "setup": {
+    "species": "Torchic",
+    "level": 5,
+    "evs": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "timing": {
+      "first": 15,
+      "second": 20,
+      "uncertainty": 60,
+      "offset": 0,
+      "calibration": -254
+    },
+    "target": 941,
+    "range": {
+      "minAdvance": 881,
+      "maxAdvance": 1001
+    },
+    "randomSeed": 3237998130,
+    "errorModel": "Uniform net input error [-1, +1] seconds; calibrated center assumed correct",
+    "inputs": "All six level-5 stats, nature, gender, Blaze; no exact IVs, PID, shininess or curtain pixels supplied",
+    "statOrder": "HP / Atk / Def / Spe / SpA / SpD",
+    "window": "Rounded to whole advances: +/-60 advances covers +/-1 second at the GBA clock rate",
+    "sameAttemptsAs": "starter-timing-simulation.json"
+  },
+  "totals": {
+    "trials": 100,
+    "correctRetained": 100,
+    "uniqueCorrect": 92,
+    "ambiguous": 8,
+    "zeroMatches": 0,
+    "falseOnly": 0,
+    "distribution": {
+      "1": 92,
+      "2": 8
+    }
+  },
+  "rows": [
+    {
+      "trial": 1,
+      "errorSeconds": -0.07609054446220398,
+      "advance": 936,
+      "pid": "F03EE99B",
+      "ivs": [
+        19,
+        21,
+        8,
+        11,
+        12,
+        3
+      ],
+      "stats": [
+        20,
+        12,
+        9,
+        10,
+        12,
+        10
+      ],
+      "nature": "Hardy",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 936,
+          "pid": "F03EE99B",
+          "ivs": [
+            19,
+            21,
+            8,
+            11,
+            12,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "errorSeconds": -0.9097933769226074,
+      "advance": 886,
+      "pid": "4A2B6C9B",
+      "ivs": [
+        11,
+        29,
+        25,
+        6,
+        21,
+        18
+      ],
+      "stats": [
+        20,
+        10,
+        10,
+        9,
+        13,
+        10
+      ],
+      "nature": "Timid",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 886,
+          "pid": "4A2B6C9B",
+          "ivs": [
+            11,
+            29,
+            25,
+            6,
+            21,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 3,
+      "errorSeconds": -0.31832644809037447,
+      "advance": 922,
+      "pid": "CC187DF6",
+      "ivs": [
+        29,
+        27,
+        13,
+        7,
+        30,
+        24
+      ],
+      "stats": [
+        20,
+        12,
+        9,
+        9,
+        13,
+        11
+      ],
+      "nature": "Quirky",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 922,
+          "pid": "CC187DF6",
+          "ivs": [
+            29,
+            27,
+            13,
+            7,
+            30,
+            24
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 4,
+      "errorSeconds": -0.2713883309625089,
+      "advance": 924,
+      "pid": "E3C7B77D",
+      "ivs": [
+        20,
+        8,
+        7,
+        3,
+        20,
+        6
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        9,
+        14,
+        9
+      ],
+      "nature": "Rash",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 924,
+          "pid": "E3C7B77D",
+          "ivs": [
+            20,
+            8,
+            7,
+            3,
+            20,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 5,
+      "errorSeconds": -0.2687254445627332,
+      "advance": 924,
+      "pid": "E3C7B77D",
+      "ivs": [
+        20,
+        8,
+        7,
+        3,
+        20,
+        6
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        9,
+        14,
+        9
+      ],
+      "nature": "Rash",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 924,
+          "pid": "E3C7B77D",
+          "ivs": [
+            20,
+            8,
+            7,
+            3,
+            20,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 6,
+      "errorSeconds": -0.9874753626063466,
+      "advance": 882,
+      "pid": "B196A4E5",
+      "ivs": [
+        15,
+        11,
+        26,
+        17,
+        16,
+        2
+      ],
+      "stats": [
+        20,
+        9,
+        10,
+        10,
+        12,
+        11
+      ],
+      "nature": "Calm",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 882,
+          "pid": "B196A4E5",
+          "ivs": [
+            15,
+            11,
+            26,
+            17,
+            16,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 7,
+      "errorSeconds": -0.1729681445285678,
+      "advance": 930,
+      "pid": "D7DB5B13",
+      "ivs": [
+        20,
+        2,
+        15,
+        5,
+        28,
+        7
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        9,
+        13,
+        9
+      ],
+      "nature": "Naive",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 930,
+          "pid": "D7DB5B13",
+          "ivs": [
+            20,
+            2,
+            15,
+            5,
+            28,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 8,
+      "errorSeconds": -0.8250648095272481,
+      "advance": 891,
+      "pid": "50B00903",
+      "ivs": [
+        20,
+        9,
+        28,
+        24,
+        14,
+        15
+      ],
+      "stats": [
+        20,
+        11,
+        10,
+        10,
+        10,
+        11
+      ],
+      "nature": "Careful",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 891,
+          "pid": "50B00903",
+          "ivs": [
+            20,
+            9,
+            28,
+            24,
+            14,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 9,
+      "errorSeconds": 0.1517814276739955,
+      "advance": 950,
+      "pid": "38AF8644",
+      "ivs": [
+        26,
+        19,
+        0,
+        8,
+        9,
+        3
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        9,
+        12,
+        10
+      ],
+      "nature": "Bashful",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 950,
+          "pid": "38AF8644",
+          "ivs": [
+            26,
+            19,
+            0,
+            8,
+            9,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 10,
+      "errorSeconds": 0.569489611312747,
+      "advance": 975,
+      "pid": "CBCFFF36",
+      "ivs": [
+        0,
+        20,
+        29,
+        18,
+        4,
+        19
+      ],
+      "stats": [
+        19,
+        12,
+        11,
+        10,
+        12,
+        9
+      ],
+      "nature": "Lax",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 975,
+          "pid": "CBCFFF36",
+          "ivs": [
+            0,
+            20,
+            29,
+            18,
+            4,
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 11,
+      "errorSeconds": 0.487325728405267,
+      "advance": 970,
+      "pid": "7B58AA39",
+      "ivs": [
+        16,
+        26,
+        5,
+        10,
+        7,
+        7
+      ],
+      "stats": [
+        20,
+        12,
+        9,
+        11,
+        10,
+        10
+      ],
+      "nature": "Jolly",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 970,
+          "pid": "7B58AA39",
+          "ivs": [
+            16,
+            26,
+            5,
+            10,
+            7,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 12,
+      "errorSeconds": 0.8554392415098846,
+      "advance": 992,
+      "pid": "ABE576D3",
+      "ivs": [
+        8,
+        21,
+        9,
+        16,
+        3,
+        8
+      ],
+      "stats": [
+        19,
+        12,
+        9,
+        10,
+        12,
+        10
+      ],
+      "nature": "Quirky",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 992,
+          "pid": "ABE576D3",
+          "ivs": [
+            8,
+            21,
+            9,
+            16,
+            3,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 13,
+      "errorSeconds": -0.19372264947742224,
+      "advance": 929,
+      "pid": "5B139DEE",
+      "ivs": [
+        27,
+        30,
+        21,
+        20,
+        2,
+        15
+      ],
+      "stats": [
+        20,
+        10,
+        10,
+        10,
+        12,
+        11
+      ],
+      "nature": "Calm",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 929,
+          "pid": "5B139DEE",
+          "ivs": [
+            27,
+            30,
+            21,
+            20,
+            2,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 14,
+      "errorSeconds": 0.21025275718420744,
+      "advance": 953,
+      "pid": "8D8D8D28",
+      "ivs": [
+        6,
+        26,
+        17,
+        31,
+        4,
+        23
+      ],
+      "stats": [
+        19,
+        12,
+        9,
+        11,
+        12,
+        11
+      ],
+      "nature": "Bashful",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 953,
+          "pid": "8D8D8D28",
+          "ivs": [
+            6,
+            26,
+            17,
+            31,
+            4,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 15,
+      "errorSeconds": -0.1483167801052332,
+      "advance": 932,
+      "pid": "9F853C54",
+      "ivs": [
+        3,
+        30,
+        24,
+        20,
+        9,
+        1
+      ],
+      "stats": [
+        19,
+        13,
+        9,
+        10,
+        12,
+        10
+      ],
+      "nature": "Lonely",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 932,
+          "pid": "9F853C54",
+          "ivs": [
+            3,
+            30,
+            24,
+            20,
+            9,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 16,
+      "errorSeconds": -0.4287655674852431,
+      "advance": 915,
+      "pid": "8952915A",
+      "ivs": [
+        15,
+        26,
+        19,
+        21,
+        1,
+        22
+      ],
+      "stats": [
+        20,
+        13,
+        9,
+        10,
+        12,
+        9
+      ],
+      "nature": "Naughty",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 915,
+          "pid": "8952915A",
+          "ivs": [
+            15,
+            26,
+            19,
+            21,
+            1,
+            22
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 17,
+      "errorSeconds": -0.6435485021211207,
+      "advance": 902,
+      "pid": "1D934C74",
+      "ivs": [
+        1,
+        14,
+        4,
+        6,
+        16,
+        20
+      ],
+      "stats": [
+        19,
+        12,
+        9,
+        9,
+        10,
+        11
+      ],
+      "nature": "Adamant",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 902,
+          "pid": "1D934C74",
+          "ivs": [
+            1,
+            14,
+            4,
+            6,
+            16,
+            20
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 18,
+      "errorSeconds": 0.23374171275645494,
+      "advance": 955,
+      "pid": "DC9FC746",
+      "ivs": [
+        13,
+        24,
+        15,
+        14,
+        27,
+        31
+      ],
+      "stats": [
+        20,
+        12,
+        9,
+        10,
+        11,
+        11
+      ],
+      "nature": "Impish",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 955,
+          "pid": "DC9FC746",
+          "ivs": [
+            13,
+            24,
+            15,
+            14,
+            27,
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 19,
+      "errorSeconds": 0.6943330545909703,
+      "advance": 982,
+      "pid": "4E011CEE",
+      "ivs": [
+        26,
+        9,
+        6,
+        3,
+        13,
+        11
+      ],
+      "stats": [
+        20,
+        9,
+        9,
+        9,
+        13,
+        10
+      ],
+      "nature": "Modest",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 982,
+          "pid": "4E011CEE",
+          "ivs": [
+            26,
+            9,
+            6,
+            3,
+            13,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 20,
+      "errorSeconds": 0.528731553349644,
+      "advance": 972,
+      "pid": "1CEA9750",
+      "ivs": [
+        26,
+        13,
+        11,
+        22,
+        25,
+        31
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        10,
+        11,
+        11
+      ],
+      "nature": "Impish",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 972,
+          "pid": "1CEA9750",
+          "ivs": [
+            26,
+            13,
+            11,
+            22,
+            25,
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 21,
+      "errorSeconds": -0.4485258078202605,
+      "advance": 914,
+      "pid": "915A4265",
+      "ivs": [
+        18,
+        10,
+        2,
+        15,
+        26,
+        19
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        9,
+        13,
+        10
+      ],
+      "nature": "Relaxed",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 914,
+          "pid": "915A4265",
+          "ivs": [
+            18,
+            10,
+            2,
+            15,
+            26,
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 22,
+      "errorSeconds": -0.5103904376737773,
+      "advance": 910,
+      "pid": "E646403D",
+      "ivs": [
+        5,
+        10,
+        13,
+        19,
+        14,
+        15
+      ],
+      "stats": [
+        19,
+        9,
+        9,
+        10,
+        12,
+        11
+      ],
+      "nature": "Calm",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 910,
+          "pid": "E646403D",
+          "ivs": [
+            5,
+            10,
+            13,
+            19,
+            14,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 23,
+      "errorSeconds": 0.3113674269989133,
+      "advance": 959,
+      "pid": "1938B1FA",
+      "ivs": [
+        27,
+        22,
+        24,
+        21,
+        19,
+        26
+      ],
+      "stats": [
+        20,
+        13,
+        10,
+        10,
+        10,
+        11
+      ],
+      "nature": "Adamant",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 959,
+          "pid": "1938B1FA",
+          "ivs": [
+            27,
+            22,
+            24,
+            21,
+            19,
+            26
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 24,
+      "errorSeconds": 0.28629607940092683,
+      "advance": 958,
+      "pid": "B1FA7F6E",
+      "ivs": [
+        24,
+        9,
+        6,
+        27,
+        22,
+        24
+      ],
+      "stats": [
+        20,
+        12,
+        9,
+        10,
+        13,
+        9
+      ],
+      "nature": "Naughty",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 2,
+      "matches": [
+        {
+          "advance": 958,
+          "pid": "B1FA7F6E",
+          "ivs": [
+            24,
+            9,
+            6,
+            27,
+            22,
+            24
+          ]
+        },
+        {
+          "advance": 968,
+          "pid": "DBBC1ECA",
+          "ivs": [
+            25,
+            17,
+            10,
+            24,
+            26,
+            30
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 25,
+      "errorSeconds": 0.021902536507695913,
+      "advance": 942,
+      "pid": "96731FE2",
+      "ivs": [
+        3,
+        30,
+        30,
+        13,
+        25,
+        12
+      ],
+      "stats": [
+        19,
+        13,
+        10,
+        9,
+        13,
+        10
+      ],
+      "nature": "Brave",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 942,
+          "pid": "96731FE2",
+          "ivs": [
+            3,
+            30,
+            30,
+            13,
+            25,
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 26,
+      "errorSeconds": 0.9861472276970744,
+      "advance": 999,
+      "pid": "51B5AC99",
+      "ivs": [
+        7,
+        6,
+        4,
+        28,
+        0,
+        11
+      ],
+      "stats": [
+        19,
+        11,
+        9,
+        9,
+        12,
+        11
+      ],
+      "nature": "Sassy",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 999,
+          "pid": "51B5AC99",
+          "ivs": [
+            7,
+            6,
+            4,
+            28,
+            0,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 27,
+      "errorSeconds": -0.6877663736231625,
+      "advance": 899,
+      "pid": "E5107CBD",
+      "ivs": [
+        16,
+        23,
+        24,
+        20,
+        3,
+        19
+      ],
+      "stats": [
+        20,
+        12,
+        10,
+        10,
+        10,
+        11
+      ],
+      "nature": "Careful",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 899,
+          "pid": "E5107CBD",
+          "ivs": [
+            16,
+            23,
+            24,
+            20,
+            3,
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 28,
+      "errorSeconds": 0.7059359420090914,
+      "advance": 983,
+      "pid": "193A4E01",
+      "ivs": [
+        3,
+        13,
+        11,
+        12,
+        29,
+        14
+      ],
+      "stats": [
+        19,
+        11,
+        9,
+        9,
+        13,
+        10
+      ],
+      "nature": "Relaxed",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 983,
+          "pid": "193A4E01",
+          "ivs": [
+            3,
+            13,
+            11,
+            12,
+            29,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 29,
+      "errorSeconds": -0.12737151701003313,
+      "advance": 933,
+      "pid": "63C39F85",
+      "ivs": [
+        20,
+        9,
+        1,
+        27,
+        12,
+        26
+      ],
+      "stats": [
+        20,
+        11,
+        8,
+        10,
+        13,
+        11
+      ],
+      "nature": "Mild",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 933,
+          "pid": "63C39F85",
+          "ivs": [
+            20,
+            9,
+            1,
+            27,
+            12,
+            26
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 30,
+      "errorSeconds": -0.4700678391382098,
+      "advance": 912,
+      "pid": "BDD3B545",
+      "ivs": [
+        5,
+        19,
+        16,
+        26,
+        10,
+        4
+      ],
+      "stats": [
+        19,
+        11,
+        9,
+        10,
+        12,
+        10
+      ],
+      "nature": "Hardy",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 912,
+          "pid": "BDD3B545",
+          "ivs": [
+            5,
+            19,
+            16,
+            26,
+            10,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 31,
+      "errorSeconds": -0.45407108031213284,
+      "advance": 913,
+      "pid": "4265BDD3",
+      "ivs": [
+        26,
+        10,
+        4,
+        18,
+        10,
+        2
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        10,
+        12,
+        10
+      ],
+      "nature": "Serious",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 913,
+          "pid": "4265BDD3",
+          "ivs": [
+            26,
+            10,
+            4,
+            18,
+            10,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 32,
+      "errorSeconds": 0.20535145001485944,
+      "advance": 953,
+      "pid": "8D8D8D28",
+      "ivs": [
+        6,
+        26,
+        17,
+        31,
+        4,
+        23
+      ],
+      "stats": [
+        19,
+        12,
+        9,
+        11,
+        12,
+        11
+      ],
+      "nature": "Bashful",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 953,
+          "pid": "8D8D8D28",
+          "ivs": [
+            6,
+            26,
+            17,
+            31,
+            4,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 33,
+      "errorSeconds": -0.9734425731003284,
+      "advance": 882,
+      "pid": "B196A4E5",
+      "ivs": [
+        15,
+        11,
+        26,
+        17,
+        16,
+        2
+      ],
+      "stats": [
+        20,
+        9,
+        10,
+        10,
+        12,
+        11
+      ],
+      "nature": "Calm",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 882,
+          "pid": "B196A4E5",
+          "ivs": [
+            15,
+            11,
+            26,
+            17,
+            16,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 34,
+      "errorSeconds": -0.7919655060395598,
+      "advance": 893,
+      "pid": "BDD8F134",
+      "ivs": [
+        29,
+        0,
+        19,
+        3,
+        31,
+        5
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        9,
+        11,
+        11
+      ],
+      "nature": "Careful",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 893,
+          "pid": "BDD8F134",
+          "ivs": [
+            29,
+            0,
+            19,
+            3,
+            31,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 35,
+      "errorSeconds": -0.8102763029746711,
+      "advance": 892,
+      "pid": "F13450B0",
+      "ivs": [
+        24,
+        14,
+        15,
+        29,
+        0,
+        19
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        10,
+        12,
+        9
+      ],
+      "nature": "Lax",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 2,
+      "matches": [
+        {
+          "advance": 892,
+          "pid": "F13450B0",
+          "ivs": [
+            24,
+            14,
+            15,
+            29,
+            0,
+            19
+          ]
+        },
+        {
+          "advance": 993,
+          "pid": "A6A8ABE5",
+          "ivs": [
+            16,
+            3,
+            8,
+            18,
+            14,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 36,
+      "errorSeconds": 0.4370750170201063,
+      "advance": 967,
+      "pid": "1ECAF489",
+      "ivs": [
+        28,
+        29,
+        22,
+        25,
+        17,
+        10
+      ],
+      "stats": [
+        20,
+        13,
+        10,
+        10,
+        10,
+        10
+      ],
+      "nature": "Adamant",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 2,
+      "matches": [
+        {
+          "advance": 956,
+          "pid": "BF0DDC9F",
+          "ivs": [
+            14,
+            27,
+            31,
+            26,
+            15,
+            12
+          ]
+        },
+        {
+          "advance": 967,
+          "pid": "1ECAF489",
+          "ivs": [
+            28,
+            29,
+            22,
+            25,
+            17,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 37,
+      "errorSeconds": -0.9023798792622983,
+      "advance": 887,
+      "pid": "E7AB4A2B",
+      "ivs": [
+        6,
+        21,
+        18,
+        0,
+        2,
+        11
+      ],
+      "stats": [
+        19,
+        12,
+        9,
+        9,
+        12,
+        9
+      ],
+      "nature": "Naive",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 887,
+          "pid": "E7AB4A2B",
+          "ivs": [
+            6,
+            21,
+            18,
+            0,
+            2,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 38,
+      "errorSeconds": -0.4315959336236119,
+      "advance": 915,
+      "pid": "8952915A",
+      "ivs": [
+        15,
+        26,
+        19,
+        21,
+        1,
+        22
+      ],
+      "stats": [
+        20,
+        13,
+        9,
+        10,
+        12,
+        9
+      ],
+      "nature": "Naughty",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 915,
+          "pid": "8952915A",
+          "ivs": [
+            15,
+            26,
+            19,
+            21,
+            1,
+            22
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 39,
+      "errorSeconds": -0.40191506827250123,
+      "advance": 917,
+      "pid": "D8354F4F",
+      "ivs": [
+        21,
+        24,
+        1,
+        2,
+        22,
+        11
+      ],
+      "stats": [
+        20,
+        12,
+        9,
+        8,
+        14,
+        10
+      ],
+      "nature": "Quiet",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 917,
+          "pid": "D8354F4F",
+          "ivs": [
+            21,
+            24,
+            1,
+            2,
+            22,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 40,
+      "errorSeconds": -0.5302445208653808,
+      "advance": 909,
+      "pid": "403DE0AC",
+      "ivs": [
+        6,
+        18,
+        25,
+        5,
+        10,
+        13
+      ],
+      "stats": [
+        19,
+        11,
+        9,
+        9,
+        12,
+        10
+      ],
+      "nature": "Hasty",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 909,
+          "pid": "403DE0AC",
+          "ivs": [
+            6,
+            18,
+            25,
+            5,
+            10,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 41,
+      "errorSeconds": 0.036872503347694874,
+      "advance": 943,
+      "pid": "7BC39673",
+      "ivs": [
+        13,
+        25,
+        12,
+        28,
+        29,
+        28
+      ],
+      "stats": [
+        20,
+        13,
+        9,
+        10,
+        11,
+        11
+      ],
+      "nature": "Adamant",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 943,
+          "pid": "7BC39673",
+          "ivs": [
+            13,
+            25,
+            12,
+            28,
+            29,
+            28
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 42,
+      "errorSeconds": -0.20536653650924563,
+      "advance": 928,
+      "pid": "9DEE2D61",
+      "ivs": [
+        19,
+        24,
+        22,
+        27,
+        30,
+        21
+      ],
+      "stats": [
+        20,
+        12,
+        10,
+        9,
+        13,
+        12
+      ],
+      "nature": "Sassy",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 2,
+      "matches": [
+        {
+          "advance": 928,
+          "pid": "9DEE2D61",
+          "ivs": [
+            19,
+            24,
+            22,
+            27,
+            30,
+            21
+          ]
+        },
+        {
+          "advance": 989,
+          "pid": "A80DB9CE",
+          "ivs": [
+            10,
+            20,
+            22,
+            19,
+            22,
+            29
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 43,
+      "errorSeconds": -0.1918505118228495,
+      "advance": 929,
+      "pid": "5B139DEE",
+      "ivs": [
+        27,
+        30,
+        21,
+        20,
+        2,
+        15
+      ],
+      "stats": [
+        20,
+        10,
+        10,
+        10,
+        12,
+        11
+      ],
+      "nature": "Calm",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 929,
+          "pid": "5B139DEE",
+          "ivs": [
+            27,
+            30,
+            21,
+            20,
+            2,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 44,
+      "errorSeconds": 0.34001730754971504,
+      "advance": 961,
+      "pid": "6A75E2DB",
+      "ivs": [
+        20,
+        28,
+        8,
+        7,
+        10,
+        31
+      ],
+      "stats": [
+        20,
+        12,
+        9,
+        9,
+        10,
+        11
+      ],
+      "nature": "Impish",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 961,
+          "pid": "6A75E2DB",
+          "ivs": [
+            20,
+            28,
+            8,
+            7,
+            10,
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 45,
+      "errorSeconds": 0.517334477044642,
+      "advance": 971,
+      "pid": "97507B58",
+      "ivs": [
+        10,
+        7,
+        7,
+        26,
+        13,
+        11
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        9,
+        12,
+        11
+      ],
+      "nature": "Sassy",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 971,
+          "pid": "97507B58",
+          "ivs": [
+            10,
+            7,
+            7,
+            26,
+            13,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 46,
+      "errorSeconds": -0.11476437700912356,
+      "advance": 934,
+      "pid": "053463C3",
+      "ivs": [
+        27,
+        12,
+        26,
+        30,
+        1,
+        28
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        11,
+        13,
+        11
+      ],
+      "nature": "Mild",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 934,
+          "pid": "053463C3",
+          "ivs": [
+            27,
+            12,
+            26,
+            30,
+            1,
+            28
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 47,
+      "errorSeconds": 0.20088982162997127,
+      "advance": 953,
+      "pid": "8D8D8D28",
+      "ivs": [
+        6,
+        26,
+        17,
+        31,
+        4,
+        23
+      ],
+      "stats": [
+        19,
+        12,
+        9,
+        11,
+        12,
+        11
+      ],
+      "nature": "Bashful",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 953,
+          "pid": "8D8D8D28",
+          "ivs": [
+            6,
+            26,
+            17,
+            31,
+            4,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 48,
+      "errorSeconds": -0.030972790904343128,
+      "advance": 939,
+      "pid": "6C6D0D8B",
+      "ivs": [
+        31,
+        7,
+        23,
+        2,
+        31,
+        7
+      ],
+      "stats": [
+        21,
+        11,
+        10,
+        9,
+        14,
+        9
+      ],
+      "nature": "Rash",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 939,
+          "pid": "6C6D0D8B",
+          "ivs": [
+            31,
+            7,
+            23,
+            2,
+            31,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 49,
+      "errorSeconds": 0.6800728049129248,
+      "advance": 981,
+      "pid": "1CEEA675",
+      "ivs": [
+        1,
+        16,
+        19,
+        26,
+        9,
+        6
+      ],
+      "stats": [
+        19,
+        12,
+        9,
+        10,
+        12,
+        9
+      ],
+      "nature": "Naughty",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 981,
+          "pid": "1CEEA675",
+          "ivs": [
+            1,
+            16,
+            19,
+            26,
+            9,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 50,
+      "errorSeconds": 0.31287422636523843,
+      "advance": 959,
+      "pid": "1938B1FA",
+      "ivs": [
+        27,
+        22,
+        24,
+        21,
+        19,
+        26
+      ],
+      "stats": [
+        20,
+        13,
+        10,
+        10,
+        10,
+        11
+      ],
+      "nature": "Adamant",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 959,
+          "pid": "1938B1FA",
+          "ivs": [
+            27,
+            22,
+            24,
+            21,
+            19,
+            26
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 51,
+      "errorSeconds": 0.7729400922544301,
+      "advance": 987,
+      "pid": "F4FED214",
+      "ivs": [
+        14,
+        14,
+        14,
+        13,
+        0,
+        10
+      ],
+      "stats": [
+        20,
+        12,
+        9,
+        10,
+        10,
+        10
+      ],
+      "nature": "Adamant",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 987,
+          "pid": "F4FED214",
+          "ivs": [
+            14,
+            14,
+            14,
+            13,
+            0,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 52,
+      "errorSeconds": -0.42358201928436756,
+      "advance": 915,
+      "pid": "8952915A",
+      "ivs": [
+        15,
+        26,
+        19,
+        21,
+        1,
+        22
+      ],
+      "stats": [
+        20,
+        13,
+        9,
+        10,
+        12,
+        9
+      ],
+      "nature": "Naughty",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 915,
+          "pid": "8952915A",
+          "ivs": [
+            15,
+            26,
+            19,
+            21,
+            1,
+            22
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 53,
+      "errorSeconds": -0.342344640288502,
+      "advance": 920,
+      "pid": "DF96AEC2",
+      "ivs": [
+        22,
+        15,
+        31,
+        24,
+        0,
+        19
+      ],
+      "stats": [
+        20,
+        11,
+        10,
+        10,
+        12,
+        10
+      ],
+      "nature": "Docile",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 920,
+          "pid": "DF96AEC2",
+          "ivs": [
+            22,
+            15,
+            31,
+            24,
+            0,
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 54,
+      "errorSeconds": 0.9098548223264515,
+      "advance": 995,
+      "pid": "91D2A070",
+      "ivs": [
+        7,
+        20,
+        15,
+        2,
+        29,
+        23
+      ],
+      "stats": [
+        19,
+        13,
+        9,
+        8,
+        13,
+        11
+      ],
+      "nature": "Brave",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 995,
+          "pid": "91D2A070",
+          "ivs": [
+            7,
+            20,
+            15,
+            2,
+            29,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 55,
+      "errorSeconds": -0.840295641683042,
+      "advance": 890,
+      "pid": "09032C40",
+      "ivs": [
+        16,
+        5,
+        20,
+        20,
+        9,
+        28
+      ],
+      "stats": [
+        20,
+        9,
+        11,
+        10,
+        12,
+        11
+      ],
+      "nature": "Bold",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 890,
+          "pid": "09032C40",
+          "ivs": [
+            16,
+            5,
+            20,
+            20,
+            9,
+            28
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 56,
+      "errorSeconds": 0.5700089395977557,
+      "advance": 975,
+      "pid": "CBCFFF36",
+      "ivs": [
+        0,
+        20,
+        29,
+        18,
+        4,
+        19
+      ],
+      "stats": [
+        19,
+        12,
+        11,
+        10,
+        12,
+        9
+      ],
+      "nature": "Lax",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 975,
+          "pid": "CBCFFF36",
+          "ivs": [
+            0,
+            20,
+            29,
+            18,
+            4,
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 57,
+      "errorSeconds": -0.30946723418310285,
+      "advance": 922,
+      "pid": "CC187DF6",
+      "ivs": [
+        29,
+        27,
+        13,
+        7,
+        30,
+        24
+      ],
+      "stats": [
+        20,
+        12,
+        9,
+        9,
+        13,
+        11
+      ],
+      "nature": "Quirky",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 922,
+          "pid": "CC187DF6",
+          "ivs": [
+            29,
+            27,
+            13,
+            7,
+            30,
+            24
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 58,
+      "errorSeconds": -0.6320632416754961,
+      "advance": 903,
+      "pid": "11C11D93",
+      "ivs": [
+        6,
+        16,
+        20,
+        1,
+        23,
+        14
+      ],
+      "stats": [
+        19,
+        11,
+        9,
+        9,
+        14,
+        10
+      ],
+      "nature": "Mild",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 903,
+          "pid": "11C11D93",
+          "ivs": [
+            6,
+            16,
+            20,
+            1,
+            23,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 59,
+      "errorSeconds": 0.8841097583062947,
+      "advance": 993,
+      "pid": "A6A8ABE5",
+      "ivs": [
+        16,
+        3,
+        8,
+        18,
+        14,
+        4
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        10,
+        12,
+        9
+      ],
+      "nature": "Lax",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 2,
+      "matches": [
+        {
+          "advance": 892,
+          "pid": "F13450B0",
+          "ivs": [
+            24,
+            14,
+            15,
+            29,
+            0,
+            19
+          ]
+        },
+        {
+          "advance": 993,
+          "pid": "A6A8ABE5",
+          "ivs": [
+            16,
+            3,
+            8,
+            18,
+            14,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 60,
+      "errorSeconds": -0.6027719485573471,
+      "advance": 905,
+      "pid": "3AE15206",
+      "ivs": [
+        27,
+        24,
+        5,
+        18,
+        30,
+        9
+      ],
+      "stats": [
+        20,
+        13,
+        8,
+        10,
+        13,
+        10
+      ],
+      "nature": "Lonely",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 905,
+          "pid": "3AE15206",
+          "ivs": [
+            27,
+            24,
+            5,
+            18,
+            30,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 61,
+      "errorSeconds": 0.2273637275211513,
+      "advance": 954,
+      "pid": "C7468D8D",
+      "ivs": [
+        31,
+        4,
+        23,
+        13,
+        24,
+        15
+      ],
+      "stats": [
+        21,
+        11,
+        9,
+        10,
+        14,
+        10
+      ],
+      "nature": "Mild",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 954,
+          "pid": "C7468D8D",
+          "ivs": [
+            31,
+            4,
+            23,
+            13,
+            24,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 62,
+      "errorSeconds": -0.8438757206313312,
+      "advance": 890,
+      "pid": "09032C40",
+      "ivs": [
+        16,
+        5,
+        20,
+        20,
+        9,
+        28
+      ],
+      "stats": [
+        20,
+        9,
+        11,
+        10,
+        12,
+        11
+      ],
+      "nature": "Bold",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 890,
+          "pid": "09032C40",
+          "ivs": [
+            16,
+            5,
+            20,
+            20,
+            9,
+            28
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 63,
+      "errorSeconds": 0.412645380012691,
+      "advance": 965,
+      "pid": "6A1BA61F",
+      "ivs": [
+        9,
+        4,
+        29,
+        10,
+        22,
+        7
+      ],
+      "stats": [
+        19,
+        9,
+        10,
+        10,
+        13,
+        11
+      ],
+      "nature": "Calm",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 965,
+          "pid": "6A1BA61F",
+          "ivs": [
+            9,
+            4,
+            29,
+            10,
+            22,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 64,
+      "errorSeconds": 0.6990494155324996,
+      "advance": 982,
+      "pid": "4E011CEE",
+      "ivs": [
+        26,
+        9,
+        6,
+        3,
+        13,
+        11
+      ],
+      "stats": [
+        20,
+        9,
+        9,
+        9,
+        13,
+        10
+      ],
+      "nature": "Modest",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 982,
+          "pid": "4E011CEE",
+          "ivs": [
+            26,
+            9,
+            6,
+            3,
+            13,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 65,
+      "errorSeconds": 0.2011021189391613,
+      "advance": 953,
+      "pid": "8D8D8D28",
+      "ivs": [
+        6,
+        26,
+        17,
+        31,
+        4,
+        23
+      ],
+      "stats": [
+        19,
+        12,
+        9,
+        11,
+        12,
+        11
+      ],
+      "nature": "Bashful",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 953,
+          "pid": "8D8D8D28",
+          "ivs": [
+            6,
+            26,
+            17,
+            31,
+            4,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 66,
+      "errorSeconds": 0.010673243086785078,
+      "advance": 941,
+      "pid": "1FE2DCFF",
+      "ivs": [
+        19,
+        19,
+        5,
+        3,
+        30,
+        30
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        8,
+        13,
+        11
+      ],
+      "nature": "Relaxed",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 941,
+          "pid": "1FE2DCFF",
+          "ivs": [
+            19,
+            19,
+            5,
+            3,
+            30,
+            30
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 67,
+      "errorSeconds": -0.3531165327876806,
+      "advance": 919,
+      "pid": "AEC28715",
+      "ivs": [
+        22,
+        28,
+        23,
+        22,
+        15,
+        31
+      ],
+      "stats": [
+        20,
+        12,
+        10,
+        10,
+        12,
+        11
+      ],
+      "nature": "Quirky",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 919,
+          "pid": "AEC28715",
+          "ivs": [
+            22,
+            28,
+            23,
+            22,
+            15,
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 68,
+      "errorSeconds": -0.7616899255663157,
+      "advance": 895,
+      "pid": "17E3CC1D",
+      "ivs": [
+        20,
+        14,
+        0,
+        29,
+        22,
+        10
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        10,
+        13,
+        10
+      ],
+      "nature": "Bashful",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 895,
+          "pid": "17E3CC1D",
+          "ivs": [
+            20,
+            14,
+            0,
+            29,
+            22,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 69,
+      "errorSeconds": 0.7848744667135179,
+      "advance": 987,
+      "pid": "F4FED214",
+      "ivs": [
+        14,
+        14,
+        14,
+        13,
+        0,
+        10
+      ],
+      "stats": [
+        20,
+        12,
+        9,
+        10,
+        10,
+        10
+      ],
+      "nature": "Adamant",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 987,
+          "pid": "F4FED214",
+          "ivs": [
+            14,
+            14,
+            14,
+            13,
+            0,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 70,
+      "errorSeconds": -0.2676732139661908,
+      "advance": 925,
+      "pid": "9D14E3C7",
+      "ivs": [
+        3,
+        20,
+        6,
+        1,
+        11,
+        11
+      ],
+      "stats": [
+        19,
+        12,
+        9,
+        9,
+        12,
+        10
+      ],
+      "nature": "Bashful",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 925,
+          "pid": "9D14E3C7",
+          "ivs": [
+            3,
+            20,
+            6,
+            1,
+            11,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 71,
+      "errorSeconds": -0.5812486712820828,
+      "advance": 906,
+      "pid": "971B3AE1",
+      "ivs": [
+        18,
+        30,
+        9,
+        12,
+        5,
+        24
+      ],
+      "stats": [
+        20,
+        12,
+        8,
+        11,
+        12,
+        11
+      ],
+      "nature": "Hasty",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 906,
+          "pid": "971B3AE1",
+          "ivs": [
+            18,
+            30,
+            9,
+            12,
+            5,
+            24
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 72,
+      "errorSeconds": 0.8272766298614442,
+      "advance": 990,
+      "pid": "DA8AA80D",
+      "ivs": [
+        19,
+        22,
+        29,
+        5,
+        31,
+        10
+      ],
+      "stats": [
+        20,
+        13,
+        10,
+        8,
+        13,
+        10
+      ],
+      "nature": "Brave",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 990,
+          "pid": "DA8AA80D",
+          "ivs": [
+            19,
+            22,
+            29,
+            5,
+            31,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 73,
+      "errorSeconds": -0.882113175932318,
+      "advance": 888,
+      "pid": "CAA6E7AB",
+      "ivs": [
+        0,
+        2,
+        11,
+        3,
+        8,
+        2
+      ],
+      "stats": [
+        19,
+        9,
+        9,
+        9,
+        13,
+        10
+      ],
+      "nature": "Modest",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 888,
+          "pid": "CAA6E7AB",
+          "ivs": [
+            0,
+            2,
+            11,
+            3,
+            8,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 74,
+      "errorSeconds": -0.21161060966551304,
+      "advance": 928,
+      "pid": "9DEE2D61",
+      "ivs": [
+        19,
+        24,
+        22,
+        27,
+        30,
+        21
+      ],
+      "stats": [
+        20,
+        12,
+        10,
+        9,
+        13,
+        12
+      ],
+      "nature": "Sassy",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 2,
+      "matches": [
+        {
+          "advance": 928,
+          "pid": "9DEE2D61",
+          "ivs": [
+            19,
+            24,
+            22,
+            27,
+            30,
+            21
+          ]
+        },
+        {
+          "advance": 989,
+          "pid": "A80DB9CE",
+          "ivs": [
+            10,
+            20,
+            22,
+            19,
+            22,
+            29
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 75,
+      "errorSeconds": 0.9117517177946866,
+      "advance": 995,
+      "pid": "91D2A070",
+      "ivs": [
+        7,
+        20,
+        15,
+        2,
+        29,
+        23
+      ],
+      "stats": [
+        19,
+        13,
+        9,
+        8,
+        13,
+        11
+      ],
+      "nature": "Brave",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 995,
+          "pid": "91D2A070",
+          "ivs": [
+            7,
+            20,
+            15,
+            2,
+            29,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 76,
+      "errorSeconds": 0.7125359666533768,
+      "advance": 983,
+      "pid": "193A4E01",
+      "ivs": [
+        3,
+        13,
+        11,
+        12,
+        29,
+        14
+      ],
+      "stats": [
+        19,
+        11,
+        9,
+        9,
+        13,
+        10
+      ],
+      "nature": "Relaxed",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 983,
+          "pid": "193A4E01",
+          "ivs": [
+            3,
+            13,
+            11,
+            12,
+            29,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 77,
+      "errorSeconds": -0.45072153583168983,
+      "advance": 914,
+      "pid": "915A4265",
+      "ivs": [
+        18,
+        10,
+        2,
+        15,
+        26,
+        19
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        9,
+        13,
+        10
+      ],
+      "nature": "Relaxed",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 914,
+          "pid": "915A4265",
+          "ivs": [
+            18,
+            10,
+            2,
+            15,
+            26,
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 78,
+      "errorSeconds": 0.3033325490541756,
+      "advance": 959,
+      "pid": "1938B1FA",
+      "ivs": [
+        27,
+        22,
+        24,
+        21,
+        19,
+        26
+      ],
+      "stats": [
+        20,
+        13,
+        10,
+        10,
+        10,
+        11
+      ],
+      "nature": "Adamant",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 959,
+          "pid": "1938B1FA",
+          "ivs": [
+            27,
+            22,
+            24,
+            21,
+            19,
+            26
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 79,
+      "errorSeconds": 0.5105026243254542,
+      "advance": 971,
+      "pid": "97507B58",
+      "ivs": [
+        10,
+        7,
+        7,
+        26,
+        13,
+        11
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        9,
+        12,
+        11
+      ],
+      "nature": "Sassy",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 971,
+          "pid": "97507B58",
+          "ivs": [
+            10,
+            7,
+            7,
+            26,
+            13,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 80,
+      "errorSeconds": -0.35968406684696674,
+      "advance": 919,
+      "pid": "AEC28715",
+      "ivs": [
+        22,
+        28,
+        23,
+        22,
+        15,
+        31
+      ],
+      "stats": [
+        20,
+        12,
+        10,
+        10,
+        12,
+        11
+      ],
+      "nature": "Quirky",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 919,
+          "pid": "AEC28715",
+          "ivs": [
+            22,
+            28,
+            23,
+            22,
+            15,
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 81,
+      "errorSeconds": -0.46309086261317134,
+      "advance": 913,
+      "pid": "4265BDD3",
+      "ivs": [
+        26,
+        10,
+        4,
+        18,
+        10,
+        2
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        10,
+        12,
+        10
+      ],
+      "nature": "Serious",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 913,
+          "pid": "4265BDD3",
+          "ivs": [
+            26,
+            10,
+            4,
+            18,
+            10,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 82,
+      "errorSeconds": -0.8706194907426834,
+      "advance": 889,
+      "pid": "2C40CAA6",
+      "ivs": [
+        3,
+        8,
+        2,
+        16,
+        5,
+        20
+      ],
+      "stats": [
+        19,
+        11,
+        8,
+        11,
+        12,
+        11
+      ],
+      "nature": "Hasty",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 889,
+          "pid": "2C40CAA6",
+          "ivs": [
+            3,
+            8,
+            2,
+            16,
+            5,
+            20
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 83,
+      "errorSeconds": 0.38792533427476883,
+      "advance": 964,
+      "pid": "A61F7D47",
+      "ivs": [
+        27,
+        16,
+        26,
+        9,
+        4,
+        29
+      ],
+      "stats": [
+        20,
+        11,
+        10,
+        9,
+        12,
+        11
+      ],
+      "nature": "Bashful",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 964,
+          "pid": "A61F7D47",
+          "ivs": [
+            27,
+            16,
+            26,
+            9,
+            4,
+            29
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 84,
+      "errorSeconds": 0.10364680644124746,
+      "advance": 947,
+      "pid": "A571B6F4",
+      "ivs": [
+        13,
+        1,
+        27,
+        4,
+        18,
+        1
+      ],
+      "stats": [
+        20,
+        11,
+        10,
+        9,
+        13,
+        9
+      ],
+      "nature": "Rash",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 947,
+          "pid": "A571B6F4",
+          "ivs": [
+            13,
+            1,
+            27,
+            4,
+            18,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 85,
+      "errorSeconds": 0.9423598311841488,
+      "advance": 997,
+      "pid": "DFA2BE87",
+      "ivs": [
+        25,
+        4,
+        11,
+        21,
+        13,
+        20
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        10,
+        12,
+        11
+      ],
+      "nature": "Hardy",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 997,
+          "pid": "DFA2BE87",
+          "ivs": [
+            25,
+            4,
+            11,
+            21,
+            13,
+            20
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 86,
+      "errorSeconds": 0.4657046962529421,
+      "advance": 968,
+      "pid": "DBBC1ECA",
+      "ivs": [
+        25,
+        17,
+        10,
+        24,
+        26,
+        30
+      ],
+      "stats": [
+        20,
+        12,
+        9,
+        10,
+        13,
+        9
+      ],
+      "nature": "Naughty",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 2,
+      "matches": [
+        {
+          "advance": 958,
+          "pid": "B1FA7F6E",
+          "ivs": [
+            24,
+            9,
+            6,
+            27,
+            22,
+            24
+          ]
+        },
+        {
+          "advance": 968,
+          "pid": "DBBC1ECA",
+          "ivs": [
+            25,
+            17,
+            10,
+            24,
+            26,
+            30
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 87,
+      "errorSeconds": -0.5304382289759815,
+      "advance": 909,
+      "pid": "403DE0AC",
+      "ivs": [
+        6,
+        18,
+        25,
+        5,
+        10,
+        13
+      ],
+      "stats": [
+        19,
+        11,
+        9,
+        9,
+        12,
+        10
+      ],
+      "nature": "Hasty",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 909,
+          "pid": "403DE0AC",
+          "ivs": [
+            6,
+            18,
+            25,
+            5,
+            10,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 88,
+      "errorSeconds": 0.6973889404907823,
+      "advance": 982,
+      "pid": "4E011CEE",
+      "ivs": [
+        26,
+        9,
+        6,
+        3,
+        13,
+        11
+      ],
+      "stats": [
+        20,
+        9,
+        9,
+        9,
+        13,
+        10
+      ],
+      "nature": "Modest",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 982,
+          "pid": "4E011CEE",
+          "ivs": [
+            26,
+            9,
+            6,
+            3,
+            13,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 89,
+      "errorSeconds": 0.16641822829842567,
+      "advance": 950,
+      "pid": "38AF8644",
+      "ivs": [
+        26,
+        19,
+        0,
+        8,
+        9,
+        3
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        9,
+        12,
+        10
+      ],
+      "nature": "Bashful",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 950,
+          "pid": "38AF8644",
+          "ivs": [
+            26,
+            19,
+            0,
+            8,
+            9,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 90,
+      "errorSeconds": -0.591839637607336,
+      "advance": 905,
+      "pid": "3AE15206",
+      "ivs": [
+        27,
+        24,
+        5,
+        18,
+        30,
+        9
+      ],
+      "stats": [
+        20,
+        13,
+        8,
+        10,
+        13,
+        10
+      ],
+      "nature": "Lonely",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 905,
+          "pid": "3AE15206",
+          "ivs": [
+            27,
+            24,
+            5,
+            18,
+            30,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 91,
+      "errorSeconds": 0.07516432786360383,
+      "advance": 945,
+      "pid": "73BCB32D",
+      "ivs": [
+        20,
+        23,
+        13,
+        17,
+        11,
+        9
+      ],
+      "stats": [
+        20,
+        13,
+        9,
+        9,
+        12,
+        10
+      ],
+      "nature": "Brave",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 945,
+          "pid": "73BCB32D",
+          "ivs": [
+            20,
+            23,
+            13,
+            17,
+            11,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 92,
+      "errorSeconds": 0.7926535797305405,
+      "advance": 988,
+      "pid": "B9CEF4FE",
+      "ivs": [
+        13,
+        0,
+        10,
+        10,
+        20,
+        22
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        10,
+        14,
+        9
+      ],
+      "nature": "Rash",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 2,
+      "matches": [
+        {
+          "advance": 921,
+          "pid": "7DF6DF96",
+          "ivs": [
+            24,
+            0,
+            19,
+            29,
+            27,
+            13
+          ]
+        },
+        {
+          "advance": 988,
+          "pid": "B9CEF4FE",
+          "ivs": [
+            13,
+            0,
+            10,
+            10,
+            20,
+            22
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 93,
+      "errorSeconds": 0.04657874861732125,
+      "advance": 943,
+      "pid": "7BC39673",
+      "ivs": [
+        13,
+        25,
+        12,
+        28,
+        29,
+        28
+      ],
+      "stats": [
+        20,
+        13,
+        9,
+        10,
+        11,
+        11
+      ],
+      "nature": "Adamant",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 943,
+          "pid": "7BC39673",
+          "ivs": [
+            13,
+            25,
+            12,
+            28,
+            29,
+            28
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 94,
+      "errorSeconds": -0.7303504454903305,
+      "advance": 897,
+      "pid": "2ADD01D4",
+      "ivs": [
+        29,
+        5,
+        31,
+        16,
+        8,
+        25
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        10,
+        12,
+        12
+      ],
+      "nature": "Gentle",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 897,
+          "pid": "2ADD01D4",
+          "ivs": [
+            29,
+            5,
+            31,
+            16,
+            8,
+            25
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 95,
+      "errorSeconds": 0.6967709534801543,
+      "advance": 982,
+      "pid": "4E011CEE",
+      "ivs": [
+        26,
+        9,
+        6,
+        3,
+        13,
+        11
+      ],
+      "stats": [
+        20,
+        9,
+        9,
+        9,
+        13,
+        10
+      ],
+      "nature": "Modest",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 982,
+          "pid": "4E011CEE",
+          "ivs": [
+            26,
+            9,
+            6,
+            3,
+            13,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 96,
+      "errorSeconds": -0.5684629073366523,
+      "advance": 907,
+      "pid": "27D2971B",
+      "ivs": [
+        12,
+        5,
+        24,
+        29,
+        1,
+        16
+      ],
+      "stats": [
+        20,
+        11,
+        10,
+        9,
+        13,
+        10
+      ],
+      "nature": "Quiet",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 907,
+          "pid": "27D2971B",
+          "ivs": [
+            12,
+            5,
+            24,
+            29,
+            1,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 97,
+      "errorSeconds": -0.6549386796541512,
+      "advance": 901,
+      "pid": "4C7462F0",
+      "ivs": [
+        19,
+        12,
+        7,
+        1,
+        14,
+        4
+      ],
+      "stats": [
+        20,
+        9,
+        9,
+        9,
+        12,
+        11
+      ],
+      "nature": "Calm",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 901,
+          "pid": "4C7462F0",
+          "ivs": [
+            19,
+            12,
+            7,
+            1,
+            14,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 98,
+      "errorSeconds": -0.3368634129874408,
+      "advance": 920,
+      "pid": "DF96AEC2",
+      "ivs": [
+        22,
+        15,
+        31,
+        24,
+        0,
+        19
+      ],
+      "stats": [
+        20,
+        11,
+        10,
+        10,
+        12,
+        10
+      ],
+      "nature": "Docile",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 920,
+          "pid": "DF96AEC2",
+          "ivs": [
+            22,
+            15,
+            31,
+            24,
+            0,
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 99,
+      "errorSeconds": 0.6164052169770002,
+      "advance": 977,
+      "pid": "4C927680",
+      "ivs": [
+        13,
+        7,
+        12,
+        20,
+        13,
+        23
+      ],
+      "stats": [
+        20,
+        11,
+        9,
+        10,
+        10,
+        11
+      ],
+      "nature": "Impish",
+      "gender": "male",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 977,
+          "pid": "4C927680",
+          "ivs": [
+            13,
+            7,
+            12,
+            20,
+            13,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 100,
+      "errorSeconds": 0.8294859933666885,
+      "advance": 990,
+      "pid": "DA8AA80D",
+      "ivs": [
+        19,
+        22,
+        29,
+        5,
+        31,
+        10
+      ],
+      "stats": [
+        20,
+        13,
+        10,
+        8,
+        13,
+        10
+      ],
+      "nature": "Brave",
+      "gender": "female",
+      "correctRetained": true,
+      "possiblePids": 1,
+      "matches": [
+        {
+          "advance": 990,
+          "pid": "DA8AA80D",
+          "ivs": [
+            19,
+            22,
+            29,
+            5,
+            31,
+            10
+          ]
+        }
+      ]
+    }
+  ]
+}

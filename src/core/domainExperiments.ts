@@ -5,6 +5,7 @@ import { SUBSTRUCT_POSITIONS } from "./pokemon";
 import { ITEM_CATALOG, type rankItemExperiments } from "./experiments";
 import {
   controlledActions,
+  controlledFacts,
   type rankControlledExperiments,
 } from "./controlledExperiments";
 import { experimentChecksumSupports, type Hypothesis } from "./sid";
@@ -84,12 +85,29 @@ export function rankDomainExperiments(
       snapshot: s,
       plain: knownPlaintext({ ...s.knownFacts, ...identity }),
     }));
-  const actions = controlledActions(source, identity.species, identity);
+  const keyMasks = Array.from({ length: 8 }, (_, n) =>
+    inference.orders.reduce(
+      (mask, order) =>
+        inference.orderKeyCounts[order][n].reduce(
+          (m, count, digit) => (count ? m | (1 << digit) : m),
+          mask,
+        ),
+      0,
+    ),
+  );
+  const actions = controlledActions(
+    source,
+    identity.species,
+    identity,
+    keyMasks,
+  );
   const rank = (id: string, changes: KnownFacts, logical: number[]) => {
-    const facts = { ...original, ...changes };
+    const action = actions.find((a) => a.id === id);
+    const facts = action
+      ? controlledFacts(original, action)
+      : { ...original, ...changes };
     delete facts.checksum;
     // Match the recorded experiment's conservative side-effect policy.
-    const action = actions.find((a) => a.id === id);
     if (action?.kind !== "moves" && changes.friendship === undefined)
       delete facts.friendship;
     const plain = knownPlaintext(facts);

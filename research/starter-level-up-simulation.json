@@ -1,0 +1,1333 @@
+{
+  "assumptions": {
+    "species": "Torchic",
+    "window": {
+      "minAdvance": 881,
+      "maxAdvance": 1001
+    },
+    "training": "Solo defeat only level-2 wild Zigzagoon on Route 101 after Birch's battle; run from other encounters. No EXP sharing, held EXP/EV modifiers or Pokerus.",
+    "startingExperience": 152,
+    "startingSpeedEvs": 1,
+    "expPerAdditionalBattle": 17,
+    "speedEvsPerAdditionalBattle": 1,
+    "statOrder": [
+      "HP",
+      "Attack",
+      "Defense",
+      "Speed",
+      "Sp. Attack",
+      "Sp. Defense"
+    ],
+    "limitation": "Earliest levels are conditional on this explicit battle log; a different route can change the rounding checkpoints."
+  },
+  "rows": [
+    {
+      "trial": 24,
+      "actualAdvance": 958,
+      "actualPid": "B1FA7F6E",
+      "firstUniqueLevel": 6,
+      "checks": [
+        {
+          "level": 5,
+          "experience": 152,
+          "additionalBattles": 0,
+          "evs": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 958,
+              "pid": "B1FA7F6E",
+              "ivs": [
+                24,
+                9,
+                6,
+                27,
+                22,
+                24
+              ],
+              "stats": [
+                20,
+                12,
+                9,
+                10,
+                13,
+                9
+              ]
+            },
+            {
+              "advance": 968,
+              "pid": "DBBC1ECA",
+              "ivs": [
+                25,
+                17,
+                10,
+                24,
+                26,
+                30
+              ],
+              "stats": [
+                20,
+                12,
+                9,
+                10,
+                13,
+                9
+              ]
+            }
+          ],
+          "distinguishingStats": [],
+          "remaining": [
+            {
+              "advance": 958,
+              "pid": "B1FA7F6E",
+              "ivs": [
+                24,
+                9,
+                6,
+                27,
+                22,
+                24
+              ]
+            },
+            {
+              "advance": 968,
+              "pid": "DBBC1ECA",
+              "ivs": [
+                25,
+                17,
+                10,
+                24,
+                26,
+                30
+              ]
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "experience": 186,
+          "additionalBattles": 2,
+          "evs": [
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 958,
+              "pid": "B1FA7F6E",
+              "ivs": [
+                24,
+                9,
+                6,
+                27,
+                22,
+                24
+              ],
+              "stats": [
+                22,
+                13,
+                10,
+                12,
+                14,
+                10
+              ]
+            },
+            {
+              "advance": 968,
+              "pid": "DBBC1ECA",
+              "ivs": [
+                25,
+                17,
+                10,
+                24,
+                26,
+                30
+              ],
+              "stats": [
+                22,
+                14,
+                10,
+                11,
+                14,
+                10
+              ]
+            }
+          ],
+          "distinguishingStats": [
+            "Attack",
+            "Speed"
+          ],
+          "remaining": [
+            {
+              "advance": 958,
+              "pid": "B1FA7F6E",
+              "ivs": [
+                24,
+                9,
+                6,
+                27,
+                22,
+                24
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 35,
+      "actualAdvance": 892,
+      "actualPid": "F13450B0",
+      "firstUniqueLevel": 6,
+      "checks": [
+        {
+          "level": 5,
+          "experience": 152,
+          "additionalBattles": 0,
+          "evs": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 892,
+              "pid": "F13450B0",
+              "ivs": [
+                24,
+                14,
+                15,
+                29,
+                0,
+                19
+              ],
+              "stats": [
+                20,
+                11,
+                9,
+                10,
+                12,
+                9
+              ]
+            },
+            {
+              "advance": 993,
+              "pid": "A6A8ABE5",
+              "ivs": [
+                16,
+                3,
+                8,
+                18,
+                14,
+                4
+              ],
+              "stats": [
+                20,
+                11,
+                9,
+                10,
+                12,
+                9
+              ]
+            }
+          ],
+          "distinguishingStats": [],
+          "remaining": [
+            {
+              "advance": 892,
+              "pid": "F13450B0",
+              "ivs": [
+                24,
+                14,
+                15,
+                29,
+                0,
+                19
+              ]
+            },
+            {
+              "advance": 993,
+              "pid": "A6A8ABE5",
+              "ivs": [
+                16,
+                3,
+                8,
+                18,
+                14,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "experience": 186,
+          "additionalBattles": 2,
+          "evs": [
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 892,
+              "pid": "F13450B0",
+              "ivs": [
+                24,
+                14,
+                15,
+                29,
+                0,
+                19
+              ],
+              "stats": [
+                22,
+                13,
+                11,
+                12,
+                13,
+                10
+              ]
+            },
+            {
+              "advance": 993,
+              "pid": "A6A8ABE5",
+              "ivs": [
+                16,
+                3,
+                8,
+                18,
+                14,
+                4
+              ],
+              "stats": [
+                22,
+                12,
+                11,
+                11,
+                14,
+                9
+              ]
+            }
+          ],
+          "distinguishingStats": [
+            "Attack",
+            "Speed",
+            "Sp. Attack",
+            "Sp. Defense"
+          ],
+          "remaining": [
+            {
+              "advance": 892,
+              "pid": "F13450B0",
+              "ivs": [
+                24,
+                14,
+                15,
+                29,
+                0,
+                19
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 36,
+      "actualAdvance": 967,
+      "actualPid": "1ECAF489",
+      "firstUniqueLevel": 6,
+      "checks": [
+        {
+          "level": 5,
+          "experience": 152,
+          "additionalBattles": 0,
+          "evs": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 956,
+              "pid": "BF0DDC9F",
+              "ivs": [
+                14,
+                27,
+                31,
+                26,
+                15,
+                12
+              ],
+              "stats": [
+                20,
+                13,
+                10,
+                10,
+                10,
+                10
+              ]
+            },
+            {
+              "advance": 967,
+              "pid": "1ECAF489",
+              "ivs": [
+                28,
+                29,
+                22,
+                25,
+                17,
+                10
+              ],
+              "stats": [
+                20,
+                13,
+                10,
+                10,
+                10,
+                10
+              ]
+            }
+          ],
+          "distinguishingStats": [],
+          "remaining": [
+            {
+              "advance": 956,
+              "pid": "BF0DDC9F",
+              "ivs": [
+                14,
+                27,
+                31,
+                26,
+                15,
+                12
+              ]
+            },
+            {
+              "advance": 967,
+              "pid": "1ECAF489",
+              "ivs": [
+                28,
+                29,
+                22,
+                25,
+                17,
+                10
+              ]
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "experience": 186,
+          "additionalBattles": 2,
+          "evs": [
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 956,
+              "pid": "BF0DDC9F",
+              "ivs": [
+                14,
+                27,
+                31,
+                26,
+                15,
+                12
+              ],
+              "stats": [
+                22,
+                14,
+                11,
+                11,
+                12,
+                11
+              ]
+            },
+            {
+              "advance": 967,
+              "pid": "1ECAF489",
+              "ivs": [
+                28,
+                29,
+                22,
+                25,
+                17,
+                10
+              ],
+              "stats": [
+                23,
+                14,
+                11,
+                11,
+                12,
+                11
+              ]
+            }
+          ],
+          "distinguishingStats": [
+            "HP"
+          ],
+          "remaining": [
+            {
+              "advance": 967,
+              "pid": "1ECAF489",
+              "ivs": [
+                28,
+                29,
+                22,
+                25,
+                17,
+                10
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 42,
+      "actualAdvance": 928,
+      "actualPid": "9DEE2D61",
+      "firstUniqueLevel": 6,
+      "checks": [
+        {
+          "level": 5,
+          "experience": 152,
+          "additionalBattles": 0,
+          "evs": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 928,
+              "pid": "9DEE2D61",
+              "ivs": [
+                19,
+                24,
+                22,
+                27,
+                30,
+                21
+              ],
+              "stats": [
+                20,
+                12,
+                10,
+                9,
+                13,
+                12
+              ]
+            },
+            {
+              "advance": 989,
+              "pid": "A80DB9CE",
+              "ivs": [
+                10,
+                20,
+                22,
+                19,
+                22,
+                29
+              ],
+              "stats": [
+                20,
+                12,
+                10,
+                9,
+                13,
+                12
+              ]
+            }
+          ],
+          "distinguishingStats": [],
+          "remaining": [
+            {
+              "advance": 928,
+              "pid": "9DEE2D61",
+              "ivs": [
+                19,
+                24,
+                22,
+                27,
+                30,
+                21
+              ]
+            },
+            {
+              "advance": 989,
+              "pid": "A80DB9CE",
+              "ivs": [
+                10,
+                20,
+                22,
+                19,
+                22,
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "experience": 186,
+          "additionalBattles": 2,
+          "evs": [
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 928,
+              "pid": "9DEE2D61",
+              "ivs": [
+                19,
+                24,
+                22,
+                27,
+                30,
+                21
+              ],
+              "stats": [
+                22,
+                13,
+                11,
+                10,
+                15,
+                13
+              ]
+            },
+            {
+              "advance": 989,
+              "pid": "A80DB9CE",
+              "ivs": [
+                10,
+                20,
+                22,
+                19,
+                22,
+                29
+              ],
+              "stats": [
+                22,
+                13,
+                11,
+                9,
+                14,
+                13
+              ]
+            }
+          ],
+          "distinguishingStats": [
+            "Speed",
+            "Sp. Attack"
+          ],
+          "remaining": [
+            {
+              "advance": 928,
+              "pid": "9DEE2D61",
+              "ivs": [
+                19,
+                24,
+                22,
+                27,
+                30,
+                21
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 59,
+      "actualAdvance": 993,
+      "actualPid": "A6A8ABE5",
+      "firstUniqueLevel": 6,
+      "checks": [
+        {
+          "level": 5,
+          "experience": 152,
+          "additionalBattles": 0,
+          "evs": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 892,
+              "pid": "F13450B0",
+              "ivs": [
+                24,
+                14,
+                15,
+                29,
+                0,
+                19
+              ],
+              "stats": [
+                20,
+                11,
+                9,
+                10,
+                12,
+                9
+              ]
+            },
+            {
+              "advance": 993,
+              "pid": "A6A8ABE5",
+              "ivs": [
+                16,
+                3,
+                8,
+                18,
+                14,
+                4
+              ],
+              "stats": [
+                20,
+                11,
+                9,
+                10,
+                12,
+                9
+              ]
+            }
+          ],
+          "distinguishingStats": [],
+          "remaining": [
+            {
+              "advance": 892,
+              "pid": "F13450B0",
+              "ivs": [
+                24,
+                14,
+                15,
+                29,
+                0,
+                19
+              ]
+            },
+            {
+              "advance": 993,
+              "pid": "A6A8ABE5",
+              "ivs": [
+                16,
+                3,
+                8,
+                18,
+                14,
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "experience": 186,
+          "additionalBattles": 2,
+          "evs": [
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 892,
+              "pid": "F13450B0",
+              "ivs": [
+                24,
+                14,
+                15,
+                29,
+                0,
+                19
+              ],
+              "stats": [
+                22,
+                13,
+                11,
+                12,
+                13,
+                10
+              ]
+            },
+            {
+              "advance": 993,
+              "pid": "A6A8ABE5",
+              "ivs": [
+                16,
+                3,
+                8,
+                18,
+                14,
+                4
+              ],
+              "stats": [
+                22,
+                12,
+                11,
+                11,
+                14,
+                9
+              ]
+            }
+          ],
+          "distinguishingStats": [
+            "Attack",
+            "Speed",
+            "Sp. Attack",
+            "Sp. Defense"
+          ],
+          "remaining": [
+            {
+              "advance": 993,
+              "pid": "A6A8ABE5",
+              "ivs": [
+                16,
+                3,
+                8,
+                18,
+                14,
+                4
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 74,
+      "actualAdvance": 928,
+      "actualPid": "9DEE2D61",
+      "firstUniqueLevel": 6,
+      "checks": [
+        {
+          "level": 5,
+          "experience": 152,
+          "additionalBattles": 0,
+          "evs": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 928,
+              "pid": "9DEE2D61",
+              "ivs": [
+                19,
+                24,
+                22,
+                27,
+                30,
+                21
+              ],
+              "stats": [
+                20,
+                12,
+                10,
+                9,
+                13,
+                12
+              ]
+            },
+            {
+              "advance": 989,
+              "pid": "A80DB9CE",
+              "ivs": [
+                10,
+                20,
+                22,
+                19,
+                22,
+                29
+              ],
+              "stats": [
+                20,
+                12,
+                10,
+                9,
+                13,
+                12
+              ]
+            }
+          ],
+          "distinguishingStats": [],
+          "remaining": [
+            {
+              "advance": 928,
+              "pid": "9DEE2D61",
+              "ivs": [
+                19,
+                24,
+                22,
+                27,
+                30,
+                21
+              ]
+            },
+            {
+              "advance": 989,
+              "pid": "A80DB9CE",
+              "ivs": [
+                10,
+                20,
+                22,
+                19,
+                22,
+                29
+              ]
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "experience": 186,
+          "additionalBattles": 2,
+          "evs": [
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 928,
+              "pid": "9DEE2D61",
+              "ivs": [
+                19,
+                24,
+                22,
+                27,
+                30,
+                21
+              ],
+              "stats": [
+                22,
+                13,
+                11,
+                10,
+                15,
+                13
+              ]
+            },
+            {
+              "advance": 989,
+              "pid": "A80DB9CE",
+              "ivs": [
+                10,
+                20,
+                22,
+                19,
+                22,
+                29
+              ],
+              "stats": [
+                22,
+                13,
+                11,
+                9,
+                14,
+                13
+              ]
+            }
+          ],
+          "distinguishingStats": [
+            "Speed",
+            "Sp. Attack"
+          ],
+          "remaining": [
+            {
+              "advance": 928,
+              "pid": "9DEE2D61",
+              "ivs": [
+                19,
+                24,
+                22,
+                27,
+                30,
+                21
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 86,
+      "actualAdvance": 968,
+      "actualPid": "DBBC1ECA",
+      "firstUniqueLevel": 6,
+      "checks": [
+        {
+          "level": 5,
+          "experience": 152,
+          "additionalBattles": 0,
+          "evs": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 958,
+              "pid": "B1FA7F6E",
+              "ivs": [
+                24,
+                9,
+                6,
+                27,
+                22,
+                24
+              ],
+              "stats": [
+                20,
+                12,
+                9,
+                10,
+                13,
+                9
+              ]
+            },
+            {
+              "advance": 968,
+              "pid": "DBBC1ECA",
+              "ivs": [
+                25,
+                17,
+                10,
+                24,
+                26,
+                30
+              ],
+              "stats": [
+                20,
+                12,
+                9,
+                10,
+                13,
+                9
+              ]
+            }
+          ],
+          "distinguishingStats": [],
+          "remaining": [
+            {
+              "advance": 958,
+              "pid": "B1FA7F6E",
+              "ivs": [
+                24,
+                9,
+                6,
+                27,
+                22,
+                24
+              ]
+            },
+            {
+              "advance": 968,
+              "pid": "DBBC1ECA",
+              "ivs": [
+                25,
+                17,
+                10,
+                24,
+                26,
+                30
+              ]
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "experience": 186,
+          "additionalBattles": 2,
+          "evs": [
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 958,
+              "pid": "B1FA7F6E",
+              "ivs": [
+                24,
+                9,
+                6,
+                27,
+                22,
+                24
+              ],
+              "stats": [
+                22,
+                13,
+                10,
+                12,
+                14,
+                10
+              ]
+            },
+            {
+              "advance": 968,
+              "pid": "DBBC1ECA",
+              "ivs": [
+                25,
+                17,
+                10,
+                24,
+                26,
+                30
+              ],
+              "stats": [
+                22,
+                14,
+                10,
+                11,
+                14,
+                10
+              ]
+            }
+          ],
+          "distinguishingStats": [
+            "Attack",
+            "Speed"
+          ],
+          "remaining": [
+            {
+              "advance": 968,
+              "pid": "DBBC1ECA",
+              "ivs": [
+                25,
+                17,
+                10,
+                24,
+                26,
+                30
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "trial": 92,
+      "actualAdvance": 988,
+      "actualPid": "B9CEF4FE",
+      "firstUniqueLevel": 6,
+      "checks": [
+        {
+          "level": 5,
+          "experience": 152,
+          "additionalBattles": 0,
+          "evs": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 921,
+              "pid": "7DF6DF96",
+              "ivs": [
+                24,
+                0,
+                19,
+                29,
+                27,
+                13
+              ],
+              "stats": [
+                20,
+                11,
+                9,
+                10,
+                14,
+                9
+              ]
+            },
+            {
+              "advance": 988,
+              "pid": "B9CEF4FE",
+              "ivs": [
+                13,
+                0,
+                10,
+                10,
+                20,
+                22
+              ],
+              "stats": [
+                20,
+                11,
+                9,
+                10,
+                14,
+                9
+              ]
+            }
+          ],
+          "distinguishingStats": [],
+          "remaining": [
+            {
+              "advance": 921,
+              "pid": "7DF6DF96",
+              "ivs": [
+                24,
+                0,
+                19,
+                29,
+                27,
+                13
+              ]
+            },
+            {
+              "advance": 988,
+              "pid": "B9CEF4FE",
+              "ivs": [
+                13,
+                0,
+                10,
+                10,
+                20,
+                22
+              ]
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "experience": 186,
+          "additionalBattles": 2,
+          "evs": [
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          "pair": [
+            {
+              "advance": 921,
+              "pid": "7DF6DF96",
+              "ivs": [
+                24,
+                0,
+                19,
+                29,
+                27,
+                13
+              ],
+              "stats": [
+                22,
+                12,
+                10,
+                12,
+                16,
+                9
+              ]
+            },
+            {
+              "advance": 988,
+              "pid": "B9CEF4FE",
+              "ivs": [
+                13,
+                0,
+                10,
+                10,
+                20,
+                22
+              ],
+              "stats": [
+                22,
+                12,
+                10,
+                11,
+                15,
+                10
+              ]
+            }
+          ],
+          "distinguishingStats": [
+            "Speed",
+            "Sp. Attack",
+            "Sp. Defense"
+          ],
+          "remaining": [
+            {
+              "advance": 988,
+              "pid": "B9CEF4FE",
+              "ivs": [
+                13,
+                0,
+                10,
+                10,
+                20,
+                22
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

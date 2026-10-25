@@ -1,6 +1,8 @@
 node_modules/
 dist/
 release/
+# Generated reports, screenshots and local investigation backups
+/artifacts/
 *.log
 .env*
 .DS_Store

@@ -15,6 +15,7 @@ import { experimentChecksumSupports } from "./sid";
 import { rankCombinedPixels } from "./checksum";
 import { experimentChecksumDelta } from "./checksumExperiments";
 import { isActiveAssumption } from "./session";
+import { evTrainingPlan, type EvTrainingPlan } from "./evTraining";
 import {
   moveLearningActions,
   learningSwapVariants,
@@ -23,7 +24,7 @@ import {
 } from "./moveLearningExperiments";
 
 export type ActionDescription = {
-  kind: "moves" | "candy" | "vitamin" | "pokeblock" | "pp" | "learn";
+  kind: "moves" | "candy" | "vitamin" | "pokeblock" | "pp" | "learn" | "ev";
   name: string;
   instructions: string;
   restore: string;
@@ -42,6 +43,7 @@ export type ControlledAction = ActionDescription & {
   logical: number[];
   level?: number;
   cost?: number; // Practical steps, used only after information ties.
+  training?: EvTrainingPlan;
 };
 const digits = (byte: number, length: number) =>
   Array.from({ length: length * 2 }, (_, n) => byte * 2 + n);
@@ -86,6 +88,7 @@ export function controlledActions(
   source: Snapshot,
   species?: number,
   identity: KnownFacts = {},
+  keyMasks: number[] = Array(8).fill(65535),
 ): ControlledAction[] {
   const f = source.knownFacts,
     actions: ControlledAction[] = [];
@@ -245,7 +248,106 @@ export function controlledActions(
         logical: digits(30, 6),
       });
   }
+  // Defense and Speed occupy key digits 5-8: the four SID positions. Retain
+  // the cheapest checkpoint for each distinct set of informative nibble tests.
+  for (const stat of [2, 3]) {
+    const checkpoints = new Map<string, ControlledAction>();
+    for (let target = 1; target <= 255; target++) {
+      const signature = [0, 1]
+        .map((half) => {
+          const digit = stat * 2 + half,
+            value = (target >>> (half * 4)) & 15;
+          const mask = keyMasks[digit];
+          return mask & (mask - 1) && mask & (1 << value) ? value : "-";
+        })
+        .join("/");
+      if (signature === "-/-") continue;
+      const plan = evTrainingPlan(f, stat, target);
+      if (!plan) continue;
+      const old = checkpoints.get(signature);
+      if (
+        old?.training &&
+        (Number(old.training.lastResort) < Number(plan.lastResort) ||
+          (old.training.lastResort === plan.lastResort &&
+            old.training.seconds <= plan.seconds))
+      )
+        continue;
+      const evs = f.evs!.slice();
+      evs[stat] = target;
+      const name = stat === 2 ? "Defense" : "Speed";
+      const vitamin = stat === 2 ? "Iron" : "Carbos";
+      checkpoints.set(signature, {
+        id: `ev-${stat}-${target}`,
+        kind: "ev",
+        name: `${name} EVs to ${target}`,
+        training: plan,
+        cost: plan.vitamins + plan.battles,
+        instructions: `Save the original state first. ${plan.vitamins ? `Use ${plan.vitamins} ${vitamin} vitamin${plan.vitamins === 1 ? "" : "s"}. ` : ""}${plan.battles ? `${plan.removeBrace ? "Remove the held item for training. " : ""}Defeat exactly ${plan.battles} opponents that each yield only 1 ${name} EV (${plan.gain} EV${plan.gain === 1 ? "" : "s"} per battle with the recorded Pokerus/item). Avoid other EV awards and cancel evolution. Restore the original held item before checking. ` : ""}Check the curtain at exactly ${target} ${name} EVs. Reload the baseline after this test.`,
+        restore: reload,
+        changes: { evs },
+        logical: digits(24 + stat, 1),
+      });
+    }
+    const cheapest = [...checkpoints.values()].sort(
+      (a, b) =>
+        Number(a.training!.lastResort) - Number(b.training!.lastResort) ||
+        a.training!.seconds - b.training!.seconds,
+    );
+    const covered = new Set<string>();
+    for (const action of cheapest) {
+      const keys = [0, 1].flatMap((half) => {
+        const value = (action.training!.target >>> (half * 4)) & 15,
+          mask = keyMasks[stat * 2 + half];
+        return mask & (mask - 1) && mask & (1 << value)
+          ? [`${half}/${value}`]
+          : [];
+      });
+      // The existing one-vitamin action already offers this exact checkpoint.
+      // Keep its established protocol rather than suggesting the same test twice.
+      if (
+        actions.some(
+          (a) =>
+            a.kind === "vitamin" &&
+            JSON.stringify(a.changes.evs) ===
+              JSON.stringify(action.changes.evs),
+        )
+      ) {
+        keys.forEach((key) => covered.add(key));
+        continue;
+      }
+      if (
+        keys.some((key) => !covered.has(key)) ||
+        action.training!.battles === 0
+      ) {
+        actions.push(action);
+        keys.forEach((key) => covered.add(key));
+      }
+    }
+  }
   return actions;
+}
+
+/** Battles can change these fields independently of the target EV byte. Never
+ * carry their old plaintext or checksum into a training observation. */
+export function controlledFacts(
+  source: KnownFacts,
+  action: ControlledAction,
+): KnownFacts {
+  const facts = {
+    ...structuredClone(source),
+    ...structuredClone(action.changes),
+  };
+  if (action.kind !== "moves" && action.changes.friendship === undefined)
+    delete facts.friendship;
+  if (action.training?.battles) {
+    delete facts.experience;
+    delete facts.moves;
+    delete facts.pp;
+    delete facts.ppBonuses;
+    delete facts.pokerus;
+  }
+  delete facts.checksum;
+  return facts;
 }
 export function actionPixels(
   source: Snapshot,
@@ -276,15 +378,16 @@ export function rankControlledExperiments(
   candidates: Hypothesis[],
   identity: KnownFacts = {},
   snapshots: Snapshot[] = [source],
+  includeChecksum = true,
 ) {
   if (!candidates.length) return [];
-  const supports = experimentChecksumSupports(
-    identity,
-    snapshots,
-    source,
-    candidates,
+  const supports = includeChecksum
+    ? experimentChecksumSupports(identity, snapshots, source, candidates)
+    : undefined;
+  const keyMasks = Array.from({ length: 8 }, (_, n) =>
+    candidates.reduce((mask, h) => mask | (1 << ((h.key >>> (n * 4)) & 15)), 0),
   );
-  return controlledActions(source, species, identity)
+  return controlledActions(source, species, identity, keyMasks)
     .flatMap((action) => {
       const plaintext = knownPlaintext({
         ...source.knownFacts,
@@ -324,7 +427,7 @@ export function rankControlledExperiments(
       }
       const target = {
         ...source,
-        knownFacts: { ...source.knownFacts, ...action.changes },
+        knownFacts: controlledFacts(source.knownFacts, action),
         itemTest: {
           sourceId: source.id,
           phase: "question" as const,
@@ -362,10 +465,7 @@ export function createControlledTest(
   candidatesBefore?: number,
 ): Snapshot {
   if (!isRecorded(source)) throw Error("Finish the current experiment first");
-  const facts = {
-    ...structuredClone(source.knownFacts),
-    ...structuredClone(action.changes),
-  };
+  const facts = controlledFacts(source.knownFacts, action);
   if (action.kind !== "moves" && action.changes.friendship === undefined)
     delete facts.friendship;
   delete facts.checksum;
@@ -396,15 +496,19 @@ export function createControlledTest(
     ...newSnapshot(id, action.name, facts),
     observations: source.observations.slice(),
     targets: targets.slice(),
-    ...(action.kind !== "candy" && action.kind !== "vitamin"
+    ...(action.kind !== "candy" &&
+    action.kind !== "vitamin" &&
+    action.kind !== "ev"
       ? { summaryStats: structuredClone(source.summaryStats) }
       : {
           summaryStats: {
-            ...(action.level === undefined
-              ? source.summaryStats?.level === undefined
-                ? {}
-                : { level: source.summaryStats.level }
-              : { level: action.level }),
+            ...(action.training?.battles
+              ? {}
+              : action.level === undefined
+                ? source.summaryStats?.level === undefined
+                  ? {}
+                  : { level: source.summaryStats.level }
+                : { level: action.level }),
             stats: Array(6).fill(null),
           },
         }),

@@ -1,0 +1,381 @@
+[
+  {
+    "id": 13,
+    "stage": "early",
+    "instruction": "Take the Potion from the PC in your bedroom in Littleroot, or the free Potion from the Oldale Mart employee.",
+    "seconds": 5,
+    "routeOrder": 0
+  },
+  {
+    "id": 4,
+    "stage": "early",
+    "instruction": "Keep one of the five Poke Balls given by the rival after receiving the Pokedex.",
+    "seconds": 5,
+    "routeOrder": 12
+  },
+  {
+    "id": 14,
+    "stage": "early",
+    "instruction": "Buy one Antidote at the Rustboro Mart (100 money).",
+    "seconds": 5,
+    "shop": "Rustboro",
+    "price": 100,
+    "routeOrder": 90
+  },
+  {
+    "id": 111,
+    "stage": "early",
+    "instruction": "Pick up the hidden Heart Scale on the Route 104 south beach.",
+    "seconds": 45,
+    "routeOrder": 35
+  },
+  {
+    "id": 135,
+    "stage": "early",
+    "instruction": "Harvest a Pecha Berry from the trees on Route 102 or Route 104 south.",
+    "seconds": 30,
+    "routeOrder": 24
+  },
+  {
+    "id": 139,
+    "stage": "early",
+    "instruction": "Harvest an Oran Berry from the trees on Route 102 or Route 104.",
+    "seconds": 30,
+    "routeOrder": 24
+  },
+  {
+    "id": 18,
+    "stage": "early",
+    "instruction": "Buy one Parlyz Heal at the Rustboro Mart (200 money).",
+    "seconds": 5,
+    "shop": "Rustboro",
+    "price": 200,
+    "routeOrder": 90
+  },
+  {
+    "id": 3,
+    "stage": "early",
+    "instruction": "Keep the Great Ball given by the Devon employee after the Team Aqua battle in Petalburg Woods.",
+    "seconds": 5,
+    "routeOrder": 51
+  },
+  {
+    "id": 34,
+    "stage": "early",
+    "instruction": "Pick up the Ether in the northwest corner of Petalburg Woods.",
+    "seconds": 45,
+    "routeOrder": 63
+  },
+  {
+    "id": 297,
+    "stage": "early",
+    "instruction": "Get TM09 Bullet Seed from the boy south of the Route 104 Flower Shop. Keep the TM; do not teach it.",
+    "seconds": 30,
+    "routeOrder": 70
+  },
+  {
+    "id": 133,
+    "stage": "early",
+    "instruction": "Harvest a Cheri Berry from the trees on Route 104 north.",
+    "seconds": 30,
+    "routeOrder": 71
+  },
+  {
+    "id": 138,
+    "stage": "early",
+    "instruction": "Harvest a Leppa Berry from the trees east of the Route 104 bridge.",
+    "seconds": 30,
+    "routeOrder": 75
+  },
+  {
+    "id": 134,
+    "stage": "early",
+    "instruction": "Get the Chesto Berry from the old woman east of the Route 104 bridge.",
+    "seconds": 30,
+    "routeOrder": 74
+  },
+  {
+    "id": 22,
+    "stage": "early",
+    "instruction": "Buy one Super Potion at the Rustboro Mart (700 money).",
+    "seconds": 5,
+    "shop": "Rustboro",
+    "price": 700,
+    "routeOrder": 90
+  },
+  {
+    "id": 76,
+    "stage": "early",
+    "instruction": "Buy one X Defend at the Rustboro Mart (550 money).",
+    "seconds": 5,
+    "shop": "Rustboro",
+    "price": 550,
+    "routeOrder": 90
+  },
+  {
+    "id": 12,
+    "stage": "early",
+    "instruction": "Get the Premier Ball from the boy upstairs in the southwest Rustboro apartment building.",
+    "seconds": 30,
+    "routeOrder": 92
+  },
+  {
+    "id": 183,
+    "stage": "early",
+    "instruction": "Get the Quick Claw from the teacher in Rustboro Trainers' School.",
+    "seconds": 30,
+    "routeOrder": 97
+  },
+  {
+    "id": 86,
+    "stage": "early",
+    "instruction": "Buy one Repel at the Rustboro Mart (350 money).",
+    "seconds": 5,
+    "shop": "Rustboro",
+    "price": 350,
+    "routeOrder": 90
+  },
+  {
+    "id": 79,
+    "stage": "early",
+    "instruction": "Pick up the X Special east of the Rusturf Tunnel entrance on Route 116.",
+    "seconds": 120,
+    "routeOrder": 95
+  },
+  {
+    "id": 17,
+    "stage": "early",
+    "instruction": "Buy one Awakening at the Petalburg Mart on the way (250 money); Rustboro does not sell it.",
+    "seconds": 5,
+    "price": 250,
+    "shop": "Petalburg",
+    "routeOrder": 30
+  },
+  {
+    "id": 85,
+    "stage": "early",
+    "instruction": "Buy one Escape Rope at the Rustboro Mart (550 money).",
+    "seconds": 5,
+    "price": 550,
+    "shop": "Rustboro",
+    "routeOrder": 90
+  },
+  {
+    "id": 77,
+    "stage": "early",
+    "instruction": "Buy one X Speed at the Rustboro Mart (350 money).",
+    "seconds": 5,
+    "price": 350,
+    "shop": "Rustboro",
+    "routeOrder": 90
+  },
+  {
+    "id": 75,
+    "stage": "early",
+    "instruction": "Buy one X Attack at the Rustboro Mart (500 money).",
+    "seconds": 5,
+    "price": 500,
+    "shop": "Rustboro",
+    "routeOrder": 90
+  },
+  {
+    "id": 121,
+    "stage": "early",
+    "instruction": "Buy Orange Mail at the Petalburg Mart (50 money).",
+    "seconds": 30,
+    "price": 50,
+    "routeOrder": 80
+  },
+  {
+    "id": 327,
+    "stage": "gym",
+    "instruction": "Defeat Roxanne to receive TM39 Rock Tomb. Keep the TM; do not teach it.",
+    "seconds": 600
+  },
+  {
+    "id": 3,
+    "stage": "rescue",
+    "instruction": "After recovering the Devon Goods, receive a Great Ball from the Devon employee.",
+    "seconds": 600
+  },
+  {
+    "id": 133,
+    "stage": "random",
+    "instruction": "The Route 104 Flower Shop gives one random Berry per day; this specific Berry is not guaranteed.",
+    "seconds": 300
+  },
+  {
+    "id": 134,
+    "stage": "random",
+    "instruction": "The Route 104 Flower Shop gives one random Berry per day; this specific Berry is not guaranteed.",
+    "seconds": 300
+  },
+  {
+    "id": 135,
+    "stage": "random",
+    "instruction": "The Route 104 Flower Shop gives one random Berry per day; this specific Berry is not guaranteed.",
+    "seconds": 300
+  },
+  {
+    "id": 136,
+    "stage": "random",
+    "instruction": "The Route 104 Flower Shop gives one random Berry per day; this specific Berry is not guaranteed.",
+    "seconds": 300
+  },
+  {
+    "id": 137,
+    "stage": "random",
+    "instruction": "The Route 104 Flower Shop gives one random Berry per day; this specific Berry is not guaranteed.",
+    "seconds": 300
+  },
+  {
+    "id": 138,
+    "stage": "random",
+    "instruction": "The Route 104 Flower Shop gives one random Berry per day; this specific Berry is not guaranteed.",
+    "seconds": 300
+  },
+  {
+    "id": 139,
+    "stage": "random",
+    "instruction": "The Route 104 Flower Shop gives one random Berry per day; this specific Berry is not guaranteed.",
+    "seconds": 300
+  },
+  {
+    "id": 140,
+    "stage": "random",
+    "instruction": "The Route 104 Flower Shop gives one random Berry per day; this specific Berry is not guaranteed.",
+    "seconds": 300
+  },
+  {
+    "id": 13,
+    "stage": "random",
+    "instruction": "A level 1-10 Zigzagoon with Pickup may find this after a battle; it is not guaranteed.",
+    "seconds": 600
+  },
+  {
+    "id": 14,
+    "stage": "random",
+    "instruction": "A level 1-10 Zigzagoon with Pickup may find this after a battle; it is not guaranteed.",
+    "seconds": 600
+  },
+  {
+    "id": 22,
+    "stage": "random",
+    "instruction": "A level 1-10 Zigzagoon with Pickup may find this after a battle; it is not guaranteed.",
+    "seconds": 600
+  },
+  {
+    "id": 3,
+    "stage": "random",
+    "instruction": "A level 1-10 Zigzagoon with Pickup may find this after a battle; it is not guaranteed.",
+    "seconds": 600
+  },
+  {
+    "id": 86,
+    "stage": "random",
+    "instruction": "A level 1-10 Zigzagoon with Pickup may find this after a battle; it is not guaranteed.",
+    "seconds": 600
+  },
+  {
+    "id": 85,
+    "stage": "random",
+    "instruction": "A level 1-10 Zigzagoon with Pickup may find this after a battle; it is not guaranteed.",
+    "seconds": 600
+  },
+  {
+    "id": 75,
+    "stage": "random",
+    "instruction": "A level 1-10 Zigzagoon with Pickup may find this after a battle; it is not guaranteed.",
+    "seconds": 600
+  },
+  {
+    "id": 23,
+    "stage": "random",
+    "instruction": "A level 1-10 Zigzagoon with Pickup may find this after a battle; it is not guaranteed.",
+    "seconds": 600
+  },
+  {
+    "id": 2,
+    "stage": "random",
+    "instruction": "A level 1-10 Zigzagoon with Pickup may find this after a battle; it is not guaranteed.",
+    "seconds": 600
+  },
+  {
+    "id": 21,
+    "stage": "random",
+    "instruction": "A level 1-10 Zigzagoon with Pickup may find this after a battle; it is not guaranteed.",
+    "seconds": 600
+  },
+  {
+    "id": 110,
+    "stage": "random",
+    "instruction": "A level 1-10 Zigzagoon with Pickup may find this after a battle; it is not guaranteed.",
+    "seconds": 600
+  },
+  {
+    "id": 68,
+    "stage": "grind",
+    "instruction": "Higher-level Pickup can find this, but needs substantial leveling and random drops.",
+    "seconds": 3600
+  },
+  {
+    "id": 187,
+    "stage": "grind",
+    "instruction": "Higher-level Pickup can find this, but needs substantial leveling and random drops.",
+    "seconds": 3600
+  },
+  {
+    "id": 332,
+    "stage": "grind",
+    "instruction": "Higher-level Pickup can find this, but needs substantial leveling and random drops.",
+    "seconds": 3600
+  },
+  {
+    "id": 289,
+    "stage": "grind",
+    "instruction": "Higher-level Pickup can find this, but needs substantial leveling and random drops.",
+    "seconds": 3600
+  },
+  {
+    "id": 314,
+    "stage": "grind",
+    "instruction": "Higher-level Pickup can find this, but needs substantial leveling and random drops.",
+    "seconds": 3600
+  },
+  {
+    "id": 200,
+    "stage": "grind",
+    "instruction": "Higher-level Pickup can find this, but needs substantial leveling and random drops.",
+    "seconds": 3600
+  },
+  {
+    "id": 135,
+    "stage": "random",
+    "instruction": "Catch a wild Poochyena; its held item has a 5% chance.",
+    "seconds": 1200
+  },
+  {
+    "id": 139,
+    "stage": "random",
+    "instruction": "Catch a wild Zigzagoon; its held item has a 5% chance.",
+    "seconds": 1200
+  },
+  {
+    "id": 134,
+    "stage": "random",
+    "instruction": "Catch a wild Whismur; its held item has a 5% chance.",
+    "seconds": 1200
+  },
+  {
+    "id": 138,
+    "stage": "random",
+    "instruction": "Catch a wild Skitty; its held item has a 5% chance.",
+    "seconds": 1200
+  },
+  {
+    "id": 214,
+    "stage": "random",
+    "instruction": "Catch a wild Abra; its held item has a 5% chance.",
+    "seconds": 1200
+  }
+]

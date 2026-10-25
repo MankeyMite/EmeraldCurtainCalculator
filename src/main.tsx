@@ -4,6 +4,7 @@ import App from "./App";
 import "./styles.css";
 import "./workbench.css";
 import "./research.css";
+import "./starter-guide.css";
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />

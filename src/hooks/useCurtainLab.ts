@@ -22,8 +22,14 @@ import {
   type Origin,
 } from "../core/investigation";
 import { diagnoseHypothesis, makeHypothesis } from "../core/sid";
+import { validateFacts } from "../core/session";
 import { validateSidRng, type SidRngSettings } from "../core/sidRng";
 import { useDeduction } from "./useDeduction";
+import {
+  correctStarterCheckpointEvs,
+  correctStarterCheckpointFacts,
+} from "../core/starterEvidence";
+import { GUIDE_LAB_KEY } from "../core/starterGuide";
 import { createControlledTest } from "../core/controlledExperiments";
 import {
   createItemTest,
@@ -36,6 +42,8 @@ import {
   targetExperiment,
   answerExperimentPixel,
   finishPixelExperiment,
+  experimentToUndo,
+  undoExperimentAnswer,
 } from "../core/itemTests";
 import { AUTOSAVE_KEY, readAutosave } from "../core/autosave";
 import {
@@ -66,6 +74,12 @@ import {
   type SpindaMatcherState,
 } from "../core/spindaMatcher";
 import { fieldPossibilities } from "../core/inference";
+import { newSpindaSidGuide } from "../core/spindaSidGuide";
+import {
+  sidCandidateMasks,
+  spindaTrainerFacts,
+  type SpindaSidProgress,
+} from "../core/spindaUsefulness";
 import {
   summaryFromDraft,
   summaryToDraft,
@@ -80,12 +94,12 @@ export function download(name: string, data: Blob) {
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-export function useCurtainLab() {
+export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
   const [restored] = useState(() => {
     try {
       return typeof window === "undefined"
         ? null
-        : readAutosave(window.localStorage);
+        : readAutosave(window.localStorage, autosaveKey);
     } catch {
       return null;
     }
@@ -183,6 +197,7 @@ export function useCurtainLab() {
     .reverse()
     .find((s) => s.itemTest?.phase === "recorded");
   const pendingItemTest = currentSnapshots.find((s) => !isRecorded(s));
+  const undoableExperiment = experimentToUndo(currentSnapshots);
   const evidenceSnapshot = isRecorded(activeSnapshot)
     ? activeSnapshot
     : currentSnapshots.find((s) => s.id === activeSnapshot.itemTest!.sourceId)!;
@@ -270,14 +285,14 @@ export function useCurtainLab() {
     setSaveStatus("Saving on this device…");
     const timer = setTimeout(() => {
       try {
-        window.localStorage.setItem(AUTOSAVE_KEY, autosaveText);
+        window.localStorage.setItem(autosaveKey, autosaveText);
         setSaveStatus("Saved on this device");
       } catch {
         setSaveStatus("Autosave unavailable · use Save investigation");
       }
     }, 350);
     return () => clearTimeout(timer);
-  }, [autosaveText, activeResearchExample]);
+  }, [autosaveText, activeResearchExample, autosaveKey]);
   const memory = useMemo(() => assembleMemory(records), [records]),
     masks = useMemo(() => recordMasks(obs, 5), [obs]),
     suppliedMasks = useMemo(
@@ -297,17 +312,46 @@ export function useCurtainLab() {
     Array.from({ length: 4 }, (_, i) =>
       ppInputError(facts.moves?.[i] ?? undefined, factDraft[`pp_${i}`] ?? ""),
     ).find(Boolean) ?? "";
+  const combinedSidFilters = useMemo(
+    () =>
+      sidCandidateMasks(spindaMatcher.sidProgress?.remainingSids).map(
+        (mask, n) => mask & (sidDigitFilters?.[n] ?? 65535),
+      ),
+    [spindaMatcher.sidProgress?.remainingSids, sidDigitFilters],
+  );
   const deduction = useDeduction(
     {
       identity,
       snapshots: currentSnapshots,
       activeId,
+      ...(autosaveKey === GUIDE_LAB_KEY ? { starterGuide: true } : {}),
       ...(rngActive && identity.species !== undefined
         ? { rng: rngSettings }
         : {}),
       ...(sidRngSettings ? { sidRng: sidRngSettings } : {}),
-      ...(sidDigitFilters ? { sidDigitFilters } : {}),
+      sidDigitFilters: combinedSidFilters,
+      ...(spindaMatcher.sidProgress?.remainingSids
+        ? { sidCandidates: spindaMatcher.sidProgress.remainingSids }
+        : {}),
       ...(mode === "renderer" ? { renderMasks: suppliedMasks } : {}),
+      ...(spindaMatcher.guide &&
+      identity.species === 308 &&
+      identity.pid === spindaMatcher.guide.pid
+        ? {
+            spindaGuide: {
+              guide: spindaMatcher.guide,
+              settings: spindaMatcher.settings,
+            },
+          }
+        : {}),
+      ...(identity.species === 308 && identity.pid !== undefined
+        ? {
+            spindaPlanning: {
+              settings: spindaMatcher.settings,
+              tested: spindaMatcher.sidProgress?.tested ?? [0, 0, 0, 0],
+            },
+          }
+        : {}),
     },
     drawingInProgress,
     !factError && !summaryState.error && !ppError,
@@ -945,7 +989,9 @@ export function useCurtainLab() {
       currentSnapshots.length < 2 ||
       factError ||
       summaryState.error ||
-      currentSnapshots.some((s) => s.itemTest?.sourceId === activeId)
+      currentSnapshots.some(
+        (s) => s.itemTest?.sourceId === activeId || s.supersededBy === activeId,
+      )
     )
       return;
     const remaining = currentSnapshots.filter((s) => s.id !== activeId),
@@ -1004,7 +1050,7 @@ export function useCurtainLab() {
     setHover(null);
     setMode("solver");
   }
-  function startItemTest(itemId: number) {
+  function startItemTest(itemId: number, guidedTargets?: number[]) {
     if (
       factError ||
       summaryState.error ||
@@ -1020,7 +1066,7 @@ export function useCurtainLab() {
       originalItemBaseline,
       crypto.randomUUID(),
       itemId,
-      recommendation.pixels.map((p) => p.index),
+      guidedTargets ?? recommendation.pixels.map((p) => p.index),
       sidAnalysis?.candidates.length ?? Number(investigationInference.pidCount),
     );
     const targeted = targetExperiment(next);
@@ -1029,7 +1075,7 @@ export function useCurtainLab() {
       `Item test selected. Compare the new item's curtain with original drawing “${originalItemBaseline.name}”.`,
     );
   }
-  function startControlledTest(id: string) {
+  function startControlledTest(id: string, guidedTargets?: number[]) {
     if (
       factError ||
       summaryState.error ||
@@ -1047,7 +1093,7 @@ export function useCurtainLab() {
       originalItemBaseline,
       crypto.randomUUID(),
       recommendation.action,
-      recommendation.pixels.map((p) => p.index),
+      guidedTargets ?? recommendation.pixels.map((p) => p.index),
       sidAnalysis?.candidates.length ?? Number(investigationInference.pidCount),
     );
     const targeted = targetExperiment(next);
@@ -1078,6 +1124,24 @@ export function useCurtainLab() {
     } catch (error) {
       setError((error as Error).message);
     }
+  }
+  function undoLastExperimentAnswer() {
+    if (
+      !undoableExperiment ||
+      factError ||
+      summaryState.error ||
+      deduction.busy ||
+      drawingInProgress
+    )
+      return;
+    const next = undoExperimentAnswer(undoableExperiment);
+    useItemSnapshot(
+      next,
+      currentSnapshots.map((s) => (s.id === next.id ? next : s)),
+    );
+    setNotice(
+      "Last experiment answer cleared. Candidates are recalculating. Apply this experiment's setup and check the highlighted pixel again.",
+    );
   }
   function reportItemChange(changed: boolean) {
     if (factError || summaryState.error || !activeSnapshot.itemTest)
@@ -1131,6 +1195,95 @@ export function useCurtainLab() {
   }
   return {
     spindaMatcher,
+    useSpindaPid: (pid: number, ball: number, level?: number) => {
+      if (pendingItemTest || factError || summaryState.error) return false;
+      const sameSpinda =
+        facts.species === 308 && (facts.pid === undefined || facts.pid === pid);
+      const next = {
+        ...freshCapturePreset(
+          wildStoragePreset({ species: 308, metGame: 3, isEgg: 0 }),
+        ),
+        ...(sameSpinda ? facts : spindaTrainerFacts(facts)),
+        species: 308,
+        pid,
+        ball,
+        ...(level === undefined ? {} : { metLevel: level }),
+      };
+      if (!sameSpinda) {
+        const first = newSnapshot(`spinda-${Date.now()}`, "Spinda curtain");
+        setSnapshots([first]);
+        setActiveId(first.id);
+        obsRef.current = first.observations;
+        setObs(first.observations);
+        setUndo([]);
+        setRedo([]);
+        setSummaryDraft({});
+        setRngSettings(undefined);
+      }
+      setOrigin("wild");
+      setFacts(next);
+      setFactDraft(factsToDraft(next));
+      if (level !== undefined)
+        setSummaryDraft((draft) => ({
+          ...draft,
+          level: draft.level || String(level),
+        }));
+      setSpindaMatcher((s) => ({
+        ...s,
+        appliedPid: pid,
+        guide: {
+          ...(s.guide?.pid === pid ? s.guide : newSpindaSidGuide(pid)),
+          enabled: true,
+          freshZeros: true,
+          paddingZero: true,
+        },
+      }));
+      setNotice("");
+      return true;
+    },
+    catchNextSpinda: (progress?: SpindaSidProgress) => {
+      if (
+        deduction.busy ||
+        deduction.error ||
+        pendingItemTest ||
+        factError ||
+        summaryState.error
+      )
+        return;
+      const current = deduction.data.spindaGuideProgress;
+      const remainingSids =
+        sidAnalysis?.sidValues ??
+        current?.remainingSids ??
+        progress?.remainingSids ??
+        spindaMatcher.sidProgress?.remainingSids;
+      if (!remainingSids?.length) return;
+      const tested = (spindaMatcher.sidProgress?.tested ?? [0, 0, 0, 0]).map(
+        (mask, n) =>
+          mask | (current?.tested[n] ?? 0) | (progress?.tested[n] ?? 0),
+      );
+      setSpindaMatcher((s) => ({
+        ...s,
+        appliedPid: undefined,
+        guide: undefined,
+        sidProgress: { remainingSids, tested },
+      }));
+      const next = {
+        ...newPokemonFacts(),
+        ...spindaTrainerFacts(facts),
+      };
+      const first = newSnapshot(`spinda-${Date.now()}`, "Spinda curtain");
+      setSnapshots([first]);
+      setActiveId(first.id);
+      obsRef.current = first.observations;
+      setObs(first.observations);
+      setFacts(next);
+      setFactDraft(factsToDraft(next));
+      setSummaryDraft({});
+      setUndo([]);
+      setRedo([]);
+      setRngSettings(undefined);
+      setNotice("");
+    },
     sidDigitFilters,
     setSidDigitFilters: (masks?: number[]) =>
       setSidDigitFilters(masks ? validateSidDigitFilters(masks) : undefined),
@@ -1188,6 +1341,83 @@ export function useCurtainLab() {
       );
     },
     itemTestBaseline: originalItemBaseline,
+    correctStarterCheckpointFacts: (changes: KnownFacts) => {
+      if (pendingItemTest || drawingInProgress)
+        throw Error(
+          "Finish the drawing or current experiment before correcting its setup.",
+        );
+      const corrected = correctStarterCheckpointFacts(
+        currentSnapshots,
+        originalItemBaseline.id,
+        changes,
+      );
+      const active = corrected.find((s) => s.id === activeId)!;
+      const next = validateFacts({ ...identity, ...active.knownFacts });
+      setSnapshots(corrected);
+      setFacts(next);
+      setFactDraft(factsToDraft(next));
+      setFactError("");
+      setAnalysisRevision((revision) => revision + 1);
+    },
+    correctStarterCheckpointEvs: (evs: (number | null)[]) => {
+      const corrected = correctStarterCheckpointEvs(
+        currentSnapshots,
+        originalItemBaseline.id,
+        evs,
+      );
+      const active = corrected.find((s) => s.id === activeId)!;
+      const next = validateFacts({ ...identity, ...active.knownFacts });
+      setSnapshots(corrected);
+      setFacts(next);
+      setFactDraft(factsToDraft(next));
+      setFactError("");
+      setAnalysisRevision((revision) => revision + 1);
+    },
+    configureStarterInvestigation: (
+      supplied: KnownFacts,
+      readings: Snapshot[],
+      rng: RngSettings,
+      sidRng: SidRngSettings,
+    ) => {
+      if (pendingItemTest)
+        throw Error(
+          "Finish or cancel the current experiment before updating the Pokémon checkpoint.",
+        );
+      const next = validateFacts(supplied);
+      const first = newSnapshot(
+        `starter-checkpoint-${Date.now()}`,
+        "Starter curtain",
+        next,
+      );
+      first.starterCheckpointId = first.id;
+      // Earlier observations retain their own mutable facts. Never reinterpret
+      // old pixels after training, changing moves, or replacing a held item.
+      const earlier = currentSnapshots.filter(
+        (s) => s.observations.some((v) => v !== -1) || s.itemTest,
+      );
+      const ids = new Set(earlier.map((s) => s.id));
+      setSnapshots([
+        first,
+        ...earlier,
+        ...readings.filter((s) => !ids.has(s.id)),
+      ]);
+      setActiveId(first.id);
+      obsRef.current = first.observations;
+      setObs(first.observations);
+      setFacts(next);
+      setFactDraft(factsToDraft(next));
+      setFactError("");
+      setSummaryDraft({});
+      setOrigin("static");
+      setRngSettings(validateRngSettings(rng));
+      setSidRngSettings(validateSidRng(sidRng));
+      setSidDigitFilters(undefined);
+      setSpindaMatcher(defaultSpindaMatcher());
+      setUndo([]);
+      setRedo([]);
+      setDrawingInProgress(false);
+      setMode("solver");
+    },
     lastCompletedItemTest,
     rngSettings,
     rngActive,
@@ -1211,8 +1441,14 @@ export function useCurtainLab() {
     experimentLimitations,
     experimentProgress,
     answerTarget,
+    canUndoExperimentAnswer: !!undoableExperiment,
+    undoLastExperimentAnswer,
     saveVerifiedTargets,
     experimentTargets,
+    starterQuestions:
+      deduction.current && !deduction.error
+        ? deduction.data.starterQuestions
+        : [],
     referenceObservations:
       activeSnapshot.itemTest?.mode === "pixels"
         ? currentSnapshots.find(
@@ -1229,7 +1465,9 @@ export function useCurtainLab() {
     cancelItemTest,
     canRemoveObservation:
       currentSnapshots.length > 1 &&
-      !currentSnapshots.some((s) => s.itemTest?.sourceId === activeId),
+      !currentSnapshots.some(
+        (s) => s.itemTest?.sourceId === activeId || s.supersededBy === activeId,
+      ),
     evidenceSnapshot,
     highlightReferenceConflicts,
     origin,
@@ -1248,6 +1486,8 @@ export function useCurtainLab() {
     ownedItems,
     setOwnedItems,
     sidAnalysis,
+    spindaBaseSidValues: deduction.data.spindaBaseSidValues,
+    nextSpinda: deduction.data.nextSpinda,
     identity,
     recovery,
     experiments,

@@ -73,6 +73,9 @@ export function experimentChecksumDelta(
   const test = target.itemTest;
   if (!test || test.sourceId !== source.id) return null;
   const kind = test.action?.kind;
+  // Training may alter EXP, moves/PP, friendship and Pokerus. Its EV byte is
+  // predictable, but the resulting checksum is not.
+  if (kind === "ev") return null;
   let changed: number[];
   if (!kind) changed = [4, 5, 6, 7];
   else if (kind === "moves") {

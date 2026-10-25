@@ -35,66 +35,43 @@ Search/ranking run in a worker. Settings changes terminate obsolete workers; dra
 
 Only the union of pixels that can carry legal PID spots is compared. Similarity is `100 × [0.65 × 2×exactOverlap + 0.35 × (nearTarget + nearCandidate)] / (targetSpotPixels + candidateSpotPixels)`. Near overlap uses Euclidean distance ≤2 sprite pixels. This symmetric soft Dice measure penalizes extra/missing spot pixels without rewarding blank background. Exact patterns score 100. Identical visible patterns retain every PID and tied score. A three-point band flags close alternatives; best score below 65 prompts review. Scores/thresholds are visual guidance, not calibrated probabilities.
 
-## Persistence and transfer
+## Persistence and confirmation
 
-Root state and optional validated investigation JSON store editor PID, filters, advisory shortlist and applied-estimate provenance separately from curtain evidence. Autosave/manual backups include them; old files remain compatible. Spots and filters survive tab changes; search results recompute. UI-only selection, handles, palette, pagination and disclosure state reset on remount.
+Choose **Use this PID** on a match to confirm it. The Painter and suggestions fold away, and the existing SID Pixel Guide opens. The confirmed PID is applied to Pokemon info. Fresh wild-catch defaults supply EV/contest/ribbon zeros and Growth padding; entered facts for the same Spinda are preserved. A different catch starts a separate record, carrying only supplied original-trainer facts. Pending experiments and invalid inputs must be resolved first.
 
-Plausible PIDs remain advisory: current inference does not accept arbitrary disjunctions of visual PIDs. An estimate requires explicit confirmation before replacing the conditional PID input, with no unfinished experiment/input error. An unspecified species is filled as Spinda; an explicitly different species is protected. No trainer, IV, nature, level or summary fields are required. Snapshots, pixels, IVs and encounter scopes remain intact. Pokémon info/investigation label the estimate unverified, with a removal button. Confirmation does not independently verify it.
+Matcher settings, the active guide and completed SID progress persist in investigation JSON and autosave. Old backups remain compatible. Search results regenerate from the saved RNG settings. The legacy shortlist remains readable in older backups but is no longer part of the confirmation flow.
 
-## SID pixel guide without Pokémon info
+## Useful SID digits and catch ball
 
-Choose **Use this pattern PID: show SID pixels** immediately after dragging, or **Show SID pixels for this candidate** in a result preview. The guide works without applying the estimate to the solver, without RNG results and without TID. It displays physical block order from the shared `SUBSTRUCT_POSITIONS[PID % 24]`, an 8×20 main-record map, and twelve field-linked pixels for each of S1–S4 (highest SID digit first). Coordinates come from actual school tile placements, including flips, through `hitForNibble`; **Locate selected pixel in main curtain** links the same canonical address to the existing curtain. Main-curtain orange targets follow the selected SID digit while the guide is open.
+Each match displays small H1, H2 and H4 counts. For each method, each exact known plaintext nibble P and corresponding upper PID digit D tests candidate P XOR D at a specific SID position. Counts include only remaining, untested candidates, with one count per position/candidate across duplicate fields, pixels and encounter combinations. Solved SID positions contribute no further questions. Multiple spreads within a method contribute the union of their distinct tests; the actual spread is narrowed after capture.
 
-Printed SID digits S1–S4 use XOR-key nibbles 7, 6, 5, 4 (numbered from the least significant), paired with the upper four printed PID digits. All blocks contain three four-byte key repetitions, so the *set* of twelve physical positions for one SID digit is invariant across block permutations. The named field at each position, and the location of a selected logical field, change with the permutation. High/low means bits 4–7 / 0–3; byte numbering is little endian.
+Counts use carried SID candidates, current completed main-investigation inference and SID RNG results, manual SID limits, and current guide answers. Masks use little-endian order internally (S4, S3, S2, S1); printed digits run S1 through S4. Catch-ball evaluation uses the existing Origins encoding and actual encounter levels. An ordinary ball is suggested only when it adds an untested candidate over a regular Poke Ball without reducing total method usefulness. Safari and Master Balls are excluded from recommendations. Confirm the actual ball in the guide's existing data flow.
 
-The field pairs match [Emerald's stored structures](https://github.com/pret/pokeemerald/blob/731ad5bfd6e6f265508d0efcca0ba42f9dcf5881/include/pokemon.h#L95): held item bytes 2/1, EXP bytes 4/3, Growth padding bytes 2/1, Move 2 ID bytes 2/1, Move 4 ID bytes 2/1, Move 4/3 PP, Speed/Defense EV, Beauty/Cool, Sheen/Tough, Origins bytes 2/1, IV/flags bytes 4/3 and ribbon/flags bytes 4/3. The first member supplies S1(high)/S2(low); the second supplies S3(high)/S4(low).
+## SID Pixel Guide
 
-For plaintext nibble P and corresponding PID digit D:
+The guide reuses the shared SUBSTRUCT_POSITIONS[PID % 24] permutation and actual flipped school tile coordinates from hitForNibble. Each digit has twelve possible field locations, but the map and field table show only distinct useful, unobserved tests whose plaintext is exact. Known plaintext and its XOR with the PID digit appear beside the selected pixel. The main curtain highlights the same useful coordinates.
 
-- Transparent: ciphertext is zero, hence the SID digit is `P XOR D`.
-- Black: ciphertext is nonzero, so exclude `P XOR D` and keep every other digit.
-- Unobserved, or unknown plaintext: retain all sixteen possibilities.
+For plaintext P and PID digit D, a transparent pixel confirms SID digit P XOR D; a black pixel excludes it. Unknown plaintext adds no evidence. Duplicate tests disappear after an answer. Selection advances through useful pixels and SID positions. Manual SID digit limits immediately affect both the guide and match counts.
 
-Intersect these constraints per digit, showing unresolved digits and explicit contradictions. This is a **conditional nibble calculation**, not the full checksum/legality solver or independent proof of the estimated PID. A separate header helper locates all eight unencrypted PID digits: zero must be transparent; nonzero must be black, which cannot distinguish different nonzero digits.
+The existing stored-data engine supplies known Pokemon-info plaintext. Existing saved logical overrides remain supported by the core and take precedence over automatic values. Guide physical observations remain separate from the main curtain drawing. A newly confirmed catch receives its own guide, so physical pixels from another catch are not reused.
 
-SID Finder's **Manually limit SID digit candidates** controls further intersect
-each guide digit with reversible S1 through S4 hexadecimal masks. These limits
-also constrain full recovery and experiment rankings. Internal mask order is
-little-endian (S4, S3, S2, S1); the UI presents S1 first. An empty digit remains
-an explicit contradiction. Limits save in investigation JSON and autosave,
-and clear when starting a new Pokemon. Earlier exclusions can be reused only
-for the same original trainer.
+## RNG-derived IVs and summary stats
 
-Known plaintext fills automatically from the active Spinda's Pokémon info using the existing `knownPlaintext` stored-data engine. Every exact logical nibble feeds the dropdown, field table and SID calculation, regardless of the estimated PID's permutation. This includes entered assumptions; changes or cleared info update the guide immediately. Partial packed nibbles remain unknown, and invalid form drafts pause automatic input. A different species or an unidentified blank form cannot supply Spinda plaintext.
+The complete current search supplies all encounters for the exact confirmed PID. The guide shows methods, possible IV spreads and packed IV bytes 3 and 4 in hex, including the non-Egg and generated ability-slot flags. It reuses the summary-stat inputs and existing stat calculation to filter complete spreads. No method is selected arbitrarily when stats leave alternatives. Only exact common plaintext nibbles are highlighted; ambiguous IV nibbles wait for more information.
 
-Precedence is manual override (including explicit Unknown), exact Pokémon info, then a compatible guide zero preset. **Use automatic value for this field** removes one override; **Use automatic plaintext for all fields** removes all manual overrides. Neither changes recorded pixels or Pokémon info. Two initially disabled presets cover fresh ordinary wild EV/contest/ribbon zeros and, separately, Growth padding zero. A preset cannot contradict partially entered bits. IVs, PP, held item and Origins are never invented by presets. With no Pokémon info or presets the standalone guide still starts unknown. The guide also includes verified level 14–16 Emerald/Poké Ball/OT-gender Origins and move-ID/current-PP examples. Actual battle PP use must be considered.
+SID calculation evaluates whole IV words and preserves their cross-digit correlations. It never treats a black answer with ambiguous plaintext as an exclusion of every alternative. Invalid form drafts pause interpretation. Cancelled, failed or incomplete searches supply no IV evidence. Observed IV pixels cannot be saved to the next round until the supporting plaintext is available again.
 
-The optional validated `spindaMatcher.guide` stores selected PID/digit, disclosure state, presets, manual logical plaintext and physical black/transparent answers. It survives tabs, autosave and JSON backups; older files without it remain valid. Automatic plaintext is derived from saved Pokémon info and is never copied into manual overrides. These advisory notes stay separate from `KnownFacts`, snapshot observations and curtain drawing. Trying another PID retains physical answers in place while logical plaintext follows its field. Clear guide answers when changing Pokémon or stored state.
+## Catch next Spinda
 
-## RNG-derived IVs in the SID guide
+**Catch next Spinda** saves the exact surviving SID set and tested candidate masks, clears the current catch's drawing, facts and stats, then returns to the Painter. Original-trainer facts, manual SID limits and matcher settings are retained. The main deduction engine intersects subsequent results with the carried exact SID set, preserving correlated candidates rather than only their per-digit envelope. Catches must share the same original trainer.
 
-The complete current matcher pool supplies encounters for the guide's exact PID,
-including when no Pokemon info has been entered. IVs do not come from the
-highest visual score or the first matching method. Each distinct generated
-packed IV word includes its non-Egg flag and actual ability-slot flag. Entered
-IV/flag masks filter whole words; an empty intersection is shown as a conflict.
+## Current guide evidence and next-step planning
 
-The guide displays possible IV spreads and automatically fills exact plaintext
-nibbles in its field table and dropdown. If several words remain, deduction runs
-against each word and unions compatible SID digits. Transparent answers keep
-possible plaintext XOR PID values. A black answer requires at least one
-nonzero encrypted nibble; it does not exclude every possible plaintext value.
-Answers and manual SID limits that invalidate any digit reject that whole IV
-word before the union. Final per-digit displays remain conditional projections,
-not a claim that all combinations of displayed digits form valid complete SIDs.
-Manual plaintext, including explicit Unknown, still overrides an individual field.
+The worker applies current guide answers to the main SID hypotheses before recovery and experiment ranking. It retains a separate pre-guide SID set so editing or clearing an answer can restore candidates. Baseline guide answers always use baseline Pokémon facts and stats, including while another item/training snapshot is active. Generated hypotheses keep their own complete IV words when checking IV pixels. The guide's existing table keeps answered rows editable.
 
-These IVs remain conditional on the visually estimated PID, seed, inclusive
-advance range, methods and encounter settings. Cancelled, failed, outdated or
-incomplete searches supply no IV evidence. A PID absent from the pool keeps the
-standalone guide usable with a range-review notice. Changing scope recomputes
-IVs; tab changes and JSON reload regenerate from saved settings. No IVs are
-silently copied into Pokemon info, manual plaintext or curtain observations.
+The existing next-experiment list compares information per minute for supported tests and another catch. A deterministic, bounded sample of up to 64 PID/IV encounters estimates catch information using fresh capture plaintext, the suggested ball, remaining SID candidates and tested digits. Large SID sets use a stratified sample of 256 candidates for this estimate only. Stats are assumed to identify the future spread; sampling is a planning model and never changes solver evidence. Timing is 240 seconds per catch/check, 30 seconds per item swap, 10 seconds per vitamin and 60 seconds per training battle including returning to inspect the curtain (30 seconds for the battle alone).
+
+Defense/Speed training enumerates exact reachable EV targets, chooses vitamin checkpoints followed by 1/2/4-EV battles using the recorded Pokérus/item, and respects the 255-per-stat/510-total limits. Targets above 110 EVs rank after useful ordinary tests and catches. A compact selection retains cheap tests covering reachable unresolved key digits, without repeating an existing one-vitamin checkpoint. Training instructions start from a save and restore the held item before inspection, then reload that save. Unknown battle EXP, moves, PP, friendship and Pokérus are removed from the training snapshot; no linked training checksum is asserted. Training and catch simulations never fill observations.
 
 ## Validation and limitations
 

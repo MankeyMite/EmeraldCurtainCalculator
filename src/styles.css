@@ -374,6 +374,21 @@ details[open] > summary {
   border: 1px solid #ddd;
   background: #f8f8f8;
 }
+.form-table.summary-stat-inputs,
+.workbench .form-table.summary-stat-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.summary-stat-inputs > .summary-level {
+  grid-column: 1 / -1;
+}
+@media (max-width: 600px) {
+  .form-table.summary-stat-inputs > label {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
 .form-table label {
   display: grid;
   grid-template-columns: 104px minmax(0, 1fr);
