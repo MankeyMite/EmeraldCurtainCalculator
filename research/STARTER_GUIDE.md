@@ -8,7 +8,7 @@ Reset remounts the guide so active audio, workers and delayed saves are cancelle
 
 At the final step, **Try again** clears only the last attempt's observations and
 returns to a ready timer. **Start next attempt** keeps the SID, selected target
-and calibration. **Restart countdown** is also available during a running timer.
+and calibration. **Restart timer** is also available during a running timer.
 Every restart invalidates an earlier pending audio start to prevent stale cues.
 
 The optional entry appears in About and SID Finder. It opens a six-step guide
@@ -355,7 +355,25 @@ question can actually distinguish surviving SIDs. No new in-game save is needed
 for the sequential training checkpoints; the original pre-starter save must
 remain intact for the final reset.
 
-The audible timer schedules four beeps per stage on Web Audio's clock. The fourth
+The timer displays its configured first-stage number before starting. All three
+guide timers share a collapsed Audio settings dropdown: volume (including mute)
+and optional quiet half-second beats between the final main beeps. Preferences
+persist across guide steps and sessions; volume changes apply live. Main tones
+retain their original 784 Hz / 1046 Hz zero cue; intermediate tones use 392 Hz
+and less than a quarter of the main peak amplitude. Extra beats do not shift
+either zero or the calibration calculation.
+
+All guide timers also show a horizontal scale for the final four main beeps:
+four major marks with three minor marks between each pair, spaced at quarter-second
+intervals. Half-second marks are taller and darker than quarter-second marks;
+whole-second marks remain the largest and darkest. The moving dot's
+position is calculated directly from the same Web Audio elapsed time as the
+countdown, rather than an independent CSS animation. It waits at the left until
+the last three seconds, crosses a major mark on each beep and holds the first
+zero for 180 ms before resetting for stage two. Display refresh and audio-device
+latency still limit perceived synchronization; this does not change RNG timing.
+
+The audible timer schedules four main beeps per stage on Web Audio's clock. The fourth
 starts at zero. Wall-clock conversion uses the GBA display rate
 `16777216 / 280896`; input latency, startup delays and extra RNG calls still need
 uncertainty/calibration. A browser countdown cannot establish an actual game RNG

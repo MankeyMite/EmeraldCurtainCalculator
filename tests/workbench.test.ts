@@ -54,7 +54,7 @@ test("compact workspace follows the supplied split layout with one curtain strip
     assert.ok(html.includes(`aria-label="${label}"`));
   assert.match(html, /View and edit remaining fields/);
   assert.match(html, /Assume freshly caught Pokémon/);
-  assert.match(html, /New-game SID RNG Filter/);
+  assert.match(html, /Dewford trend SID finder/);
   assert.match(html, /Limit RNG advances/);
   assert.match(html, /Fixed curtain and byte recovery/);
   assert.match(html, /aria-label="Pixel grid lines" aria-pressed="true"/);

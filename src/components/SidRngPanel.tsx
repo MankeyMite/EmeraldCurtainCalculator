@@ -35,9 +35,9 @@ export function SidRngPanel({
       <SidDigitControls lab={lab} />
       <details
         className={`sid-rng-panel investigation-card ${compact ? "compact" : ""}`}
-        aria-label="New-game SID RNG Filter"
+        aria-label="Dewford trend SID finder"
       >
-        <summary>New-game SID RNG Filter</summary>
+        <summary>Dewford trend SID finder</summary>
         <label className="check-label">
           <input
             type="checkbox"
@@ -49,7 +49,7 @@ export function SidRngPanel({
               setError("");
             }}
           />
-          New-game SID RNG Filter
+          Use the new-game timing filter
         </label>
         {!compact && (
           <p>

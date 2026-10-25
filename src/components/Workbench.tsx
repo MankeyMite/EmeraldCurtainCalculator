@@ -363,6 +363,15 @@ export function Workbench({
               />
               {section === "sid" && (
                 <>
+                  {onStarterGuide && (
+                    <button
+                      type="button"
+                      className="sid-guide-launch"
+                      onClick={onStarterGuide}
+                    >
+                      New Game SID Finder → Shiny Starter
+                    </button>
+                  )}
                   <SpindaMatcher
                     lab={lab}
                     onTargetsChange={handleSpindaTargets}
@@ -376,16 +385,6 @@ export function Workbench({
                     }}
                   />
                   <SidRngPanel lab={lab} />
-                  <p>
-                    {onStarterGuide && (
-                      <button onClick={onStarterGuide}>
-                        New Game SID Finder → Shiny Starter
-                      </button>
-                    )}
-                    <button onClick={() => open("items")}>
-                      Test experiments for further deduction
-                    </button>
-                  </p>
                 </>
               )}
               {section === "data" && (

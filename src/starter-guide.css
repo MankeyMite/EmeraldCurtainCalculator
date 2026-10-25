@@ -147,6 +147,70 @@
   font-variant-numeric: tabular-nums;
   padding: 8px;
 }
+.starter-beat-guide {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin: 4px auto 10px;
+  overflow: visible;
+  color: #355f4f;
+}
+.starter-beat-axis {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  opacity: 0.4;
+}
+.starter-beat-major,
+.starter-beat-half,
+.starter-beat-minor {
+  stroke: currentColor;
+  stroke-width: 2;
+}
+.starter-beat-half {
+  stroke-width: 1.5;
+  opacity: 0.8;
+}
+.starter-beat-minor {
+  stroke-width: 1;
+  opacity: 0.5;
+}
+.starter-beat-guide text {
+  fill: currentColor;
+  font:
+    12px ui-monospace,
+    monospace;
+}
+.starter-beat-dot {
+  fill: #355f4f;
+  stroke: #f2f7ee;
+  stroke-width: 2;
+}
+.starter-beat-guide[data-active="false"] .starter-beat-dot {
+  opacity: 0.35;
+}
+.starter-beat-guide[data-zero="true"] .starter-beat-dot {
+  fill: #a66916;
+}
+.starter-audio-settings {
+  margin-top: 14px;
+  text-align: left;
+}
+.starter-volume {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+.starter-volume input {
+  flex: 1;
+  min-width: 0;
+  max-width: 260px;
+}
+.starter-volume output {
+  min-width: 4ch;
+  font-variant-numeric: tabular-nums;
+}
 .starter-notice,
 .starter-success {
   background: #fff3d6;

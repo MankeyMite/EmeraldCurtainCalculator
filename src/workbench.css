@@ -13,6 +13,20 @@ body:has(.workbench) {
   font-weight: 700;
   cursor: pointer;
 }
+.workbench .sid-guide-launch {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 12px 0 20px;
+  padding: 24px 20px;
+  border: 1px solid #cdded5;
+  border-radius: 10px;
+  background: #f9fcfa;
+  color: #3e5e4c;
+  text-align: left;
+  font-weight: 600;
+  line-height: 1.5;
+}
 .spinda-workflow {
   display: grid;
   grid-template-columns: minmax(170px, 0.85fr) minmax(240px, 1.3fr);

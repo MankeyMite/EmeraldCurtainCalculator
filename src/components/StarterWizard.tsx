@@ -774,24 +774,10 @@ function StarterGuideSession({
                 caption="Second zero: advance “Come see me in my POKéMON LAB.”"
               />
             </div>
-            <ol>
-              <li>
-                On Emerald’s title menu, open Options and set text speed to
-                Fast. Start a new game.
-              </li>
-              <li>
-                Enter your trainer name and put the cursor on OK. Start the
-                timer below.
-              </li>
-              <li>
-                At the first zero, confirm your name. Continue to Birch’s final
-                message shown in the second picture and wait.
-              </li>
-              <li>
-                At the second zero, advance that message. Read IDNo. from your
-                Trainer Card once you can open it.
-              </li>
-            </ol>
+            <p>
+              Start a new save file and set text speed to Fast, then start the
+              timer when you’re ready to press OK to confirm your nickname.
+            </p>
             <TwoStageTimer
               first={state.intro.first}
               second={state.intro.second}
@@ -1231,7 +1217,6 @@ function StarterGuideSession({
                   {...targetTiming}
                   firstCue="Soft reset (A + B + Start + Select)"
                   secondCue="Confirm the starter"
-                  startLabel="Start next attempt"
                   onStart={beginShinyAttempt}
                 />
               </div>
