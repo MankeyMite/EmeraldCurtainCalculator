@@ -15,7 +15,11 @@ import { experimentChecksumSupports } from "./sid";
 import { rankCombinedPixels } from "./checksum";
 import { experimentChecksumDelta } from "./checksumExperiments";
 import { isActiveAssumption } from "./session";
-import { evTrainingPlan, type EvTrainingPlan } from "./evTraining";
+import {
+  evTrainingPlan,
+  type EvTrainingPlan,
+  type EvTrainingOptions,
+} from "./evTraining";
 import {
   moveLearningActions,
   learningSwapVariants,
@@ -89,6 +93,7 @@ export function controlledActions(
   species?: number,
   identity: KnownFacts = {},
   keyMasks: number[] = Array(8).fill(65535),
+  trainingOptions: EvTrainingOptions = {},
 ): ControlledAction[] {
   const f = source.knownFacts,
     actions: ControlledAction[] = [];
@@ -182,7 +187,11 @@ export function controlledActions(
   }
   actions.push(...moveLearningActions(source, species));
   const evs = f.evs;
-  if (evs?.length === 6 && evs.every((n) => n !== null)) {
+  if (
+    trainingOptions.allowVitamins !== false &&
+    evs?.length === 6 &&
+    evs.every((n) => n !== null)
+  ) {
     const total = evs.reduce<number>((sum, n) => sum + n!, 0);
     ["HP Up", "Protein", "Iron", "Carbos", "Calcium", "Zinc"].forEach(
       (name, i) => {
@@ -262,7 +271,7 @@ export function controlledActions(
         })
         .join("/");
       if (signature === "-/-") continue;
-      const plan = evTrainingPlan(f, stat, target);
+      const plan = evTrainingPlan(f, stat, target, trainingOptions);
       if (!plan) continue;
       const old = checkpoints.get(signature);
       if (
@@ -379,6 +388,7 @@ export function rankControlledExperiments(
   identity: KnownFacts = {},
   snapshots: Snapshot[] = [source],
   includeChecksum = true,
+  trainingOptions: EvTrainingOptions = {},
 ) {
   if (!candidates.length) return [];
   const supports = includeChecksum
@@ -387,7 +397,7 @@ export function rankControlledExperiments(
   const keyMasks = Array.from({ length: 8 }, (_, n) =>
     candidates.reduce((mask, h) => mask | (1 << ((h.key >>> (n * 4)) & 15)), 0),
   );
-  return controlledActions(source, species, identity, keyMasks)
+  return controlledActions(source, species, identity, keyMasks, trainingOptions)
     .flatMap((action) => {
       const plaintext = knownPlaintext({
         ...source.knownFacts,

@@ -31,6 +31,25 @@
   border-bottom: 1px solid #cbdcd4;
   padding: 16px 0;
 }
+.starter-pid-search {
+  margin: 14px 0;
+}
+.starter-search-progress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+.starter-search-progress progress {
+  width: 100%;
+  height: 14px;
+  accent-color: #355f50;
+}
+.starter-search-progress span {
+  font-size: 13px;
+  white-space: nowrap;
+}
 .starter-screen {
   background: #fffef9;
   border: 1px solid #d0dfd6;

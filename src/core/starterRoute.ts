@@ -217,7 +217,7 @@ export function planStarterItems(
   return { items, score: scorePatterns(candidates, combined) };
 }
 
-function legalMoveOrders(facts: KnownFacts) {
+export function legalMoveOrders(facts: KnownFacts) {
   const occupied = (facts.moves ?? []).flatMap((m, i) => (m ? [i] : []));
   let states = [{ facts, instructions: [] as string[] }];
   // Breadth first all permutations of occupied slots, including slots 3/4.

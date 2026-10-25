@@ -139,7 +139,7 @@ export function TimingOptions({
       <p className="help">
         {intro
           ? "The initial 50-advance delay is a calibration estimate. The timer begins at the name-confirmation cue; the game seeds after the naming-screen fade. Extra calls and input delays can shift the result."
-          : "The default search covers about one second early or late (±60 advances). Use A+B+Start+Select to soft reset on console or emulator. Calibration starts at zero; adjust it from a known landed advance if needed."}
+          : "The default search covers about one second early or late (±60 advances). Use A+B+Start+Select to soft reset on console or emulator. The initial +3-advance calibration estimates starter-generation delay; adjust it from a known landed advance if needed."}
       </p>
     </details>
   );

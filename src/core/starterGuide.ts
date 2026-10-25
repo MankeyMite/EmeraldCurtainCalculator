@@ -15,10 +15,13 @@ import {
   type StarterTiming,
   STARTER_SEARCH_RADIUS,
   DEFAULT_STARTER_SEARCH_RADIUS,
+  DEFAULT_STARTER_CALIBRATION,
 } from "./starterTiming";
 import yields from "../data/ev-yields.json";
 import learnsets from "../data/level-up-learnsets.json";
 import { STARTER_ITEM_IDS } from "./starterItems";
+import catalogueRules from "../data/starter-catalogue-rules.json";
+import type { StarterPidRecommendation } from "./starterRecommendation";
 import { recordStarterChecklist } from "./starterChecklist";
 
 export const STARTERS = [277, 280, 283];
@@ -64,7 +67,7 @@ export type RouteSetup = {
 };
 export type StarterGuideState = {
   version: 1;
-  starterTimingVersion?: 1 | 2 | 3 | 4;
+  starterTimingVersion?: 1 | 2 | 3 | 4 | 5;
   itemCatalogVersion?: 1 | 2;
   journeyVersion?: 1;
   usedTms?: number[];
@@ -72,6 +75,11 @@ export type StarterGuideState = {
   tid: string;
   intro: StarterTiming;
   starter: StarterTiming;
+  starterRecommendation?: Pick<
+    StarterPidRecommendation,
+    "key" | "advance" | "species"
+  > &
+    Partial<StarterPidRecommendation>;
   identifiedStarter?: RngSpread | null;
   species: number;
   nature: string;
@@ -101,7 +109,7 @@ export type StarterGuideState = {
 export function newStarterGuide(): StarterGuideState {
   return {
     version: 1,
-    starterTimingVersion: 4,
+    starterTimingVersion: 5,
     itemCatalogVersion: 2,
     journeyVersion: 1,
     usedTms: [],
@@ -180,7 +188,7 @@ export function validateStarterGuide(value: unknown): StarterGuideState {
     !s ||
     s.version !== 1 ||
     (s.starterTimingVersion !== undefined &&
-      ![1, 2, 3, 4].includes(s.starterTimingVersion)) ||
+      ![1, 2, 3, 4, 5].includes(s.starterTimingVersion)) ||
     (s.itemCatalogVersion !== undefined &&
       ![1, 2].includes(s.itemCatalogVersion)) ||
     (s.journeyVersion !== undefined && s.journeyVersion !== 1) ||
@@ -213,6 +221,49 @@ export function validateStarterGuide(value: unknown): StarterGuideState {
     throw Error("Invalid starter guide progress.");
   validateTiming(s.intro);
   validateTiming(s.starter);
+  if (
+    s.starterRecommendation &&
+    (typeof s.starterRecommendation.key !== "string" ||
+      s.starterRecommendation.key.length > 2000 ||
+      !Number.isInteger(s.starterRecommendation.advance) ||
+      s.starterRecommendation.advance < catalogueRules.minAdvance ||
+      s.starterRecommendation.advance > catalogueRules.maxAdvance ||
+      !STARTERS.includes(s.starterRecommendation.species))
+  )
+    throw Error("Invalid starter recommendation.");
+  const preview = s.starterRecommendation;
+  if (preview?.rows !== undefined) {
+    if (
+      !preview.timing ||
+      !Number.isInteger(preview.fullSidCount) ||
+      preview.fullSidCount! < 1 ||
+      preview.fullSidCount! > 4096 ||
+      !Number.isInteger(preview.priorityCount) ||
+      preview.priorityCount! < 1 ||
+      preview.priorityCount! > 19 ||
+      !Number.isFinite(preview.drawingChance) ||
+      preview.drawingChance! < 0 ||
+      preview.drawingChance! > 1 ||
+      !Array.isArray(preview.rows) ||
+      preview.rows.length !== 11 ||
+      preview.rows.some(
+        (row, n) =>
+          row.advance !== preview.advance - 5 + n ||
+          !Number.isInteger(row.pid) ||
+          row.pid < 0 ||
+          row.pid > 0xffffffff ||
+          !Number.isInteger(row.drawingOnly) ||
+          row.drawingOnly < 0 ||
+          row.drawingOnly > preview.priorityCount! ||
+          !Number.isInteger(row.withoutTraining) ||
+          row.withoutTraining < row.drawingOnly ||
+          row.withoutTraining > preview.priorityCount! ||
+          typeof row.ambiguous !== "boolean",
+      )
+    )
+      throw Error("Invalid saved starter PID preview.");
+    validateTiming(preview.timing);
+  }
   if (!["timer", "summary"].includes(s.starterPart))
     throw Error("Invalid starter screen.");
   for (const r of s.readings) {
@@ -316,12 +367,22 @@ export function validateStarterGuide(value: unknown): StarterGuideState {
       s.completedRouteSteps.some((key) => typeof key !== "string"))
   )
     throw Error("Invalid checklist progress.");
+  const existingCalibration =
+    (s.starterTimingVersion ?? 0) < 3 && s.starter.calibration === -254
+      ? 0
+      : s.starter.calibration;
+  const starterCalibration =
+    (s.starterTimingVersion ?? 0) < 5 &&
+    existingCalibration === 0 &&
+    s.starter.offset === 0
+      ? existingCalibration + DEFAULT_STARTER_CALIBRATION
+      : existingCalibration;
   // Older versions accumulated checks that could belong to different attempts.
   return structuredClone({
     ...s,
     ability: starterAbility(s.species),
     attemptAbility: starterAbility(s.species),
-    starterTimingVersion: 4,
+    starterTimingVersion: 5,
     itemCatalogVersion: 2,
     journeyVersion: 1,
     usedTms: s.usedTms ?? [],
@@ -330,10 +391,7 @@ export function validateStarterGuide(value: unknown): StarterGuideState {
       ...s.starter,
       // Remove the old BIOS-reset default once. Other measured corrections
       // and explicitly entered version-3 calibrations remain unchanged.
-      calibration:
-        (s.starterTimingVersion ?? 0) < 3 && s.starter.calibration === -254
-          ? 0
-          : s.starter.calibration,
+      calibration: starterCalibration,
       uncertainty:
         ((s.starterTimingVersion ?? 0) < 2 && s.starter.uncertainty === 100) ||
         ((s.starterTimingVersion ?? 0) < 4 && s.starter.uncertainty === 10)

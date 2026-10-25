@@ -3,12 +3,14 @@ export function useStarterTask<T>() {
   const worker = useRef<Worker | null>(null);
   const [result, setResult] = useState<T | null>(null),
     [busy, setBusy] = useState(false),
+    [progress, setProgress] = useState(0),
     [error, setError] = useState("");
   useEffect(() => () => worker.current?.terminate(), []);
   const clear = () => {
     worker.current?.terminate();
     worker.current = null;
     setBusy(false);
+    setProgress(0);
     setResult(null);
     setError("");
   };
@@ -23,9 +25,17 @@ export function useStarterTask<T>() {
       worker.current = w;
       w.onmessage = ({ data }) => {
         if (worker.current !== w) return;
+        if (typeof data.progress === "number") {
+          if (Number.isFinite(data.progress))
+            setProgress(Math.max(0, Math.min(99, Math.floor(data.progress))));
+          return;
+        }
         setBusy(false);
         if (data.error) setError(data.error);
-        else setResult(data.result);
+        else {
+          setProgress(100);
+          setResult(data.result);
+        }
         w.terminate();
         worker.current = null;
       };
@@ -44,5 +54,5 @@ export function useStarterTask<T>() {
       setError((e as Error).message);
     }
   };
-  return { result, busy, error, run, clear };
+  return { result, busy, progress, error, run, clear };
 }

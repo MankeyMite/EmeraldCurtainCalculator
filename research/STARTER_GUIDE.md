@@ -1,5 +1,21 @@
 # New Game SID Finder → Shiny Starter
 
+After TID entry, choose **Search optimal PID** to compare all three starters across the
+[1000–3000 advance catalogue](STARTER_CATALOGUE.md). A real-work progress bar
+and percentage track the search. The guide selects the best 11-PID
+window and automatically sets the starter species and second countdown. It
+prioritises low EV requirements at the exact target and within three advances,
+then item/move and drawing-only outcomes. Outer landings matter less. The compact
+expandable table retains unweighted drawing-only and no-EV counts per PID.
+SID timings nearer the estimated target receive more planning weight; none are
+removed from the search. These weights are assumptions, not measured probabilities.
+The 19 prioritised SID-generation advances remain separate from the eleven
+starter landings; all SID competitors and the full PID search are retained.
+The button is disabled for an empty or invalid TID and while searching. Editing
+search inputs cancels stale work. The completed preview and timer persist across
+reloads; the guide never starts a new optimal-PID search automatically. An
+existing starter investigation is never replaced by a suggestion.
+
 The header's **Reset guide** starts again at Step 1, clearing this guide's
 trainer, starter, route and curtain evidence while preserving timer settings.
 The previous pair of guide saves is backed up locally; **Undo reset** on Step 1
@@ -55,12 +71,20 @@ editing it stores that total with zero legacy delay. The shiny-attempt manual
 calibration uses the same total. Existing targets and countdowns are preserved.
 The naming-to-SID final-dialogue delay remains a separate introductory setting.
 
-Starter calibration defaults to **zero**, using the in-game **A+B+Start+Select**
-soft reset on both console and emulator. At zero confirmation delay and zero
-calibration, 15 seconds estimates advance 896, 20 seconds estimates 1195
-(search 1135–1255), and 25 seconds estimates 1493. The same total calibration
-feeds the inverse countdown for shiny targets. Any input-to-generation delay
-is covered by the search uncertainty and subsequent measured calibration.
+Starter calibration defaults to **+3 advances**, using the in-game
+**A+B+Start+Select** soft reset on both console and emulator. This incorporates the
+[reported +3 (+/-1) advance starter-generation delay](https://www.reddit.com/r/pokemonrng/comments/k395lc/pok%C3%A9mon_emerald_shiny_starter_delay/)
+after confirming YES. It is a community-measured starting estimate, not a source-proven
+constant or guaranteed latency. At zero legacy offset and +3 calibration, 15 seconds
+estimates advance 899, 20 seconds estimates 1198 (search 1138–1258), and 25 seconds
+estimates 1496. For a fixed chosen advance, the inverse timer subtracts that same
+three advances, moving the YES cue about 50 ms earlier. Measured misses adjust
+this existing total calibration; no second hidden starter delay is added.
+
+Version 5 upgrades older neutral zero/zero starter settings once. Nonzero saved
+calibrations and offsets are preserved, including a previously entered +3. Explicit
+version-5 zero settings remain zero. The identified starter stays pinned, and the
+separate SID-generation delay and calibration are unchanged.
 
 The former −254 default came from the user's mGBA **Ctrl+R** reset, which
 replayed the Game Boy Advance BIOS intro. It is not an in-game soft-reset
@@ -78,7 +102,7 @@ centered for the setup. Regression checks use independent Method 1 tuples
 60 advances early and late at 15, 20 and 25 seconds for all three starters.
 The older fixed-20-second simulation giving 92 unique results out of 100 used
 the former BIOS-reset calibration; its artifacts are historical and do not
-establish the success rate at the corrected advance-1195 target. The beginner
+establish the success rate at the current advance-1198 target. The beginner
 screen asks players to reset until one spread matches. That spread survives
 EV-aware stat updates and clears on a new timed attempt. Contradictory later
 stats cannot silently switch to another PID. Advanced tools retain ambiguity.
@@ -270,7 +294,7 @@ The user-supplied full early-game source list is preserved in
 sources are in src/data/starter-items.json and filtered by starterItems.ts.
 The guide no longer asks which items the player owns. Guaranteed pre-badge,
 no-HM sources supply the first setup and later held-item experiment options.
-The legacy availableItems field is retained only for saved-data compatibility.
+The optional availableItems field is retained only for saved-data compatibility.
 Older selected-item route plans refresh once; active curtain evidence and
 unfinished training checkpoints are preserved.
 
@@ -390,7 +414,13 @@ and the original drawing remain unchanged. Answer order and the reopened pixel
 are saved between sessions; legacy saves fall back to their stored target order.
 The advanced targeted experiment controls reuse the same undo operation.
 
-After exactly one starter spread is identified, an effort table shows the estimated
+The eleven-PID recommendation appears before catching the starter. After the stats identify one PID, the guide also shows eleven nearby possible SIDs, their experiment difficulty, and an optional retry if substantial training may be needed. Both previews preserve the full SID search window.
+After exactly one starter spread is identified, the scored catalogue preparation
+becomes its route if the initial battle log still matches the modeled starting
+state. Extra battles or an existing Rustboro checkpoint use the actual-state
+planner. Checklist actions log the prescribed battles, moves and consumed TMs.
+
+The SID table shows the estimated
 TID/SID target advance and five advances on each side, chronologically. Repeated
 SIDs retain their separate generating advances. Every displayed
 SID is compared against all SIDs in the full timing window; the preview never
@@ -414,7 +444,7 @@ the interactive recommender may choose a different path. This is not an optimal
 experiment tree or a guarantee. Windows above 4096 distinct SIDs retain all
 candidates but do not run experiment rehearsals.
 
-For hard or unresolved rows, the optional “Try another starter (+20 advances)” moves
+The legacy “Try another starter (+20 advances)” helper moves
 the actual second countdown about 0.33 seconds later. It preserves calibration,
 the first countdown, search radius and TID/SID timing. Intentional target changes
 are not measured calibration corrections. The windows overlap and a different
@@ -473,3 +503,46 @@ Both display numbering and the RNG sequence remain unchanged. Another fixture
 retains multiple compatible in-window spreads at 1786 and 1889, prompts for all
 six stats after every level-up, and removes the false match using the latest
 summary and its actual EV snapshot.
+
+
+### Manual training when the early guide has no vitamins
+
+The guided experiment generator disables vitamins before choosing or pruning EV
+checkpoints. It must not choose a cheap vitamin plan and then hide it, because
+that loses an attainable manual-training test for the same SID digit. The
+advanced investigator retains its vitamin-aware planning. EV totals, multipliers,
+per-stat caps and total caps remain enforced in both modes.
+
+The user-supplied encrypted Torchic record (PID 2FCA6C06, TID 50998) is retained
+as a reference-only regression fixture. Correct initial pixels plus every
+supported early item and single move swap leave SIDs 06425 and 21273. The guide
+now offers Speed EVs 1 to 6 with five ordinary one-EV battles. An independently
+modified encrypted record makes row 15, column 7 transparent for SID 06425;
+recording that answer leaves only 06425. The fixture's hidden SID is never an
+input to the solver or experiment selection.
+
+Item and move tests in the guide continue from the latest completed setup.
+The active saved snapshot supplies its held item and move order; completing the
+next test keeps that changed setup. Earlier drawings and answers remain attached
+to their own facts. The advanced investigator retains its original-baseline protocol.
+
+### Continuing experiments and training evidence
+
+The guide follows the active recorded setup rather than returning to its first
+drawing. Item and move changes keep their resulting item, moves and PP; new
+recommendations use those current values, and the active setup persists on reload.
+Partial targeted answers do not require another full drawing before the next test.
+
+Battle-log edits describe the Pokemon now. Returning from the log creates a new,
+blank checkpoint and asks useful pixel questions for the updated EVs/moves. It
+never applies the new EVs to an old drawing or propagates them through historical
+item and move tests. An EV update alone leaves the SID set unchanged. Predictions
+remain previews until the player answers. This supersedes the earlier automatic
+EV-correction path in the wizard; explicit historical-correction helpers remain
+available to the advanced/core tools.
+
+The supplied Torchic regression demonstrates the failure and repair: applying
+6 Speed EVs to its old 1-Speed-EV black pixel falsely confirms SID 21273. A fresh
+unanswered checkpoint instead retains 06425 and 21273, including after reload.
+Only the independently verified transparent answer then resolves 06425. Undoing
+that answer restores both candidates without changing earlier snapshots.

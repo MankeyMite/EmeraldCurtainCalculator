@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "sourceRevision": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "minAdvance": 1000,
+  "maxAdvance": 3000,
+  "maxLevel": 11,
+  "minimumSecondCountdown": 15,
+  "machineMoves": [15, 331],
+  "forestTrainer": {
+    "id": "journey-lyle",
+    "species": 290,
+    "level": 3,
+    "count": 4,
+    "trainer": true,
+    "multiplier": 1
+  },
+  "levelTraining": { "species": 290, "level": 5, "maximumBattles": 12 },
+  "additionalPlaintext": []
+}

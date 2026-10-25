@@ -75,6 +75,10 @@ export function StarterOutlook({
       </p>
       {canRetry && (
         <>
+          <p>
+            Some nearby SIDs may need lengthy training with this starter. You
+            can try another starter before travelling to Rustboro.
+          </p>
           <button onClick={onRetry}>Try another starter (+20 advances)</button>
           <p className="help">
             Optional: shift the starter countdown about 0.33 seconds later.

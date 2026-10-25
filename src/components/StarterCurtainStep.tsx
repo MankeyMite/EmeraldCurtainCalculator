@@ -6,6 +6,8 @@ import { controlledFacts } from "../core/controlledExperiments";
 import { compareSidSteps, experimentSeconds } from "../core/nextSidStep";
 import { emptyObservations } from "../core/constraints";
 import { speciesTraits } from "../core/traits";
+import { ITEM_CATALOG } from "../core/experiments";
+import { moveName } from "../core/moveLearningExperiments";
 import { describeByte } from "../core/inspection";
 import { PixelGrid } from "./PixelGrid";
 import { stripLayout } from "./WorkbenchData";
@@ -58,9 +60,12 @@ export function StarterCurtainStep({
   const question = available.find((q) => q.index === selected) ?? available[0];
   const disabled =
     lab.analysisBusy || lab.drawingInProgress || !!lab.analysisError;
-  const baselineReady = (lab.itemTestBaseline?.observations ?? lab.obs)
-    .slice(16, 176)
-    .every((v) => v !== -1);
+  const baselineReady =
+    lab.starterHasDrawing ??
+    (lab.itemTestBaseline?.observations ?? lab.obs)
+      .slice(16, 176)
+      .every((v) => v !== -1);
+  const drawing = !lab.pendingItemTest && !lab.activeSnapshot?.itemTest;
   const layout = stripLayout();
   const answer = (value: 0 | 1) => {
     if (!question || disabled) return;
@@ -168,6 +173,22 @@ export function StarterCurtainStep({
     lab.analysisError,
   ]);
   const next = options[0];
+  const alreadyChanged =
+    recheck !== undefined ||
+    lab.activeSnapshot?.itemTest?.action?.kind === "ev";
+  const original = alreadyChanged
+    ? lab.activeSnapshot.knownFacts
+    : lab.itemTestBaseline.knownFacts;
+  const originalSetup = [
+    original.heldItem === 0
+      ? "No held item."
+      : original.heldItem === undefined
+        ? "Keep the original held item."
+        : `Hold ${ITEM_CATALOG.find((item) => item.id === original.heldItem)?.name ?? `item ${original.heldItem}`}.`,
+    original.moves
+      ? `Move order: ${original.moves.map((move) => (move === null ? "unknown" : move === 0 ? "empty" : moveName(move))).join(" / ")}.`
+      : "Keep the original move order.",
+  ].join(" ");
   const conflict =
     !lab.drawingInProgress && !lab.analysisBusy
       ? [...lab.assistance.contradictions][0]
@@ -221,14 +242,19 @@ export function StarterCurtainStep({
       {!lab.pendingItemTest &&
         !lab.drawingInProgress &&
         (sids?.length === 0 || conflict !== undefined) && (
-          <button onClick={onMoreInfo}>Check battle log and moves</button>
+          <button onClick={onMoreInfo}>Update battle log and moves</button>
         )}
       {lab.pendingItemTest && (
         <div className="starter-notice">
           <strong>{lab.activeSnapshot.name}</strong>
           <p>
-            {lab.activeSnapshot.itemTest?.action?.instructions ??
-              `Change the held item to the selected test item while boxed. Inspect the highlighted pixels, then restore the original item.`}
+            {alreadyChanged ? "Current" : "Starting"} setup: {originalSetup}
+          </p>
+          <p>
+            {recheck !== undefined
+              ? "Keep this setup, reenter the school and check the highlighted pixel again."
+              : (lab.activeSnapshot.itemTest?.action?.instructions ??
+                `Give the starter ${ITEM_CATALOG.find((item) => item.id === lab.activeSnapshot.knownFacts.heldItem)?.name ?? "the selected test item"} while boxed. Reenter the school and inspect the highlighted pixels. Keep this item and move order for the next experiment.`)}
           </p>
           <button onClick={lab.cancelItemTest}>Cancel this experiment</button>
           <button
@@ -241,8 +267,7 @@ export function StarterCurtainStep({
       )}
       {!lab.pendingItemTest && lab.lastCompletedItemTest && (
         <p className="starter-notice">
-          Restore the original held item and move order before another test. The
-          app restored the baseline drawing only.
+          Current setup: {originalSetup} Keep it for the next experiment.
         </p>
       )}
       {lab.canUndoExperimentAnswer && (
@@ -277,7 +302,7 @@ export function StarterCurtainStep({
             gameBackground
             mainOnly
             solver
-            editable={!lab.pendingItemTest}
+            editable={drawing}
             memory={lab.memory}
             observations={lab.obs}
             referenceObservations={lab.referenceObservations}
@@ -296,10 +321,8 @@ export function StarterCurtainStep({
           />
         </div>
         <section aria-label="SID Pixel Guide">
-          <h3>
-            {lab.pendingItemTest ? "SID Pixel Guide" : "Draw your curtains"}
-          </h3>
-          {!lab.pendingItemTest && (
+          <h3>{drawing ? "Draw your curtains" : "SID Pixel Guide"}</h3>
+          {drawing && (
             <>
               <p>
                 Click or drag to copy the black pixels you see. Click a black
@@ -359,7 +382,7 @@ export function StarterCurtainStep({
               <p>
                 {next.id.startsWith("ev-")
                   ? "Log the training battles and update any changed moves before the next curtain reading."
-                  : "Start from the current original setup. This test can distinguish remaining SIDs."}
+                  : `Current setup: ${originalSetup} This test can distinguish remaining SIDs.`}
               </p>
               <button onClick={() => next.select(next.targets)}>
                 Try this experiment
@@ -374,8 +397,9 @@ export function StarterCurtainStep({
             sids.length > 1 && (
               <>
                 <p>
-                  Check the battle log and current moves before another curtain
-                  reading.
+                  No supported experiment can separate these SIDs with the
+                  recorded setup. Check the battle log and moves for missing
+                  information.
                 </p>
                 <button onClick={onMoreInfo}>Check battle log and moves</button>
               </>

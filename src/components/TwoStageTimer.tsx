@@ -15,6 +15,7 @@ export function TwoStageTimer({
   secondCue,
   onFirstCue,
   onStart,
+  disabled = false,
 }: {
   first: number;
   second: number;
@@ -22,6 +23,7 @@ export function TwoStageTimer({
   secondCue: string;
   onFirstCue?: () => void;
   onStart?: () => void;
+  disabled?: boolean;
 }) {
   const [remaining, setRemaining] = useState<number | null>(null),
     [stage, setStage] = useState(0),
@@ -210,7 +212,7 @@ export function TwoStageTimer({
           ? `Stage ${stage + 1} — ${stage === 0 ? firstCue : secondCue}`
           : "Four main beeps per stage. Act on the fourth beep, at zero. Keep this page visible."}
       </p>
-      <button onClick={start}>
+      <button onClick={start} disabled={disabled}>
         {remaining === null ? "Start timer" : "Restart timer"}
       </button>
       {remaining !== null && <button onClick={stop}>Stop timer</button>}

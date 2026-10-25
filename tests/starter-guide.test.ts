@@ -160,14 +160,14 @@ test("both countdowns have exactly four cues and the fourth is at zero; calibrat
 
 test("in-game soft-reset timing has no BIOS offset and upgrades old defaults once", () => {
   const timing = { ...defaultStarterTiming(), second: 20 };
-  assert.equal(timing.calibration, 0);
-  assert.equal(starterTargetFrame(timing), 1195);
+  assert.equal(timing.calibration, 3);
+  assert.equal(starterTargetFrame(timing), 1198);
   assert.deepEqual(estimatedStarterWindow(timing), {
-    minAdvance: 1135,
-    maxAdvance: 1255,
+    minAdvance: 1138,
+    maxAdvance: 1258,
   });
-  assert.equal(starterTargetFrame({ ...timing, second: 15 }), 896);
-  assert.equal(starterTargetFrame({ ...timing, second: 25 }), 1493);
+  assert.equal(starterTargetFrame({ ...timing, second: 15 }), 899);
+  assert.equal(starterTargetFrame({ ...timing, second: 25 }), 1496);
   for (const advance of [896, 1195, 1493, 5000]) {
     const countdown = targetCountdown(advance, timing.calibration, 15, 12);
     assert.equal(
@@ -175,7 +175,7 @@ test("in-game soft-reset timing has no BIOS offset and upgrades old defaults onc
       advance,
     );
   }
-  const calibration = calibratedFrames(timing.calibration, 1195, 1202);
+  const calibration = calibratedFrames(timing.calibration, 1198, 1202);
   assert.equal(calibration, 7);
   assert.equal(starterTargetFrame({ ...timing, calibration }), 1202);
   assert.ok(
@@ -187,7 +187,7 @@ test("in-game soft-reset timing has no BIOS offset and upgrades old defaults onc
     legacy.starterTimingVersion = version;
     legacy.starter = { ...timing, calibration: -254 };
     const restored = validateStarterGuide(JSON.parse(JSON.stringify(legacy)));
-    assert.equal(starterTargetFrame(restored.starter), 1195);
+    assert.equal(starterTargetFrame(restored.starter), 1198);
     assert.deepEqual(
       restored.intro,
       legacy.intro,
@@ -198,7 +198,7 @@ test("in-game soft-reset timing has no BIOS offset and upgrades old defaults onc
       legacy.starter.calibration = correction;
       assert.equal(
         validateStarterGuide(legacy).starter.calibration,
-        correction,
+        correction === 0 ? 3 : correction,
       );
     }
     restored.starter.calibration = -254;
@@ -208,13 +208,18 @@ test("in-game soft-reset timing has no BIOS offset and upgrades old defaults onc
       "explicit version-3 calibration must survive reopening",
     );
   }
+  const cancellingLegacy = newStarterGuide();
+  cancellingLegacy.starterTimingVersion = 4;
+  cancellingLegacy.starter.offset = -9;
+  cancellingLegacy.starter.calibration = 9;
+  assert.equal(validateStarterGuide(cancellingLegacy).starter.calibration, 9);
   const { s } = fixture();
   const spread = searchStarter(s)[0];
   s.identifiedStarter = spread;
   s.starterTimingVersion = 2;
   s.starter = { ...timing, calibration: -254 };
   const restored = validateStarterGuide(s);
-  assert.equal(restored.starter.calibration, 0);
+  assert.equal(restored.starter.calibration, 3);
   assert.deepEqual(
     searchStarter(restored).map((e) => e.pid),
     [spread.pid],
@@ -225,6 +230,50 @@ test("in-game soft-reset timing has no BIOS offset and upgrades old defaults onc
     minAdvance: spread.advance,
     maxAdvance: spread.advance,
   });
+});
+
+test("reported starter delay advances the cue once and preserves measured calibration on reload", () => {
+  const s = newStarterGuide();
+  const advance = 1800;
+  const uncalibrated = targetCountdown(advance, 0);
+  const estimated = targetCountdown(advance, s.starter.calibration);
+  assert.ok(
+    Math.abs(uncalibrated.second - estimated.second - 3 / EMERALD_FPS) < 1e-9,
+  );
+  assert.equal(starterTargetFrame({ ...s.starter, ...estimated }), advance);
+  const corrected = calibratedFrames(
+    s.starter.calibration,
+    advance,
+    advance + 2,
+  );
+  assert.equal(
+    corrected,
+    5,
+    "a measured two-advance miss adds two, not another three",
+  );
+  assert.ok(
+    Math.abs(
+      estimated.second -
+        targetCountdown(advance, corrected).second -
+        2 / EMERALD_FPS,
+    ) < 1e-9,
+  );
+  for (const version of [3, 4, 5] as const) {
+    for (const calibration of [0, 3, 9, -7]) {
+      const saved = {
+        ...s,
+        starterTimingVersion: version,
+        starter: { ...s.starter, calibration },
+      };
+      const restored = validateStarterGuide(saved);
+      assert.equal(
+        restored.starter.calibration,
+        version < 5 && calibration === 0 ? 3 : calibration,
+      );
+      assert.deepEqual(validateStarterGuide(restored), restored);
+      assert.deepEqual(restored.intro, s.intro);
+    }
+  }
 });
 
 test("starter calibration alone preserves legacy confirmation delays in both target and countdown", () => {
@@ -280,9 +329,9 @@ test("default starter search retains the actual PID/IVs with one-second timing e
   for (const second of [15, 20, 25]) {
     // Rounded independent reference centers for in-game soft resets.
     const center = new Map([
-      [15, 896],
-      [20, 1195],
-      [25, 1493],
+      [15, 899],
+      [20, 1198],
+      [25, 1496],
     ]).get(second)!;
     for (const species of [277, 280, 283]) {
       for (const advance of [center - 60, center + 60]) {
@@ -336,7 +385,7 @@ test("one-second starter default migrates old defaults and asks beginners to ret
   s.starter.uncertainty = 100;
   const migrated = validateStarterGuide(s);
   assert.equal(migrated.starter.uncertainty, 60);
-  assert.equal(migrated.starterTimingVersion, 4);
+  assert.equal(migrated.starterTimingVersion, 5);
   s.starter.uncertainty = 40;
   assert.equal(validateStarterGuide(s).starter.uncertainty, 40);
   migrated.starter.uncertainty = 100;
@@ -365,13 +414,13 @@ test("saved ten-advance radius upgrades once and the displayed bounds match the 
     const restored = validateStarterGuide(saved);
     assert.equal(restored.starter.uncertainty, 60);
     const range = estimatedStarterWindow(restored.starter);
-    assert.deepEqual(range, { minAdvance: 1135, maxAdvance: 1255 });
+    assert.deepEqual(range, { minAdvance: 1138, maxAdvance: 1258 });
     assert.equal(starterSettings(restored).minAdvance, range.minAdvance);
     assert.equal(starterSettings(restored).maxAdvance, range.maxAdvance);
     const html = renderToStaticMarkup(
       createElement(StarterTargetWindow, { timing: restored.starter }),
     );
-    assert.match(html, /1135\u20131255/);
+    assert.match(html, /1138\u20131258/);
     assert.match(html, /\u00b160 advances/);
     assert.deepEqual(validateStarterGuide(restored), restored);
     restored.starter.uncertainty = 10;
@@ -1163,6 +1212,7 @@ test("guided curtains retain the main artwork but label only the 8 by 20 record 
     analysisError: "",
     obs,
     assistance: { contradictions: new Set<number>() },
+    itemTestBaseline: newSnapshot("baseline", "Starter curtain", {}),
   } as unknown as Parameters<typeof StarterCurtainStep>[0]["lab"];
   const html = renderToStaticMarkup(
     createElement(StarterCurtainStep, {

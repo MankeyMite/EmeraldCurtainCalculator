@@ -30,6 +30,12 @@ import {
   correctStarterCheckpointFacts,
 } from "../core/starterEvidence";
 import { GUIDE_LAB_KEY } from "../core/starterGuide";
+import {
+  starterExperimentSource,
+  hasStarterDrawing,
+  continueStarterExperiment,
+  updatedStarterCheckpoint,
+} from "../core/starterExperimentFlow";
 import { createControlledTest } from "../core/controlledExperiments";
 import {
   createItemTest,
@@ -192,7 +198,10 @@ export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
     [snapshots, activeId, obs, facts, summaryState],
   );
   const activeSnapshot = currentSnapshots.find((s) => s.id === activeId)!;
-  const originalItemBaseline = itemTestBaseline(currentSnapshots);
+  const guided = autosaveKey === GUIDE_LAB_KEY;
+  const originalItemBaseline = guided
+    ? starterExperimentSource(currentSnapshots, activeId)
+    : itemTestBaseline(currentSnapshots);
   const lastCompletedItemTest = [...currentSnapshots]
     .reverse()
     .find((s) => s.itemTest?.phase === "recorded");
@@ -1069,7 +1078,9 @@ export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
       guidedTargets ?? recommendation.pixels.map((p) => p.index),
       sidAnalysis?.candidates.length ?? Number(investigationInference.pidCount),
     );
-    const targeted = targetExperiment(next);
+    const targeted = guided
+      ? continueStarterExperiment(targetExperiment(next))
+      : targetExperiment(next);
     useItemSnapshot(targeted, [...currentSnapshots, targeted]);
     setNotice(
       `Item test selected. Compare the new item's curtain with original drawing “${originalItemBaseline.name}”.`,
@@ -1096,20 +1107,29 @@ export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
       guidedTargets ?? recommendation.pixels.map((p) => p.index),
       sidAnalysis?.candidates.length ?? Number(investigationInference.pidCount),
     );
-    const targeted = targetExperiment(next);
+    const targeted = guided
+      ? continueStarterExperiment(targetExperiment(next))
+      : targetExperiment(next);
     useItemSnapshot(targeted, [...currentSnapshots, targeted]);
     setNotice(
-      "Experiment selected. Follow its instructions and compare with the original drawing. Restore the original Pokémon state after recording this test.",
+      guided
+        ? "Experiment selected. Apply the change to the current setup and keep it after answering."
+        : "Experiment selected. Follow its instructions and compare with the original drawing. Restore the original Pokémon state after recording this test.",
     );
   }
   function answerTarget(index: number, value: Observation) {
     if (activeSnapshot.itemTest?.mode !== "pixels") return;
     const next = answerExperimentPixel(activeSnapshot, index, value);
     const all = currentSnapshots.map((s) => (s.id === next.id ? next : s));
-    useItemSnapshot(isRecorded(next) ? itemTestBaseline(all) : next, all);
+    useItemSnapshot(
+      isRecorded(next) && !guided ? itemTestBaseline(all) : next,
+      all,
+    );
     setNotice(
       isRecorded(next)
-        ? "Verified experiment pixels saved. Original drawing restored; next experiments are being reranked."
+        ? guided
+          ? "Answer saved. Keep the current setup; next experiments are being reranked."
+          : "Verified experiment pixels saved. Original drawing restored; next experiments are being reranked."
         : "Verified pixel saved; unexamined pixels remain unknown. Candidates are updating.",
     );
   }
@@ -1117,7 +1137,7 @@ export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
     try {
       const next = finishPixelExperiment(activeSnapshot),
         all = currentSnapshots.map((s) => (s.id === next.id ? next : s));
-      useItemSnapshot(itemTestBaseline(all), all);
+      useItemSnapshot(guided ? next : itemTestBaseline(all), all);
       setNotice(
         "Verified pixels saved. Unexamined pixels remain unknown; recommendations are updating.",
       );
@@ -1341,6 +1361,21 @@ export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
       );
     },
     itemTestBaseline: originalItemBaseline,
+    starterHasDrawing: hasStarterDrawing(currentSnapshots),
+    updateStarterCheckpoint: (supplied: KnownFacts) => {
+      if (pendingItemTest || drawingInProgress || deduction.busy)
+        throw Error(
+          "Finish the current drawing or experiment before updating the setup.",
+        );
+      const next = updatedStarterCheckpoint(
+        originalItemBaseline,
+        identity,
+        supplied,
+        sidAnalysis?.candidates ?? [],
+        crypto.randomUUID(),
+      );
+      if (next) useItemSnapshot(next, [...currentSnapshots, next]);
+    },
     correctStarterCheckpointFacts: (changes: KnownFacts) => {
       if (pendingItemTest || drawingInProgress)
         throw Error(

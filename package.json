@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5187",
-    "build": "tsc --noEmit \u0026\u0026 vite build",
+    "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "tsx --test tests/*.test.ts",
     "research": "node scripts/extract-mapping.mjs",
-    "check": "npm run test \u0026\u0026 npm run build",
-    "package:source": "node scripts/package-source.mjs"
+    "check": "npm run test && npm run build",
+    "package:source": "node scripts/package-source.mjs",
+    "catalogue:build": "tsx scripts/build-starter-catalogue.ts",
+    "catalogue:check": "tsx scripts/build-starter-catalogue.ts --check",
+    "catalogue:benchmark": "tsx scripts/benchmark-starter-catalogue.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
@@ -26,6 +29,6 @@
   "description": "Emerald Curtain Investigator: guided Pokémon data recovery, SID inference and curtain experiments",
   "license": "MIT",
   "engines": {
-    "node": "\u003e=22.12.0"
+    "node": ">=22.12.0"
   }
 }

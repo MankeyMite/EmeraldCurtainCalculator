@@ -16,6 +16,8 @@ export type EvTrainingPlan = {
   lastResort: boolean;
 };
 
+export type EvTrainingOptions = { allowVitamins?: boolean };
+
 /** Train from the saved baseline, then return to inspect the curtain. Vitamins
  * precede battles, as Emerald stops accepting them at 100 EVs. The 60 seconds
  * per battle includes returning to check; it is not an extra 30-second battle. */
@@ -23,6 +25,7 @@ export function evTrainingPlan(
   facts: KnownFacts,
   stat: number,
   target: number,
+  options: EvTrainingOptions = {},
 ): EvTrainingPlan | null {
   if (!facts.evs || facts.evs.some((n) => n === null)) return null;
   const evs = facts.evs as number[],
@@ -65,6 +68,7 @@ export function evTrainingPlan(
       };
       if (!best || plan.seconds < best.seconds) best = plan;
     }
+    if (options.allowVitamins === false) break;
     const next = Math.min(100, cap, checkpoint + 10);
     if (next <= checkpoint || next > target) break;
     checkpoint = next;

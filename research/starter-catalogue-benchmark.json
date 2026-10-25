@@ -1,0 +1,1688 @@
+{
+  "node": "v24.13.0",
+  "platform": "win32",
+  "cpu": "12th Gen Intel(R) Core(TM) i5-12600KF",
+  "range": [
+    1000,
+    2000
+  ],
+  "timing": {
+    "first": 5,
+    "second": 20,
+    "uncertainty": 60,
+    "offset": 50,
+    "calibration": 0
+  },
+  "results": [
+    {
+      "tid": 48734,
+      "milliseconds": 2195,
+      "fullSidCount": 121,
+      "priority": [
+        {
+          "advance": 1236,
+          "sid": 5654
+        },
+        {
+          "advance": 1237,
+          "sid": 32487
+        },
+        {
+          "advance": 1238,
+          "sid": 27478
+        },
+        {
+          "advance": 1239,
+          "sid": 18160
+        },
+        {
+          "advance": 1240,
+          "sid": 44039
+        },
+        {
+          "advance": 1241,
+          "sid": 29811
+        },
+        {
+          "advance": 1242,
+          "sid": 41393
+        },
+        {
+          "advance": 1243,
+          "sid": 13118
+        },
+        {
+          "advance": 1244,
+          "sid": 29435
+        },
+        {
+          "advance": 1245,
+          "sid": 27368
+        },
+        {
+          "advance": 1246,
+          "sid": 49423
+        },
+        {
+          "advance": 1247,
+          "sid": 63957
+        },
+        {
+          "advance": 1248,
+          "sid": 6280
+        },
+        {
+          "advance": 1249,
+          "sid": 16275
+        },
+        {
+          "advance": 1250,
+          "sid": 3987
+        },
+        {
+          "advance": 1251,
+          "sid": 21263
+        },
+        {
+          "advance": 1252,
+          "sid": 59176
+        },
+        {
+          "advance": 1253,
+          "sid": 43122
+        },
+        {
+          "advance": 1254,
+          "sid": 64384
+        }
+      ],
+      "evaluatedSetups": 1527257,
+      "assumptions": [
+        "Equal weight per surviving SID-generating advance within estimated target ±9; this is a planning assumption, not a measured probability.",
+        "Equal weight across starter timing errors within ±60 advances; candidates outside the 1000–2000 catalogue are not certified.",
+        "Every prioritised SID is compared with the entire surviving SID window.",
+        "One held item and one legal preparation per landed PID; no true SID is supplied to route selection.",
+        "A level-5 summary that matches multiple in-window PIDs counts as a retry, not drawing-only success.",
+        "Lyle and James are fought; extra HP-only battles are permitted solely to learn an early move, never to tune Defense or Speed.",
+        "Known singleton plaintext only; unknown fields and checksum correlations can improve real results beyond this conservative score."
+      ],
+      "targets": [
+        {
+          "species": 280,
+          "advance": 1856,
+          "secondCountdown": 31.07,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.5967812092214007,
+          "worstDrawingOnly": 7,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 109.7107438016529,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1856,
+            "pid": 1258701170,
+            "species": 280,
+            "option": {
+              "preparation": 731,
+              "item": 183,
+              "seconds": 165,
+              "plaintextMasks": [
+                24757,
+                2439,
+                259,
+                5
+              ]
+            },
+            "drawingOnly": 11,
+            "coverageBits": 512620,
+            "fullDrawingOnly": 51,
+            "expectedSurvivors": 5.033057851239669,
+            "worstSurvivors": 20
+          }
+        },
+        {
+          "species": 283,
+          "advance": 1864,
+          "secondCountdown": 31.21,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.5928664636798608,
+          "worstDrawingOnly": 0,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 4,
+          "averagePreparationSeconds": 109.58677685950413,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1864,
+            "pid": 611985663,
+            "species": 283,
+            "option": {
+              "preparation": 804,
+              "item": 76,
+              "seconds": 95,
+              "plaintextMasks": [
+                12709,
+                2333,
+                519,
+                3
+              ]
+            },
+            "drawingOnly": 7,
+            "coverageBits": 197036,
+            "fullDrawingOnly": 55,
+            "expectedSurvivors": 3.049586776859504,
+            "worstSurvivors": 13
+          }
+        },
+        {
+          "species": 277,
+          "advance": 1496,
+          "secondCountdown": 25.05,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.5632883862548934,
+          "worstDrawingOnly": 0,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 2,
+          "averagePreparationSeconds": 150.74380165289256,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1496,
+            "pid": 389569827,
+            "species": 277,
+            "option": {
+              "preparation": 32,
+              "item": 13,
+              "seconds": 140,
+              "plaintextMasks": [
+                10413,
+                277,
+                19,
+                3
+              ]
+            },
+            "drawingOnly": 15,
+            "coverageBits": 393131,
+            "fullDrawingOnly": 72,
+            "expectedSurvivors": 2.9173553719008263,
+            "worstSurvivors": 13
+          }
+        }
+      ],
+      "tighterTimingTargets": [
+        {
+          "species": 283,
+          "advance": 1938,
+          "secondCountdown": 32.45,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6592797783933518,
+          "worstDrawingOnly": 10,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 118.15789473684211,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1938,
+            "pid": 2799741425,
+            "species": 283,
+            "option": {
+              "preparation": 804,
+              "item": 86,
+              "seconds": 95,
+              "plaintextMasks": [
+                8677,
+                2349,
+                519,
+                3
+              ]
+            },
+            "drawingOnly": 12,
+            "coverageBits": 483966,
+            "fullDrawingOnly": 67,
+            "expectedSurvivors": 3.0826446280991737,
+            "worstSurvivors": 14
+          }
+        },
+        {
+          "species": 280,
+          "advance": 1766,
+          "secondCountdown": 29.57,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.631578947368421,
+          "worstDrawingOnly": 10,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 114.47368421052632,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1766,
+            "pid": 2603261589,
+            "species": 280,
+            "option": {
+              "preparation": 677,
+              "item": 183,
+              "seconds": 120,
+              "plaintextMasks": [
+                8885,
+                2439,
+                259,
+                5
+              ]
+            },
+            "drawingOnly": 12,
+            "coverageBits": 386742,
+            "fullDrawingOnly": 64,
+            "expectedSurvivors": 3.975206611570248,
+            "worstSurvivors": 17
+          }
+        },
+        {
+          "species": 277,
+          "advance": 1404,
+          "secondCountdown": 23.51,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6011080332409973,
+          "worstDrawingOnly": 7,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 159.73684210526315,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1404,
+            "pid": 1943265528,
+            "species": 277,
+            "option": {
+              "preparation": 45,
+              "item": 86,
+              "seconds": 155,
+              "plaintextMasks": [
+                2167,
+                307,
+                16387,
+                3
+              ]
+            },
+            "drawingOnly": 13,
+            "coverageBits": 457518,
+            "fullDrawingOnly": 63,
+            "expectedSurvivors": 2.43801652892562,
+            "worstSurvivors": 9
+          }
+        }
+      ],
+      "longestPerfectDrawingRun": [
+        {
+          "species": 277,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        },
+        {
+          "species": 280,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        },
+        {
+          "species": 283,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        }
+      ],
+      "baseline": {
+        "description": "Fixed 20-second Torchic target (advance 1195), using the same optimized catalogue preparations and ±60 landing window",
+        "expectedDrawingOnly": 0.5476294040887343
+      }
+    },
+    {
+      "tid": 30134,
+      "milliseconds": 5026,
+      "fullSidCount": 120,
+      "priority": [
+        {
+          "advance": 1236,
+          "sid": 8922
+        },
+        {
+          "advance": 1237,
+          "sid": 45642
+        },
+        {
+          "advance": 1238,
+          "sid": 3617
+        },
+        {
+          "advance": 1239,
+          "sid": 41748
+        },
+        {
+          "advance": 1240,
+          "sid": 41861
+        },
+        {
+          "advance": 1241,
+          "sid": 45516
+        },
+        {
+          "advance": 1242,
+          "sid": 8943
+        },
+        {
+          "advance": 1243,
+          "sid": 24246
+        },
+        {
+          "advance": 1244,
+          "sid": 62258
+        },
+        {
+          "advance": 1245,
+          "sid": 64503
+        },
+        {
+          "advance": 1246,
+          "sid": 34464
+        },
+        {
+          "advance": 1247,
+          "sid": 1316
+        },
+        {
+          "advance": 1248,
+          "sid": 39837
+        },
+        {
+          "advance": 1249,
+          "sid": 38670
+        },
+        {
+          "advance": 1250,
+          "sid": 22968
+        },
+        {
+          "advance": 1251,
+          "sid": 65341
+        },
+        {
+          "advance": 1252,
+          "sid": 8254
+        },
+        {
+          "advance": 1253,
+          "sid": 47615
+        },
+        {
+          "advance": 1254,
+          "sid": 59763
+        }
+      ],
+      "evaluatedSetups": 1540718,
+      "assumptions": [
+        "Equal weight per surviving SID-generating advance within estimated target ±9; this is a planning assumption, not a measured probability.",
+        "Equal weight across starter timing errors within ±60 advances; candidates outside the 1000–2000 catalogue are not certified.",
+        "Every prioritised SID is compared with the entire surviving SID window.",
+        "One held item and one legal preparation per landed PID; no true SID is supplied to route selection.",
+        "A level-5 summary that matches multiple in-window PIDs counts as a retry, not drawing-only success.",
+        "Lyle and James are fought; extra HP-only battles are permitted solely to learn an early move, never to tune Defense or Speed.",
+        "Known singleton plaintext only; unknown fields and checksum correlations can improve real results beyond this conservative score."
+      ],
+      "targets": [
+        {
+          "species": 280,
+          "advance": 1855,
+          "secondCountdown": 31.06,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6307090039147455,
+          "worstDrawingOnly": 9,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 108.88429752066116,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1855,
+            "pid": 1098045368,
+            "species": 280,
+            "option": {
+              "preparation": 694,
+              "item": 183,
+              "seconds": 135,
+              "plaintextMasks": [
+                33205,
+                2317,
+                16387,
+                3
+              ]
+            },
+            "drawingOnly": 11,
+            "coverageBits": 211623,
+            "fullDrawingOnly": 58,
+            "expectedSurvivors": 5.566666666666666,
+            "worstSurvivors": 22
+          }
+        },
+        {
+          "species": 283,
+          "advance": 1670,
+          "secondCountdown": 27.96,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6267942583732058,
+          "worstDrawingOnly": 0,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 5,
+          "averagePreparationSeconds": 107.68595041322314,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1670,
+            "pid": 2441401493,
+            "species": 283,
+            "option": {
+              "preparation": 823,
+              "item": 86,
+              "seconds": 155,
+              "plaintextMasks": [
+                8807,
+                2343,
+                15,
+                5
+              ]
+            },
+            "drawingOnly": 14,
+            "coverageBits": 114047,
+            "fullDrawingOnly": 50,
+            "expectedSurvivors": 5.166666666666667,
+            "worstSurvivors": 21
+          }
+        },
+        {
+          "species": 277,
+          "advance": 1710,
+          "secondCountdown": 28.63,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.5928664636798608,
+          "worstDrawingOnly": 0,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 2,
+          "averagePreparationSeconds": 154.29752066115702,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1710,
+            "pid": 836089132,
+            "species": 277,
+            "option": {
+              "preparation": 178,
+              "item": 138,
+              "seconds": 180,
+              "plaintextMasks": [
+                3125,
+                327,
+                16387,
+                3
+              ]
+            },
+            "drawingOnly": 11,
+            "coverageBits": 223847,
+            "fullDrawingOnly": 57,
+            "expectedSurvivors": 4.216666666666667,
+            "worstSurvivors": 17
+          }
+        }
+      ],
+      "tighterTimingTargets": [
+        {
+          "species": 280,
+          "advance": 1658,
+          "secondCountdown": 27.76,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6786703601108033,
+          "worstDrawingOnly": 10,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 117.36842105263158,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1658,
+            "pid": 2696061934,
+            "species": 280,
+            "option": {
+              "preparation": 697,
+              "item": 75,
+              "seconds": 170,
+              "plaintextMasks": [
+                36133,
+                277,
+                16387,
+                3
+              ]
+            },
+            "drawingOnly": 14,
+            "coverageBits": 259774,
+            "fullDrawingOnly": 59,
+            "expectedSurvivors": 9.7,
+            "worstSurvivors": 32
+          }
+        },
+        {
+          "species": 283,
+          "advance": 1723,
+          "secondCountdown": 28.85,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.667590027700831,
+          "worstDrawingOnly": 11,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 100.78947368421052,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1723,
+            "pid": 2953373071,
+            "species": 283,
+            "option": {
+              "preparation": 804,
+              "item": 12,
+              "seconds": 90,
+              "plaintextMasks": [
+                12709,
+                2317,
+                519,
+                3
+              ]
+            },
+            "drawingOnly": 13,
+            "coverageBits": 248959,
+            "fullDrawingOnly": 51,
+            "expectedSurvivors": 6.2,
+            "worstSurvivors": 22
+          }
+        },
+        {
+          "species": 277,
+          "advance": 1711,
+          "secondCountdown": 28.65,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6398891966759003,
+          "worstDrawingOnly": 8,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 160.26315789473685,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1711,
+            "pid": 2763272661,
+            "species": 277,
+            "option": {
+              "preparation": 26,
+              "item": 297,
+              "seconds": 135,
+              "plaintextMasks": [
+                19109,
+                279,
+                19,
+                3
+              ]
+            },
+            "drawingOnly": 13,
+            "coverageBits": 236895,
+            "fullDrawingOnly": 62,
+            "expectedSurvivors": 5.383333333333334,
+            "worstSurvivors": 22
+          }
+        }
+      ],
+      "longestPerfectDrawingRun": [
+        {
+          "species": 277,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        },
+        {
+          "species": 280,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        },
+        {
+          "species": 283,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        }
+      ],
+      "baseline": {
+        "description": "Fixed 20-second Torchic target (advance 1195), using the same optimized catalogue preparations and ±60 landing window",
+        "expectedDrawingOnly": 0.5806872553284037
+      }
+    },
+    {
+      "tid": 52759,
+      "milliseconds": 5431,
+      "fullSidCount": 121,
+      "priority": [
+        {
+          "advance": 1236,
+          "sid": 55420
+        },
+        {
+          "advance": 1237,
+          "sid": 59677
+        },
+        {
+          "advance": 1238,
+          "sid": 36165
+        },
+        {
+          "advance": 1239,
+          "sid": 43973
+        },
+        {
+          "advance": 1240,
+          "sid": 12976
+        },
+        {
+          "advance": 1241,
+          "sid": 20511
+        },
+        {
+          "advance": 1242,
+          "sid": 18026
+        },
+        {
+          "advance": 1243,
+          "sid": 21985
+        },
+        {
+          "advance": 1244,
+          "sid": 17576
+        },
+        {
+          "advance": 1245,
+          "sid": 15456
+        },
+        {
+          "advance": 1246,
+          "sid": 63759
+        },
+        {
+          "advance": 1247,
+          "sid": 28448
+        },
+        {
+          "advance": 1248,
+          "sid": 37159
+        },
+        {
+          "advance": 1249,
+          "sid": 37238
+        },
+        {
+          "advance": 1250,
+          "sid": 58281
+        },
+        {
+          "advance": 1251,
+          "sid": 11989
+        },
+        {
+          "advance": 1252,
+          "sid": 34080
+        },
+        {
+          "advance": 1253,
+          "sid": 12729
+        },
+        {
+          "advance": 1254,
+          "sid": 2491
+        }
+      ],
+      "evaluatedSetups": 1536868,
+      "assumptions": [
+        "Equal weight per surviving SID-generating advance within estimated target ±9; this is a planning assumption, not a measured probability.",
+        "Equal weight across starter timing errors within ±60 advances; candidates outside the 1000–2000 catalogue are not certified.",
+        "Every prioritised SID is compared with the entire surviving SID window.",
+        "One held item and one legal preparation per landed PID; no true SID is supplied to route selection.",
+        "A level-5 summary that matches multiple in-window PIDs counts as a retry, not drawing-only success.",
+        "Lyle and James are fought; extra HP-only battles are permitted solely to learn an early move, never to tune Defense or Speed.",
+        "Known singleton plaintext only; unknown fields and checksum correlations can improve real results beyond this conservative score."
+      ],
+      "targets": [
+        {
+          "species": 280,
+          "advance": 1856,
+          "secondCountdown": 31.07,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6737712048716833,
+          "worstDrawingOnly": 10,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 112.85123966942149,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1856,
+            "pid": 1258701170,
+            "species": 280,
+            "option": {
+              "preparation": 731,
+              "item": 111,
+              "seconds": 180,
+              "plaintextMasks": [
+                57397,
+                455,
+                259,
+                5
+              ]
+            },
+            "drawingOnly": 11,
+            "coverageBits": 421736,
+            "fullDrawingOnly": 55,
+            "expectedSurvivors": 3,
+            "worstSurvivors": 12
+          }
+        },
+        {
+          "species": 283,
+          "advance": 1626,
+          "secondCountdown": 27.22,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6602870813397129,
+          "worstDrawingOnly": 0,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 6,
+          "averagePreparationSeconds": 107.47933884297521,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1626,
+            "pid": 100712701,
+            "species": 283,
+            "option": {
+              "preparation": 823,
+              "item": 76,
+              "seconds": 155,
+              "plaintextMasks": [
+                12839,
+                2327,
+                15,
+                5
+              ]
+            },
+            "drawingOnly": 12,
+            "coverageBits": 508095,
+            "fullDrawingOnly": 49,
+            "expectedSurvivors": 3.28099173553719,
+            "worstSurvivors": 13
+          }
+        },
+        {
+          "species": 277,
+          "advance": 1498,
+          "secondCountdown": 25.08,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6354936929099608,
+          "worstDrawingOnly": 0,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 2,
+          "averagePreparationSeconds": 159.71074380165288,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1498,
+            "pid": 3720330707,
+            "species": 277,
+            "option": {
+              "preparation": 26,
+              "item": 138,
+              "seconds": 135,
+              "plaintextMasks": [
+                19621,
+                279,
+                19,
+                3
+              ]
+            },
+            "drawingOnly": 13,
+            "coverageBits": 444286,
+            "fullDrawingOnly": 61,
+            "expectedSurvivors": 5.793388429752066,
+            "worstSurvivors": 23
+          }
+        }
+      ],
+      "tighterTimingTargets": [
+        {
+          "species": 283,
+          "advance": 1669,
+          "secondCountdown": 27.94,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.7340720221606648,
+          "worstDrawingOnly": 11,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 117.10526315789474,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1669,
+            "pid": 3566562205,
+            "species": 283,
+            "option": {
+              "preparation": 804,
+              "item": 79,
+              "seconds": 180,
+              "plaintextMasks": [
+                41381,
+                2333,
+                519,
+                3
+              ]
+            },
+            "drawingOnly": 14,
+            "coverageBits": 499063,
+            "fullDrawingOnly": 61,
+            "expectedSurvivors": 3.3636363636363638,
+            "worstSurvivors": 15
+          }
+        },
+        {
+          "species": 280,
+          "advance": 1545,
+          "secondCountdown": 25.87,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.7174515235457064,
+          "worstDrawingOnly": 11,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 112.89473684210526,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1545,
+            "pid": 4153339136,
+            "species": 280,
+            "option": {
+              "preparation": 682,
+              "item": 75,
+              "seconds": 155,
+              "plaintextMasks": [
+                2109,
+                413,
+                16387,
+                3
+              ]
+            },
+            "drawingOnly": 11,
+            "coverageBits": 443742,
+            "fullDrawingOnly": 54,
+            "expectedSurvivors": 4.933884297520661,
+            "worstSurvivors": 19
+          }
+        },
+        {
+          "species": 277,
+          "advance": 1543,
+          "secondCountdown": 25.83,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.7008310249307479,
+          "worstDrawingOnly": 10,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 173.1578947368421,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1543,
+            "pid": 1183242509,
+            "species": 277,
+            "option": {
+              "preparation": 42,
+              "item": 86,
+              "seconds": 200,
+              "plaintextMasks": [
+                33005,
+                309,
+                19,
+                3
+              ]
+            },
+            "drawingOnly": 13,
+            "coverageBits": 452092,
+            "fullDrawingOnly": 62,
+            "expectedSurvivors": 4.7190082644628095,
+            "worstSurvivors": 19
+          }
+        }
+      ],
+      "longestPerfectDrawingRun": [
+        {
+          "species": 277,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        },
+        {
+          "species": 280,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        },
+        {
+          "species": 283,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        }
+      ],
+      "baseline": {
+        "description": "Fixed 20-second Torchic target (advance 1195), using the same optimized catalogue preparations and ±60 landing window",
+        "expectedDrawingOnly": 0.6246193997390169
+      }
+    },
+    {
+      "tid": 46049,
+      "milliseconds": 5448,
+      "fullSidCount": 121,
+      "priority": [
+        {
+          "advance": 1236,
+          "sid": 20977
+        },
+        {
+          "advance": 1237,
+          "sid": 6533
+        },
+        {
+          "advance": 1238,
+          "sid": 2470
+        },
+        {
+          "advance": 1239,
+          "sid": 1428
+        },
+        {
+          "advance": 1240,
+          "sid": 37488
+        },
+        {
+          "advance": 1241,
+          "sid": 64265
+        },
+        {
+          "advance": 1242,
+          "sid": 32639
+        },
+        {
+          "advance": 1243,
+          "sid": 772
+        },
+        {
+          "advance": 1244,
+          "sid": 29205
+        },
+        {
+          "advance": 1245,
+          "sid": 9262
+        },
+        {
+          "advance": 1246,
+          "sid": 10796
+        },
+        {
+          "advance": 1247,
+          "sid": 49788
+        },
+        {
+          "advance": 1248,
+          "sid": 22804
+        },
+        {
+          "advance": 1249,
+          "sid": 14910
+        },
+        {
+          "advance": 1250,
+          "sid": 25489
+        },
+        {
+          "advance": 1251,
+          "sid": 35184
+        },
+        {
+          "advance": 1252,
+          "sid": 36921
+        },
+        {
+          "advance": 1253,
+          "sid": 6246
+        },
+        {
+          "advance": 1254,
+          "sid": 8223
+        }
+      ],
+      "evaluatedSetups": 1514787,
+      "assumptions": [
+        "Equal weight per surviving SID-generating advance within estimated target ±9; this is a planning assumption, not a measured probability.",
+        "Equal weight across starter timing errors within ±60 advances; candidates outside the 1000–2000 catalogue are not certified.",
+        "Every prioritised SID is compared with the entire surviving SID window.",
+        "One held item and one legal preparation per landed PID; no true SID is supplied to route selection.",
+        "A level-5 summary that matches multiple in-window PIDs counts as a retry, not drawing-only success.",
+        "Lyle and James are fought; extra HP-only battles are permitted solely to learn an early move, never to tune Defense or Speed.",
+        "Known singleton plaintext only; unknown fields and checksum correlations can improve real results beyond this conservative score."
+      ],
+      "targets": [
+        {
+          "species": 280,
+          "advance": 1354,
+          "secondCountdown": 22.67,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.647672901261418,
+          "worstDrawingOnly": 0,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 2,
+          "averagePreparationSeconds": 111.44628099173553,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1354,
+            "pid": 2424580218,
+            "species": 280,
+            "option": {
+              "preparation": 660,
+              "item": 75,
+              "seconds": 65,
+              "plaintextMasks": [
+                26677,
+                287,
+                515,
+                3
+              ]
+            },
+            "drawingOnly": 12,
+            "coverageBits": 377087,
+            "fullDrawingOnly": 50,
+            "expectedSurvivors": 6.305785123966942,
+            "worstSurvivors": 24
+          }
+        },
+        {
+          "species": 283,
+          "advance": 1661,
+          "secondCountdown": 27.81,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.631578947368421,
+          "worstDrawingOnly": 0,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 5,
+          "averagePreparationSeconds": 108.7603305785124,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1661,
+            "pid": 1675146569,
+            "species": 283,
+            "option": {
+              "preparation": 801,
+              "item": 76,
+              "seconds": 95,
+              "plaintextMasks": [
+                5287,
+                285,
+                519,
+                3
+              ]
+            },
+            "drawingOnly": 14,
+            "coverageBits": 388601,
+            "fullDrawingOnly": 64,
+            "expectedSurvivors": 4.950413223140496,
+            "worstSurvivors": 21
+          }
+        },
+        {
+          "species": 277,
+          "advance": 1497,
+          "secondCountdown": 25.06,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6267942583732058,
+          "worstDrawingOnly": 0,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 2,
+          "averagePreparationSeconds": 154.4214876033058,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1497,
+            "pid": 3184727864,
+            "species": 277,
+            "option": {
+              "preparation": 26,
+              "item": 138,
+              "seconds": 135,
+              "plaintextMasks": [
+                19621,
+                279,
+                19,
+                3
+              ]
+            },
+            "drawingOnly": 10,
+            "coverageBits": 377007,
+            "fullDrawingOnly": 61,
+            "expectedSurvivors": 6.818181818181818,
+            "worstSurvivors": 26
+          }
+        }
+      ],
+      "tighterTimingTargets": [
+        {
+          "species": 283,
+          "advance": 1151,
+          "secondCountdown": 19.27,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6952908587257618,
+          "worstDrawingOnly": 10,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 100.78947368421052,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1151,
+            "pid": 745658100,
+            "species": 283,
+            "option": {
+              "preparation": 804,
+              "item": 4,
+              "seconds": 65,
+              "plaintextMasks": [
+                8629,
+                2317,
+                519,
+                3
+              ]
+            },
+            "drawingOnly": 11,
+            "coverageBits": 339627,
+            "fullDrawingOnly": 62,
+            "expectedSurvivors": 2.7024793388429753,
+            "worstSurvivors": 10
+          }
+        },
+        {
+          "species": 280,
+          "advance": 1231,
+          "secondCountdown": 20.61,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6952908587257618,
+          "worstDrawingOnly": 9,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 112.63157894736842,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1231,
+            "pid": 351532565,
+            "species": 280,
+            "option": {
+              "preparation": 666,
+              "item": 111,
+              "seconds": 105,
+              "plaintextMasks": [
+                41525,
+                455,
+                16387,
+                3
+              ]
+            },
+            "drawingOnly": 13,
+            "coverageBits": 485039,
+            "fullDrawingOnly": 70,
+            "expectedSurvivors": 2.487603305785124,
+            "worstSurvivors": 11
+          }
+        },
+        {
+          "species": 277,
+          "advance": 1145,
+          "secondCountdown": 19.17,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6786703601108033,
+          "worstDrawingOnly": 10,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 173.68421052631578,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1145,
+            "pid": 1531345821,
+            "species": 277,
+            "option": {
+              "preparation": 29,
+              "item": 86,
+              "seconds": 170,
+              "plaintextMasks": [
+                33005,
+                309,
+                16387,
+                3
+              ]
+            },
+            "drawingOnly": 10,
+            "coverageBits": 475565,
+            "fullDrawingOnly": 56,
+            "expectedSurvivors": 4.2727272727272725,
+            "worstSurvivors": 16
+          }
+        }
+      ],
+      "longestPerfectDrawingRun": [
+        {
+          "species": 277,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        },
+        {
+          "species": 280,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        },
+        {
+          "species": 283,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        }
+      ],
+      "baseline": {
+        "description": "Fixed 20-second Torchic target (advance 1195), using the same optimized catalogue preparations and ±60 landing window",
+        "expectedDrawingOnly": 0.6063505872118312
+      }
+    },
+    {
+      "tid": 16159,
+      "milliseconds": 5574,
+      "fullSidCount": 121,
+      "priority": [
+        {
+          "advance": 1236,
+          "sid": 34367
+        },
+        {
+          "advance": 1237,
+          "sid": 20027
+        },
+        {
+          "advance": 1238,
+          "sid": 25152
+        },
+        {
+          "advance": 1239,
+          "sid": 50222
+        },
+        {
+          "advance": 1240,
+          "sid": 57312
+        },
+        {
+          "advance": 1241,
+          "sid": 38730
+        },
+        {
+          "advance": 1242,
+          "sid": 61990
+        },
+        {
+          "advance": 1243,
+          "sid": 1601
+        },
+        {
+          "advance": 1244,
+          "sid": 63135
+        },
+        {
+          "advance": 1245,
+          "sid": 29334
+        },
+        {
+          "advance": 1246,
+          "sid": 13182
+        },
+        {
+          "advance": 1247,
+          "sid": 25689
+        },
+        {
+          "advance": 1248,
+          "sid": 48225
+        },
+        {
+          "advance": 1249,
+          "sid": 64392
+        },
+        {
+          "advance": 1250,
+          "sid": 34322
+        },
+        {
+          "advance": 1251,
+          "sid": 1476
+        },
+        {
+          "advance": 1252,
+          "sid": 7871
+        },
+        {
+          "advance": 1253,
+          "sid": 13113
+        },
+        {
+          "advance": 1254,
+          "sid": 3968
+        }
+      ],
+      "evaluatedSetups": 1536044,
+      "assumptions": [
+        "Equal weight per surviving SID-generating advance within estimated target ±9; this is a planning assumption, not a measured probability.",
+        "Equal weight across starter timing errors within ±60 advances; candidates outside the 1000–2000 catalogue are not certified.",
+        "Every prioritised SID is compared with the entire surviving SID window.",
+        "One held item and one legal preparation per landed PID; no true SID is supplied to route selection.",
+        "A level-5 summary that matches multiple in-window PIDs counts as a retry, not drawing-only success.",
+        "Lyle and James are fought; extra HP-only battles are permitted solely to learn an early move, never to tune Defense or Speed.",
+        "Known singleton plaintext only; unknown fields and checksum correlations can improve real results beyond this conservative score."
+      ],
+      "targets": [
+        {
+          "species": 280,
+          "advance": 1852,
+          "secondCountdown": 31.01,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6624619399739017,
+          "worstDrawingOnly": 7,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 114.00826446280992,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1852,
+            "pid": 3331414787,
+            "species": 280,
+            "option": {
+              "preparation": 660,
+              "item": 183,
+              "seconds": 60,
+              "plaintextMasks": [
+                24757,
+                2319,
+                515,
+                3
+              ]
+            },
+            "drawingOnly": 14,
+            "coverageBits": 381949,
+            "fullDrawingOnly": 70,
+            "expectedSurvivors": 4.669421487603306,
+            "worstSurvivors": 20
+          }
+        },
+        {
+          "species": 283,
+          "advance": 1675,
+          "secondCountdown": 28.04,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6520226185297956,
+          "worstDrawingOnly": 0,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 5,
+          "averagePreparationSeconds": 114.58677685950413,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1675,
+            "pid": 1603568808,
+            "species": 283,
+            "option": {
+              "preparation": 809,
+              "item": 138,
+              "seconds": 120,
+              "plaintextMasks": [
+                9389,
+                2317,
+                519,
+                3
+              ]
+            },
+            "drawingOnly": 14,
+            "coverageBits": 381935,
+            "fullDrawingOnly": 68,
+            "expectedSurvivors": 5.8264462809917354,
+            "worstSurvivors": 24
+          }
+        },
+        {
+          "species": 277,
+          "advance": 1498,
+          "secondCountdown": 25.08,
+          "radius": 60,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6359286646367986,
+          "worstDrawingOnly": 0,
+          "priorityCount": 19,
+          "evaluatedLandings": 121,
+          "ambiguousLandings": 2,
+          "averagePreparationSeconds": 162.56198347107437,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1498,
+            "pid": 3720330707,
+            "species": 277,
+            "option": {
+              "preparation": 28,
+              "item": 297,
+              "seconds": 165,
+              "plaintextMasks": [
+                2615,
+                263,
+                16387,
+                3
+              ]
+            },
+            "drawingOnly": 13,
+            "coverageBits": 501626,
+            "fullDrawingOnly": 59,
+            "expectedSurvivors": 4.735537190082645,
+            "worstSurvivors": 20
+          }
+        }
+      ],
+      "tighterTimingTargets": [
+        {
+          "species": 283,
+          "advance": 1718,
+          "secondCountdown": 28.76,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.7313019390581718,
+          "worstDrawingOnly": 10,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 112.89473684210526,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1718,
+            "pid": 2652435862,
+            "species": 283,
+            "option": {
+              "preparation": 800,
+              "item": 86,
+              "seconds": 65,
+              "plaintextMasks": [
+                9445,
+                301,
+                519,
+                3
+              ]
+            },
+            "drawingOnly": 13,
+            "coverageBits": 475647,
+            "fullDrawingOnly": 57,
+            "expectedSurvivors": 5.661157024793388,
+            "worstSurvivors": 23
+          }
+        },
+        {
+          "species": 280,
+          "advance": 1553,
+          "secondCountdown": 26,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.7174515235457064,
+          "worstDrawingOnly": 12,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 117.89473684210526,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1553,
+            "pid": 1768660896,
+            "species": 280,
+            "option": {
+              "preparation": 692,
+              "item": 86,
+              "seconds": 140,
+              "plaintextMasks": [
+                41069,
+                293,
+                16387,
+                3
+              ]
+            },
+            "drawingOnly": 12,
+            "coverageBits": 432823,
+            "fullDrawingOnly": 42,
+            "expectedSurvivors": 5.363636363636363,
+            "worstSurvivors": 20
+          }
+        },
+        {
+          "species": 277,
+          "advance": 1713,
+          "secondCountdown": 28.68,
+          "radius": 9,
+          "searchRadius": 60,
+          "expectedDrawingOnly": 0.6731301939058172,
+          "worstDrawingOnly": 9,
+          "priorityCount": 19,
+          "evaluatedLandings": 19,
+          "ambiguousLandings": 0,
+          "averagePreparationSeconds": 178.68421052631578,
+          "perfectCluster": null,
+          "centre": {
+            "advance": 1713,
+            "pid": 769314107,
+            "species": 277,
+            "option": {
+              "preparation": 54,
+              "item": 86,
+              "seconds": 185,
+              "plaintextMasks": [
+                2167,
+                307,
+                11,
+                5
+              ]
+            },
+            "drawingOnly": 10,
+            "coverageBits": 373635,
+            "fullDrawingOnly": 51,
+            "expectedSurvivors": 6.024793388429752,
+            "worstSurvivors": 23
+          }
+        }
+      ],
+      "longestPerfectDrawingRun": [
+        {
+          "species": 277,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        },
+        {
+          "species": 280,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        },
+        {
+          "species": 283,
+          "length": 0,
+          "minAdvance": null,
+          "maxAdvance": null,
+          "note": "Known-pixel coverage for all 19 likely SIDs; PID-identification ambiguity must still be checked for a chosen search window."
+        }
+      ],
+      "baseline": {
+        "description": "Fixed 20-second Torchic target (advance 1195), using the same optimized catalogue preparations and ±60 landing window",
+        "expectedDrawingOnly": 0.6054806437581557
+      }
+    }
+  ]
+}

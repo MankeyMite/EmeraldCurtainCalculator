@@ -14,6 +14,18 @@ curtain SID recovery, shiny target selection and calibration. Progress saves
 separately from the advanced investigator. Game screenshots can be added later;
 the guide currently shows labeled references. See [mechanics and limitations](research/STARTER_GUIDE.md).
 
+The [starter catalogue and scan report](research/STARTER_CATALOGUE.md) documents
+precomputed Method 1 advances 1000–3000, legal initial move/item preparations,
+and comparisons against the full SID candidate window. The guide uses it to
+recommend a starter and an 11-PID window after **Search optimal PID**, with a
+progress bar and percentage, then configures the timer automatically. Ranking
+favours low EV requirements at the exact target and its closest neighbours,
+with less weight on outer landings. The starter timer includes a reported +3-advance
+generation delay as its adjustable initial calibration; saved measured adjustments
+are preserved.
+Regenerate with `npm run catalogue:build`,
+verify with `npm run catalogue:check`, or run `npm run catalogue:benchmark`.
+
 ## Latest update — 19 October 2026
 
 - **Compact workspace:** Pokémon info, Investigate and About on the scrolling left; a fixed curtain, live recovery values, pixel inspector and grouped 80-byte hex on the right. Mobile screens stack the panels.

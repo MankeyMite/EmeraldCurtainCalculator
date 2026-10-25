@@ -213,6 +213,7 @@ test("zero SID results explain the conflicting field and offer setup correction 
     assistance,
     predictions: assistance.predictions,
     sidAnalysis: { sidValues: [], candidates: [] },
+    itemTestBaseline: baseline,
   } as unknown as Parameters<typeof StarterCurtainStep>[0]["lab"];
   const html = renderToStaticMarkup(
     createElement(StarterCurtainStep, {
@@ -225,7 +226,7 @@ test("zero SID results explain the conflicting field and offer setup correction 
   assert.match(html, /row 14, column 3/);
   assert.match(html, /Move 2 PP/);
   assert.match(html, /predicts Transparent/);
-  assert.match(html, /Check battle log and moves/);
+  assert.match(html, /Update battle log and moves/);
 });
 
 test("correcting forgotten Defense EVs recovers the SID without changing the black pixel, in all 24 permutations", () => {

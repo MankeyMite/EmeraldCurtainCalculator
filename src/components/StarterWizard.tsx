@@ -21,6 +21,7 @@ import {
   type StarterReading,
 } from "../core/starterGuide";
 import {
+  DEFAULT_STARTER_CALIBRATION,
   calibratedFrames,
   estimatedSidWindow,
   targetCountdown,
@@ -29,7 +30,6 @@ import {
 } from "../core/starterTiming";
 import type { StarterOutlookTask } from "../core/starterOutlook";
 import { routeCheckpoint } from "../core/starterRoute";
-import { starterEvsNeedCorrection } from "../core/starterEvidence";
 import {
   patchStarterGuide,
   starterTravelReady,
@@ -53,6 +53,18 @@ import {
 } from "./StarterGuideParts";
 import { StarterCurtainStep } from "./StarterCurtainStep";
 import { StarterOutlook } from "./StarterOutlook";
+import {
+  StarterPidRecommendation,
+  OptimalPidSearch,
+} from "./StarterPidRecommendation";
+import {
+  applyStarterRecommendation,
+  canSearchOptimalPid,
+  isRecommendedTimer,
+  savedStarterRecommendation,
+  starterRecommendationKey,
+  type StarterPidRecommendation as PidRecommendation,
+} from "../core/starterRecommendation";
 import names from "../data/named-facts.json";
 import {
   GUIDE_RESET_BACKUP_KEY,
@@ -173,6 +185,7 @@ function StarterGuideSession({
   const search = useStarterTask<RngSpread[]>(),
     route = useStarterTask<RouteSetup>(),
     outlook = useStarterTask<StarterOutlookTask>(),
+    recommendation = useStarterTask<PidRecommendation>(),
     shiny = useStarterTask<RngSpread[]>(),
     nearby = useStarterTask<RngSpread[]>(),
     landing = useStarterTask<RngSpread[]>();
@@ -242,6 +255,21 @@ function StarterGuideSession({
       return [];
     }
   }, [state.tid, state.intro]);
+  const recommendationKey = starterRecommendationKey(state);
+  const pidRecommendation =
+    recommendation.result?.key === recommendationKey
+      ? recommendation.result
+      : savedStarterRecommendation(state);
+  useEffect(() => {
+    recommendation.clear();
+    return () => recommendation.clear();
+  }, [recommendationKey]);
+  useEffect(() => {
+    if (recommendation.result)
+      setState((current) =>
+        applyStarterRecommendation(current, recommendation.result!, true),
+      );
+  }, [recommendation.result]);
   const spreads = searched === searchKey(state) ? search.result : null;
   const outlookKey =
     spreads?.length === 1 && state.tid
@@ -278,13 +306,6 @@ function StarterGuideSession({
     lab.identity.tid === Number(state.tid) &&
     lab.identity.pid === state.identifiedStarter?.pid &&
     lab.identity.species === state.species;
-  const correctingEvs = starterEvsNeedCorrection(
-    state,
-    lab.identity,
-    lab.itemTestBaseline,
-    !!lab.pendingItemTest,
-    lab.drawingInProgress,
-  );
   const survivingSids =
     sameStarter && !lab.analysisBusy && !lab.analysisError
       ? lab.sidAnalysis?.sidValues
@@ -294,22 +315,8 @@ function StarterGuideSession({
     state.step === 2 &&
     sameStarter &&
     !state.route?.train &&
-    lab.itemTestBaseline.observations.some((v) => v !== -1);
+    lab.starterHasDrawing;
   const currentRouteKey = JSON.stringify([routeKey(state), survivingSids]);
-  useEffect(() => {
-    if (!correctingEvs) return;
-    try {
-      lab.correctStarterCheckpointEvs(
-        state.evsKnown ? evs : Array(6).fill(null),
-      );
-      route.clear();
-      setPlannedKey("");
-      // An existing drawing means the player has already reached Rustboro.
-      patch({ route: null, routeDone: true });
-    } catch (e) {
-      setError((e as Error).message);
-    }
-  }, [correctingEvs, evs, state.evsKnown]);
   // Plan before travel, then refresh automatically when actual EVs or moves
   // change. Keep checkbox-only edits out of the key.
   useEffect(() => {
@@ -325,7 +332,6 @@ function StarterGuideSession({
     if (
       state.step !== 2 ||
       editingCheckpoint ||
-      correctingEvs ||
       noSurvivingSids ||
       state.route ||
       !state.readings.length ||
@@ -346,7 +352,6 @@ function StarterGuideSession({
     lab.pendingItemTest,
     lab.analysisBusy,
     lab.analysisError,
-    correctingEvs,
     noSurvivingSids,
     editingCheckpoint,
   ]);
@@ -354,7 +359,6 @@ function StarterGuideSession({
     if (
       state.step === 2 &&
       !editingCheckpoint &&
-      !correctingEvs &&
       !noSurvivingSids &&
       !lab.analysisBusy &&
       !lab.analysisError &&
@@ -368,7 +372,6 @@ function StarterGuideSession({
     state.step,
     currentRouteKey,
     plannedKey,
-    correctingEvs,
     noSurvivingSids,
     lab.analysisBusy,
     lab.analysisError,
@@ -504,6 +507,14 @@ function StarterGuideSession({
           throw Error("Enter the public TID from the Trainer Card (0–65535).");
         if (!sidCandidates.length)
           throw Error("Widen the estimated SID window.");
+        if (recommendation.busy)
+          throw Error("Wait for the optimal PID search to finish.");
+        if (
+          !pidRecommendation &&
+          !state.identifiedStarter &&
+          !state.readings.length
+        )
+          throw Error("Choose Search optimal PID before continuing.");
       }
       if (state.step === 1 && state.starterPart === "timer") {
         patch({ starterPart: "summary" });
@@ -511,7 +522,9 @@ function StarterGuideSession({
       }
       if (editingCheckpoint) {
         const actual = routeCheckpoint(state);
-        lab.correctStarterCheckpointFacts({
+        lab.updateStarterCheckpoint({
+          ...lab.identity,
+          ...lab.itemTestBaseline.knownFacts,
           evs: actual.evs,
           moves: actual.moves,
           pp: actual.pp,
@@ -542,7 +555,9 @@ function StarterGuideSession({
             "Choose Back, reset with the timer and try again until exactly one PID matches.",
           );
         if (checkingOutlook)
-          throw Error("Wait for the starter SID preview before continuing.");
+          throw Error(
+            "Wait for your starter's route estimate before continuing.",
+          );
         if (
           lab.identity.pid !== spreads[0].pid ||
           lab.identity.tid !== Number(state.tid) ||
@@ -581,15 +596,27 @@ function StarterGuideSession({
           throw Error(
             "The battle log no longer matches this plan. Plan again using the actual EVs.",
           );
-        configure({
-          ...actual,
-          pid: planned.pid,
-          ivs: planned.ivs,
-          moves: planned.moves,
-          pp: planned.pp,
-          ppBonuses: planned.ppBonuses,
-          heldItem: planned.heldItem,
-        });
+        if (state.route.train) {
+          lab.updateStarterCheckpoint({
+            ...lab.identity,
+            ...lab.itemTestBaseline.knownFacts,
+            evs: actual.evs,
+            moves: actual.moves,
+            pp: actual.pp,
+            ppBonuses: actual.ppBonuses,
+            pokerus: actual.pokerus,
+          });
+        } else {
+          configure({
+            ...actual,
+            pid: planned.pid,
+            ivs: planned.ivs,
+            moves: planned.moves,
+            pp: planned.pp,
+            ppBonuses: planned.ppBonuses,
+            heldItem: planned.heldItem,
+          });
+        }
       }
       if (state.step === 3) {
         if (
@@ -649,9 +676,9 @@ function StarterGuideSession({
           expected: recommendation.expectedRemaining,
         },
         instructions: [
-          `Defeat exactly ${plan.battles} ${stat === 2 ? "Seedot on Route 102 (rare; 1 Defense EV each)" : "Zigzagoon on Route 101/103 (1 Speed EV each)"}. Remove the held item before training. Log any other defeated Pokémon separately.`,
+          `Defeat exactly ${plan.battles} ${stat === 2 ? "Seedot on Route 102 (rare; 1 Defense EV each)" : "Zigzagoon on Route 101/103 (1 Speed EV each)"}. Keep the current held item. Log any other defeated Pokémon separately.`,
           "Heal and check the current moves. Cancel evolution.",
-          "Restore the current original held item and move order. Box the starter in Box 8, slot 5 and reenter the school.",
+          "Keep the current held item and move order. Box the starter in Box 8, slot 5 and reenter the school.",
         ],
         train: { species: stat === 2 ? 298 : 288, count: plan.battles },
         done: [false, false, false],
@@ -812,6 +839,23 @@ function StarterGuideSession({
                 }
               />
             </label>
+            <OptimalPidSearch
+              tid={state.tid}
+              busy={recommendation.busy}
+              progress={recommendation.progress}
+              complete={!!pidRecommendation && !recommendation.error}
+              onSearch={() => {
+                if (canSearchOptimalPid(state.tid))
+                  recommendation.run({ kind: "recommendation", state });
+              }}
+            />
+            {recommendation.error && <p role="alert">{recommendation.error}</p>}
+            {pidRecommendation && (
+              <StarterPidRecommendation
+                value={pidRecommendation}
+                applied={isRecommendedTimer(state, pidRecommendation)}
+              />
+            )}
             {state.tid && (
               <p role="status">
                 {sidCandidates.length} possible SIDs in the estimated
@@ -857,7 +901,23 @@ function StarterGuideSession({
                   firstCue="Soft reset (A + B + Start + Select)"
                   secondCue="Confirm the starter"
                   onFirstCue={beginStarterAttempt}
+                  disabled={recommendation.busy}
                 />
+                {recommendation.busy && (
+                  <p role="status">Finding the best 11-PID starter window…</p>
+                )}
+                {pidRecommendation && (
+                  <StarterPidRecommendation
+                    value={pidRecommendation}
+                    applied={isRecommendedTimer(state, pidRecommendation)}
+                  />
+                )}
+                {recommendation.error && (
+                  <p role="alert">
+                    Starter recommendation unavailable: {recommendation.error}{" "}
+                    Your current timer can still be used.
+                  </p>
+                )}
                 <TimingOptions
                   value={state.starter}
                   onChange={(starter) => patch({ starter, route: null })}
@@ -907,7 +967,7 @@ function StarterGuideSession({
                 )}
                 {checkingOutlook && (
                   <p role="status">
-                    Checking the closest SID candidates and preparing the route…
+                    Checking nearby SIDs and preparing this starter’s route…
                   </p>
                 )}
                 {starterOutlook && (
@@ -918,7 +978,7 @@ function StarterGuideSession({
                 )}
                 {outlook.error && (
                   <p role="alert">
-                    SID preview unavailable: {outlook.error} You can continue
+                    Route estimate unavailable: {outlook.error} You can continue
                     with the full SID investigation.
                   </p>
                 )}
@@ -935,10 +995,7 @@ function StarterGuideSession({
                     plan={state.route}
                     onCheck={checkRoute}
                   />
-                ) : !route.error &&
-                  !lab.analysisError &&
-                  !noSurvivingSids &&
-                  !correctingEvs ? (
+                ) : !route.error && !lab.analysisError && !noSurvivingSids ? (
                   <p role="status">
                     Calculating your Rustboro checklist from the starter’s IVs
                     and remaining SIDs…
@@ -961,9 +1018,9 @@ function StarterGuideSession({
               <>
                 {editingCheckpoint ? (
                   <p>
-                    Correct the battle log and move order used for your saved
-                    drawing, then choose Next to recheck it. Leave any uncertain
-                    move slot unknown.
+                    Update the battle log and current move order, then choose
+                    Next. Earlier drawings keep their original setup; new pixels
+                    will be checked separately.
                   </p>
                 ) : (
                   <p>
@@ -1024,8 +1081,7 @@ function StarterGuideSession({
                   !editingCheckpoint &&
                   !route.error &&
                   !lab.analysisError &&
-                  !noSurvivingSids &&
-                  !correctingEvs && (
+                  !noSurvivingSids && (
                     <p role="status">Updating your curtain setup…</p>
                   )}
                 {!editingCheckpoint && (route.error || lab.analysisError) && (
@@ -1076,30 +1132,23 @@ function StarterGuideSession({
                 )}
               </>
             )}
-            {correctingEvs && (
-              <p role="status">
-                Rechecking your drawing with the corrected EVs…
-              </p>
-            )}
-            {noSurvivingSids && !correctingEvs && !editingCheckpoint && (
+            {noSurvivingSids && !editingCheckpoint && (
               <p role="alert">
                 No SIDs fit the saved evidence. Check the drawing against the
                 game with the corrected battle log. Your recorded pixels are
                 preserved.
               </p>
             )}
-            {(noSurvivingSids || lab.analysisError) &&
-              !correctingEvs &&
-              !editingCheckpoint && (
-                <button
-                  onClick={() => {
-                    route.clear();
-                    patch({ step: 3, routeDone: true });
-                  }}
-                >
-                  Review curtain drawing
-                </button>
-              )}
+            {(noSurvivingSids || lab.analysisError) && !editingCheckpoint && (
+              <button
+                onClick={() => {
+                  route.clear();
+                  patch({ step: 3, routeDone: true });
+                }}
+              >
+                Review curtain drawing
+              </button>
+            )}
           </>
         )}
         {state.step === 3 && (
@@ -1107,7 +1156,15 @@ function StarterGuideSession({
             lab={lab}
             state={state}
             onTraining={train}
-            onMoreInfo={() => patch({ step: 2, route: null })}
+            onMoreInfo={() =>
+              patch({
+                step: 2,
+                route: null,
+                routeDone: true,
+                moves:
+                  lab.itemTestBaseline.knownFacts.moves?.slice() ?? state.moves,
+              })
+            }
           />
         )}
         {state.step === 4 && (
@@ -1350,14 +1407,19 @@ function StarterGuideSession({
                 the game before every new attempt.
               </p>
               <p className="help">
-                Start at zero if unsure. Use the optional attempt check above to
-                calculate a change from a verified landing.
+                The initial +3 adjustment is an estimate. Use the optional
+                attempt check above to calculate a change from a verified
+                landing.
               </p>
               {targetTimingError && (
                 <button
                   onClick={() =>
                     patch({
-                      starter: { ...state.starter, calibration: 0, offset: 0 },
+                      starter: {
+                        ...state.starter,
+                        calibration: DEFAULT_STARTER_CALIBRATION,
+                        offset: 0,
+                      },
                     })
                   }
                 >
@@ -1372,17 +1434,37 @@ function StarterGuideSession({
           <button
             disabled={state.step === 0}
             onClick={() =>
-              state.step === 1 && state.starterPart === "summary"
-                ? patch({ starterPart: "timer" })
-                : state.step === 2 && state.routeDone
-                  ? patch({ routeDone: false })
-                  : patch({ step: state.step - 1 })
+              state.step === 3
+                ? patch({
+                    step: 2,
+                    route: null,
+                    routeDone: true,
+                    moves:
+                      lab.itemTestBaseline.knownFacts.moves?.slice() ??
+                      state.moves,
+                  })
+                : state.step === 1 && state.starterPart === "summary"
+                  ? patch({ starterPart: "timer" })
+                  : state.step === 2 && state.routeDone
+                    ? patch({ routeDone: false })
+                    : patch({ step: state.step - 1 })
             }
           >
             {state.step === 5 ? "Choose another target" : "Back"}
           </button>
           {state.step < 5 ? (
-            <button onClick={next} disabled={checkingOutlook}>
+            <button
+              onClick={next}
+              disabled={
+                checkingOutlook ||
+                (state.step === 0 &&
+                  (recommendation.busy ||
+                    !canSearchOptimalPid(state.tid) ||
+                    (!pidRecommendation &&
+                      !state.identifiedStarter &&
+                      !state.readings.length)))
+              }
+            >
               Next
             </button>
           ) : (
@@ -1414,6 +1496,14 @@ function StarterGuideSession({
             rel="noreferrer"
           >
             Trainer-ID initialization
+          </a>{" "}
+          ·{" "}
+          <a
+            href="https://www.reddit.com/r/pokemonrng/comments/k395lc/pok%C3%A9mon_emerald_shiny_starter_delay/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Reported starter delay (+3 ±1 advances; starting estimate)
           </a>{" "}
           ·{" "}
           <a

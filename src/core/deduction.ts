@@ -13,6 +13,7 @@ import {
 } from "./inference";
 import { analyzeObservations } from "./jointInference";
 import { isEvidence, isRecorded, itemTestBaseline } from "./itemTests";
+import { starterExperimentSource } from "./starterExperimentFlow";
 import { usefulStarterPixels, type SidQuestion } from "./starterRoute";
 import { solveSids, projectRecord, compileChecksumSupport } from "./sid";
 import { rankPixelDomains } from "./experimentOutcomes";
@@ -81,7 +82,9 @@ export function computeDeduction(
   const { identity, snapshots } = input,
     active = snapshots.find((s) => s.id === input.activeId)!;
   const evidence = snapshots.filter(isEvidence),
-    baseline = itemTestBaseline(snapshots);
+    baseline = input.starterGuide
+      ? starterExperimentSource(snapshots, input.activeId)
+      : itemTestBaseline(snapshots);
   const pendingExperiment = snapshots.some((s) => !isRecorded(s));
   const reference = isEvidence(active)
     ? active
@@ -424,6 +427,7 @@ export function computeDeduction(
         identity,
         evidence,
         !input.starterGuide,
+        { allowVitamins: !input.starterGuide },
       );
   // Prefer the existing joint/checksum ranker wherever it can score the action.
   // Domain questions also cover small sets with differing block positions.

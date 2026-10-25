@@ -6,7 +6,9 @@ export const DEFAULT_STARTER_SEARCH_RADIUS = Math.ceil(EMERALD_FPS);
 // In-game A+B+Start+Select reset on console or emulator. The former -254
 // default was measured with an emulator reset that replayed the BIOS intro;
 // it must not be applied to the in-game soft-reset procedure.
-export const DEFAULT_STARTER_CALIBRATION = 0;
+// Community-measured YES-to-generation delay: about 3 advances (+/-1).
+// This is an adjustable initial estimate, not a guaranteed hardware latency.
+export const DEFAULT_STARTER_CALIBRATION = 3;
 export type StarterTiming = {
   first: number;
   second: number;
