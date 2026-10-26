@@ -1,10 +1,10 @@
+import { snapshotPlaintext } from "./summaryPlaintext";
 import {
   allowedValues,
   applyFacts,
   recordMasks,
   type KnownFacts,
 } from "./constraints";
-import { knownPlaintext } from "./inference";
 import { SUBSTRUCT_POSITIONS, decodePokemon, hex } from "./pokemon";
 import { genderForPid } from "./traits";
 import { xorMask } from "./cryptoConstraints";
@@ -50,7 +50,7 @@ function prepare(
     ...(generated ? { ivs: generated.ivs } : {}),
   });
   const header = applyFacts(recordMasks(snapshot.observations, 5), facts);
-  const logical = knownPlaintext(facts);
+  const logical = snapshotPlaintext(facts, snapshot);
   if (generated) logical[87] &= generated.abilitySlot === 0 ? 0x00ff : 0xff00;
   const order = SUBSTRUCT_POSITIONS[pid % 24];
   const plain = Array<number>(96).fill(0xffff);
@@ -582,7 +582,7 @@ export function projectRecord(
     const consistent = constrainLinkedChecksums(
       all,
       headers,
-      all.map((s) => knownPlaintext({ ...s.knownFacts, ...identity })),
+      all.map((s) => snapshotPlaintext({ ...s.knownFacts, ...identity }, s)),
     );
     checksumUpper = consistent
       ? headers[all.findIndex((s) => s.id === snapshot.id)].slice(56, 60)

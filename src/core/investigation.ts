@@ -39,6 +39,7 @@ export type Snapshot = {
   observations: Observations;
   knownFacts: KnownFacts;
   summaryStats?: SummaryStats;
+  useSummaryStats?: true; // Opt-in summary bounds for the guided backup Pokemon.
   starterCheckpointId?: string; // Separates genuine training checkpoints from edits.
   supersededBy?: string; // Preserved revision; the replacement supplies evidence.
   targets?: number[];
@@ -174,6 +175,8 @@ export function loadInvestigation(text: string): Investigation {
       !s.observations.every((n) => [-1, 0, 1].includes(n))
     )
       throw Error("Expected 192 observations");
+    if (s.useSummaryStats !== undefined && s.useSummaryStats !== true)
+      throw Error("Invalid summary evidence flag");
     const knownFacts = validateFacts(s.knownFacts, false);
     for (const key of ["starterCheckpointId", "supersededBy"] as const)
       if (
@@ -280,6 +283,7 @@ export function loadInvestigation(text: string): Investigation {
         ? {}
         : { starterCheckpointId: s.starterCheckpointId }),
       ...(s.supersededBy === undefined ? {} : { supersededBy: s.supersededBy }),
+      ...(s.useSummaryStats ? { useSummaryStats: true as const } : {}),
       ...(s.summaryStats === undefined
         ? {}
         : { summaryStats: validateSummaryStats(s.summaryStats) }),

@@ -69,9 +69,9 @@ export function StarterOutlook({
       </p>
       <p className="help">
         Estimates after the planned route, using known pixels, early items, move
-        swaps and manual EV training. The bold row is an estimated target, not a
-        verified SID. All {outlook.fullCount} SIDs remain in the full timing
-        search.
+        swaps and manual EV training, prioritising the closest surviving SID
+        after each answer. The bold row is an estimated target, not a verified
+        SID. All {outlook.fullCount} SIDs remain in the full timing search.
       </p>
       {canRetry && (
         <>

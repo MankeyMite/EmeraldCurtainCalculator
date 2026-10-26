@@ -22,13 +22,18 @@ import learnsets from "../data/level-up-learnsets.json";
 import { STARTER_ITEM_IDS } from "./starterItems";
 import catalogueRules from "../data/starter-catalogue-rules.json";
 import type { StarterPidRecommendation } from "./starterRecommendation";
-import { recordStarterChecklist } from "./starterChecklist";
+import {
+  recordStarterChecklist,
+  withStarterStorageInstructions,
+} from "./starterChecklist";
 
 export const STARTERS = [277, 280, 283];
 // Each original Emerald starter has one possible ability.
 export const starterAbility = (species: number) =>
   String(speciesTraits(species)!.abilities[0].id);
 export const GUIDE_KEY = "emerald-starter-guide-v1";
+export const GUIDE_BACKUP_LAB_KEY =
+  "emerald-starter-guide-backup-investigation-v1";
 export const GUIDE_LAB_KEY = "emerald-starter-guide-investigation-v1";
 export type BattleEntry = {
   id: string;
@@ -73,6 +78,13 @@ export type StarterGuideState = {
   usedTms?: number[];
   step: number;
   tid: string;
+  playerGender?: "" | "male" | "female";
+  backup?: {
+    active: boolean;
+    configured?: boolean;
+    phase: "details" | "curtains";
+    draft: Record<string, string>;
+  };
   intro: StarterTiming;
   starter: StarterTiming;
   starterRecommendation?: Pick<
@@ -115,6 +127,7 @@ export function newStarterGuide(): StarterGuideState {
     usedTms: [],
     step: 0,
     tid: "",
+    playerGender: "",
     intro: defaultIntroTiming(),
     starter: defaultStarterTiming(),
     identifiedStarter: null,
@@ -155,6 +168,7 @@ export function newStarterAttempt(s: StarterGuideState): StarterGuideState {
     ability: starterAbility(s.species),
     readingDraft: fresh.readingDraft,
     identifiedStarter: null,
+    backup: undefined,
     readings: [],
     battles: fresh.battles,
     evsKnown: true,
@@ -187,6 +201,8 @@ export function validateStarterGuide(value: unknown): StarterGuideState {
   if (
     !s ||
     s.version !== 1 ||
+    (s.playerGender !== undefined &&
+      !["", "male", "female"].includes(s.playerGender)) ||
     (s.starterTimingVersion !== undefined &&
       ![1, 2, 3, 4, 5].includes(s.starterTimingVersion)) ||
     (s.itemCatalogVersion !== undefined &&
@@ -219,6 +235,16 @@ export function validateStarterGuide(value: unknown): StarterGuideState {
     Number(s.tid) > 65535
   )
     throw Error("Invalid starter guide progress.");
+  if (
+    s.backup &&
+    (typeof s.backup.active !== "boolean" ||
+      (s.backup.configured !== undefined &&
+        typeof s.backup.configured !== "boolean") ||
+      !["details", "curtains"].includes(s.backup.phase) ||
+      !s.backup.draft ||
+      Object.values(s.backup.draft).some((v) => typeof v !== "string"))
+  )
+    throw Error("Invalid backup Pokemon progress");
   validateTiming(s.intro);
   validateTiming(s.starter);
   if (
@@ -406,27 +432,30 @@ export function validateStarterGuide(value: unknown): StarterGuideState {
         s.step === 2 &&
         !s.route.train
       )
-        ? {
-            ...s.route,
-            instructions: s.route.instructions.map((text) =>
-              text
-                .replace(
-                  "current level, exact EXP and all four moves",
-                  "current level and all four moves",
-                )
-                .replace("current EXP and moves", "current level and moves")
-                .replace(
-                  "Heal, check the new level and moves, then update EXP points below.",
-                  "Heal and check the new level and moves.",
-                )
-                .replace(
-                  "the current level and all four moves",
-                  "all four current moves",
-                )
-                .replace("current level and moves", "current moves")
-                .replace("new level and moves", "current moves"),
-            ),
-          }
+        ? withStarterStorageInstructions(
+            {
+              ...s.route,
+              instructions: s.route.instructions.map((text) =>
+                text
+                  .replace(
+                    "current level, exact EXP and all four moves",
+                    "current level and all four moves",
+                  )
+                  .replace("current EXP and moves", "current level and moves")
+                  .replace(
+                    "Heal, check the new level and moves, then update EXP points below.",
+                    "Heal and check the new level and moves.",
+                  )
+                  .replace(
+                    "the current level and all four moves",
+                    "all four current moves",
+                  )
+                  .replace("current level and moves", "current moves")
+                  .replace("new level and moves", "current moves"),
+              ),
+            },
+            !s.routeDone,
+          )
         : null,
   });
 }
@@ -527,6 +556,7 @@ export function starterIdentity(s: StarterGuideState): KnownFacts {
       : {}),
     species: s.species,
     ...(s.tid !== "" ? { tid: Number(s.tid) } : {}),
+    ...(s.playerGender ? { otGender: s.playerGender } : {}),
     ...(s.nature !== "" ? { nature: Number(s.nature) } : {}),
     ...(s.gender !== "" ? { gender: s.gender as "male" | "female" } : {}),
     ability: Number(starterAbility(s.species)),

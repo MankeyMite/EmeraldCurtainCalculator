@@ -17,8 +17,9 @@ import type { RngSpread } from "./rng";
 
 export function starterRecommendationKey(s: StarterGuideState) {
   return JSON.stringify([
-    3,
+    5,
     s.tid,
+    s.playerGender ?? "",
     s.intro,
     s.starter.first,
     s.starter.offset + s.starter.calibration,
@@ -76,6 +77,7 @@ export function recommendStarter(
     catalogue,
     {
       tid: Number(state.tid),
+      ...(state.playerGender ? { otGender: state.playerGender } : {}),
       intro: state.intro,
       starter: state.starter,
       expectedLandingRadius: 5,
@@ -190,7 +192,12 @@ export function catalogueStarterRoute(
   if (!spread) return null;
   const scan = scanStarterCatalogue(
     { ...catalogue, spreads: [spread] },
-    { tid: Number(s.tid), intro: s.intro, starter: s.starter },
+    {
+      tid: Number(s.tid),
+      intro: s.intro,
+      starter: s.starter,
+      ...(s.playerGender ? { otGender: s.playerGender } : {}),
+    },
   );
   const winner = scan.landings.find((row) => row.species === s.species)!;
   const prep = catalogue.preparations[winner.option.preparation];
@@ -249,7 +256,7 @@ export function catalogueStarterRoute(
     ...steps.map((step) => step.text),
     ...teaching,
     confirm,
-    "Heal at the Pokémon Center; PC storage restores PP.",
+    "PC storage fully heals the starter and restores PP.",
     winner.option.item
       ? `Before depositing, give ${catalogue.items.find((item) => item.id === winner.option.item)!.name} to the starter.`
       : "Remove any held item before depositing the starter.",
@@ -257,7 +264,11 @@ export function catalogueStarterRoute(
   ];
   return preserveStarterChecklist(s, {
     itemPlanVersion: 2,
-    facts: { ...prepared.facts, tid: Number(s.tid) },
+    facts: {
+      ...prepared.facts,
+      tid: Number(s.tid),
+      ...(s.playerGender ? { otGender: s.playerGender } : {}),
+    },
     instructions,
     items: winner.option.item ? [winner.option.item] : [],
     done: instructions.map(() => false),

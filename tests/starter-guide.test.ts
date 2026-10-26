@@ -959,7 +959,7 @@ test("guided route uses exact IVs, automatic obtainable items and legal move slo
     assert.ok(
       equip <
         plan.instructions.findIndex((text) =>
-          text.startsWith("Place the starter in Box"),
+          text.startsWith("Swap your caught Pokémon"),
         ),
     );
   }

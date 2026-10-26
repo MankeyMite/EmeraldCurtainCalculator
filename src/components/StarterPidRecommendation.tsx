@@ -99,10 +99,11 @@ export function StarterPidRecommendation({
         <p className="help">
           Estimated outcomes across {value.priorityCount} likely SID timings,
           compared with all {value.fullSidCount} SID candidates. Without EV
-          training includes item changes and move swaps. Ranking favours lower
-          EV training at the exact target and nearby advances, with more weight
-          on SIDs close to the estimated timing. These counts are unweighted.
-          Overlapping stats may require another starter attempt.
+          training counts timing-aware rehearsals resolved using item changes
+          and move swaps. Ranking favours fewer inexpensive experiments and
+          lower EV training at the exact target and nearby advances, with more
+          weight on SIDs close to the estimated timing. These counts are
+          unweighted. Overlapping stats may require another starter attempt.
         </p>
       </details>
     </div>

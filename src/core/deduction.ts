@@ -59,6 +59,7 @@ export type DeductionInput = {
   renderMasks?: number[];
   spindaGuide?: { guide: SpindaSidGuideState; settings: RngSettings };
   spindaPlanning?: { settings: RngSettings; tested: number[] };
+  backupGuide?: boolean;
   starterGuide?: boolean; // The guided questions use encrypted pixels, not checksums.
 };
 export const DEDUCTION_PHASE_LABELS = {
@@ -165,6 +166,33 @@ export function computeDeduction(
   let sidAnalysis = input.sidRng
     ? (sidResult?.analysis ?? null)
     : curtainSidAnalysis;
+  // Complete unknown-PID enumeration supplies a set, not a single witness.
+  // Only that complete set may power guide experiments and confirmation.
+  if (
+    input.starterGuide &&
+    !sidAnalysis &&
+    sidResult?.pidValues?.length &&
+    sidResult.pidValues.length <= 256
+  ) {
+    try {
+      sidAnalysis = solveSids(
+        identity,
+        evidence,
+        sidResult.pidValues,
+        undefined,
+        200000,
+        sidResult.rows.map((r) => r.sid),
+      );
+      sidResult.analysis = sidAnalysis;
+    } catch (error) {
+      if (
+        !(error instanceof Error) ||
+        !error.message.startsWith("More than 200,000 joint hypotheses")
+      )
+        throw error;
+      candidateLimit = true;
+    }
+  }
   // Keep the pre-guide set separate: editing or clearing a guide answer must
   // be able to bring candidates back. Interpret baseline pixels using baseline
   // facts even while a changed-item or training experiment is active.
@@ -344,7 +372,8 @@ export function computeDeduction(
     input.starterGuide &&
     active.itemTest?.mode === "pixels" &&
     !isRecorded(active) &&
-    sidAnalysis
+    sidAnalysis &&
+    sidAnalysis.candidates.length <= 4096
       ? usefulStarterPixels(
           sidAnalysis.candidates,
           { ...active.knownFacts, ...identity },
@@ -400,12 +429,16 @@ export function computeDeduction(
   if (!pendingExperiment) phase?.("experiments");
   const domain =
     !pendingExperiment &&
-    !input.starterGuide &&
+    (!input.starterGuide || input.backupGuide) &&
     (!input.rng || sidAnalysis) &&
     sidScopeAllows
       ? rankDomainExperiments(identity, evidence, baseline, domainInference, {
-          candidates: domainCandidates,
+          candidates:
+            input.backupGuide && (domainCandidates?.length ?? 0) > 4096
+              ? undefined
+              : domainCandidates,
           scopeRelaxed,
+          backupGuide: input.backupGuide,
         })
       : null;
   const items =

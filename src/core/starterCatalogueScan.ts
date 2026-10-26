@@ -1,9 +1,16 @@
+import type { KnownFacts } from "./constraints";
+import { knownPlaintext } from "./inference";
+import { cataloguePlaintextMasks } from "./starterCatalogue";
+import {
+  rehearseStarterSidStrategy,
+  newStarterStrategyCache,
+} from "./starterSidStrategy";
+import { estimatedSidTargetAdvance } from "./starterSidPriority";
 import { generateSidRng } from "./sidRng";
 import {
   estimatedSidWindow,
   estimatedStarterWindow,
   targetCountdown,
-  EMERALD_FPS,
   type StarterTiming,
 } from "./starterTiming";
 import { STARTERS } from "./starterGuide";
@@ -17,6 +24,7 @@ import type {
 
 export type CatalogueScanInput = {
   tid: number;
+  otGender?: KnownFacts["otGender"];
   intro: StarterTiming;
   starter: StarterTiming;
   remainingSids?: number[];
@@ -39,6 +47,9 @@ export type CatalogueLanding = {
   shortTrainingBits: number;
   evCap: number;
   evEffort: number;
+  strategySeconds?: number;
+  strategyExperiments?: number;
+  strategyUnresolved?: number;
 };
 export type CatalogueTarget = {
   species: number;
@@ -57,6 +68,11 @@ export type CatalogueTarget = {
   perfectCluster: { minAdvance: number; maxAdvance: number } | null;
   centre: CatalogueLanding;
   ranking: {
+    centreStrategySeconds?: number;
+    nearStrategySeconds?: number;
+    weightedStrategySeconds?: number;
+    centreStrategyUnresolved?: number;
+    nearStrategyUnresolved?: number;
     centreEvCap: number;
     nearEvCap: number;
     nearEvEffort: number;
@@ -95,14 +111,32 @@ function signature(key: number, m: SidTestMasks) {
   );
 }
 
+const genderPlaintext = new Map<string, SidTestMasks>();
+export function starterGenderPlaintextMasks(
+  otGender?: KnownFacts["otGender"],
+): SidTestMasks {
+  if (!otGender) return [0, 0, 0, 0];
+  let masks = genderPlaintext.get(otGender);
+  if (!masks) {
+    masks = cataloguePlaintextMasks(
+      knownPlaintext({ metLevel: 5, metGame: 3, ball: 4, otGender }),
+    );
+    genderPlaintext.set(otGender, masks);
+  }
+  return masks;
+}
+
 /** Raw plaintext and SID candidate masks are equivalent after XORing every
  * candidate with the PID upper word. Use that bijection to avoid regenerating
  * plaintext or transforming 16-bit masks for every recipe at runtime. */
 export function catalogueCandidateMasks(
   spread: CatalogueSpread,
   option: CatalogueOption,
+  otGender?: KnownFacts["otGender"],
 ): SidTestMasks {
+  const gender = starterGenderPlaintextMasks(otGender);
   return option.plaintextMasks.map((mask, digit) => {
+    mask |= gender[digit];
     let tests = spread.baseMasks[digit];
     const pid = (spread.pid >>> ((digit + 4) * 4)) & 15;
     for (let value = 0; value < 16; value++)
@@ -120,13 +154,14 @@ export function scanStarterCatalogue(
 ): CatalogueScan {
   if (!Number.isInteger(input.tid) || input.tid < 0 || input.tid > 65535)
     throw Error("Enter a public TID from 0 to 65535.");
+  if (
+    input.otGender !== undefined &&
+    !["male", "female"].includes(input.otGender)
+  )
+    throw Error("Choose a valid player character.");
+  const genderMasks = starterGenderPlaintextMasks(input.otGender);
   const window = estimatedSidWindow(input.intro);
-  const center = Math.max(
-    1,
-    Math.round(input.intro.second * EMERALD_FPS) +
-      input.intro.offset +
-      input.intro.calibration,
-  );
+  const center = estimatedSidTargetAdvance(input.intro);
   const kept = input.remainingSids && new Set(input.remainingSids);
   const sidRows = generateSidRng(input.tid, window).filter(
     (row) => !kept || kept.has(row.sid),
@@ -157,6 +192,7 @@ export function scanStarterCatalogue(
   let epoch = 0,
     evaluatedSetups = 0;
   const landings: CatalogueLanding[] = [];
+  const strategyCache = newStarterStrategyCache();
   const evaluate = (keys: Uint16Array, masks: SidTestMasks) => {
     epoch++;
     evaluatedSetups++;
@@ -213,7 +249,8 @@ export function scanStarterCatalogue(
     const fixed = [0, 1, 2, 3].map(
       (n) =>
         (1 << ((upper >>> (n * 4)) & 15)) |
-        (1 << spread.ivTests.find((t) => t.position === 4 - n)!.plaintext),
+        (1 << spread.ivTests.find((t) => t.position === 4 - n)!.plaintext) |
+        genderMasks[n],
     ) as SidTestMasks;
     const outcomes = new Map<string, ReturnType<typeof evaluate>>();
     const outcome = (raw: SidTestMasks) => {
@@ -300,6 +337,73 @@ export function scanStarterCatalogue(
       }
       if (!best)
         throw Error("Catalogue has no supported preparation for this starter.");
+      const prep = catalogue.preparations[best.option.preparation];
+      const rehearsal = rehearseStarterSidStrategy({
+        facts: {
+          ...prep.facts,
+          tid: input.tid,
+          heldItem: best.option.item,
+          ...(input.otGender ? { otGender: input.otGender } : {}),
+        },
+        spread,
+        rows: sidRows,
+        target: center,
+        scenarios: priority.map((r) => r.sid),
+        collectedItems: best.option.item ? [best.option.item] : [],
+        consumedItems: prep.consumedItems,
+        drawingMasks: catalogueCandidateMasks(
+          spread,
+          best.option,
+          input.otGender,
+        ),
+        cache: strategyCache,
+      });
+      const totalWeight = sidWeights.reduce((a, b) => a + b, 0);
+      best.strategySeconds =
+        rehearsal.reduce(
+          (sum, c, n) => sum + sidWeights[n] * (c.seconds ?? 14400),
+          0,
+        ) / totalWeight;
+      best.strategyExperiments =
+        rehearsal.reduce(
+          (sum, c, n) => sum + sidWeights[n] * (c.experiments ?? 64),
+          0,
+        ) / totalWeight;
+      best.strategyUnresolved = rehearsal.filter(
+        (c) => c.experiments === null,
+      ).length;
+      best.withoutTrainingBits = rehearsal.reduce(
+        (bits, c, n) =>
+          bits |
+          (c.experiments !== null &&
+          c.defenseTarget === null &&
+          c.speedTarget === null
+            ? 1 << n
+            : 0),
+        0,
+      );
+      best.withoutTraining = rehearsal.filter(
+        (c) =>
+          c.experiments !== null &&
+          c.defenseTarget === null &&
+          c.speedTarget === null,
+      ).length;
+      best.shortTrainingBits = rehearsal.reduce(
+        (bits, c, n) =>
+          bits |
+          (c.experiments !== null &&
+          (c.defenseTarget ?? 0) <= 10 &&
+          (c.speedTarget ?? 0) <= 10
+            ? 1 << n
+            : 0),
+        0,
+      );
+      best.shortTraining = rehearsal.filter(
+        (c) =>
+          c.experiments !== null &&
+          (c.defenseTarget ?? 0) <= 10 &&
+          (c.speedTarget ?? 0) <= 10,
+      ).length;
       landings.push(best);
     }
     if (row % 16 === 0 || row === catalogue.spreads.length - 1)
@@ -327,6 +431,7 @@ export function scanStarterCatalogue(
     assumptions: [
       "Triangular planning weights favour SID-generating advances near estimated target ±9; this is a planning assumption, not a measured probability.",
       `The exact starter target and errors within +/-3 advances take priority; outer rows through +/-${radius} have lower weight. PID search retains +/-${Math.min(input.starter.uncertainty, 100)} advances.`,
+      "Timing-aware, truth-blind experiment rehearsals use the live guide score and legal item/move/manual-EV actions. Costs are estimates; unknown plaintext and checksum deductions are omitted.",
       "Every prioritised SID is compared with the entire surviving SID window.",
       "One held item and one legal preparation per landed PID; no true SID is supplied to route selection.",
       "A level-5 summary that matches multiple in-window PIDs counts as a retry, not drawing-only success.",
@@ -460,6 +565,28 @@ export function rankCatalogueTargets(
           max++;
         perfectCluster = { minAdvance: min, maxAdvance: max };
       }
+      const strategyAverage = (
+        close: boolean,
+        field: "strategySeconds" | "strategyUnresolved",
+      ) => {
+        let sum = 0,
+          total = 0;
+        for (const row of neighbors) {
+          const distance = Math.abs(row.advance - centre.advance);
+          if (close && distance > 3) continue;
+          const weight = close ? 4 - distance : Math.max(1, 6 - distance);
+          sum +=
+            weight *
+            (identified(row)
+              ? (row[field] ?? 0) +
+                (field === "strategySeconds" ? row.option.seconds : 0)
+              : field === "strategySeconds"
+                ? 14400
+                : priorityCount);
+          total += weight;
+        }
+        return sum / total;
+      };
       const candidate: CatalogueTarget = {
         species,
         advance: centre.advance,
@@ -488,6 +615,12 @@ export function rankCatalogueTargets(
         perfectCluster,
         centre,
         ranking: {
+          centreStrategySeconds:
+            (centre.strategySeconds ?? 0) + centre.option.seconds,
+          nearStrategySeconds: strategyAverage(true, "strategySeconds"),
+          weightedStrategySeconds: strategyAverage(false, "strategySeconds"),
+          centreStrategyUnresolved: centre.strategyUnresolved ?? 0,
+          nearStrategyUnresolved: strategyAverage(true, "strategyUnresolved"),
           centreEvCap: centre.evCap,
           nearEvCap: Math.max(
             ...neighbors
@@ -549,6 +682,16 @@ export function compareCatalogueTargets(
   return (
     a.ranking.centreEvCap - b.ranking.centreEvCap ||
     a.ranking.nearEvCap - b.ranking.nearEvCap ||
+    (a.ranking.centreStrategyUnresolved ?? 0) -
+      (b.ranking.centreStrategyUnresolved ?? 0) ||
+    (a.ranking.nearStrategyUnresolved ?? 0) -
+      (b.ranking.nearStrategyUnresolved ?? 0) ||
+    (a.ranking.centreStrategySeconds ?? 0) -
+      (b.ranking.centreStrategySeconds ?? 0) ||
+    (a.ranking.nearStrategySeconds ?? 0) -
+      (b.ranking.nearStrategySeconds ?? 0) ||
+    (a.ranking.weightedStrategySeconds ?? 0) -
+      (b.ranking.weightedStrategySeconds ?? 0) ||
     b.ranking.centreShort - a.ranking.centreShort ||
     b.ranking.centreEasy - a.ranking.centreEasy ||
     a.ranking.nearEvEffort - b.ranking.nearEvEffort ||

@@ -504,7 +504,6 @@ retains multiple compatible in-window spreads at 1786 and 1889, prompts for all
 six stats after every level-up, and removes the false match using the latest
 summary and its actual EV snapshot.
 
-
 ### Manual training when the early guide has no vitamins
 
 The guided experiment generator disables vitamins before choosing or pruning EV
@@ -546,3 +545,120 @@ The supplied Torchic regression demonstrates the failure and repair: applying
 unanswered checkpoint instead retains 06425 and 21273, including after reload.
 Only the independently verified transparent answer then resolves 06425. Undoing
 that answer restores both candidates without changing earlier snapshots.
+
+### Timing-prioritised SID confirmation
+
+The New Game guide uses this preference. Discover SID ranks the surviving SIDs
+by the minimum absolute distance of any generating advance from the existing
+intro timer target. All generating advances, tied nearest advances and tied SIDs
+are retained. A compact overview shows the target, leader(s), next alternative,
+signed offsets and an expandable full survivor table. Distance is not converted
+to a confidence percentage or a probability.
+
+The guide scores the existing supported held-item, move and manual-EV actions.
+The shared starter pixel-support predicate supplies black/transparent outcomes;
+uncertain plaintext permits both, and multiple PID/IV witnesses are unioned by SID.
+A greedy selection of at most four pixels preserves joint patterns within each
+hypothesis. Competitors outside the nearest timing group remain in every check.
+Unresolved SIDs without a witness conservatively permit every pattern.
+
+The internal planning benefit adds the existing type of information gain to
+twice the conservative information about the nearest SID(s), separation from
+their nearest competitors, and a bounded bonus for an isolating outcome. It is
+divided by the existing acquisition/action effort; the existing last-resort EV
+ordering still applies. These are ranking preferences, not timing probabilities
+or a claim of globally optimal experiment order. Without timing or a useful
+leading-SID test, information and effort supply the fallback.
+
+The recommendation and active pixel question explain which outcome could isolate
+or exclude the leading SID only when all surviving hypotheses support the claim.
+No timing score is supplied to the solver or used to narrow its window. Confirmed
+SID and shiny-stage navigation still require one distinct SID across the complete
+configured window. RNG generation, decryption, route preparation selection and
+ordinary advanced investigator remain unchanged.
+
+### Timing-aware target and difficulty estimates
+
+The TID search now rehearses experiments for each of its 19 timing scenarios,
+after the existing preparation search has chosen one legal setup for each
+PID/species. Every initial drawing and experiment is evaluated against all
+surviving SIDs in the configured window. Scenario answers are applied only after
+the current pool, setup and timing ranking have selected an action. Duplicate
+SID-generating witnesses keep their existing separate planning weights.
+
+The rehearsal shares the live guide's outcome score and cost comparator. It uses
+known singleton plaintext and the existing legal move/EV action generator, with
+no vitamins. Unknown fields and checksum deductions are omitted; paths are
+estimates rather than a promise of identical interactive questions. Current
+held items, move order, PP and trained EVs persist into the next action. Acquired
+items are charged once. Training assumes the player retains the recorded moves,
+deposits to heal and restore PP before reading, and tracks only the requested EV awards.
+
+Existing worst-case EV-coverage safeguards remain first in target ranking. Among
+those targets, unresolved rehearsals are penalised and estimated action plus
+preparation effort is minimised at the exact PID, then within +/-3 advances,
+then the outer landing window. SID scenarios retain their existing triangular
+timing weights; these are planning assumptions, not measured probabilities.
+Drawing-only counts are unchanged in meaning. Without-training counts now count
+scenarios actually resolved without EV actions by this rehearsal, rather than
+union coverage across every available action.
+
+The landed-starter difficulty preview uses the same rehearsal. Old persisted
+PID recommendations are invalidated by a policy-version key, without deleting
+the player's investigation. The catalogue data, its generation and the actual
+SID/PID RNG search windows are unchanged. Reusable raw plaintext and legal
+training actions are cached within each scan to limit repeated calculations.
+
+The travel checklist asks the player to catch any Pokémon on Routes 101-103,
+store it at Oldale or Petalburg, and keep it boxed during solo starter battles.
+At Rustboro, swap it with the starter, placing the starter in Box 8, slot 5. PC storage restores PP
+and boxed Pokémon return fully healed; no separate pre-deposit healing is needed.
+Saved checklists receive these instruction updates without rewriting facts,
+replaying battle actions, or losing their checkmarks.
+
+Player character is selected before the introductory timer. Its known OT gender
+is passed to starter identity, route facts, the TID catalogue scan and the
+landed-starter preview. The existing origin-bit encoder supplies the extra
+known plaintext: for a starter in a Poke Ball, logical nibble 79 is 2 for a boy
+and A for a girl, testing S1 XOR the PID upper nibble. Unknown legacy choices
+remain unknown, rather than silently assuming a boy. Catalogue raw masks are
+augmented at scan time; no additional PID catalogue or RNG model is generated.
+Source: [Emerald PokemonSubstruct3 origin bits](https://github.com/pret/pokeemerald/blob/master/include/pokemon.h#L126).
+
+### Second-Pokemon fallback before substantial starter EV training
+
+Discover SID offers the boxed early-route catch before the next starter EV target
+above 5 in either stat, or when no supported starter experiment remains. The
+player swaps it with the starter in Box 8 slot 5, enters its species, summary
+traits/stats, current moves and held item, and uses the same curtain editor.
+The form assumes the catch remained boxed without battle EVs, as prescribed by
+the travel checklist. It uses restored PC PP; no encounter timer or guessed PID
+is required. Move defaults come from the local Emerald learnset and remain editable.
+
+The two Pokemon keep separate investigation autosaves. The starter is always
+solved from its own full configured SID window and observations. Its independently
+surviving SIDs scope the backup's unknown-PID search. Only SID compatibility is
+intersected for display and shiny-stage verification; neither Pokemon borrows
+the other's PID, IVs, observations or mutable setup. Recomputing this one-way
+scope allows editing or undoing either source to restore previously excluded SIDs.
+
+The existing per-SID unknown-PID search retains unresolved rows and never treats
+witness PIDs as an exhaustive list. A complete enumerated PID set can supply the
+existing exact experiment ranker. Larger sets reuse symbolic per-permutation
+questions from the advanced investigator, limited here to early obtainable
+items, legal move swaps and HM01 Cut learning. Only actual black/transparent
+answers add evidence. After checking the backup, swapping back to the starter
+remains available; the guide does not force every backup experiment before EVs.
+
+Backup snapshots opt into conservative IV-nibble bounds derived from the existing
+stat calculator. Ranges remain ranges, including cross-nibble correlations that
+cannot be represented by independent nibble masks. This flag is persisted and
+is not enabled for ordinary advanced investigations. All 24 block permutations
+remain possible until evidence eliminates them. The shiny step requires a unique
+SID across the full original window, both analyses current, no pending drawing
+or experiment, and no unresolved existence-search result.
+
+Guide reset/undo includes both investigation saves. Starting another starter
+attempt clears the backup association; the next backup form replaces old evidence
+rather than reusing a different captured Pokemon. Catalogue construction, initial
+PID target ranking, route calculations and RNG timing are unchanged by this step.

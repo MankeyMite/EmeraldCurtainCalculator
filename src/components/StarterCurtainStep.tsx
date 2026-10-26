@@ -1,11 +1,19 @@
+import { preferBackupPokemon } from "../core/starterBackup";
 import { useEffect, useMemo, useState } from "react";
 import type { CurtainLab } from "../hooks/useCurtainLab";
-import { usefulStarterPixels } from "../core/starterRoute";
 import { type StarterGuideState } from "../core/starterGuide";
+import { itemPixels } from "../core/experiments";
+import { actionPixels } from "../core/controlledExperiments";
+import { StarterSidTimingOverview } from "./StarterSidTimingOverview";
+import {
+  rankSurvivingSidTimings,
+  estimatedSidTargetAdvance,
+  prioritizeStarterSidPixels,
+  compareStarterSidExperiments,
+  leadingSidPixelReason,
+} from "../core/starterSidPriority";
 import { controlledFacts } from "../core/controlledExperiments";
-import { compareSidSteps, experimentSeconds } from "../core/nextSidStep";
-import { emptyObservations } from "../core/constraints";
-import { speciesTraits } from "../core/traits";
+import { experimentSeconds } from "../core/nextSidStep";
 import { ITEM_CATALOG } from "../core/experiments";
 import { moveName } from "../core/moveLearningExperiments";
 import { describeByte } from "../core/inspection";
@@ -25,16 +33,36 @@ export function StarterCurtainStep({
   state,
   onTraining,
   onMoreInfo,
+  backup = false,
+  onBackup,
+  backupAvailable = false,
+  confirmationReady = true,
 }: {
   lab: CurtainLab;
   state: StarterGuideState;
   onTraining: (id: string) => void;
   onMoreInfo: () => void;
+  backup?: boolean;
+  onBackup?: () => void;
+  backupAvailable?: boolean;
+  confirmationReady?: boolean;
 }) {
   const [skip, setSkip] = useState<number[]>([]),
     [selected, setSelected] = useState<number | null>(null);
-  const candidates = lab.sidAnalysis?.candidates,
+  const candidates =
+      backup && (lab.sidAnalysis?.candidates.length ?? 0) > 4096
+        ? undefined
+        : lab.sidAnalysis?.candidates,
     sids = lab.sidAnalysis?.sidValues;
+  const timing = useMemo(
+    () =>
+      rankSurvivingSidTimings(
+        lab.sidRngRows ?? [],
+        sids ?? [],
+        estimatedSidTargetAdvance(state.intro),
+      ),
+    [lab.sidRngRows, sids, state.intro],
+  );
   useEffect(() => {
     setSkip([]);
     setSelected(null);
@@ -42,6 +70,39 @@ export function StarterCurtainStep({
   const recheck = lab.pendingItemTest
     ? lab.activeSnapshot.itemTest?.recheckPixel
     : undefined;
+  const activePriority = useMemo(
+    () =>
+      lab.pendingItemTest && candidates?.length
+        ? prioritizeStarterSidPixels(
+            candidates,
+            { ...lab.identity, ...lab.activeSnapshot.knownFacts },
+            (lab.starterQuestions ?? []).map((q) => q.index),
+            timing,
+          )
+        : null,
+    [
+      lab.pendingItemTest,
+      candidates,
+      lab.identity,
+      lab.activeSnapshot?.knownFacts,
+      lab.starterQuestions,
+      timing,
+    ],
+  );
+  const rankedQuestions = activePriority
+    ? [...(lab.starterQuestions ?? [])].sort((a, b) => {
+        const rank = (index: number) => {
+          const n = activePriority.targets.indexOf(index);
+          return n < 0 ? Infinity : n;
+        };
+        return rank(a.index) - rank(b.index);
+      })
+    : backup && !candidates?.length && lab.pendingItemTest
+      ? (lab.experimentTargets ?? []).map((index) => ({
+          index,
+          field: describeByte((index - 16) >> 1, lab.identity.pid).name,
+        }))
+      : (lab.starterQuestions ?? []);
   const available = [
     ...(recheck === undefined
       ? []
@@ -51,7 +112,7 @@ export function StarterCurtainStep({
             field: describeByte((recheck - 16) >> 1, lab.identity.pid).name,
           },
         ]),
-    ...(lab.starterQuestions ?? []).filter((q) => q.index !== recheck),
+    ...rankedQuestions.filter((q) => q.index !== recheck),
   ].filter(
     (q) =>
       !skip.includes(q.index) &&
@@ -60,6 +121,15 @@ export function StarterCurtainStep({
   const question = available.find((q) => q.index === selected) ?? available[0];
   const disabled =
     lab.analysisBusy || lab.drawingInProgress || !!lab.analysisError;
+  const questionReason =
+    question && !disabled
+      ? leadingSidPixelReason(
+          candidates ?? [],
+          { ...lab.identity, ...lab.activeSnapshot.knownFacts },
+          question.index,
+          timing,
+        )
+      : "";
   const baselineReady =
     lab.starterHasDrawing ??
     (lab.itemTestBaseline?.observations ?? lab.obs)
@@ -79,9 +149,9 @@ export function StarterCurtainStep({
       lab.analysisBusy ||
       lab.analysisError ||
       lab.pendingItemTest ||
-      !candidates?.length ||
-      new Set(candidates.map((h) => h.sid)).size < 2 ||
-      candidates.length > 4096
+      (!backup && !candidates?.length) ||
+      (sids?.length ?? 0) < 2 ||
+      (candidates?.length ?? 0) > 4096
     )
       return [];
     const base = lab.itemTestBaseline.knownFacts;
@@ -106,7 +176,15 @@ export function StarterCurtainStep({
               ? 0
               : starterItemCost([e.item.id]).seconds),
           lastResort: false,
-          targets: e.pixels.map((p) => p.index),
+          targets: candidates?.length
+            ? [
+                ...new Set(
+                  candidates.flatMap((h) =>
+                    itemPixels(h, e.item.id).map((p) => p.index),
+                  ),
+                ),
+              ]
+            : e.pixels.map((p) => p.index),
           facts: { ...lab.identity, ...base, heldItem: e.item.id },
           select: (targets: number[]) => lab.startItemTest(e.item.id, targets),
         })),
@@ -114,7 +192,12 @@ export function StarterCurtainStep({
         .filter(
           (e) =>
             e.action.kind === "moves" ||
-            (e.action.kind === "ev" && e.action.training?.vitamins === 0),
+            (!backup &&
+              e.action.kind === "ev" &&
+              e.action.training?.vitamins === 0) ||
+            (backup &&
+              e.action.kind === "learn" &&
+              /^teach-15(?:-|$)/.test(e.action.id)),
         )
         .map((e) => ({
           id: e.action.id,
@@ -123,7 +206,17 @@ export function StarterCurtainStep({
           informationGain: e.informationGain,
           seconds: experimentSeconds(e.action),
           lastResort: e.action.training?.lastResort ?? false,
-          targets: e.pixels.map((p) => p.index),
+          targets: candidates?.length
+            ? [
+                ...new Set(
+                  candidates.flatMap((h) =>
+                    actionPixels(lab.itemTestBaseline, e.action, h).map(
+                      (p) => p.index,
+                    ),
+                  ),
+                ),
+              ]
+            : e.pixels.map((p) => p.index),
           facts: { ...lab.identity, ...controlledFacts(base, e.action) },
           select: (targets: number[]) =>
             e.action.kind === "ev"
@@ -133,35 +226,42 @@ export function StarterCurtainStep({
     ];
     return options
       .flatMap((e) => {
-        const useful = usefulStarterPixels(
+        if (!candidates?.length) {
+          const domain = lab.domainQuestions[e.id];
+          if (!backup || !domain || !e.targets.length) return [];
+          const benefit = Math.max(
+            0,
+            Math.log2(
+              domain.total /
+                Math.max(domain.transparentCount, domain.blackCount, 1),
+            ),
+          );
+          return [
+            {
+              ...e,
+              targets: e.targets.filter((n) => n >= 80).slice(0, 4),
+              benefit,
+              reason:
+                "This test helps narrow the backup Pokemon's PID and remaining SIDs.",
+            },
+          ];
+        }
+        const priority = prioritizeStarterSidPixels(
           candidates,
           e.facts,
-          emptyObservations(),
-        ).filter((q) => e.targets.includes(q.index));
-        if (!useful.length) return [];
-        const q = useful[0];
-        return [
-          {
-            ...e,
-            targets: useful.slice(0, 4).map((q) => q.index),
-            worstCase: q.worstCase,
-            informationGain: Math.log2(
-              q.total /
-                Math.max(
-                  1,
-                  (q.transparent * q.transparent + q.black * q.black) /
-                    (q.transparent + q.black),
-                ),
-            ),
-          },
-        ];
+          e.targets,
+          timing,
+        );
+        return priority ? [{ ...e, ...priority }] : [];
       })
-      .sort(
-        (a, b) =>
-          Number(a.lastResort) - Number(b.lastResort) || compareSidSteps(a, b),
-      );
+      .sort(compareStarterSidExperiments);
   }, [
     candidates,
+    sids,
+    backup,
+    lab.domainQuestions,
+    timing,
+    lab.identity,
     lab.experiments,
     lab.controlledExperiments,
     lab.itemTestBaseline,
@@ -173,6 +273,17 @@ export function StarterCurtainStep({
     lab.analysisError,
   ]);
   const next = options[0];
+  const checkBackup =
+    !!onBackup &&
+    backupAvailable &&
+    baselineReady &&
+    !disabled &&
+    !lab.pendingItemTest &&
+    (sids?.length ?? 0) > 1 &&
+    (!next ||
+      preferBackupPokemon(
+        next.id.startsWith("ev-") ? Number(next.id.split("-")[2]) : undefined,
+      ));
   const alreadyChanged =
     recheck !== undefined ||
     lab.activeSnapshot?.itemTest?.action?.kind === "ev";
@@ -206,8 +317,9 @@ export function StarterCurtainStep({
         />
       </div>
       <p>
-        Box the starter in <strong>Box 8, slot 5</strong>, with slots 4 and 6
-        empty. Enter Rustboro Trainer’s School. Reenter after every change.
+        Box the {backup ? "caught Pokémon" : "starter"} in{" "}
+        <strong>Box 8, slot 5</strong>, with slots 4 and 6 empty. Enter Rustboro
+        Trainer’s School. Reenter after every change.
       </p>
       <p role="status">
         {lab.drawingInProgress
@@ -215,13 +327,14 @@ export function StarterCurtainStep({
           : disabled
             ? "Updating candidates…"
             : sids
-              ? `${sids.length} possible SID${sids.length === 1 ? "" : "s"} remain. All matching PID/IV spreads are retained.`
+              ? `${sids.length} possible SID${sids.length === 1 ? "" : "s"} remain. All compatible PID/IV possibilities are retained.`
               : "Waiting for the starter and SID searches."}
       </p>
       <SidProgress
         sids={lab.analysisError ? undefined : sids}
         updating={lab.analysisBusy || lab.drawingInProgress}
       />
+      <StarterSidTimingOverview value={timing} updating={disabled} />
       {lab.analysisError && <p role="alert">{lab.analysisError}</p>}
       {sids?.length === 0 && !disabled && (
         <p role="alert">
@@ -278,18 +391,21 @@ export function StarterCurtainStep({
           Undo last experiment answer
         </button>
       )}
-      {sids?.length === 1 && !disabled && (
-        <div className="starter-success">
-          <strong>
-            One SID matches: {sids[0]} · 0x
-            {sids[0].toString(16).toUpperCase().padStart(4, "0")}
-          </strong>
-          <p>
-            This result uses your recorded observations, EV log and selected RNG
-            window. Choose Next to find shiny targets.
-          </p>
-        </div>
-      )}
+      {sids?.length === 1 &&
+        confirmationReady &&
+        !disabled &&
+        (!backup || lab.sidRngResult?.exact !== false) && (
+          <div className="starter-success">
+            <strong>
+              One SID matches: {sids[0]} · 0x
+              {sids[0].toString(16).toUpperCase().padStart(4, "0")}
+            </strong>
+            <p>
+              This result uses your recorded observations, EV log and selected
+              RNG window. Choose Next to find shiny targets.
+            </p>
+          </div>
+        )}
       <div className="starter-curtain-layout">
         <div className="starter-curtain-view">
           <PixelGrid
@@ -358,6 +474,7 @@ export function StarterCurtainStep({
                   disabled={disabled}
                   onAnswer={answer}
                 />
+                {questionReason && <p className="help">{questionReason}</p>}
                 <button
                   disabled={disabled}
                   onClick={() => {
@@ -375,21 +492,37 @@ export function StarterCurtainStep({
             ) : (
               <p>Finding useful questions…</p>
             ))}
-          {!lab.pendingItemTest && baselineReady && !disabled && next && (
+          {checkBackup && (
             <>
-              <h4>Next: {next.name}</h4>
-              {next.obtain && <p>{next.obtain}</p>}
+              <h4>Next: check your second Pokémon</h4>
               <p>
-                {next.id.startsWith("ev-")
-                  ? "Log the training battles and update any changed moves before the next curtain reading."
-                  : `Current setup: ${originalSetup} This test can distinguish remaining SIDs.`}
+                Try its curtain and simple item or move tests before training a
+                stat above 5 EVs.
               </p>
-              <button onClick={() => next.select(next.targets)}>
-                Try this experiment
-              </button>
+              <button onClick={onBackup}>Check second Pokémon</button>
             </>
           )}
-          {!lab.pendingItemTest &&
+          {!checkBackup &&
+            !lab.pendingItemTest &&
+            baselineReady &&
+            !disabled &&
+            next && (
+              <>
+                <h4>Next: {next.name}</h4>
+                {next.obtain && <p>{next.obtain}</p>}
+                <p>
+                  {next.id.startsWith("ev-")
+                    ? "Log the training battles and update any changed moves before the next curtain reading."
+                    : `Current setup: ${originalSetup} This test can distinguish remaining SIDs.`}
+                </p>
+                {next.reason && <p className="help">{next.reason}</p>}
+                <button onClick={() => next.select(next.targets)}>
+                  Try this experiment
+                </button>
+              </>
+            )}
+          {!checkBackup &&
+            !lab.pendingItemTest &&
             baselineReady &&
             !disabled &&
             !next &&
@@ -401,7 +534,11 @@ export function StarterCurtainStep({
                   recorded setup. Check the battle log and moves for missing
                   information.
                 </p>
-                <button onClick={onMoreInfo}>Check battle log and moves</button>
+                <button onClick={onMoreInfo}>
+                  {backup
+                    ? "Check Pokemon details"
+                    : "Check battle log and moves"}
+                </button>
               </>
             )}
           {lab.pendingItemTest && !!skip.length && (

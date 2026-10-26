@@ -442,3 +442,10 @@
     text-align: center;
   }
 }
+
+.starter-sid-timing {
+  margin: 12px 0;
+}
+.starter-sid-timing p {
+  margin: 6px 0;
+}

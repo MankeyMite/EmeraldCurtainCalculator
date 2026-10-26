@@ -29,7 +29,7 @@ import {
   correctStarterCheckpointEvs,
   correctStarterCheckpointFacts,
 } from "../core/starterEvidence";
-import { GUIDE_LAB_KEY } from "../core/starterGuide";
+import { GUIDE_LAB_KEY, GUIDE_BACKUP_LAB_KEY } from "../core/starterGuide";
 import {
   starterExperimentSource,
   hasStarterDrawing,
@@ -100,7 +100,10 @@ export function download(name: string, data: Blob) {
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
+export function useCurtainLab(
+  autosaveKey = AUTOSAVE_KEY,
+  guideOptions: { sidCandidates?: number[]; enabled?: boolean } = {},
+) {
   const [restored] = useState(() => {
     try {
       return typeof window === "undefined"
@@ -198,7 +201,8 @@ export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
     [snapshots, activeId, obs, facts, summaryState],
   );
   const activeSnapshot = currentSnapshots.find((s) => s.id === activeId)!;
-  const guided = autosaveKey === GUIDE_LAB_KEY;
+  const guided =
+    autosaveKey === GUIDE_LAB_KEY || autosaveKey === GUIDE_BACKUP_LAB_KEY;
   const originalItemBaseline = guided
     ? starterExperimentSource(currentSnapshots, activeId)
     : itemTestBaseline(currentSnapshots);
@@ -333,7 +337,8 @@ export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
       identity,
       snapshots: currentSnapshots,
       activeId,
-      ...(autosaveKey === GUIDE_LAB_KEY ? { starterGuide: true } : {}),
+      ...(guided ? { starterGuide: true } : {}),
+      ...(autosaveKey === GUIDE_BACKUP_LAB_KEY ? { backupGuide: true } : {}),
       ...(rngActive && identity.species !== undefined
         ? { rng: rngSettings }
         : {}),
@@ -341,6 +346,9 @@ export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
       sidDigitFilters: combinedSidFilters,
       ...(spindaMatcher.sidProgress?.remainingSids
         ? { sidCandidates: spindaMatcher.sidProgress.remainingSids }
+        : {}),
+      ...(guideOptions.sidCandidates
+        ? { sidCandidates: guideOptions.sidCandidates }
         : {}),
       ...(mode === "renderer" ? { renderMasks: suppliedMasks } : {}),
       ...(spindaMatcher.guide &&
@@ -363,7 +371,10 @@ export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
         : {}),
     },
     drawingInProgress,
-    !factError && !summaryState.error && !ppError,
+    guideOptions.enabled !== false &&
+      !factError &&
+      !summaryState.error &&
+      !ppError,
     analysisRevision,
   );
   const {
@@ -1453,6 +1464,44 @@ export function useCurtainLab(autosaveKey = AUTOSAVE_KEY) {
       setDrawingInProgress(false);
       setMode("solver");
     },
+    configureBackupInvestigation: (
+      supplied: KnownFacts,
+      summary: import("../core/stats").SummaryStats,
+      sidRng: SidRngSettings,
+      preserve = false,
+    ) => {
+      if (pendingItemTest)
+        throw Error("Finish or cancel the current experiment first.");
+      const next = validateFacts(supplied);
+      const first = {
+        ...newSnapshot(crypto.randomUUID(), "Backup curtain", next),
+        summaryStats: summary,
+        useSummaryStats: true as const,
+      };
+      const earlier = preserve
+        ? currentSnapshots.filter(
+            (s) => s.observations.some((v) => v !== -1) || s.itemTest,
+          )
+        : [];
+      setSnapshots([first, ...earlier]);
+      setActiveId(first.id);
+      obsRef.current = first.observations;
+      setObs(first.observations);
+      setFacts(next);
+      setFactDraft(factsToDraft(next));
+      setFactError("");
+      setSummaryDraft(summaryToDraft(summary));
+      setOrigin("wild");
+      setRngSettings(undefined);
+      setSidRngSettings(validateSidRng(sidRng));
+      setSidDigitFilters(undefined);
+      setSpindaMatcher(defaultSpindaMatcher());
+      setUndo([]);
+      setRedo([]);
+      setDrawingInProgress(true);
+      setMode("solver");
+    },
+    analysisCurrent: deduction.current,
     lastCompletedItemTest,
     rngSettings,
     rngActive,

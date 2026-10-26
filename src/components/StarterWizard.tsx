@@ -1,9 +1,16 @@
+import { StarterBackupStep } from "./StarterBackupStep";
+import {
+  intersectBackupSids,
+  sharedSidLabView,
+  preferBackupPokemon,
+} from "../core/starterBackup";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useCurtainLab } from "../hooks/useCurtainLab";
 import { useStarterTask } from "../hooks/useStarterTask";
 import {
   GUIDE_KEY,
   GUIDE_LAB_KEY,
+  GUIDE_BACKUP_LAB_KEY,
   newStarterGuide,
   newStarterAttempt,
   newShinyAttempt,
@@ -83,6 +90,7 @@ const STEPS = [
 const searchKey = (s: StarterGuideState) =>
   JSON.stringify([
     s.species,
+    s.playerGender,
     s.nature,
     s.gender,
     s.ability,
@@ -255,6 +263,58 @@ function StarterGuideSession({
       return [];
     }
   }, [state.tid, state.intro]);
+  const starterSids = lab.sidAnalysis?.sidValues ?? sidCandidates;
+  const backupLab = useCurtainLab(GUIDE_BACKUP_LAB_KEY, {
+    sidCandidates: starterSids,
+    enabled: !!state.backup?.configured,
+  });
+  const backupHasEvidence =
+    !!state.backup?.configured && backupLab.starterHasDrawing;
+  const backupSids =
+    backupLab.sidAnalysis?.sidValues ??
+    backupLab.sidRngResult?.rows.map((r) => r.sid);
+  const sharedSids =
+    backupHasEvidence && backupSids
+      ? intersectBackupSids(starterSids, backupSids)
+      : starterSids;
+  const backupBusy =
+    backupHasEvidence &&
+    (backupLab.analysisBusy || backupLab.drawingInProgress);
+  const jointReady =
+    !!lab.sidAnalysis &&
+    lab.starterHasDrawing &&
+    !lab.analysisBusy &&
+    !lab.analysisError &&
+    !lab.drawingInProgress &&
+    !lab.pendingItemTest &&
+    (!backupHasEvidence ||
+      (backupLab.analysisCurrent &&
+        !backupBusy &&
+        !backupLab.analysisError &&
+        !backupLab.pendingItemTest &&
+        backupLab.sidRngResult?.exact === true));
+  const starterView = sharedSidLabView(
+    lab,
+    sharedSids,
+    backupBusy,
+    backupHasEvidence ? backupLab.analysisError : "",
+  );
+  const backupView = sharedSidLabView(
+    backupLab,
+    sharedSids,
+    lab.analysisBusy,
+    lab.analysisError,
+  );
+  const backupAvailable =
+    !state.backup?.configured || !backupLab.starterHasDrawing;
+  const openBackup = () => {
+    patch({
+      backup: state.backup
+        ? { ...state.backup, active: true }
+        : { active: true, phase: "details", draft: { heldItem: "0" } },
+    });
+    window.scrollTo({ top: 0 });
+  };
   const recommendationKey = starterRecommendationKey(state);
   const pidRecommendation =
     recommendation.result?.key === recommendationKey
@@ -503,6 +563,8 @@ function StarterGuideSession({
   const next = () => {
     try {
       if (state.step === 0) {
+        if (!state.playerGender)
+          throw Error("Choose your player character first.");
         if (!/^\d{1,5}$/.test(state.tid) || Number(state.tid) > 65535)
           throw Error("Enter the public TID from the Trainer Card (0–65535).");
         if (!sidCandidates.length)
@@ -620,16 +682,14 @@ function StarterGuideSession({
       }
       if (state.step === 3) {
         if (
-          lab.drawingInProgress ||
-          lab.analysisBusy ||
-          lab.analysisError ||
-          lab.pendingItemTest ||
-          lab.sidAnalysis?.sidValues.length !== 1
+          !jointReady ||
+          sharedSids.length !== 1 ||
+          (state.backup?.active && state.backup.phase === "details")
         )
           throw Error(
-            "One SID must match the recorded evidence before choosing a shiny target.",
+            "One SID must match all recorded Pokemon evidence before choosing a shiny target.",
           );
-        patch({ confirmedSid: lab.sidAnalysis.sidValues[0], step: 4 });
+        patch({ confirmedSid: sharedSids[0], step: 4 });
         return;
       }
       if (state.step === 4) {
@@ -646,6 +706,10 @@ function StarterGuideSession({
       ),
       plan = recommendation?.action.training;
     if (!recommendation || !plan || plan.vitamins) return;
+    if (preferBackupPokemon(plan.target) && backupAvailable) {
+      openBackup();
+      return;
+    }
     const stat = Number(id.split("-")[1]);
     // This route uses only ordinary ×1, 1-EV opponents. Other verified
     // multipliers remain supported in the battle log, never assumed here.
@@ -660,8 +724,9 @@ function StarterGuideSession({
       ...lab.identity,
       ...base,
       ...recommendation.action.changes,
-      experience: undefined,
     };
+    // Training changes EXP, but an explicit undefined value is not a valid fact.
+    delete facts.experience;
     patch({
       step: 2,
       routeDone: true,
@@ -677,7 +742,7 @@ function StarterGuideSession({
         },
         instructions: [
           `Defeat exactly ${plan.battles} ${stat === 2 ? "Seedot on Route 102 (rare; 1 Defense EV each)" : "Zigzagoon on Route 101/103 (1 Speed EV each)"}. Keep the current held item. Log any other defeated Pokémon separately.`,
-          "Heal and check the current moves. Cancel evolution.",
+          "Check the current moves. Cancel evolution.",
           "Keep the current held item and move order. Box the starter in Box 8, slot 5 and reenter the school.",
         ],
         train: { species: stat === 2 ? 298 : 288, count: plan.battles },
@@ -791,6 +856,26 @@ function StarterGuideSession({
         <h2 id="starter-step-title">{STEPS[state.step]}</h2>
         {state.step === 0 && (
           <>
+            <label>
+              Player character
+              <select
+                value={state.playerGender ?? ""}
+                onChange={(e) =>
+                  patch({
+                    playerGender: e.target.value as "male" | "female",
+                    confirmedSid: null,
+                    selected: null,
+                    route: null,
+                  })
+                }
+              >
+                <option value="" disabled>
+                  Choose your character
+                </option>
+                <option value="male">Boy</option>
+                <option value="female">Girl</option>
+              </select>
+            </label>
             <div className="starter-guide-images">
               <GuideImage
                 name="trainer-name"
@@ -840,7 +925,7 @@ function StarterGuideSession({
               />
             </label>
             <OptimalPidSearch
-              tid={state.tid}
+              tid={state.playerGender ? state.tid : ""}
               busy={recommendation.busy}
               progress={recommendation.progress}
               complete={!!pidRecommendation && !recommendation.error}
@@ -1040,10 +1125,10 @@ function StarterGuideSession({
                   }
                 />
                 <p>
-                  Heal at the Pokémon Center. Copy all four current moves; leave
-                  an uncertain slot unknown. Boxed Pokémon have restored PP. No
-                  PP Ups, contest training, Pokérus or other unrecorded changes
-                  are assumed for this ordinary new-game route.
+                  Copy all four current moves; leave an uncertain slot unknown.
+                  Depositing fully heals the starter and restores PP. No PP Ups,
+                  contest training, Pokérus or other unrecorded changes are
+                  assumed for this ordinary new-game route.
                 </p>
                 <div className="starter-input-grid">
                   {state.moves.map((move, i) => (
@@ -1151,22 +1236,52 @@ function StarterGuideSession({
             )}
           </>
         )}
-        {state.step === 3 && (
-          <StarterCurtainStep
-            lab={lab}
-            state={state}
-            onTraining={train}
-            onMoreInfo={() =>
-              patch({
-                step: 2,
-                route: null,
-                routeDone: true,
-                moves:
-                  lab.itemTestBaseline.knownFacts.moves?.slice() ?? state.moves,
-              })
-            }
-          />
-        )}
+        {state.step === 3 &&
+          (state.backup?.active ? (
+            <StarterBackupStep
+              state={state}
+              lab={backupView}
+              onChange={(backup) =>
+                patch({ backup, confirmedSid: null, selected: null })
+              }
+              onReturn={() =>
+                patch({ backup: { ...state.backup!, active: false } })
+              }
+            />
+          ) : (
+            <>
+              {state.backup?.configured && (
+                <>
+                  <p>
+                    Swap the starter back with your caught Pokemon, placing the
+                    starter in Box 8, slot 5 before checking these pixels.
+                  </p>
+                  <button onClick={openBackup}>
+                    Check second Pokemon again
+                  </button>
+                </>
+              )}
+
+              <StarterCurtainStep
+                lab={starterView}
+                confirmationReady={jointReady}
+                onBackup={openBackup}
+                backupAvailable={backupAvailable}
+                state={state}
+                onTraining={train}
+                onMoreInfo={() =>
+                  patch({
+                    step: 2,
+                    route: null,
+                    routeDone: true,
+                    moves:
+                      lab.itemTestBaseline.knownFacts.moves?.slice() ??
+                      state.moves,
+                  })
+                }
+              />
+            </>
+          ))}
         {state.step === 4 && (
           <>
             <p>
@@ -1432,22 +1547,29 @@ function StarterGuideSession({
         {error && <p role="alert">{error}</p>}
         <footer className="starter-navigation">
           <button
-            disabled={state.step === 0}
+            disabled={
+              state.step === 0 ||
+              (state.step === 3 &&
+                !!state.backup?.active &&
+                !!backupLab.pendingItemTest)
+            }
             onClick={() =>
-              state.step === 3
-                ? patch({
-                    step: 2,
-                    route: null,
-                    routeDone: true,
-                    moves:
-                      lab.itemTestBaseline.knownFacts.moves?.slice() ??
-                      state.moves,
-                  })
-                : state.step === 1 && state.starterPart === "summary"
-                  ? patch({ starterPart: "timer" })
-                  : state.step === 2 && state.routeDone
-                    ? patch({ routeDone: false })
-                    : patch({ step: state.step - 1 })
+              state.step === 3 && state.backup?.active
+                ? patch({ backup: { ...state.backup, active: false } })
+                : state.step === 3
+                  ? patch({
+                      step: 2,
+                      route: null,
+                      routeDone: true,
+                      moves:
+                        lab.itemTestBaseline.knownFacts.moves?.slice() ??
+                        state.moves,
+                    })
+                  : state.step === 1 && state.starterPart === "summary"
+                    ? patch({ starterPart: "timer" })
+                    : state.step === 2 && state.routeDone
+                      ? patch({ routeDone: false })
+                      : patch({ step: state.step - 1 })
             }
           >
             {state.step === 5 ? "Choose another target" : "Back"}
@@ -1458,7 +1580,8 @@ function StarterGuideSession({
               disabled={
                 checkingOutlook ||
                 (state.step === 0 &&
-                  (recommendation.busy ||
+                  (!state.playerGender ||
+                    recommendation.busy ||
                     !canSearchOptimalPid(state.tid) ||
                     (!pidRecommendation &&
                       !state.identifiedStarter &&

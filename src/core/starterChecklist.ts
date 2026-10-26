@@ -1,6 +1,59 @@
 import type { RouteSetup, StarterGuideState } from "./starterGuide";
 import { starterAcquisitionSteps } from "./starterItems";
 
+export const STARTER_COMPANION_STEP =
+  "Once you have Poké Balls, catch any Pokémon on Route 101, 102 or 103 before leaving Petalburg. Store it in the PC in Oldale Town or Petalburg City and keep it boxed until Rustboro; use only the starter for the listed battles.";
+
+/** Refresh route instructions without changing Pokemon facts or replaying actions.
+ * Old saved checklists keep their checkmarks and action indices when a catch
+ * reminder is inserted. A catch adds no defeated Pokemon to the battle log. */
+export function withStarterStorageInstructions(
+  plan: RouteSetup,
+  travelling: boolean,
+): RouteSetup {
+  const instructions = plan.instructions.map((text) =>
+    text
+      .replace(
+        "Heal at the Pokémon Center; PC storage restores PP.",
+        "PC storage fully heals the starter and restores PP.",
+      )
+      .replace(
+        "Heal at the Pokémon Center and check the current moves.",
+        "Check the current moves. PC storage fully heals the starter and restores PP.",
+      )
+      .replace(
+        /^Heal at the Pokémon Center\.$/,
+        "PC storage fully heals the starter and restores PP.",
+      )
+      .replace("Heal at the Pokémon Center. ", "")
+      .replace(/^Heal and check/, "Check")
+      .replace(
+        /^(Place the starter|Withdraw your second Pokémon into your party, then place the starter)/,
+        "Swap your caught Pokémon with the starter, placing the starter",
+      ),
+  );
+  const done = plan.done.slice();
+  let actions = plan.actions;
+  if (
+    travelling &&
+    instructions.some((text) => text.startsWith("Avoid all wild battles")) &&
+    !plan.train &&
+    !instructions.includes(STARTER_COMPANION_STEP)
+  ) {
+    const rival = instructions.findIndex((text) =>
+      text.startsWith("Defeat the Route 103 rival"),
+    );
+    const index = rival >= 0 ? rival + 1 : Math.min(1, instructions.length);
+    instructions.splice(index, 0, STARTER_COMPANION_STEP);
+    done.splice(index, 0, false);
+    actions = actions?.map((action) => ({
+      ...action,
+      index: action.index >= index ? action.index + 1 : action.index,
+    }));
+  }
+  return { ...plan, instructions, done, ...(actions ? { actions } : {}) };
+}
+
 export function isStarterMoveStep(route: RouteSetup, index: number) {
   const text = route.instructions[index];
   return (
@@ -13,12 +66,12 @@ export function isStarterMoveStep(route: RouteSetup, index: number) {
 }
 
 // Acquiring an item stays done when the Pokémon changes. Confirming its
-// preparation does not: moves, healing and depositing refer to a specific setup.
+// preparation does not: moves, checking and depositing refer to a specific setup.
 function stepKey(route: RouteSetup, index: number) {
   const text = route.instructions[index];
   const setup =
     isStarterMoveStep(route, index) ||
-    /^(Heal|Place the starter|Before depositing|Remove any held item|Restore|Box the starter)/.test(
+    /^(Heal|Place the starter|PC storage|Withdraw your second|Swap your caught|Before depositing|Remove any held item|Restore|Box the starter)/.test(
       text,
     ) ||
     (!!route.train && !route.actions);
@@ -108,6 +161,7 @@ export function preserveStarterChecklist(
   s: StarterGuideState,
   plan: RouteSetup,
 ): RouteSetup {
+  plan = withStarterStorageInstructions(plan, !s.routeDone);
   const completed = remembered(s);
   return {
     ...plan,

@@ -1,3 +1,4 @@
+import { snapshotPlaintext } from "./summaryPlaintext";
 import { advanceSeed, nextSeed } from "./rng";
 import {
   applyFacts,
@@ -5,7 +6,6 @@ import {
   recordMasks,
   type KnownFacts,
 } from "./constraints";
-import { knownPlaintext } from "./inference";
 import { SUBSTRUCT_POSITIONS } from "./pokemon";
 import { genderPidCases } from "./traits";
 import { xorMask } from "./cryptoConstraints";
@@ -152,7 +152,7 @@ function modelsForSid(identity: KnownFacts, snapshots: Snapshot[]) {
     }),
   );
   const plains = snapshots.map((s) =>
-    knownPlaintext({ ...s.knownFacts, ...identity }),
+    snapshotPlaintext({ ...s.knownFacts, ...identity }, s),
   );
   const pidMasks = Array.from({ length: 8 }, (_, n) =>
     headers.reduce((m, h) => m & h[n], 0xffff),

@@ -1,3 +1,5 @@
+import { STARTER_ITEM_IDS } from "./starterItems";
+import { isEvidence } from "./itemTests";
 import type { KnownFacts } from "./constraints";
 import { knownPlaintext, type Inference } from "./inference";
 import type { Snapshot } from "./investigation";
@@ -43,7 +45,11 @@ export function rankDomainExperiments(
   snapshots: Snapshot[],
   source: Snapshot,
   inference: ExperimentDomain,
-  options: { candidates?: Hypothesis[]; scopeRelaxed?: boolean } = {},
+  options: {
+    candidates?: Hypothesis[];
+    scopeRelaxed?: boolean;
+    backupGuide?: boolean;
+  } = {},
 ) {
   const experiments: ReturnType<typeof rankItemExperiments> = [],
     controlledExperiments: ReturnType<typeof rankControlledExperiments> = [],
@@ -61,16 +67,17 @@ export function rankDomainExperiments(
   // Bound expensive nuisance-outcome materialization. Above this budget the
   // encrypted question remains valid; no candidate subset is substituted.
   const candidates = options.candidates;
-  const supports = candidates
-    ? experimentChecksumSupports(identity, snapshots, source, candidates)
-    : undefined;
+  const supports =
+    candidates && !options.backupGuide
+      ? experimentChecksumSupports(identity, snapshots, source, candidates)
+      : undefined;
   const checksumSupports =
     supports &&
     !supports.every((s) => s === supports[0]) &&
     !supports.every((s) => s.length === 65536)
       ? supports
       : undefined;
-  const checksumLimited = !!candidates && !supports;
+  const checksumLimited = !options.backupGuide && !!candidates && !supports;
   let outcomeLimited = false;
   const countBasis: DomainQuestion["countBasis"] = candidates?.some(
     (h) => h.rng,
@@ -80,7 +87,9 @@ export function rankDomainExperiments(
       ? "PID/SID pair"
       : "PID";
   const previous = snapshots
-    .filter((s) => s.itemTest?.sourceId === source.id)
+    .filter((s) =>
+      options.backupGuide ? isEvidence(s) : s.itemTest?.sourceId === source.id,
+    )
     .map((s) => ({
       snapshot: s,
       plain: knownPlaintext({ ...s.knownFacts, ...identity }),
@@ -100,6 +109,12 @@ export function rankDomainExperiments(
     identity.species,
     identity,
     keyMasks,
+    { allowVitamins: !options.backupGuide },
+  ).filter(
+    (a) =>
+      !options.backupGuide ||
+      a.kind === "moves" ||
+      (a.kind === "learn" && /^teach-15(?:-|$)/.test(a.id)),
   );
   const rank = (id: string, changes: KnownFacts, logical: number[]) => {
     const action = actions.find((a) => a.id === id);
@@ -121,8 +136,8 @@ export function rankDomainExperiments(
     for (const { snapshot: s, plain: before } of previous) {
       const same =
         (id.startsWith("item-")
-          ? !s.itemTest!.actionId && s.knownFacts.heldItem === changes.heldItem
-          : s.itemTest!.actionId === id) &&
+          ? !s.itemTest?.actionId && s.knownFacts.heldItem === changes.heldItem
+          : s.itemTest?.actionId === id) &&
         plain.every((m, n) => n === 18 || n === 19 || m === before[n]);
       if (same)
         s.observations.forEach((v, n) => {
@@ -316,7 +331,12 @@ export function rankDomainExperiments(
     return ranked;
   };
   for (const item of ITEM_CATALOG) {
-    if (!item.experiment || item.id === source.knownFacts.heldItem) continue;
+    if (
+      !item.experiment ||
+      item.id === source.knownFacts.heldItem ||
+      (options.backupGuide && !STARTER_ITEM_IDS.includes(item.id))
+    )
+      continue;
     const ranked = rank(`item-${item.id}`, { heldItem: item.id }, [4, 5, 6, 7]);
     if (ranked)
       experiments.push({

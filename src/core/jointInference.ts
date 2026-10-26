@@ -1,6 +1,7 @@
+import { snapshotPlaintext } from "./summaryPlaintext";
 import { applyFacts, recordMasks, type KnownFacts } from "./constraints";
 import { xorMask } from "./cryptoConstraints";
-import { analyzeConstraints, knownPlaintext } from "./inference";
+import { analyzeConstraints } from "./inference";
 import type { Snapshot } from "./investigation";
 import { SUBSTRUCT_POSITIONS } from "./pokemon";
 import { isEvidence } from "./itemTests";
@@ -22,7 +23,7 @@ export function analyzeObservations(
     }),
   );
   const plains = snapshots.map((s) =>
-    knownPlaintext({ ...s.knownFacts, ...identity }),
+    snapshotPlaintext({ ...s.knownFacts, ...identity }, s),
   );
   const checksumConsistent = constrainLinkedChecksums(
     snapshots,

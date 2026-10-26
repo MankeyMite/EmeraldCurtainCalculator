@@ -69,6 +69,9 @@ function supports(index: number, h: Hypothesis, plain: number[]) {
     bit = 1 << ((h.key >>> ((p % 8) * 4)) & 15);
   return (mask & bit ? 1 : 0) | (mask & (65535 ^ bit) ? 2 : 0);
 }
+// Reuse the exact guide prediction support for timing-based recommendations.
+export { supports as starterPixelSupport };
+
 const indices = [
   ...Array.from({ length: 16 }, (_, n) => 16 + n),
   ...Array.from({ length: 96 }, (_, n) => 80 + n),
@@ -297,7 +300,7 @@ export function planStarterRoute(
       instructions: [
         "Avoid all wild battles and optional trainers. Record every required battle the starter gains EXP from.",
         "Keep the current move order and no held item.",
-        "Heal at the Pokémon Center and check the current moves.",
+        "Check the current moves. PC storage fully heals the starter and restores PP.",
         "Place the starter in Box 8, slot 5, with slots 4 and 6 empty. Enter Rustboro Trainer’s School.",
       ],
       score: {
@@ -528,7 +531,7 @@ export function planStarterRoute(
     "Avoid all wild battles except any training listed below, and other optional trainers. Check off the listed battles once, rather than recording them again in the battle log. Decline any new moves not listed in this plan.",
     ...routeSteps.map((step) => step.text),
     moveConfirmation,
-    "Heal at the Pokémon Center. Check all four current moves before boxing; PC storage restores PP. Cancel evolution during this investigation.",
+    "Check all four current moves before boxing; PC storage fully heals the starter and restores PP. Cancel evolution during this investigation.",
     firstItem
       ? `Before depositing, give ${starterItemSource(firstItem)!.item.name} to the starter. Keep the other listed items in your Bag for later curtain tests.`
       : "Remove any held item before depositing the starter.",
