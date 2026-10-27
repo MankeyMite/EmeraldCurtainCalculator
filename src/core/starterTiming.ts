@@ -108,6 +108,19 @@ export function calibratedFrames(
   return current + landed - target;
 }
 
+/** Calibrate against the timer used for that attempt. Keeping its baseline
+ * avoids applying the same observed miss twice when results are reviewed again. */
+export function calibrateStarterLanding(
+  timing: StarterTiming,
+  target: number,
+  landed: number,
+  attemptCalibration = timing.calibration,
+): StarterTiming {
+  const calibration = calibratedFrames(attemptCalibration, target, landed);
+  targetCountdown(target, calibration, timing.first, timing.offset);
+  return validateTiming({ ...timing, calibration });
+}
+
 /** Vary the next starter without turning an intentional target change into
  * measured calibration. Keep the normal search radius and trainer timing. */
 export function shiftStarterTarget(

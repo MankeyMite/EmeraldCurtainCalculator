@@ -991,7 +991,8 @@ test("guided route uses exact IVs, automatic obtainable items and legal move slo
     createElement(StarterTravelChecklist, { plan }),
   );
   assert.match(html, /Get to Rustboro City/);
-  assert.doesNotMatch(html, /father|Wally|Box 8/);
+  assert.doesNotMatch(html, /father|Wally/);
+  assert.match(html, /Box 8/);
   assert.match(html, /Avoid all/);
   const surviving = guideSidCandidates(s).slice(0, 1);
   const resolved = planStarterRoute(s, spreads, surviving);

@@ -51,7 +51,37 @@ export function withStarterStorageInstructions(
       index: action.index >= index ? action.index + 1 : action.index,
     }));
   }
-  return { ...plan, instructions, done, ...(actions ? { actions } : {}) };
+  // Older saved routes used the same order for Petalburg shopping and Lyle.
+  // Move only late Petalburg purchases; retain checkmarks and action ownership.
+  const firstForest = instructions.findIndex((text) =>
+    text.includes("Petalburg Woods"),
+  );
+  const latePurchases = instructions
+    .map((_, n) => n)
+    .filter(
+      (n) =>
+        firstForest >= 0 &&
+        n > firstForest &&
+        instructions[n].includes("Petalburg Mart"),
+    );
+  const order = instructions
+    .map((_, n) => n)
+    .filter((n) => !latePurchases.includes(n));
+  if (latePurchases.length)
+    order.splice(order.indexOf(firstForest), 0, ...latePurchases);
+  return {
+    ...plan,
+    instructions: order.map((n) => instructions[n]),
+    done: order.map((n) => done[n]),
+    ...(actions
+      ? {
+          actions: actions.map((action) => ({
+            ...action,
+            index: order.indexOf(action.index),
+          })),
+        }
+      : {}),
+  };
 }
 
 export function isStarterMoveStep(route: RouteSetup, index: number) {
@@ -199,4 +229,36 @@ export function starterTravelReady(plan: RouteSetup) {
   return plan.instructions
     .slice(0, -2)
     .every((_, i) => plan.done[i] || isStarterMoveStep(plan, i));
+}
+
+/** Present old saved plans as concise instructions without requiring a migration
+ * of their action indices or recorded completion state. */
+export function starterRouteBulletPoints(plan: RouteSetup): string[] {
+  return plan.instructions
+    .map((text) =>
+      text
+        .replace(
+          /Check off each battle once; cancel evolution\./,
+          "Cancel evolution.",
+        )
+        .replace(
+          "Check off the listed battles once, rather than recording them again in the battle log. ",
+          "",
+        )
+        .replace(
+          "Confirm the starter has these moves in this order:",
+          "Arrange the moves in this order:",
+        )
+        .replace(
+          /PC storage (?:fully heals the starter and restores PP|restores PP)\.?/g,
+          "",
+        )
+        .replace(
+          /Check all four current moves before boxing;\s*Cancel evolution during this investigation\./,
+          "Cancel evolution during this investigation.",
+        )
+        .replace(/^Check the current moves\.\s*$/, "")
+        .trim(),
+    )
+    .filter(Boolean);
 }

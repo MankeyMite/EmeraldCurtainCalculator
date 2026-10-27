@@ -1,3 +1,4 @@
+import { starterRouteBulletPoints } from "../core/starterChecklist";
 import { useState } from "react";
 import { SummaryStatInputs } from "./SummaryStatInputs";
 import {
@@ -362,38 +363,22 @@ export function ReadingInputs({
     />
   );
 }
-export function StarterTravelChecklist({
-  plan,
-  onCheck,
-}: {
-  plan: RouteSetup;
-  onCheck?: (index: number, checked: boolean) => void;
-}) {
+export function StarterTravelChecklist({ plan }: { plan: RouteSetup }) {
   return (
     <>
-      <p>Get to Rustboro City and do these specific things along the way:</p>
-      <ol>
-        {plan.instructions.slice(0, -2).map((text, i) => (
-          <li key={i}>
-            {onCheck ? (
-              <label>
-                <input
-                  type="checkbox"
-                  checked={plan.done[i] ?? false}
-                  onChange={(e) => onCheck(i, e.target.checked)}
-                />
-                {text}
-              </label>
-            ) : (
-              text
-            )}
-          </li>
-        ))}
-      </ol>
       <p>
-        Checking off a listed battle records its EVs. Log any other battles
-        below. If the moves differ from the plan, leave those move steps
-        unchecked and choose Next to enter the actual moves.
+        {plan.train
+          ? "Complete this training before checking the curtains again:"
+          : "Get to Rustboro City and do these specific things along the way:"}
+      </p>
+      <ul>
+        {starterRouteBulletPoints(plan).map((text, i) => (
+          <li key={i}>{text}</li>
+        ))}
+      </ul>
+      <p>
+        When you have followed this plan, choose Next. The listed battles and
+        move order will be recorded together.
       </p>
     </>
   );
@@ -442,12 +427,16 @@ export function StarterSpreadTable({
   selected,
   onSelect,
   compact = false,
+  selectionLabel = "Use this target",
+  selectionHeading = "Target",
 }: {
   spreads: RngSpread[];
   species: number;
   selected?: number;
   onSelect?: (spread: RngSpread) => void;
   compact?: boolean;
+  selectionLabel?: string;
+  selectionHeading?: string;
 }) {
   return (
     <div className="table-scroll">
@@ -462,7 +451,7 @@ export function StarterSpreadTable({
                 ? "IVs: HP / Atk / Def / SpA / SpD / Spe"
                 : "IVs: HP / Atk / Def / Spe / SpA / SpD"}
             </th>
-            {onSelect && <th>Target</th>}
+            {onSelect && <th>{selectionHeading}</th>}
           </tr>
         </thead>
         <tbody>
@@ -490,7 +479,7 @@ export function StarterSpreadTable({
               {onSelect && (
                 <td>
                   <button onClick={() => onSelect(e)}>
-                    {selected === e.advance ? "Selected" : "Use this target"}
+                    {selected === e.advance ? "Selected" : selectionLabel}
                   </button>
                 </td>
               )}

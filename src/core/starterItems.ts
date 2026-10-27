@@ -41,7 +41,7 @@ export function starterAcquisitionSteps(ids: number[]) {
       ? [
           {
             text: `At the ${shop} Mart${shop === "Petalburg" ? " on the way" : " when you arrive"}, buy one each: ${purchases.map((source) => source.item.name).join(", ")} (${purchases.reduce((total, source) => total + (source.price ?? 0), 0)} money total).`,
-            order: shop === "Petalburg" ? 30 : 90,
+            order: shop === "Petalburg" ? 21 : 90,
             acquiredItems: purchases.map((source) => source.id),
           },
         ]

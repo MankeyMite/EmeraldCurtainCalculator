@@ -32,7 +32,7 @@ export function Workbench({
     [section, setSection] = useState("items"),
     [field, setField] = useState("hidden data");
   const [paint, setPaint] = useState(false),
-    [showCurtain, setShowCurtain] = useState(false),
+    [showCurtain, setShowCurtain] = useState(true),
     [drawingOptions, setDrawingOptions] = useState(false),
     [largeCurtain, setLargeCurtain] = useState(false),
     [recoveryOpen, setRecoveryOpen] = useState(false);

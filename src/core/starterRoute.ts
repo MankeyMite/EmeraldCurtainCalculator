@@ -300,7 +300,7 @@ export function planStarterRoute(
       instructions: [
         "Avoid all wild battles and optional trainers. Record every required battle the starter gains EXP from.",
         "Keep the current move order and no held item.",
-        "Check the current moves. PC storage fully heals the starter and restores PP.",
+        "Cancel evolution during this investigation.",
         "Place the starter in Box 8, slot 5, with slots 4 and 6 empty. Enter Rustboro Trainer’s School.",
       ],
       score: {
@@ -528,10 +528,10 @@ export function planStarterRoute(
     ...acquisitionSteps,
   ].sort((a, b) => a.order - b.order);
   const instructions = [
-    "Avoid all wild battles except any training listed below, and other optional trainers. Check off the listed battles once, rather than recording them again in the battle log. Decline any new moves not listed in this plan.",
+    "Avoid all wild battles except any training listed below, and other optional trainers. Decline any new moves not listed in this plan.",
     ...routeSteps.map((step) => step.text),
     moveConfirmation,
-    "Check all four current moves before boxing; PC storage fully heals the starter and restores PP. Cancel evolution during this investigation.",
+    "Cancel evolution during this investigation.",
     firstItem
       ? `Before depositing, give ${starterItemSource(firstItem)!.item.name} to the starter. Keep the other listed items in your Bag for later curtain tests.`
       : "Remove any held item before depositing the starter.",

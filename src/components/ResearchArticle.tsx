@@ -155,9 +155,9 @@ export function ResearchArticle() {
           <li>
             <strong>Battles and EVs shape the plan.</strong> The route includes
             the modeled journey battles and your starter’s different rival
-            opponent. Checking off a listed battle records its EVs. Extra
-            Defense or Speed training is compared with other supported options,
-            rather than recommended simply because it changes a digit.
+            opponent. Choosing Next after following the route records its EVs.
+            Extra Defense or Speed training is compared with other supported
+            options, rather than recommended simply because it changes a digit.
           </li>
           <li>
             <strong>Moves and PP are part of the evidence.</strong> The planner

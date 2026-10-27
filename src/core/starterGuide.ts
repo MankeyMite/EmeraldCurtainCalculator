@@ -94,6 +94,7 @@ export type StarterGuideState = {
     Partial<StarterPidRecommendation>;
   identifiedStarter?: RngSpread | null;
   species: number;
+  shinySpecies?: number;
   nature: string;
   gender: string;
   ability: string;
@@ -193,7 +194,7 @@ export function newShinyAttempt(s: StarterGuideState): StarterGuideState {
     attemptDraft: { level: "5" },
     attemptNature: "",
     attemptGender: "",
-    attemptAbility: starterAbility(s.species),
+    attemptAbility: starterAbility(shinyStarterSpecies(s)),
   };
 }
 export function validateStarterGuide(value: unknown): StarterGuideState {
@@ -214,6 +215,7 @@ export function validateStarterGuide(value: unknown): StarterGuideState {
     s.step < 0 ||
     s.step > 5 ||
     !STARTERS.includes(s.species) ||
+    (s.shinySpecies !== undefined && !STARTERS.includes(s.shinySpecies)) ||
     !Array.isArray(s.readings) ||
     s.readings.length > 40 ||
     !Array.isArray(s.battles) ||
@@ -407,7 +409,7 @@ export function validateStarterGuide(value: unknown): StarterGuideState {
   return structuredClone({
     ...s,
     ability: starterAbility(s.species),
-    attemptAbility: starterAbility(s.species),
+    attemptAbility: starterAbility(shinyStarterSpecies(s)),
     starterTimingVersion: 5,
     itemCatalogVersion: 2,
     journeyVersion: 1,
@@ -543,6 +545,18 @@ export function checkStarterRoute(
     },
   };
 }
+/** Next confirms the whole route once; simply displaying it records no EVs.
+ * Reuse stable action IDs so saved partial routes and retries do not duplicate battles. */
+export function completeStarterRoute(s: StarterGuideState): StarterGuideState {
+  if (!s.route) throw Error("Wait for your Rustboro plan before continuing.");
+  let completed = s;
+  for (let i = 0; i < s.route.instructions.length; i++) {
+    if (!completed.route!.done[i])
+      completed = checkStarterRoute(completed, i, true);
+  }
+  return { ...completed, routeDone: true };
+}
+
 export function readingSnapshots(readings: StarterReading[]): Snapshot[] {
   return currentStarterReadings(readings).map((r) => ({
     ...newSnapshot(r.id, "Earlier summary stats", { evs: r.evs }),
@@ -591,12 +605,19 @@ export function searchStarter(s: StarterGuideState) {
     readingSnapshots(s.readings),
   );
 }
+/** Shiny attempts are independent of the starter used to investigate SID. */
+export function shinyStarterSpecies(
+  s: Pick<StarterGuideState, "species" | "shinySpecies">,
+) {
+  return s.shinySpecies ?? s.species;
+}
+
 export function searchShinyStarters(s: StarterGuideState) {
   if (s.confirmedSid === null || !s.tid) throw Error("Confirm the SID first.");
   return scanStaticSpreads(
     { ...starterSettings(s), minAdvance: s.targetMin, maxAdvance: s.targetMax },
     {
-      species: s.species,
+      species: shinyStarterSpecies(s),
       tid: Number(s.tid),
       sid: s.confirmedSid,
       shiny: true,
@@ -614,7 +635,7 @@ export function nearbyStarters(s: StarterGuideState, radius = 10) {
       minAdvance: Math.max(0, s.selected.advance - radius),
       maxAdvance: s.selected.advance + radius,
     },
-    { species: s.species, metLevel: 5 },
+    { species: shinyStarterSpecies(s), metLevel: 5 },
     [],
   );
 }
@@ -641,6 +662,29 @@ export function matchStarterAttempt(
       ]),
   );
 }
+/** Derive the single starter ability from the chosen species, never a stale
+ * attempt field left over from the investigation Pokemon. */
+export function matchShinyStarterAttempt(
+  s: StarterGuideState,
+  spreads: RngSpread[],
+  summary: SummaryStats,
+) {
+  const species = shinyStarterSpecies(s);
+  return matchStarterAttempt(
+    spreads,
+    species,
+    {
+      ...(s.attemptNature ? { nature: Number(s.attemptNature) } : {}),
+      ...(s.attemptGender
+        ? { gender: s.attemptGender as "male" | "female" }
+        : {}),
+      ability: Number(starterAbility(species)),
+    },
+    summary,
+    [0, 0, 0, 1, 0, 0],
+  );
+}
+
 export function guideSidCandidates(s: StarterGuideState) {
   return generateSidRng(Number(s.tid), estimatedSidWindow(s.intro)).map(
     (r) => r.sid,

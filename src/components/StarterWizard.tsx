@@ -16,12 +16,14 @@ import {
   newShinyAttempt,
   validateStarterGuide,
   battleEvs,
-  checkStarterRoute,
+  completeStarterRoute,
   readingSnapshots,
   starterSettings,
   creationMoves,
   starterAbility,
-  matchStarterAttempt,
+  matchShinyStarterAttempt,
+  shinyStarterSpecies,
+  STARTERS,
   guideSidCandidates,
   type StarterGuideState,
   type RouteSetup,
@@ -29,7 +31,7 @@ import {
 } from "../core/starterGuide";
 import {
   DEFAULT_STARTER_CALIBRATION,
-  calibratedFrames,
+  calibrateStarterLanding,
   estimatedSidWindow,
   targetCountdown,
   STARTER_LANDING_RADIUS,
@@ -37,14 +39,9 @@ import {
 } from "../core/starterTiming";
 import type { StarterOutlookTask } from "../core/starterOutlook";
 import { routeCheckpoint } from "../core/starterRoute";
-import {
-  patchStarterGuide,
-  starterTravelReady,
-} from "../core/starterChecklist";
+import { patchStarterGuide } from "../core/starterChecklist";
 import { validateSummaryStats, summaryFromDraft } from "../core/stats";
 import { speciesTraits } from "../core/traits";
-import { moveName } from "../core/moveLearningExperiments";
-import { ITEM_CATALOG } from "../core/experiments";
 import type { RngSpread } from "../core/rng";
 import { TwoStageTimer } from "./TwoStageTimer";
 import {
@@ -189,6 +186,9 @@ function StarterGuideSession({
     [attemptResult, setAttemptResult] = useState<RngSpread[] | null>(null),
     [skippedAttempt, setSkippedAttempt] = useState(false);
   const [attemptClock, setAttemptClock] = useState(0);
+  const [selectedLanding, setSelectedLanding] = useState<number | null>(null);
+  const attemptCalibration = useRef<number | null>(null);
+  const shinySpecies = shinyStarterSpecies(state);
   const attemptTimer = useRef<HTMLDivElement>(null);
   const search = useStarterTask<RngSpread[]>(),
     route = useStarterTask<RouteSetup>(),
@@ -207,10 +207,12 @@ function StarterGuideSession({
         "attemptNature",
         "attemptGender",
         "attemptAbility",
+        "shinySpecies",
         "starter",
       ].some((key) => Object.hasOwn(p, key))
     ) {
       setAttemptResult(null);
+      setSelectedLanding(null);
       setSkippedAttempt(false);
     }
   };
@@ -244,7 +246,7 @@ function StarterGuideSession({
   }, [
     state.step,
     state.confirmedSid,
-    state.species,
+    shinySpecies,
     state.targetMin,
     state.targetMax,
   ]);
@@ -255,6 +257,9 @@ function StarterGuideSession({
       setAttemptResult(null);
       setSkippedAttempt(false);
     }
+  }, [state.step, state.selected?.advance, shinySpecies]);
+  useEffect(() => {
+    attemptCalibration.current = null;
   }, [state.step, state.selected?.advance]);
   const sidCandidates = useMemo(() => {
     try {
@@ -483,6 +488,8 @@ function StarterGuideSession({
     }
   };
   const beginShinyAttempt = () => {
+    attemptCalibration.current = state.starter.calibration;
+    setSelectedLanding(null);
     setState((s) => newShinyAttempt(s));
     setAttemptResult(null);
     setSkippedAttempt(false);
@@ -596,17 +603,6 @@ function StarterGuideSession({
         patch({ step: 3, routeDone: true, route: null });
         return;
       }
-      if (state.step === 2 && !state.routeDone) {
-        if (lab.analysisError) throw Error(lab.analysisError);
-        if (!state.route || route.busy)
-          throw Error("Wait for your Rustboro checklist before continuing.");
-        if (!starterTravelReady(state.route))
-          throw Error(
-            "Complete and check off the travel actions before continuing.",
-          );
-        patch({ routeDone: true });
-        return;
-      }
       if (state.step === 1) {
         if (!spreads?.length || search.busy)
           throw Error(
@@ -638,27 +634,20 @@ function StarterGuideSession({
       }
       if (state.step === 2) {
         if (lab.analysisError) throw Error(lab.analysisError);
-        if (!state.routeDone)
-          throw Error(
-            "Complete the travel checklist and record every battle the starter participated in.",
-          );
-        if (!state.route || !state.route.done.every(Boolean))
-          throw Error(
-            "Plan the curtain setup and confirm each completed action.",
-          );
-        const actual = routeCheckpoint(state),
-          planned = state.route.facts;
-        // Training is logged explicitly when completed. Levels and new moves
-        // must be checked by the player; they are never predicted as observations.
+        if (!state.route || route.busy)
+          throw Error("Wait for your Rustboro plan before continuing.");
+        const completed = completeStarterRoute(state);
+        const actual = routeCheckpoint(completed),
+          planned = completed.route!.facts;
         if (
-          state.evsKnown &&
+          completed.evsKnown &&
           planned.evs &&
-          planned.evs.some((n, i) => n !== null && n !== evs[i])
+          planned.evs.some((n, i) => n !== null && n !== actual.evs?.[i])
         )
           throw Error(
             "The battle log no longer matches this plan. Plan again using the actual EVs.",
           );
-        if (state.route.train) {
+        if (completed.route!.train) {
           lab.updateStarterCheckpoint({
             ...lab.identity,
             ...lab.itemTestBaseline.knownFacts,
@@ -679,6 +668,9 @@ function StarterGuideSession({
             heldItem: planned.heldItem,
           });
         }
+        setState({ ...completed, step: 3 });
+        setError("");
+        return;
       }
       if (state.step === 3) {
         if (
@@ -750,10 +742,6 @@ function StarterGuideSession({
       },
     });
   };
-  const checkRoute = (index: number, checked: boolean) => {
-    setState((s) => checkStarterRoute(s, index, checked));
-    setError("");
-  };
   let targetTiming: { first: number; second: number } | null = null;
   let targetTimingError = "";
   if (state.selected)
@@ -787,23 +775,10 @@ function StarterGuideSession({
           "This calibration check uses level 5 immediately after Birch’s first battle. Skip calibration if you trained further.",
         );
       if (!landing.result) throw Error("Wait for the nearby search to finish.");
-      const matches = matchStarterAttempt(
-        landing.result,
-        state.species,
-        {
-          ...(state.attemptNature
-            ? { nature: Number(state.attemptNature) }
-            : {}),
-          ...(state.attemptGender
-            ? { gender: state.attemptGender as "male" | "female" }
-            : {}),
-          ...(state.attemptAbility
-            ? { ability: Number(state.attemptAbility) }
-            : {}),
-        },
-        summary,
-        [0, 0, 0, 1, 0, 0],
-      );
+      const matches = matchShinyStarterAttempt(state, landing.result, summary);
+      if (attemptCalibration.current === null)
+        attemptCalibration.current = state.starter.calibration;
+      setSelectedLanding(null);
       setAttemptResult(matches);
       setSkippedAttempt(false);
       setError("");
@@ -811,7 +786,12 @@ function StarterGuideSession({
       setError((e as Error).message);
     }
   };
-  const landed = attemptResult?.length === 1 ? attemptResult[0] : null,
+  const landed =
+      attemptResult?.length === 1
+        ? attemptResult[0]
+        : (attemptResult?.find(
+            (spread) => spread.advance === selectedLanding,
+          ) ?? null),
     difference =
       landed && state.selected ? landed.advance - state.selected.advance : null;
   return (
@@ -1073,149 +1053,82 @@ function StarterGuideSession({
         )}
         {state.step === 2 && (
           <>
-            {!state.routeDone && !editingCheckpoint ? (
-              <>
-                {state.route ? (
-                  <StarterTravelChecklist
-                    plan={state.route}
-                    onCheck={checkRoute}
-                  />
-                ) : !route.error && !lab.analysisError && !noSurvivingSids ? (
-                  <p role="status">
-                    Calculating your Rustboro checklist from the starter’s IVs
-                    and remaining SIDs…
-                  </p>
-                ) : null}
-                {(route.error || lab.analysisError) && (
-                  <p role="alert">{route.error || lab.analysisError}</p>
-                )}
-                <BattleLog
-                  state={state}
-                  onChange={(p) =>
-                    patch({
-                      ...p,
-                      route: state.route?.train ? state.route : null,
-                    })
-                  }
-                />
-              </>
-            ) : (
-              <>
-                {editingCheckpoint ? (
-                  <p>
-                    Update the battle log and current move order, then choose
-                    Next. Earlier drawings keep their original setup; new pixels
-                    will be checked separately.
-                  </p>
-                ) : (
-                  <p>
-                    Prepare the starter at Rustboro’s Pokémon Center. Your PID,
-                    IVs and remaining SIDs determine this setup. Update the
-                    battle log and current moves so the final plan uses the
-                    actual EVs.
-                  </p>
-                )}
-                <BattleLog
-                  state={state}
-                  onChange={(p) =>
-                    patch({
-                      ...p,
-                      route: state.route?.train ? state.route : null,
-                    })
-                  }
-                />
-                <p>
-                  Copy all four current moves; leave an uncertain slot unknown.
-                  Depositing fully heals the starter and restores PP. No PP Ups,
-                  contest training, Pokérus or other unrecorded changes are
-                  assumed for this ordinary new-game route.
-                </p>
-                <div className="starter-input-grid">
-                  {state.moves.map((move, i) => (
-                    <label key={i}>
-                      Move slot {i + 1}
-                      <select
-                        value={move ?? ""}
-                        onChange={(e) =>
-                          patch({
-                            moves: state.moves.map((m, n) =>
-                              n === i
-                                ? e.target.value === ""
-                                  ? null
-                                  : Number(e.target.value)
-                                : m,
-                            ),
-                            route: state.route?.train ? state.route : null,
-                          })
-                        }
-                      >
-                        <option value="">Unknown</option>
-                        <option value={0}>Empty</option>
-                        {names.moves
-                          .filter((m) => m.id !== 0)
-                          .map((m) => (
-                            <option key={m.id} value={m.id}>
-                              {m.name}
-                            </option>
-                          ))}
-                      </select>
-                    </label>
-                  ))}
-                </div>
-                {!state.route &&
-                  !editingCheckpoint &&
-                  !route.error &&
-                  !lab.analysisError &&
-                  !noSurvivingSids && (
-                    <p role="status">Updating your curtain setup…</p>
-                  )}
-                {!editingCheckpoint && (route.error || lab.analysisError) && (
-                  <p role="alert">{route.error || lab.analysisError}</p>
-                )}
-                {state.route && !editingCheckpoint && (
-                  <div className="starter-setup">
-                    <h3>Your setup checklist</h3>
-                    {state.route.instructions.map((text, i) => (
-                      <label key={i}>
-                        <input
-                          type="checkbox"
-                          checked={state.route!.done[i] ?? false}
-                          onChange={(e) => checkRoute(i, e.target.checked)}
-                        />
-                        {text}
-                      </label>
-                    ))}
-                    <p>
-                      Final move order:{" "}
-                      {state.route.facts.moves
-                        ?.map((m) =>
-                          m === null
-                            ? "unknown"
-                            : m === 0
-                              ? "empty"
-                              : moveName(m!),
-                        )
-                        .join(" → ")}
-                      . Held item:{" "}
-                      {state.route.facts.heldItem
-                        ? ITEM_CATALOG.find(
-                            (i) => i.id === state.route!.facts.heldItem,
-                          )?.name
-                        : "none"}
-                      .
-                    </p>
-                    <p>
-                      Update any changed moves; the checklist refreshes
-                      automatically.
-                    </p>
-                  </div>
-                )}
-                {lab.pendingItemTest && (
-                  <button onClick={lab.cancelItemTest}>
-                    Cancel unfinished experiment before updating the checkpoint
-                  </button>
-                )}
-              </>
+            {editingCheckpoint ? (
+              <p>
+                Update the battle log and move order, then choose Next. Earlier
+                drawings keep their original setup; new pixels will be checked
+                separately.
+              </p>
+            ) : state.route ? (
+              <StarterTravelChecklist plan={state.route} />
+            ) : !route.error && !lab.analysisError && !noSurvivingSids ? (
+              <p role="status">
+                Calculating your Rustboro plan from the starter's IVs and
+                remaining SIDs...
+              </p>
+            ) : null}
+            {!editingCheckpoint && (route.error || lab.analysisError) && (
+              <p role="alert">{route.error || lab.analysisError}</p>
+            )}
+            <details open={editingCheckpoint || undefined}>
+              <summary>Battle log and move changes</summary>
+              <p>
+                {editingCheckpoint
+                  ? "Enter the current setup."
+                  : "Only edit this if your trip differed from the plan. Next records the listed battles; add only extra battles here."}
+              </p>
+              <BattleLog
+                state={state}
+                onChange={(p) =>
+                  patch({
+                    ...p,
+                    route: state.route?.train ? state.route : null,
+                  })
+                }
+              />
+              <div className="starter-input-grid">
+                {(editingCheckpoint
+                  ? state.moves
+                  : (state.route?.facts.moves ?? state.moves)
+                ).map((move, i) => (
+                  <label key={i}>
+                    Move slot {i + 1}
+                    <select
+                      value={move ?? ""}
+                      onChange={(e) =>
+                        patch({
+                          moves: (editingCheckpoint
+                            ? state.moves
+                            : (state.route?.facts.moves ?? state.moves)
+                          ).map((m, n) =>
+                            n === i
+                              ? e.target.value === ""
+                                ? null
+                                : Number(e.target.value)
+                              : m,
+                          ),
+                          route: state.route?.train ? state.route : null,
+                        })
+                      }
+                    >
+                      <option value="">Unknown</option>
+                      <option value={0}>Empty</option>
+                      {names.moves
+                        .filter((m) => m.id !== 0)
+                        .map((m) => (
+                          <option key={m.id} value={m.id}>
+                            {m.name}
+                          </option>
+                        ))}
+                    </select>
+                  </label>
+                ))}
+              </div>
+            </details>
+            {lab.pendingItemTest && (
+              <button onClick={lab.cancelItemTest}>
+                Cancel unfinished experiment before updating the checkpoint
+              </button>
             )}
             {noSurvivingSids && !editingCheckpoint && (
               <p role="alert">
@@ -1298,9 +1211,28 @@ function StarterGuideSession({
               playthrough will be discarded.
             </p>
             <p>
-              Choose a shiny Method 1 target that leaves enough time to load
-              your save and open the bag. Nature and IVs vary between targets.
+              Choose the starter you want, then select a shiny target. All three
+              starters share the same shiny advances. Leave enough time to load
+              your save and open the bag.
             </p>
+            <label>
+              Shiny starter
+              <select
+                value={shinySpecies}
+                onChange={(e) =>
+                  patch({
+                    shinySpecies: Number(e.target.value),
+                    attemptAbility: starterAbility(Number(e.target.value)),
+                  })
+                }
+              >
+                {STARTERS.map((species) => (
+                  <option key={species} value={species}>
+                    {speciesTraits(species)?.name}
+                  </option>
+                ))}
+              </select>
+            </label>
             <details>
               <summary>Shiny target search range</summary>
               <div className="starter-input-grid">
@@ -1343,7 +1275,7 @@ function StarterGuideSession({
                 </p>
                 <StarterSpreadTable
                   spreads={shiny.result.slice(page * 5, page * 5 + 5)}
-                  species={state.species}
+                  species={shinySpecies}
                   selected={state.selected?.advance}
                   onSelect={(selected) => patch({ selected })}
                 />
@@ -1370,13 +1302,13 @@ function StarterGuideSession({
             />
             <StarterSpreadTable
               spreads={[state.selected]}
-              species={state.species}
+              species={shinySpecies}
             />
             <p>
               Load the protected pre-starter save. At the first zero, reset with
               A+B+Start+Select on console or emulator. Open the bag promptly,
-              select {speciesTraits(state.species)?.name}, and wait at the
-              Yes/No confirmation. Confirm Yes at the second zero.
+              select {speciesTraits(shinySpecies)?.name}, and wait at the Yes/No
+              confirmation. Confirm Yes at the second zero.
             </p>
             {targetTiming ? (
               <div
@@ -1406,7 +1338,7 @@ function StarterGuideSession({
               {nearby.result && (
                 <StarterSpreadTable
                   spreads={nearby.result}
-                  species={state.species}
+                  species={shinySpecies}
                   selected={state.selected.advance}
                 />
               )}
@@ -1420,17 +1352,23 @@ function StarterGuideSession({
                 skip calibration.
               </p>
               <StarterTraitsForm
-                species={state.species}
+                species={shinySpecies}
+                chooseSpecies
                 nature={state.attemptNature}
                 gender={state.attemptGender}
                 onChange={(key, value) =>
-                  patch({
-                    [key === "nature"
-                      ? "attemptNature"
-                      : key === "gender"
-                        ? "attemptGender"
-                        : "attemptAbility"]: value,
-                  })
+                  key === "species"
+                    ? patch({
+                        shinySpecies: Number(value),
+                        attemptAbility: starterAbility(Number(value)),
+                      })
+                    : patch({
+                        [key === "nature"
+                          ? "attemptNature"
+                          : key === "gender"
+                            ? "attemptGender"
+                            : "attemptAbility"]: value,
+                      })
                 }
               />
               <ReadingInputs
@@ -1461,10 +1399,20 @@ function StarterGuideSession({
                 <p role="status">
                   {attemptResult.length === 0
                     ? `No match within ±${STARTER_LANDING_RADIUS} advances. Check the inputs or retry without changing calibration.`
-                    : attemptResult.length > 1
-                      ? `${attemptResult.length} advances match. Stats do not identify a unique landing; calibration is unchanged.`
-                      : `Likely landed advance ${landed!.advance}: ${difference! > 0 ? `${difference} late` : difference! < 0 ? `${-difference!} early` : "on target"}.`}
+                    : landed
+                      ? `${attemptResult.length > 1 ? "Selected" : "Likely"} landed advance ${landed.advance}: ${difference! > 0 ? `${difference} late` : difference! < 0 ? `${-difference!} early` : "on target"}.`
+                      : `${attemptResult.length} advances match. Select the landing you think you hit, or skip calibration if uncertain.`}
                 </p>
+              )}
+              {!!attemptResult?.length && (
+                <StarterSpreadTable
+                  spreads={attemptResult}
+                  species={shinySpecies}
+                  selected={landed?.advance}
+                  onSelect={(spread) => setSelectedLanding(spread.advance)}
+                  selectionHeading="Landing"
+                  selectionLabel="Use this landing"
+                />
               )}
               {landed && difference !== null && (
                 <>
@@ -1475,19 +1423,15 @@ function StarterGuideSession({
                   </p>
                   <button
                     onClick={() => {
-                      const calibration = calibratedFrames(
-                        state.starter.calibration,
-                        state.selected!.advance,
-                        landed.advance,
-                      );
                       try {
-                        targetCountdown(
+                        const starter = calibrateStarterLanding(
+                          state.starter,
                           state.selected!.advance,
-                          calibration,
-                          state.starter.first,
-                          state.starter.offset,
+                          landed.advance,
+                          attemptCalibration.current ??
+                            state.starter.calibration,
                         );
-                        patch({ starter: { ...state.starter, calibration } });
+                        patch({ starter });
                         setAttemptResult(null);
                       } catch (e) {
                         setError((e as Error).message);
@@ -1567,9 +1511,7 @@ function StarterGuideSession({
                     })
                   : state.step === 1 && state.starterPart === "summary"
                     ? patch({ starterPart: "timer" })
-                    : state.step === 2 && state.routeDone
-                      ? patch({ routeDone: false })
-                      : patch({ step: state.step - 1 })
+                    : patch({ step: state.step - 1 })
             }
           >
             {state.step === 5 ? "Choose another target" : "Back"}

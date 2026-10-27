@@ -251,12 +251,11 @@ export function catalogueStarterRoute(
   const teaching = prep.instructions.filter((t) => t.startsWith("Teach "));
   const confirm = `Confirm the starter has these moves in this order: ${prep.facts.moves!.map((m) => (m ? moveName(m) : "empty")).join(" / ")}.`;
   const instructions = [
-    "Avoid all wild battles and optional trainers except those listed. Check off each battle once; cancel evolution.",
+    "Avoid all wild battles and optional trainers except those listed. Cancel evolution.",
     ...learning,
     ...steps.map((step) => step.text),
     ...teaching,
     confirm,
-    "PC storage fully heals the starter and restores PP.",
     winner.option.item
       ? `Before depositing, give ${catalogue.items.find((item) => item.id === winner.option.item)!.name} to the starter.`
       : "Remove any held item before depositing the starter.",
