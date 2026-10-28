@@ -358,14 +358,17 @@ test("the overview displays signed distances, the next candidate, a complete tab
   assert.match(tieHtml, /1243, 1305/);
   assert.match(tieHtml, /Gap between closest generating advances: 33/);
   assert.doesNotMatch(tieHtml, /Most likely by timing/);
+  const updating = renderToStaticMarkup(
+    createElement(StarterSidTimingOverview, {
+      value: timing,
+      updating: true,
+    }),
+  );
+  assert.match(updating, /aria-busy="true"/);
   assert.equal(
-    renderToStaticMarkup(
-      createElement(StarterSidTimingOverview, {
-        value: timing,
-        updating: true,
-      }),
-    ),
-    "",
+    updating.replace('aria-busy="true"', 'aria-busy="false"'),
+    html,
+    "pausing calculations must not collapse the summary above the drawing canvas",
   );
 });
 

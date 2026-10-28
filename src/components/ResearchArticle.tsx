@@ -183,22 +183,27 @@ export function ResearchArticle() {
           one drawing.
         </p>
         <p>
-          Enter your TID and choose Search optimal PID. A progress bar tracks
-          the comparison of all three starters at advances 1000–3000. The guide
-          favours a precise target and its closest neighbours with lower EV
-          training requirements, then drawing-only recovery. It selects the
-          starter and sets the timer automatically. Expand the nearby PID list
-          to see drawing-only coverage and which cases can be resolved using
-          item changes and move swaps without EV training. Estimates prioritise
-          nineteen nearby SID-generation timings while comparing against the
-          entire SID search window. The full starter search also stays
-          unchanged; precise timing improves your chance of landing in the
-          recommended neighbourhood. Once the actual PID is identified, its
-          matching move and held-item preparation becomes the route checklist. A
-          second table shows nearby possible SIDs and their estimated experiment
-          difficulty, with an optional starter retry when lengthy training may
-          be needed. Timing and coverage remain estimates, not a guarantee of
-          drawing-only recovery.
+          Enter your TID to preview the first shiny starter advance for the
+          estimated SID timing and nine timings on either side. The dry-battery
+          choice allows more time for the warning screen: practical minimums are
+          900 advances with a dry battery and 650 without. Green, yellow and red
+          rows show shorter or longer waits; these SIDs remain estimates. Choose
+          Reset TID to repeat the unchanged intro timer, or Keep TID to search
+          for an optimal starter PID. A progress bar tracks the comparison of
+          all three starters at advances 1000–3000. The guide favours a precise
+          target and its closest neighbours with lower EV training requirements,
+          then drawing-only recovery. It selects the starter and sets the timer
+          automatically. Expand the nearby PID list to see drawing-only coverage
+          and which cases can be resolved using item changes and move swaps
+          without EV training. Estimates prioritise nineteen nearby
+          SID-generation timings while comparing against the entire SID search
+          window. The full starter search also stays unchanged; precise timing
+          improves your chance of landing in the recommended neighbourhood. Once
+          the actual PID is identified, its matching move and held-item
+          preparation becomes the route checklist. A second table shows nearby
+          possible SIDs and their estimated experiment difficulty, with an
+          optional starter retry when lengthy training may be needed. Timing and
+          coverage remain estimates, not a guarantee of drawing-only recovery.
         </p>
 
         <h4>Draw the curtains, then ask only useful questions</h4>

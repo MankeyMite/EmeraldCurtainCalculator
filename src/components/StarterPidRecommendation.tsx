@@ -8,18 +8,25 @@ export function OptimalPidSearch({
   progress,
   complete,
   onSearch,
+  label = "Search optimal PID",
+  disabled = false,
 }: {
   tid: string;
   busy: boolean;
   progress: number;
   complete: boolean;
   onSearch: () => void;
+  label?: string;
+  disabled?: boolean;
 }) {
   const percent = busy ? progress : 100;
   return (
     <div className="starter-pid-search">
-      <button disabled={!canSearchOptimalPid(tid) || busy} onClick={onSearch}>
-        Search optimal PID
+      <button
+        disabled={disabled || !canSearchOptimalPid(tid) || busy}
+        onClick={onSearch}
+      >
+        {label}
       </button>
       {(busy || complete) && (
         <div className="starter-search-progress">

@@ -1,3 +1,4 @@
+import { previewStarterTid } from "../core/starterTidPreview";
 import {
   searchStarter,
   searchShinyStarters,
@@ -33,7 +34,8 @@ type Request = {
     | "nearby"
     | "landing"
     | "outlook"
-    | "recommendation";
+    | "recommendation"
+    | "tid-preview";
   state: StarterGuideState;
   sidValues?: number[];
   spread?: RngSpread;
@@ -42,6 +44,10 @@ type Request = {
 self.onmessage = async ({ data }: { data: Request }) => {
   try {
     const { kind, state } = data;
+    if (kind === "tid-preview") {
+      self.postMessage({ result: previewStarterTid(state) });
+      return;
+    }
     if (kind === "recommendation") {
       const catalogue = await loadCatalogue();
       const result = recommendStarter(catalogue, state, (done, total) =>

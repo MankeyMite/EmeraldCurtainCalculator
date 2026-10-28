@@ -38,6 +38,7 @@ type Props = {
 export function PixelGrid(p: Props) {
   const drawing = useRef(false),
     last = useRef<{ x: number; y: number } | null>(null),
+    strokeRectangle = useRef<DOMRect | null>(null),
     keyIndex = useRef(p.mainOnly ? 16 : 0),
     strokeValue = useRef<0 | 1>(1);
   const top = p.annotated ? 24 : 0,
@@ -199,11 +200,14 @@ export function PixelGrid(p: Props) {
       }
     }
   }, [p, width, height, top]);
-  function coordinates(e: React.PointerEvent<HTMLCanvasElement>) {
+  function coordinates(
+    e: React.PointerEvent<HTMLCanvasElement>,
+    rectangle = e.currentTarget.getBoundingClientRect(),
+  ) {
     const bitmap = bitmapCoordinates(
       e.clientX,
       e.clientY,
-      e.currentTarget.getBoundingClientRect(),
+      rectangle,
       width,
       height,
       getComputedStyle(e.currentTarget).objectFit === "contain",
@@ -214,7 +218,21 @@ export function PixelGrid(p: Props) {
     };
   }
   function move(e: React.PointerEvent<HTMLCanvasElement>) {
-    const current = coordinates(e),
+    const rectangle = e.currentTarget.getBoundingClientRect(),
+      origin = strokeRectangle.current;
+    if (
+      drawing.current &&
+      origin &&
+      (rectangle.left !== origin.left ||
+        rectangle.top !== origin.top ||
+        rectangle.width !== origin.width ||
+        rectangle.height !== origin.height)
+    ) {
+      // A scroll or layout change is not a drag through the intervening cells.
+      end(e);
+      return;
+    }
+    const current = coordinates(e, rectangle),
       hit = hitAt(current.x, current.y);
     p.onHover(hit);
     if (!drawing.current) return;
@@ -236,6 +254,7 @@ export function PixelGrid(p: Props) {
     if (drawing.current) {
       drawing.current = false;
       last.current = null;
+      strokeRectangle.current = null;
       p.onEnd();
       if (e.currentTarget.hasPointerCapture(e.pointerId))
         e.currentTarget.releasePointerCapture(e.pointerId);
@@ -270,9 +289,10 @@ export function PixelGrid(p: Props) {
         if (!selected || e.button !== 0 || !p.solver || p.editable === false)
           return;
         e.preventDefault();
-        e.currentTarget.focus();
+        e.currentTarget.focus({ preventScroll: true });
         drawing.current = true;
-        last.current = coordinates(e);
+        last.current = point;
+        strokeRectangle.current = e.currentTarget.getBoundingClientRect();
         strokeValue.current = toggleDrawingPixel(
           p.observations[selected.nibble],
           p.predictions?.[selected.nibble],
@@ -292,6 +312,7 @@ export function PixelGrid(p: Props) {
         if (drawing.current) {
           drawing.current = false;
           last.current = null;
+          strokeRectangle.current = null;
           p.onEnd();
         }
       }}

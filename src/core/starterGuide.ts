@@ -79,6 +79,7 @@ export type StarterGuideState = {
   step: number;
   tid: string;
   playerGender?: "" | "male" | "female";
+  dryBattery?: boolean;
   backup?: {
     active: boolean;
     configured?: boolean;
@@ -129,6 +130,7 @@ export function newStarterGuide(): StarterGuideState {
     step: 0,
     tid: "",
     playerGender: "",
+    dryBattery: false,
     intro: defaultIntroTiming(),
     starter: defaultStarterTiming(),
     identifiedStarter: null,
@@ -154,7 +156,7 @@ export function newStarterGuide(): StarterGuideState {
     attemptNature: "",
     attemptGender: "",
     attemptAbility: starterAbility(277),
-    targetMin: 1200,
+    targetMin: 650,
     targetMax: 200000,
   };
 }
@@ -202,6 +204,7 @@ export function validateStarterGuide(value: unknown): StarterGuideState {
   if (
     !s ||
     s.version !== 1 ||
+    (s.dryBattery !== undefined && typeof s.dryBattery !== "boolean") ||
     (s.playerGender !== undefined &&
       !["", "male", "female"].includes(s.playerGender)) ||
     (s.starterTimingVersion !== undefined &&

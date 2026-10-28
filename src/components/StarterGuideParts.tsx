@@ -85,6 +85,7 @@ export function TimingOptions({
       {label}
       <input
         type="number"
+        readOnly={intro && key === "offset"}
         min={min}
         max={max}
         step={key === "first" || key === "second" ? 0.1 : 1}

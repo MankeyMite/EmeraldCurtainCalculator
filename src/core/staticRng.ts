@@ -21,6 +21,7 @@ export function scanStaticSpreads(
   identity: KnownFacts,
   snapshots: Snapshot[],
   progress?: (done: number, total: number) => void,
+  firstOnly = false,
 ): RngSpread[] {
   const settings = validateRngSettings(input);
   if (settings.kind !== "static") throw Error("Select the static RNG model");
@@ -103,6 +104,7 @@ export function scanStaticSpreads(
           slot: -1,
           level: identity.metLevel ?? 0,
         });
+      if (firstOnly) return [...found.values()];
       if (found.size > MAX_RNG_SPREADS)
         throw Error(
           "More than 5,000 distinct spreads match. Narrow the advance range or add known traits/pixels; no partial result has been applied.",

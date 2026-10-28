@@ -20,8 +20,7 @@ export function StarterSidTimingOverview({
   value: SidTimingPriority;
   updating?: boolean;
 }) {
-  if (updating || !value.candidates.length || !value.leaders.length)
-    return null;
+  if (!value.candidates.length || !value.leaders.length) return null;
   const leader = value.leaders[0],
     alternative = value.candidates.find((row) => !value.leaders.includes(row));
   const gap =
@@ -35,7 +34,11 @@ export function StarterSidTimingOverview({
         )
       : null;
   return (
-    <div className="starter-sid-timing" aria-label="SID timing overview">
+    <div
+      className="starter-sid-timing"
+      aria-label="SID timing overview"
+      aria-busy={updating}
+    >
       <p className="help">
         Estimated SID-generation target: advance {value.target}
       </p>

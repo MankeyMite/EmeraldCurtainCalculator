@@ -57,6 +57,12 @@ import {
 } from "./StarterGuideParts";
 import { StarterCurtainStep } from "./StarterCurtainStep";
 import { StarterOutlook } from "./StarterOutlook";
+import { StarterTidPreview } from "./StarterTidPreview";
+import {
+  earliestShinyStarterAdvance,
+  starterTidPreviewKey,
+  type StarterTidPreview as TidPreview,
+} from "../core/starterTidPreview";
 import {
   StarterPidRecommendation,
   OptimalPidSearch,
@@ -194,6 +200,7 @@ function StarterGuideSession({
     route = useStarterTask<RouteSetup>(),
     outlook = useStarterTask<StarterOutlookTask>(),
     recommendation = useStarterTask<PidRecommendation>(),
+    tidPreview = useStarterTask<TidPreview>(),
     shiny = useStarterTask<RngSpread[]>(),
     nearby = useStarterTask<RngSpread[]>(),
     landing = useStarterTask<RngSpread[]>();
@@ -321,6 +328,21 @@ function StarterGuideSession({
     window.scrollTo({ top: 0 });
   };
   const recommendationKey = starterRecommendationKey(state);
+  const tidPreviewKey = starterTidPreviewKey(state);
+  const currentTidPreview =
+    tidPreview.result?.key === tidPreviewKey ? tidPreview.result : null;
+  useEffect(() => {
+    tidPreview.clear();
+    if (state.step !== 0 || !canSearchOptimalPid(state.tid)) return;
+    const timer = window.setTimeout(
+      () => tidPreview.run({ kind: "tid-preview", state }),
+      350,
+    );
+    return () => {
+      window.clearTimeout(timer);
+      tidPreview.clear();
+    };
+  }, [state.step, tidPreviewKey]);
   const pidRecommendation =
     recommendation.result?.key === recommendationKey
       ? recommendation.result
@@ -583,7 +605,9 @@ function StarterGuideSession({
           !state.identifiedStarter &&
           !state.readings.length
         )
-          throw Error("Choose Search optimal PID before continuing.");
+          throw Error(
+            "Choose Keep TID to find an optimal starter PID before continuing.",
+          );
       }
       if (state.step === 1 && state.starterPart === "timer") {
         patch({ starterPart: "summary" });
@@ -799,7 +823,7 @@ function StarterGuideSession({
       <header>
         <div>
           <p className="starter-eyebrow">New Game SID Finder → Shiny Starter</p>
-          <h1>Emerald starter guide</h1>
+          <h1>Curtain glitch shiny starter guide</h1>
         </div>
         <div className="starter-header-actions">
           <button onClick={onExit}>Return to investigator</button>
@@ -856,6 +880,19 @@ function StarterGuideSession({
                 <option value="female">Girl</option>
               </select>
             </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={state.dryBattery ?? false}
+                onChange={(e) =>
+                  patch({
+                    dryBattery: e.target.checked,
+                    targetMin: earliestShinyStarterAdvance(e.target.checked),
+                  })
+                }
+              />
+              Dry battery
+            </label>
             <div className="starter-guide-images">
               <GuideImage
                 name="trainer-name"
@@ -904,16 +941,47 @@ function StarterGuideSession({
                 }
               />
             </label>
-            <OptimalPidSearch
-              tid={state.playerGender ? state.tid : ""}
-              busy={recommendation.busy}
-              progress={recommendation.progress}
-              complete={!!pidRecommendation && !recommendation.error}
-              onSearch={() => {
-                if (canSearchOptimalPid(state.tid))
-                  recommendation.run({ kind: "recommendation", state });
-              }}
-            />
+            {canSearchOptimalPid(state.tid) &&
+              !currentTidPreview &&
+              !tidPreview.error && (
+                <p role="status">
+                  Finding the first shiny advances for nearby SIDs...
+                </p>
+              )}
+            {tidPreview.error && <p role="alert">{tidPreview.error}</p>}
+            {currentTidPreview && (
+              <StarterTidPreview value={currentTidPreview} />
+            )}
+            <div className="starter-tid-actions">
+              <OptimalPidSearch
+                label="Keep TID"
+                tid={state.playerGender ? state.tid : ""}
+                disabled={!currentTidPreview}
+                busy={recommendation.busy}
+                progress={recommendation.progress}
+                complete={!!pidRecommendation && !recommendation.error}
+                onSearch={() => {
+                  if (
+                    state.playerGender &&
+                    currentTidPreview &&
+                    canSearchOptimalPid(state.tid)
+                  ) {
+                    const next = {
+                      ...state,
+                      targetMin: currentTidPreview.minimum,
+                    };
+                    patch({ targetMin: next.targetMin });
+                    recommendation.run({ kind: "recommendation", state: next });
+                  }
+                }}
+              />
+              <button
+                disabled={!canSearchOptimalPid(state.tid)}
+                onClick={() => onReset(state)}
+              >
+                Reset TID
+              </button>
+            </div>
             {recommendation.error && <p role="alert">{recommendation.error}</p>}
             {pidRecommendation && (
               <StarterPidRecommendation

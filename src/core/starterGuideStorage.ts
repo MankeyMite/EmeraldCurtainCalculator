@@ -16,6 +16,9 @@ export function resetGuideProgress(
   current: StarterGuideState,
 ) {
   const fresh = newStarterGuide();
+  fresh.playerGender = current.playerGender ?? "";
+  fresh.dryBattery = current.dryBattery ?? false;
+  fresh.targetMin = fresh.dryBattery ? 900 : 650;
   fresh.intro = { ...current.intro };
   fresh.starter = { ...current.starter };
   const previous = {

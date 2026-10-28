@@ -34,6 +34,8 @@ test("reset clears trainer, starter, SID evidence and route, keeps timing and ca
   const s = newStarterGuide();
   s.step = 4;
   s.tid = "16780";
+  s.playerGender = "female";
+  s.dryBattery = true;
   s.confirmedSid = 26047;
   s.protectedSave = true;
   s.intro.second = 20;
@@ -56,6 +58,9 @@ test("reset clears trainer, starter, SID evidence and route, keeps timing and ca
   const fresh = resetGuideProgress(saved, s);
   assert.equal(fresh.step, 0);
   assert.equal(fresh.tid, "");
+  assert.equal(fresh.playerGender, "female");
+  assert.equal(fresh.dryBattery, true);
+  assert.equal(fresh.targetMin, 900);
   assert.equal(fresh.confirmedSid, null);
   assert.equal(fresh.protectedSave, false);
   assert.deepEqual(fresh.readings, []);
