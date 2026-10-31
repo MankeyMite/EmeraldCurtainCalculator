@@ -18,6 +18,10 @@ import {
 } from "./spindaSidGuide";
 import type { KnownFacts } from "./constraints";
 import type { SpindaSidProgress } from "./spindaUsefulness";
+import {
+  validateSpindaJourney,
+  type SpindaJourneyState,
+} from "./spindaJourney";
 
 /** Called only after explicit transfer confirmation. Never relabel another species. */
 export function spindaEstimatedFacts(
@@ -47,6 +51,7 @@ export type SpindaMatcherState = {
   appliedPid?: number; // PID confirmed by the player.
   guide?: SpindaSidGuideState; // Current catch; completed SID evidence is carried in sidProgress.
   sidProgress?: SpindaSidProgress;
+  journey?: SpindaJourneyState;
 };
 export function defaultSpindaMatcher(): SpindaMatcherState {
   return {
@@ -115,6 +120,7 @@ export function validateSpindaMatcher(value: unknown): SpindaMatcherState {
   return {
     pid: v.pid,
     settings,
+    ...(v.journey ? { journey: validateSpindaJourney(v.journey) } : {}),
     shortlist: [...new Set(v.shortlist)],
     ...(v.level === undefined ? {} : { level: v.level }),
     ...(v.nature === undefined ? {} : { nature: v.nature }),

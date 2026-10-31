@@ -1,4 +1,5 @@
 import test from "node:test";
+import { newSpindaJourney } from "../src/core/spindaJourney";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import fs from "node:fs";
@@ -298,7 +299,11 @@ test("observed Spinda gender partitions RNG candidates without changing the drag
   }
   assert.equal(state.pid, 0x88888888);
   const lab = {
-    spindaMatcher: { ...state, gender: "female" },
+    spindaMatcher: {
+      ...state,
+      gender: "female",
+      journey: { ...newSpindaJourney(), step: "draw" },
+    },
     facts: {},
     setSpindaMatcher: () => {},
   } as unknown as CurtainLab;
@@ -482,19 +487,27 @@ test("Spinda worker reranks a complete cached pool and never reports success aft
   );
 });
 
-test("Spinda UI exposes draggable pixel spots, shared RNG settings and distinct advisory state without brushes", () => {
+test("Spinda guide presents one page at a time with integrated spot drawing", () => {
+  const state = defaultSpindaMatcher();
   const lab = {
-    spindaMatcher: defaultSpindaMatcher(),
+    spindaMatcher: state,
     facts: {},
     setSpindaMatcher: () => {},
   } as unknown as CurtainLab;
-  const html = renderToStaticMarkup(createElement(SpindaMatcher, { lab }));
-  assert.match(html, /Find Spinda PID from its spot pattern/);
-  assert.match(html, /Drag the four spots/);
-  assert.match(html, /Move spot right one pixel/);
+  let html = renderToStaticMarkup(createElement(SpindaMatcher, { lab }));
+  assert.match(html, /Find SID with Spinda/);
+  assert.doesNotMatch(
+    html,
+    /SID Pixel Guide|Find Spinda PID from its spot pattern/,
+  );
+  assert.doesNotMatch(html, /Move spot right one pixel/);
   assert.match(html, /Route 113/);
   assert.match(html, /TID-seeded new-game SID RNG/);
+  state.journey = { ...newSpindaJourney(), step: "draw" };
+  html = renderToStaticMarkup(createElement(SpindaMatcher, { lab }));
+  assert.match(html, /Move spot right one pixel/);
+  assert.match(html, /Encounter settings and search range/);
   assert.match(html, /one original sprite pixel/);
   assert.match(html, /Use this PID/);
-  assert.doesNotMatch(html, /brush|Undo|Redo|Clear drawing/i);
+  assert.doesNotMatch(html, /brush|Clear drawing/i);
 });

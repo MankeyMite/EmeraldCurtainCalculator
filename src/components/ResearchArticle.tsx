@@ -1092,10 +1092,11 @@ KEY_A XOR KEY_B = PID_A XOR PID_B`}</pre>
         </figure>
         <p>
           Saved curtain observations represent changes to <em>one</em> Pokémon
-          and share its PID. For successive Spinda catches, use the SID pixel
-          guide’s <strong>Catch next Spinda</strong> button: it saves the
-          remaining SID candidates and tested digits, then starts a fresh record
-          for the next catch. Use catches from the same original trainer.
+          and share its PID. For successive Spinda catches, use
+          <strong> Find SID with Spinda</strong> and continue to its recommended
+          next encounter: it saves the remaining SID candidates and tested
+          digits, then starts a fresh record for the next catch. Use catches
+          from the same original trainer.
         </p>
         <p>
           Several catches may prove more efficient than repeated item changes on

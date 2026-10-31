@@ -10,6 +10,40 @@
   justify-content: space-between;
   gap: 20px;
 }
+.spinda-wizard {
+  max-width: 920px;
+}
+.spinda-wizard .spinda-journey {
+  margin-top: 0;
+}
+.spinda-wizard .spinda-journey > section,
+.spinda-wizard .spinda-journey > div {
+  max-width: none;
+}
+.spinda-wizard .spinda-journey-heading {
+  margin-top: 0;
+}
+.spinda-page-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 16px 0;
+}
+.spinda-page-navigation > button {
+  min-width: 88px;
+}
+.spinda-catch-preview {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 16px 0;
+}
+.spinda-catch-preview canvas {
+  width: 128px;
+  height: 128px;
+  image-rendering: pixelated;
+}
 .starter-wizard h1 {
   font-size: clamp(24px, 4vw, 34px);
   margin: 4px 0;

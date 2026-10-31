@@ -23,6 +23,8 @@ import type { SpindaCandidate } from "../core/spindaMatcher";
 import { hitForNibble, recordStripLayout } from "./WorkbenchData";
 import { SummaryStatInputs } from "./SummaryStatInputs";
 import { SidPixelQuestion } from "./SidPixelQuestion";
+import { SpindaCurtainLocator } from "./SpindaJourneyPages";
+import { spindaStoragePlacement } from "../core/spindaJourney";
 
 // Coordinates come from the actual flipped school tiles.
 const bounds = recordStripLayout().bounds;
@@ -57,6 +59,8 @@ export function SpindaSidGuide({
   onSummaryChange,
   onBallChange,
   analysisPending,
+  compact = false,
+  language,
 }: {
   value: SpindaSidGuideState;
   onChange: (next: SpindaSidGuideState) => void;
@@ -74,7 +78,10 @@ export function SpindaSidGuide({
   onSummaryChange?: (key: string, value: string) => void;
   onBallChange?: (ball: number) => void;
   analysisPending?: boolean;
+  compact?: boolean;
+  language?: number;
 }) {
+  const placement = spindaStoragePlacement(language ?? facts?.language);
   const [selectedNibble, setSelectedNibble] = useState<number | null>(null);
   const info = useMemo(
     () => (infoError ? undefined : spindaInfoPlaintext(facts)),
@@ -126,7 +133,21 @@ export function SpindaSidGuide({
     info,
     rng?.masks,
   );
-  const targets = allUseful.filter((t) => t.digit === value.digit);
+  const frequencies = Array.from({ length: 4 }, () =>
+    Array<number>(16).fill(0),
+  );
+  if (compact)
+    for (const sid of remainingSids)
+      for (let n = 0; n < 4; n++)
+        frequencies[n][(sid >>> ((3 - n) * 4)) & 15]++;
+  const targets = compact
+    ? allUseful.slice().sort((a, b) => {
+        const probability = (t: typeof a) =>
+          frequencies[t.digit - 1][t.candidate] /
+          Math.max(1, remainingSids.length);
+        return Math.abs(probability(a) - 0.5) - Math.abs(probability(b) - 0.5);
+      })
+    : allUseful.filter((t) => t.digit === value.digit);
   const target = targets.find((t) => t.nibble === selectedNibble) ?? targets[0];
   const targetKey = targets.map((t) => t.nibble).join(",");
   useEffect(() => {
@@ -185,12 +206,116 @@ export function SpindaSidGuide({
             other.methods.join() === e.methods.join(),
         ) === i,
     ) ?? [];
+  if (compact)
+    return (
+      <section className="spinda-sid-guide" aria-label="Spinda SID checks">
+        <div className="spinda-sid-digits">
+          {digits.map((values, i) => (
+            <div key={i}>
+              S{i + 1}
+              <strong>{values.length === 1 ? hex(values[0], 1) : "?"}</strong>
+              <small>{values.length} possible</small>
+            </div>
+          ))}
+        </div>
+        <p>
+          With Spinda in Box {placement.box}, slot {placement.slot}, leave and
+          reenter Rustboro’s Trainers’ School to refresh the curtain.
+        </p>
+        {infoError && (
+          <p role="alert">
+            Correct the Pokémon information or stats before answering.
+          </p>
+        )}
+        {!remainingSids.length && (
+          <p role="alert">
+            No SID matches. Review the PID, information and saved pixel answers.
+          </p>
+        )}
+        {rng && !rng.ivs.length && (
+          <p role="alert">
+            No encounter spread matches the recorded information. Correct the
+            stats, level or PID.
+          </p>
+        )}
+        {target ? (
+          <div className="spinda-experiment-question">
+            <SpindaCurtainLocator nibble={target.nibble} />
+            <div>
+              <SidPixelQuestion
+                target={target}
+                disabled={!!infoError || !!analysisPending}
+                onAnswer={answer}
+              />
+            </div>
+          </div>
+        ) : (
+          <p>
+            {remainingSids.length === 1
+              ? `SID found: ${remainingSids[0]} · 0x${hex(remainingSids[0], 4)}.`
+              : "The useful checks for this catch are complete. Next, compare an experiment with another catch."}
+          </p>
+        )}
+        <button
+          disabled={
+            !!infoError ||
+            !!analysisPending ||
+            !remainingSids.length ||
+            !!target ||
+            missingIvEvidence
+          }
+          onClick={() =>
+            onNext?.({
+              remainingSids,
+              tested: tested.map((m, n) => m | currentTested[n]),
+            })
+          }
+        >
+          {analysisPending
+            ? "Updating candidates…"
+            : "Continue to the next useful step"}
+        </button>
+        <details>
+          <summary>Review saved pixel answers and remaining digits</summary>
+          {digits.map((v, i) => (
+            <p key={i}>
+              S{i + 1}: {v.map((n) => hex(n, 1)).join(" ") || "none"}
+            </p>
+          ))}
+          {Object.entries(value.observations).map(([n, observed]) => (
+            <label key={n}>
+              {location(Number(n))}
+              <select
+                value={observed}
+                onChange={(e) => {
+                  const observations = { ...value.observations };
+                  if (e.target.value === "") delete observations[Number(n)];
+                  else
+                    observations[Number(n)] = Number(e.target.value) as 0 | 1;
+                  onChange({ ...value, observations });
+                }}
+              >
+                <option value="">Unanswered</option>
+                <option value={0}>Transparent</option>
+                <option value={1}>Black</option>
+              </select>
+            </label>
+          ))}
+          {!!Object.keys(value.observations).length && (
+            <button onClick={() => onChange({ ...value, observations: {} })}>
+              Clear guide answers
+            </button>
+          )}
+        </details>
+      </section>
+    );
   return (
     <section className="spinda-sid-guide" aria-label="Spinda SID pixel guide">
       <h3>Check curtain pixels for SID digits</h3>
       <p>
         PID <strong>0x{hex(value.pid, 8)}</strong> · Catch this Spinda, then
-        check the highlighted pixels in Box 8, slot 5.
+        check the highlighted pixels in Box {placement.box}, slot{" "}
+        {placement.slot}.
       </p>
       <p className="help">
         Stored order: {spindaBlockOrder(value.pid).join(" → ")}

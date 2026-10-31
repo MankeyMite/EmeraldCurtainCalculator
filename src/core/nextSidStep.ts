@@ -12,6 +12,7 @@ import {
 } from "./spindaUsefulness";
 import { EXPERIMENT_SECONDS } from "./evTraining";
 import type { ControlledAction } from "./controlledExperiments";
+import { initialWildMoves } from "./consumableEffects";
 
 let sampleCache: { key: string; encounters: RngSpread[] } | undefined;
 
@@ -79,6 +80,8 @@ export function estimateNextSpinda(
       metLevel: encounter.level,
       ball,
       otGender,
+      ...initialWildMoves(308, encounter.level),
+      ppBonuses: 0,
     });
     const rng = spindaRngEvidence(encounter.pid, candidate, info)!;
     const targets = usefulSpindaTargets(guide, masks, tested, info, rng.masks);

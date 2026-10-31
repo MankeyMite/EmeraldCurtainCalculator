@@ -1,8 +1,8 @@
 # Spinda pattern matcher
 
-Open **Investigate → SID Finder → Find Spinda PID from its spot pattern**. Four spots snap to original sprite pixels. Mouse/touch dragging, selection and arrow controls call the same bounded coordinate update. The eight-digit PID field accepts direct patterns.
+Open **Investigate → SID Finder → Find SID with Spinda**. The matcher is the drawing page inside the combined guide; see [the journey and calculated route thresholds](SPINDA_SID_JOURNEY.md). Four spots snap to original sprite pixels. Mouse/touch dragging, selection and arrow controls call the same bounded coordinate update. The optional eight-digit PID field accepts direct patterns.
 
-Choose **Observed Spinda gender** above the editor before dragging to filter the wild PID pool. Unknown/either stays available. This is separate from a Cute Charm lead setting. If the editor's exact PID disagrees with the observed gender, a notice explains the mismatch; the pattern stays where you placed it. The filter persists with the other matcher settings.
+The information pages supply the observed nature and gender to the wild PID pool. **Pattern details and observed gender** on the drawing page also allows correction. Unknown/either stays available. This is separate from a Cute Charm lead setting. If the editor's exact PID disagrees with the observed gender, a notice explains the mismatch; the pattern stays where you placed it. The filter persists with the other matcher settings.
 
 ## Emerald rendering
 
@@ -31,15 +31,15 @@ Handles outline full masks so hidden parts remain draggable. They never enter sc
 
 An optional occurrence callback records exact advance/method/slot/level/IV links before spread deduplication. Grouping by PID retains every occurrence, without inventing advances from first/last intervals. IV tuples remain correlated with methods and encounters.
 
-Search/ranking run in a worker. Settings changes terminate obsolete workers; dragging debounces ranking of the prepared pool. Obsolete PID responses are ignored. Cancellation/errors hide the pool. Shared limits remain 1,000,000 inclusive advances and 5,000 distinct PID/IV spreads. Exceeding either fails explicitly. Pagination limits only rendered cards, starting with ten; all candidates remain available.
+Search/ranking run in a worker. Settings changes terminate obsolete workers; dragging debounces ranking of the prepared pool. Obsolete PID responses are ignored. Cancellation/errors hide the pool. Shared limits remain 1,000,000 inclusive advances and 5,000 distinct PID/IV spreads. Exceeding either fails explicitly. Pagination limits only rendered cards, starting with four; all candidates remain available. Search settings can be corrected on the capture and drawing pages without returning to preparation.
 
 Only the union of pixels that can carry legal PID spots is compared. Similarity is `100 × [0.65 × 2×exactOverlap + 0.35 × (nearTarget + nearCandidate)] / (targetSpotPixels + candidateSpotPixels)`. Near overlap uses Euclidean distance ≤2 sprite pixels. This symmetric soft Dice measure penalizes extra/missing spot pixels without rewarding blank background. Exact patterns score 100. Identical visible patterns retain every PID and tied score. A three-point band flags close alternatives; best score below 65 prompts review. Scores/thresholds are visual guidance, not calibrated probabilities.
 
 ## Persistence and confirmation
 
-Choose **Use this PID** on a match to confirm it. The Painter and suggestions fold away, and the existing SID Pixel Guide opens. The confirmed PID is applied to Pokemon info. Fresh wild-catch defaults supply EV/contest/ribbon zeros and Growth padding; entered facts for the same Spinda are preserved. A different catch starts a separate record, carrying only supplied original-trainer facts. Pending experiments and invalid inputs must be resolved first.
+Choose **Use this PID** on a match to confirm it and continue directly to the pixel-check page. The confirmed PID is applied to Pokemon info. Fresh wild-catch defaults supply EV/contest/ribbon zeros and Growth padding; entered facts and physical answers for the same Spinda are preserved when correcting its PID. A different catch starts a separate record, carrying only supplied original-trainer facts. Pending experiments and invalid inputs must be resolved first.
 
-Matcher settings, the active guide and completed SID progress persist in investigation JSON and autosave. Old backups remain compatible. Search results regenerate from the saved RNG settings. The legacy shortlist remains readable in older backups but is no longer part of the confirmation flow.
+Matcher settings, the active guide and completed SID progress remain available in the current page session and exported investigation JSON. Refresh starts a completely fresh Spinda guide, including a new first drawing, instead of restoring its autosave. Other species' investigations retain their normal autosave behavior. Explicitly loaded backups remain compatible; search results regenerate from their RNG settings. The legacy shortlist remains readable in older backups but is no longer part of the confirmation flow.
 
 ## Useful SID digits and catch ball
 
@@ -63,7 +63,7 @@ SID calculation evaluates whole IV words and preserves their cross-digit correla
 
 ## Catch next Spinda
 
-**Catch next Spinda** saves the exact surviving SID set and tested candidate masks, clears the current catch's drawing, facts and stats, then returns to the Painter. Original-trainer facts, manual SID limits and matcher settings are retained. The main deduction engine intersects subsequent results with the carried exact SID set, preserving correlated candidates rather than only their per-digit envelope. Catches must share the same original trainer.
+The next-catch route saves the exact surviving SID set and tested candidate masks, clears the current catch's drawing, facts, stats and observed encounter traits, then returns to preparation. Original-trainer facts, manual SID limits and matcher settings are retained. The main deduction engine intersects subsequent results with the carried exact SID set, preserving correlated candidates rather than only their per-digit envelope. Catches must share the same original trainer.
 
 ## Current guide evidence and next-step planning
 

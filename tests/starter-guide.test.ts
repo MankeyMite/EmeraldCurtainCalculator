@@ -1427,11 +1427,37 @@ test("wizard starts with one screen and the two supplied timing references, leav
   const html = renderToStaticMarkup(
     createElement(StarterWizard, { onExit: () => {} }),
   );
-  assert.match(html, /Step 1 of 6/);
+  assert.match(html, /Page 1 of 6/);
   assert.match(html, /Return to investigator/);
   assert.match(html, /trainer-name\.png/);
   assert.match(html, /birch-final\.png/);
   assert.doesNotMatch(html, /Game image to add|Image placeholder/);
   assert.match(html, /Generate TID\/SID/);
   assert.doesNotMatch(html, /Record stats and find starter spreads/);
+});
+
+test("opening a saved starter guide starts on page one while retaining entered data", () => {
+  const saved = newStarterGuide();
+  saved.step = 3;
+  saved.tid = "12345";
+  const original = Object.getOwnPropertyDescriptor(globalThis, "window");
+  Object.defineProperty(globalThis, "window", {
+    configurable: true,
+    value: {
+      localStorage: {
+        getItem: (key: string) =>
+          key === "emerald-starter-guide-v1" ? JSON.stringify(saved) : null,
+      },
+    },
+  });
+  try {
+    const html = renderToStaticMarkup(
+      createElement(StarterWizard, { onExit: () => {} }),
+    );
+    assert.match(html, /Page 1 of 6/);
+    assert.match(html, /value="12345"/);
+  } finally {
+    if (original) Object.defineProperty(globalThis, "window", original);
+    else Reflect.deleteProperty(globalThis, "window");
+  }
 });

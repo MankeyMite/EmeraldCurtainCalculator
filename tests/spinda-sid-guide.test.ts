@@ -475,6 +475,17 @@ test("live Pokémon info updates guide SID implications without replacing manual
 test("matcher reuses the guide with live known plaintext, manual overrides and invalid-input feedback", () => {
   const state = defaultSpindaMatcher();
   state.guide = newSpindaSidGuide(state.pid);
+  state.journey = {
+    step: "pixels",
+    ball: 4,
+    iron: 0,
+    carbos: 0,
+    shoppingSeconds: 180,
+    caught: true,
+    patternDrawn: true,
+    matchedPid: state.pid,
+    informationComplete: true,
+  };
   const lab = {
     spindaMatcher: state,
     facts: { species: 308, heldItem: 0x1234 },
@@ -488,5 +499,9 @@ test("matcher reuses the guide with live known plaintext, manual overrides and i
   state.guide.plaintext[7] = 9;
   assert.ok(render().includes("Plaintext <code>9</code>"));
   lab.factError = "Invalid input";
-  assert.ok(render().includes("or summary stats before checking pixels"));
+  assert.ok(
+    render().includes(
+      "Correct the Pokémon information or stats before answering",
+    ),
+  );
 });

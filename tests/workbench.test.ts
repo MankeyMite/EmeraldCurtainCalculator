@@ -10,6 +10,31 @@ import { SidRngPanel } from "../src/components/SidRngPanel";
 import { curtainHit } from "../src/core/window";
 import type { CurtainLab } from "../src/hooks/useCurtainLab";
 
+test("refresh ignores saved guide-open flags and opens About on desktop", () => {
+  const original = Object.getOwnPropertyDescriptor(globalThis, "window");
+  Object.defineProperty(globalThis, "window", {
+    configurable: true,
+    value: {
+      localStorage: {
+        getItem: (key: string) =>
+          ["emerald-spinda-guide-open", "emerald-starter-guide-open"].includes(
+            key,
+          )
+            ? "true"
+            : null,
+      },
+    },
+  });
+  try {
+    const html = renderToStaticMarkup(createElement(App));
+    assert.match(html, /id="work-tab-about" aria-selected="true"/);
+    assert.doesNotMatch(html, /<main class="starter-wizard/);
+  } finally {
+    if (original) Object.defineProperty(globalThis, "window", original);
+    else Reflect.deleteProperty(globalThis, "window");
+  }
+});
+
 test("compact workspace follows the supplied split layout with one curtain strip, primary fields and collapsed extras", () => {
   const html = renderToStaticMarkup(createElement(App));
   assert.equal((html.match(/<canvas/g) ?? []).length, 1);
@@ -31,6 +56,8 @@ test("compact workspace follows the supplied split layout with one curtain strip
   assert.match(html, /Keep slots 4 and 6 empty/);
   assert.match(html, /Rustboro Trainer’s School/);
   assert.match(html, />Start with Pokémon info<\/button>/);
+  assert.match(html, />Find SID with Spinda<\/button>/);
+  assert.doesNotMatch(html, /aria-label="Find SID with Spinda"/);
   const tools = html.slice(
     html.indexOf('class="toolbar-primary"'),
     html.indexOf('class="drawing-options"'),

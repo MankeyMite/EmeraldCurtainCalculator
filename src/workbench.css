@@ -3,6 +3,91 @@ body:has(.workbench) {
 }
 
 /* The Spinda editor uses Emerald's original 64-pixel coordinate system. */
+.spinda-journey > section,
+.spinda-journey > div:not(.spinda-workflow) {
+  max-width: 720px;
+}
+.spinda-journey .spinda-workflow {
+  display: block;
+}
+.spinda-journey-heading {
+  margin: 22px 0 18px;
+}
+.spinda-journey-heading small {
+  color: #68786f;
+}
+.spinda-journey-heading h2 {
+  margin: 6px 0;
+}
+.spinda-journey .spinda-rng-advanced,
+.spinda-review {
+  margin-top: 22px;
+}
+.spinda-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 16px;
+}
+.spinda-information .move-row {
+  margin: 12px 0;
+}
+.spinda-experiment-question {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 22px;
+  margin: 20px 0;
+  align-items: center;
+}
+.spinda-inline-locator {
+  display: grid;
+  grid-template-columns: 20px repeat(8, 1fr);
+  gap: 2px;
+  max-width: 150px;
+}
+.spinda-inline-locator small {
+  text-align: center;
+  font-size: 10px;
+  color: #718078;
+}
+.spinda-inline-locator .spinda-guide-row > span {
+  display: block;
+  aspect-ratio: 1;
+  background: #e5ebe7;
+  border-radius: 2px;
+}
+.spinda-inline-locator .spinda-guide-row > span.selected {
+  background: #e39837;
+  outline: 2px solid #945b11;
+}
+.spinda-journey .spinda-sid-digits > div {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  background: #f0f6f1;
+  border: 1px solid #d1ded4;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.spinda-journey .spinda-sid-digits > div strong {
+  font-size: 20px;
+}
+.spinda-journey .spinda-sid-digits > div small {
+  color: #63766a;
+}
+@container (max-width: 420px) {
+  .spinda-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .spinda-experiment-question {
+    grid-template-columns: 105px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .spinda-inline-locator {
+    max-width: 105px;
+  }
+}
 .spinda-matcher {
   margin: 12px 0 20px;
   container-type: inline-size;

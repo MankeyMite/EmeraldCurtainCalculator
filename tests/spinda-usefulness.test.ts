@@ -35,6 +35,7 @@ import { SpindaSidGuide } from "../src/components/SpindaSidGuide";
 import { computeDeduction } from "../src/core/deduction";
 import { spindaTrainerFacts } from "../src/core/spindaUsefulness";
 import { newPokemonFacts } from "../src/core/facts";
+import { initialWildMoves } from "../src/core/consumableEffects";
 import { validateFacts } from "../src/core/session";
 
 const full = [65535, 65535, 65535, 65535],
@@ -96,7 +97,7 @@ test("usefulness counts each position/candidate once and removes tested, exclude
   assert.equal(usefulSpindaTargets(guide, full, tested).length, 3);
 });
 
-test("H1/H2/H4 counts match an independent Origins/IV nibble oracle for the selected ball", () => {
+test("H1/H2/H4 counts match an independent Origins/IV/move nibble oracle for the selected ball", () => {
   const candidate = generated();
   const remaining = [0xfffe, 0xffff, 0xfff7, 0xffff],
     tested = [2, 4, 8, 16];
@@ -112,12 +113,19 @@ test("H1/H2/H4 counts match an independent Origins/IV nibble oracle for the sele
         0;
       const origins =
         encounter.level | (3 << 7) | (result.ball << 11) | (1 << 15);
+      const initial = initialWildMoves(308, encounter.level);
       for (let position = 0; position < 4; position++) {
         const pid = (candidate.pid >>> (16 + position * 4)) & 15;
         for (const plain of [
           0,
           (origins >>> (position * 4)) & 15,
           (word >>> (16 + position * 4)) & 15,
+          ...[initial.moves[1], initial.moves[3]].map(
+            (m) => (m >>> (position * 4)) & 15,
+          ),
+          ((position >= 2 ? initial.pp[3] : initial.pp[2]) >>>
+            ((position % 2) * 4)) &
+            15,
         ]) {
           const digit = plain ^ pid,
             bit = 1 << digit;

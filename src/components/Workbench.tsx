@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CurtainLab } from "../hooks/useCurtainLab";
 import { PokemonInfoForm } from "./PokemonInfoForm";
 import { PixelGrid } from "./PixelGrid";
@@ -17,17 +17,19 @@ import { RESEARCH_EXAMPLES } from "../core/examples";
 import { isRecorded } from "../core/itemTests";
 import { useMobileLayout } from "../hooks/useMobileLayout";
 import { IVAnalysis } from "./IVAnalysis";
-import { SpindaMatcher } from "./SpindaMatcher";
 
 export function Workbench({
   lab,
   onClassic,
   onStarterGuide,
+  onSpindaGuide,
 }: {
   lab: CurtainLab;
   onClassic: () => void;
   onStarterGuide?: () => void;
+  onSpindaGuide?: () => void;
 }) {
+  // On phones showCurtain takes precedence; desktop always opens About.
   const [tab, setTab] = useState("about"),
     [section, setSection] = useState("items"),
     [field, setField] = useState("hidden data");
@@ -36,18 +38,6 @@ export function Workbench({
     [drawingOptions, setDrawingOptions] = useState(false),
     [largeCurtain, setLargeCurtain] = useState(false),
     [recoveryOpen, setRecoveryOpen] = useState(false);
-  const [spindaTargets, setSpindaTargets] = useState<number[]>([]);
-  const [guideFocus, setGuideFocus] = useState<number | null>(null);
-  const handleSpindaTargets = useCallback((targets: number[]) => {
-    setSpindaTargets(targets);
-    setGuideFocus(targets[0] ?? null);
-  }, []);
-  const spindaGuide =
-    section === "sid" &&
-    tab === "investigate" &&
-    lab.spindaMatcher?.guide?.enabled
-      ? lab.spindaMatcher.guide
-      : undefined;
   const mobile = useMobileLayout(),
     curtainOpen = mobile && showCurtain;
   const scroll = useRef<HTMLDivElement>(null),
@@ -372,18 +362,15 @@ export function Workbench({
                       New Game SID Finder → Shiny Starter
                     </button>
                   )}
-                  <SpindaMatcher
-                    lab={lab}
-                    onTargetsChange={handleSpindaTargets}
-                    locatePixel={(index) => {
-                      setGuideFocus(index);
-                      lab.setHover(null);
-                      lab.setSelectedPixel(hitForNibble(index));
-                      lab.setMode("solver");
-                      if (mobile) locateTarget.current = index;
-                      setShowCurtain(true);
-                    }}
-                  />
+                  {onSpindaGuide && (
+                    <button
+                      type="button"
+                      className="sid-guide-launch"
+                      onClick={onSpindaGuide}
+                    >
+                      Find SID with Spinda
+                    </button>
+                  )}
                   <SidRngPanel lab={lab} />
                 </>
               )}
@@ -411,8 +398,10 @@ export function Workbench({
                     lab={lab}
                     onCatchSpinda={() => {
                       lab.catchNextSpinda();
-                      setSpindaTargets([]);
-                      setGuideFocus(null);
+                      if (onSpindaGuide) {
+                        onSpindaGuide();
+                        return;
+                      }
                       open("sid");
                       scroll.current?.scrollTo({ top: 0, behavior: "smooth" });
                     }}
@@ -473,6 +462,9 @@ export function Workbench({
                   <button onClick={onStarterGuide}>
                     New Game SID Finder → Shiny Starter
                   </button>
+                )}
+                {onSpindaGuide && (
+                  <button onClick={onSpindaGuide}>Find SID with Spinda</button>
                 )}
               </section>
               <ResearchArticle />
@@ -600,14 +592,6 @@ export function Workbench({
                 : lab.activeId === lab.itemTestBaseline.id
                   ? "Original curtain baseline"
                   : lab.activeSnapshot.name}
-            {spindaGuide && (
-              <small>
-                {" "}
-                · Orange: Spinda S{spindaGuide.digit} pixels, PID 0x
-                {spindaGuide.pid.toString(16).toUpperCase().padStart(8, "0")}.
-                Guide answers are separate.
-              </small>
-            )}
           </strong>
           <div className="toolbar-primary">
             <button
@@ -715,15 +699,11 @@ export function Workbench({
               contradictions={lab.conflicts}
               predictions={lab.showPredictions ? lab.predictions : undefined}
               targets={
-                spindaGuide
-                  ? spindaTargets
-                  : lab.pendingItemTest?.itemTest?.mode === "pixels"
-                    ? lab.experimentTargets.slice(0, 1)
-                    : lab.activeSnapshot.targets
+                lab.pendingItemTest?.itemTest?.mode === "pixels"
+                  ? lab.experimentTargets.slice(0, 1)
+                  : lab.activeSnapshot.targets
               }
-              highlightedNibble={
-                highlight?.nibble ?? (spindaGuide ? guideFocus : null)
-              }
+              highlightedNibble={highlight?.nibble ?? null}
               onSelect={lab.setSelectedPixel}
               onHover={lab.setHover}
               onStart={lab.start}

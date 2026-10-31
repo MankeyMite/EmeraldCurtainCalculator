@@ -82,6 +82,11 @@ import {
 import { fieldPossibilities } from "../core/inference";
 import { newSpindaSidGuide } from "../core/spindaSidGuide";
 import {
+  newSpindaCaptureFacts,
+  spindaObservedTraits,
+  confirmedSpindaPidJourney,
+} from "../core/spindaJourney";
+import {
   sidCandidateMasks,
   spindaTrainerFacts,
   type SpindaSidProgress,
@@ -102,13 +107,19 @@ export function download(name: string, data: Blob) {
 }
 export function useCurtainLab(
   autosaveKey = AUTOSAVE_KEY,
-  guideOptions: { sidCandidates?: number[]; enabled?: boolean } = {},
+  guideOptions: {
+    sidCandidates?: number[];
+    enabled?: boolean;
+    resetSpindaGuideOnLoad?: boolean;
+  } = {},
 ) {
   const [restored] = useState(() => {
     try {
       return typeof window === "undefined"
         ? null
-        : readAutosave(window.localStorage, autosaveKey);
+        : readAutosave(window.localStorage, autosaveKey, {
+            resetSpindaGuide: guideOptions.resetSpindaGuideOnLoad,
+          });
     } catch {
       return null;
     }
@@ -734,6 +745,25 @@ export function useCurtainLab(
     related: Record<string, string> = {},
   ) {
     setDrawingInProgress(false);
+    if (
+      spindaMatcher.journey &&
+      spindaMatcher.guide &&
+      (key.startsWith("ev_") ||
+        key.startsWith("contest_") ||
+        key === "ribbonTail" ||
+        key === "growthPadding")
+    )
+      setSpindaMatcher((s) => ({
+        ...s,
+        guide: s.guide
+          ? {
+              ...s.guide,
+              ...(key === "growthPadding"
+                ? { paddingZero: false }
+                : { freshZeros: false }),
+            }
+          : undefined,
+      }));
     const draft = { ...factDraft, ...related, [key]: value };
     if (key === "species") {
       draft.ability = "";
@@ -749,6 +779,19 @@ export function useCurtainLab(
         key,
       );
       setFacts(next);
+      // Corrected summary traits must also update the pattern search filters.
+      if (
+        spindaMatcher.journey?.caught &&
+        ["nature", "gender", "metLevel"].includes(key)
+      ) {
+        const traits = spindaObservedTraits(next);
+        setSpindaMatcher((s) => ({
+          ...s,
+          ...(key === "nature" ? { nature: traits.nature } : {}),
+          ...(key === "gender" ? { gender: traits.gender } : {}),
+          ...(key === "metLevel" ? { level: traits.level } : {}),
+        }));
+      }
       // Preserve the user's text while updating dependent assumed defaults.
       const refreshed = factsToDraft(next);
       setFactDraft({
@@ -924,6 +967,13 @@ export function useCurtainLab(
   }
   function clearDefaults() {
     setDrawingInProgress(false);
+    if (spindaMatcher.journey)
+      setSpindaMatcher((s) => ({
+        ...s,
+        guide: s.guide
+          ? { ...s.guide, freshZeros: false, paddingZero: false }
+          : undefined,
+      }));
     const draft = { ...factDraft };
     for (const key of facts.assumed ?? []) draft[key] = "";
     setFactDraft(draft);
@@ -1226,18 +1276,76 @@ export function useCurtainLab(
   }
   return {
     spindaMatcher,
-    useSpindaPid: (pid: number, ball: number, level?: number) => {
+    prepareSpindaCatch: (
+      ball: number,
+      level: number,
+      pid?: number,
+      needsStats = true,
+    ) => {
+      if (pendingItemTest || factError || summaryState.error || deduction.busy)
+        return false;
+      const language = spindaMatcher.journey?.language ?? 2;
+      const next = newSpindaCaptureFacts(facts, ball, level, language, pid);
+      const first = newSnapshot(`spinda-${Date.now()}`, "Spinda curtain");
+      setSnapshots([first]);
+      setActiveId(first.id);
+      update(first.observations);
+      setUndo([]);
+      setRedo([]);
+      setFacts(next);
+      setFactDraft(factsToDraft(next));
+      setSummaryDraft({ level: String(level) });
+      setRngSettings(undefined);
+      setOrigin("wild");
+      setNotice("");
+      if (pid !== undefined)
+        setSpindaMatcher((s) => ({
+          ...s,
+          appliedPid: pid,
+          guide: {
+            ...newSpindaSidGuide(pid),
+            freshZeros: false,
+            paddingZero: false,
+          },
+          journey: s.journey
+            ? {
+                ...s.journey,
+                caught: true,
+                informationComplete: false,
+                matchedPid: pid,
+                step: needsStats ? "stats" : "information",
+              }
+            : undefined,
+        }));
+      return true;
+    },
+    useSpindaPid: (
+      pid: number,
+      ball: number,
+      level?: number,
+      confirmCatch = false,
+    ) => {
       if (pendingItemTest || factError || summaryState.error) return false;
       const sameSpinda =
-        facts.species === 308 && (facts.pid === undefined || facts.pid === pid);
+        facts.species === 308 &&
+        (facts.pid === undefined ||
+          facts.pid === pid ||
+          (spindaMatcher.journey &&
+            !["prepare", "catch"].includes(spindaMatcher.journey.step)));
       const next = {
-        ...freshCapturePreset(
-          wildStoragePreset({ species: 308, metGame: 3, isEgg: 0 }),
-        ),
-        ...(sameSpinda ? facts : spindaTrainerFacts(facts)),
+        ...(sameSpinda && spindaMatcher.journey
+          ? facts
+          : {
+              ...freshCapturePreset(
+                wildStoragePreset({ species: 308, metGame: 3, isEgg: 0 }),
+              ),
+              ...(sameSpinda ? facts : spindaTrainerFacts(facts)),
+            }),
         species: 308,
         pid,
-        ball,
+        ...(sameSpinda && spindaMatcher.journey
+          ? {}
+          : { ball: sameSpinda ? (facts.ball ?? ball) : ball }),
         ...(level === undefined ? {} : { metLevel: level }),
       };
       if (!sameSpinda) {
@@ -1262,11 +1370,16 @@ export function useCurtainLab(
       setSpindaMatcher((s) => ({
         ...s,
         appliedPid: pid,
+        journey: s.journey
+          ? confirmedSpindaPidJourney(s.journey, pid, confirmCatch)
+          : undefined,
         guide: {
-          ...(s.guide?.pid === pid ? s.guide : newSpindaSidGuide(pid)),
+          ...(sameSpinda && s.guide
+            ? { ...s.guide, pid }
+            : newSpindaSidGuide(pid)),
           enabled: true,
-          freshZeros: true,
-          paddingZero: true,
+          freshZeros: sameSpinda && s.guide ? s.guide.freshZeros : !s.journey,
+          paddingZero: sameSpinda && s.guide ? s.guide.paddingZero : !s.journey,
         },
       }));
       setNotice("");
@@ -1288,6 +1401,12 @@ export function useCurtainLab(
         progress?.remainingSids ??
         spindaMatcher.sidProgress?.remainingSids;
       if (!remainingSids?.length) return;
+      const supplied =
+        progress?.remainingSids && new Set(progress.remainingSids);
+      const carriedSids = remainingSids.filter(
+        (sid) => !supplied || supplied.has(sid),
+      );
+      if (!carriedSids.length) return;
       const tested = (spindaMatcher.sidProgress?.tested ?? [0, 0, 0, 0]).map(
         (mask, n) =>
           mask | (current?.tested[n] ?? 0) | (progress?.tested[n] ?? 0),
@@ -1296,7 +1415,21 @@ export function useCurtainLab(
         ...s,
         appliedPid: undefined,
         guide: undefined,
-        sidProgress: { remainingSids, tested },
+        sidProgress: { remainingSids: carriedSids, tested },
+        level: undefined,
+        nature: undefined,
+        gender: undefined,
+        journey: s.journey
+          ? {
+              ...s.journey,
+              step: "prepare",
+              matchedPid: undefined,
+              patternDrawn: false,
+              caught: false,
+              informationComplete: false,
+              ballChosen: false,
+            }
+          : undefined,
       }));
       const next = {
         ...newPokemonFacts(),

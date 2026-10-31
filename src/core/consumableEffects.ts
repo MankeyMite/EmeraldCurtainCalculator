@@ -1,5 +1,20 @@
 import learnsets from "../data/level-up-learnsets.json";
+import { maxPp } from "./pp";
 export { maxPp as moveMaxPp } from "./pp";
+
+export function initialWildMoves(species: number, level: number) {
+  if (!Number.isInteger(level) || level < 1 || level > 100)
+    throw Error("Enter the encountered level (1–100)");
+  const moves: number[] = [];
+  for (const [at, move] of (learnsets as Record<string, number[][]>)[species] ??
+    [])
+    if (at <= level && !moves.includes(move)) {
+      moves.push(move);
+      if (moves.length > 4) moves.shift();
+    }
+  while (moves.length < 4) moves.push(0);
+  return { moves, pp: moves.map((m) => (m ? maxPp(m, 0)! : 0)) };
+}
 
 // Extracted from pret/pokeemerald's level_up_learnsets and pointer tables.
 export function levelMoves(

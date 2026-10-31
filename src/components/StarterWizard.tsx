@@ -178,7 +178,7 @@ function StarterGuideSession({
       const saved =
         typeof window !== "undefined" && window.localStorage.getItem(GUIDE_KEY);
       return saved
-        ? validateStarterGuide(JSON.parse(saved))
+        ? { ...validateStarterGuide(JSON.parse(saved)), step: 0 }
         : newStarterGuide();
     } catch {
       return newStarterGuide();
@@ -836,7 +836,7 @@ function StarterGuideSession({
         </div>
       </header>
       <p className="starter-progress">
-        Step {state.step + 1} of 6 ·{" "}
+        Page {state.step + 1} of 6 ·{" "}
         {saveError
           ? "Saving unavailable"
           : state.step >= 2 && lab.saveStatus !== "Saved on this device"

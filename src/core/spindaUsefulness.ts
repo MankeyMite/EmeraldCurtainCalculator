@@ -4,6 +4,7 @@ import { WILD_METHODS, summaryMatchesSpread, type WildMethod } from "./rng";
 import type { SummaryStats } from "./stats";
 import { newSnapshot } from "./investigation";
 import type { SpindaCandidate } from "./spindaMatcher";
+import { initialWildMoves } from "./consumableEffects";
 import {
   guidePlaintextDetails,
   newSpindaSidGuide,
@@ -155,6 +156,8 @@ export function spindaUsefulness(
             ball,
             metLevel: encounter.level,
             otGender,
+            ...initialWildMoves(308, encounter.level),
+            ppBonuses: 0,
           });
           const rng = spindaRngEvidence(candidate.pid, {
             pid: candidate.pid,
